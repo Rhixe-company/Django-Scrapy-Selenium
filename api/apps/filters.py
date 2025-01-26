@@ -39,8 +39,9 @@ class ChapterFilter(django_filters.FilterSet):
                 "hx-get": reverse_lazy("chapters:chapter_list"),
                 "hx-trigger": "keyup[target.value.length    >   3]    changed delay:1s",
                 "hx-target": "#container",
-                "hx-indicator": ".prog",
+                "hx-indicator": ".progress",
                 "hx-swap": "outerHTML",
+                "script": "on htmx:afterOnLoad set my value to ''",
             },
         )
 
@@ -100,6 +101,7 @@ class ComicFilter(django_filters.FilterSet):
                 "hx-indicator": ".progress",
                 "hx-swap": "outerHTML",
                 "script": "on htmx:afterOnLoad set my value to ''",
+                "_": "on input show <tbody>tr/> in closest <table/> when its textContent.toLowerCase() contains my value.toLowerCase()",  # noqa: E501
             },
         )
         self.form.fields["genres"].widget.attrs.update(
@@ -133,8 +135,9 @@ class UserFilter(django_filters.FilterSet):
                 "hx-get": reverse_lazy("users:user_list"),
                 "hx-trigger": "keyup[target.value.length    >   3]    changed delay:1s",
                 "hx-target": "#container",
-                "hx-indicator": ".prog",
+                "hx-indicator": ".progress",
                 "hx-swap": "outerHTML",
+                "script": "on htmx:afterOnLoad set my value to ''",
             },
         )
 
