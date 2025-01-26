@@ -83,7 +83,7 @@ def bookmarks(request):
         html = render_block_to_string(
             "partials/bookmark/grid.html",
             "bookmarkcomics",
-            context,
+            context,  # type: ignore  # noqa: PGH003
         )
         return HttpResponse(html)
     return render(request, "bookmark/list.html", context)
@@ -97,7 +97,7 @@ def load(request):
         "items": queryset,
     }
 
-    html = render_block_to_string("partials/bookmarks.html", "comicbookmark", context)
+    html = render_block_to_string("partials/bookmarks.html", "comicbookmark", context)  # type: ignore  # noqa: PGH003
     return HttpResponse(html)
 
 
@@ -121,7 +121,7 @@ def add_bookmark(request):
         html = render_block_to_string(
             "partials/comic/bookmark.html",
             "comicbookmark",
-            context,
+            context,  # type: ignore  # noqa: PGH003
         )
         response = HttpResponse(html)
 
@@ -142,7 +142,7 @@ def delete_bookmark(request, comic_id):
         html = render_block_to_string(
             "partials/comic/bookmark.html",
             "comicbookmark",
-            context,
+            context,  # type: ignore  # noqa: PGH003
         )
         response = HttpResponse(html)
         return trigger_client_event(response, "comic_bookmark")
@@ -181,7 +181,7 @@ def sort(request):
         html = render_block_to_string(
             "partials/bookmark/grid.html",
             "bookmarkcomics",
-            context,
+            context,  # type: ignore  # noqa: PGH003
         )
         return HttpResponse(html)
     return render(request, "bookmark/list.html", context)

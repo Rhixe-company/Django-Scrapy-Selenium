@@ -15,6 +15,23 @@ urlpatterns = [
         name="add_chapter",
     ),
     path(
+        "<str:slug>/edit/",
+        view=views.chapter_update_view,
+        name="update_chapter",
+    ),
+    path(
+        "<str:slug>/delete/",
+        view=views.chapter_delete_view,
+        name="delete_chapter",
+    ),
+    path(
+        "<str:slug>/",
+        view=views.chapter_detail_view,
+        name="chapter_detail",
+    ),
+]
+htmxurlpatterns = [
+    path(
         "hx/<str:slug>/",
         view=views.chapter_detail_hx_view,
         name="hx_chapter_detail",
@@ -34,19 +51,6 @@ urlpatterns = [
         view=views.chapter_images_delete_view,
         name="delete_chapter_image",
     ),
-    path(
-        "<str:slug>/edit/",
-        view=views.chapter_update_view,
-        name="update_chapter",
-    ),
-    path(
-        "<str:slug>/delete/",
-        view=views.chapter_delete_view,
-        name="delete_chapter",
-    ),
-    path(
-        "<str:slug>/",
-        view=views.chapter_detail_view,
-        name="chapter_detail",
-    ),
 ]
+
+urlpatterns += htmxurlpatterns

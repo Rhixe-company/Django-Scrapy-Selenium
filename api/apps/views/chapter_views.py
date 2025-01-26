@@ -42,7 +42,7 @@ def chapter_list_view(
     paginator = Paginator(chapter_filter.qs, settings.PAGINATE_BY)
     page_number = request.GET.get("page")
     try:
-        page_obj = paginator.page(page_number)
+        page_obj = paginator.page(page_number)  # type: ignore  # noqa: PGH003
     except PageNotAnInteger:
         page_obj = paginator.page(1)
 
@@ -67,9 +67,9 @@ def chapter_detail_hx_view(
     #     raise Http404
     try:
         obj = get_object_or_404(Chapter, slug=slug)
-        chapter_type = obj.comic.type.name
-        chapter_author = obj.comic.author.name
-        chapter_artist = obj.comic.artist.name
+        chapter_type = obj.comic.type
+        chapter_author = obj.comic.author
+        chapter_artist = obj.comic.artist
         chapterlookups = (
             Q(type__name__iexact=chapter_type)
             | Q(author__name__iexact=chapter_author)
@@ -91,7 +91,7 @@ def chapter_detail_hx_view(
         paginator = Paginator(chapters, 1)
         page_number = request.GET.get("page")
         try:
-            page_obj = paginator.page(page_number)
+            page_obj = paginator.page(page_number)  # type: ignore  # noqa: PGH003
         except PageNotAnInteger:
             page_obj = paginator.page(1)
 

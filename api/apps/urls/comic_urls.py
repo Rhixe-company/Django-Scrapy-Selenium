@@ -30,6 +30,23 @@ urlpatterns = [
         name="add_comic",
     ),
     path(
+        "<str:slug>/edit/",
+        view=views.comic_update_view,
+        name="update_comic",
+    ),
+    path(
+        "<str:slug>/delete/",
+        view=views.comic_delete_view,
+        name="delete_comic",
+    ),
+    path(
+        "<str:slug>/",
+        view=views.comic_detail_view,
+        name="comic_detail",
+    ),
+]
+htmxurlpatterns = [
+    path(
         "hx/<str:slug>/",
         view=views.comic_detail_hx_view,
         name="hx_comic_detail",
@@ -64,19 +81,5 @@ urlpatterns = [
         view=views.comic_images_delete_view,
         name="delete_comic_image",
     ),
-    path(
-        "<str:slug>/edit/",
-        view=views.comic_update_view,
-        name="update_comic",
-    ),
-    path(
-        "<str:slug>/delete/",
-        view=views.comic_delete_view,
-        name="delete_comic",
-    ),
-    path(
-        "<str:slug>/",
-        view=views.comic_detail_view,
-        name="comic_detail",
-    ),
 ]
+urlpatterns += htmxurlpatterns
