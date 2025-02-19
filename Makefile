@@ -2,7 +2,7 @@
 # python := myvenv/Scripts/python
 pythonuser := myvenv/bin/python3 -u
 python := myvenv/bin/python3
-fix := fixtures/db1.json
+fix := fixtures/db.json
 
 compose := docker compose -f docker-compose.local.yml
 
