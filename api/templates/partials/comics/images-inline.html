@@ -11,9 +11,7 @@
                  id="comic_image_{{ object.pk }}"
                  name='mycheck'
                  value="{{ object.pk }}"
-                 x-model="comicimages"
-                 class="before:content[''] peer relative size-4 cursor-pointer appearance-none overflow-hidden rounded border border-neutral-300 bg-white before:absolute before:inset-0 checked:border-black checked:before:bg-black focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-neutral-800 checked:focus:outline-black active:outline-offset-0 dark:border-neutral-700 dark:bg-neutral-900 dark:checked:border-white dark:checked:before:bg-white dark:focus:outline-neutral-300 dark:checked:focus:outline-white"
-                 :checked="comicimages" />
+                 class="before:content[''] peer relative size-4 cursor-pointer appearance-none overflow-hidden rounded border border-neutral-300 bg-white before:absolute before:inset-0 checked:border-black checked:before:bg-black focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-neutral-800 checked:focus:outline-black active:outline-offset-0 dark:border-neutral-700 dark:bg-neutral-900 dark:checked:border-white dark:checked:before:bg-white dark:focus:outline-neutral-300 dark:checked:focus:outline-white" />
           <svg xmlns="http://www.w3.org/2000/svg"
                viewBox="0 0 24 24"
                aria-hidden="true"
@@ -39,9 +37,7 @@
         <a href="{{ object.comic.get_absolute_url }}">{{ object.comic.title }}</a>
       </p>
     </div>
-    <div class="inline-flex items-center "
-         hx-swap='outerHTML'
-         hx-indicator="#spinner">
+    <div class="inline-flex items-center " hx-swap='outerHTML'>
       <div class='pr-2'>
         <button hx-get="{{ object.get_hx_edit_url }}"
                 hx-target="#image-{{ object.id }}"

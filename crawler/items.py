@@ -23,8 +23,10 @@ def get_slug(value):
 
 
 def get_des(value):
+
+    obj = "".join(str(x) for x in value)
     return (
-        value.replace("\\n", "")
+        obj.replace("\\n", "")
         .replace("\r", "")
         .replace("\\r", "")
         .replace("rn", "")
@@ -44,7 +46,7 @@ def get_des(value):
 
 
 def get_date(value):
-    return parse(value, languages=["en"], date_formats=["%d/%m/%Y"]).date()  # type: ignore  # noqa: PGH003
+    return parse(value, languages=["en"], date_formats=["F j, Y"]).date()  # type: ignore  # noqa: PGH003
 
 
 def get_html(value):
@@ -57,6 +59,10 @@ def strip_html(value):
 
 def comments_html(value):
     return remove_comments(value)
+
+
+def lower_function(value):
+    return value.lower()
 
 
 class ComicItem(Item):
@@ -75,11 +81,11 @@ class ComicItem(Item):
         output_processor=TakeFirst(),
     )
     status = Field(
-        input_processor=MapCompose(strip_html, comments_html, get_html),
+        input_processor=MapCompose(strip_html, comments_html, get_html, lower_function),
         output_processor=TakeFirst(),
     )
     type = Field(
-        input_processor=MapCompose(strip_html, comments_html, get_html),
+        input_processor=MapCompose(strip_html, comments_html, get_html, lower_function),
         output_processor=TakeFirst(),
     )
     updated_at = Field(

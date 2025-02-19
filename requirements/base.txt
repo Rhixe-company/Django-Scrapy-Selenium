@@ -23,7 +23,7 @@ django-celery-results
 crispy-tailwind
 django-filter
 django-simple-captcha
-django-htmx
+django-htmx==1.21.0
 django-widget-tweaks
 django-tables2
 django-render-block
@@ -44,9 +44,12 @@ django-ckeditor
 jwt
 django-template-partials
 
-Scrapy
+Scrapy==2.12.0
 scrapy-selenium==0.0.7
-# selenium==3.9.0
 selenium==4.28.1
+typing
 typing-extensions
-webdriver-manager
+# webdriver-manager
+bz2file
+django-render-block
+scrapy-impersonate

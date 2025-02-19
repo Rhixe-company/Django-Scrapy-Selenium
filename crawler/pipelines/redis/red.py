@@ -1,3 +1,5 @@
+from itemadapter.adapter import ItemAdapter
+from scrapy.exceptions import DropItem
 from scrapy.utils.misc import load_object
 from scrapy.utils.serialize import ScrapyJSONEncoder
 from twisted.internet.threads import deferToThread
@@ -62,10 +64,24 @@ class CrawlerRedisPipeline(object):  # noqa: UP004
         return deferToThread(self._process_item, item, spider)
 
     def _process_item(self, item, spider):
-        key = self.item_key(item, spider)
-        data = self.serialize(item)
-        self.server.rpush(key, data)
-        return item
+        adapter = ItemAdapter(item)
+        if adapter.get("image_urls"):
+            if adapter.get("slug"):
+                key = self.item_key(item, spider)
+                data = self.serialize(item)
+                self.server.rpush(key, data)
+                return item
+            if adapter.get("comicslug") and adapter.get("chapterslug"):
+                key = self.item_key(item, spider)
+                data = self.serialize(item)
+                self.server.rpush(key, data)
+                return item
+            return None
+
+        msg = f"CrawlerRedisPipeline Item has a Missing field:{item!r}"
+        raise DropItem(
+            msg,
+        )
 
     def item_key(self, item, spider):
         """Returns redis key based on given spider.

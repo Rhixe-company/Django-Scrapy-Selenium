@@ -1,11 +1,51 @@
 {% load static i18n partials example %}
 {% load render_table from django_tables2 %}
 
-{% partialdef container-section inline %}
-<div id="container"
-     class="w-full min-[768px]:w-[100%] bg-[#222222] min-[880px]:w-[98%] min-[912px]:w-[98%] lg:w-[100%] mb-2">
-  <!-- Card header -->
+{% partialdef comic-container inline %}
+<div id='container'
+     class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+  <!-- Htmx progress Indicator -->
+  <div class="progress  my-1">
+    <div class="indeterminate"></div>
+  </div>
+  <!-- Include Partials Comics Hero -->
   {% include "partials/comics/hero.html" %}
-  <div>{% render_table table %}</div>
+  <div>
+    <form action=".">
+      {% csrf_token %}
+      <!-- Include Partials Comics Table -->
+      {% render_table table %}
+      <button id='deleteComics'
+              class="btn  btn-secondary btn-sm"
+              type="submit"
+              disabled>Delete</button>
+    </form>
+  </div>
+  {% block scripts %}
+    <script>
+      $(document).ready(function() {
+        var checkall = $('#example thead tr th input[type="checkbox"]');
+        var checkboxes = $('#example tbody tr td input[type="checkbox"]');
+        var submitButton = $("#deleteComics");
+        checkall.on('change', function(event) {
+          var numCheckall = $(checkall).filter(':checked').length;
+          if (numCheckall >= 1) {
+            $(checkall).filter(':not(:checked)').prop('disabled', true);
+            $(checkboxes).prop('checked', true);
+            $(submitButton).prop('disabled', false);
+          } else {
+            $(checkall).prop('checked', false);
+            $(checkboxes).prop('checked', false);
+            $(submitButton).prop('disabled', true);
+          }
+        });
+        checkboxes.click(function() {
+          submitButton.attr("disabled", !checkboxes.is(":checked"));
+        });
+      });
+    </script>
+  {% endblock %}
+  <!-- Include Partials Comics Pagination -->
+  {% include "partials/comics/pagination.html" %}
 </div>
 {% endpartialdef %}

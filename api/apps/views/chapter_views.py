@@ -67,13 +67,13 @@ def chapter_detail_hx_view(
     #     raise Http404
     try:
         obj = get_object_or_404(Chapter, slug=slug)
-        chapter_type = obj.comic.type
-        chapter_author = obj.comic.author
-        chapter_artist = obj.comic.artist
+        chapter_comic_type = obj.comic.type.name  # type: ignore  # noqa: PGH003
+        chapter_comic_author = obj.comic.author.name  # type: ignore  # noqa: PGH003
+        chapter_comic_artist = obj.comic.artist.name  # type: ignore  # noqa: PGH003
         chapterlookups = (
-            Q(type__name__iexact=chapter_type)
-            | Q(author__name__iexact=chapter_author)
-            | Q(artist__name__iexact=chapter_artist)
+            Q(type__name__iexact=chapter_comic_type)
+            | Q(author__name__iexact=chapter_comic_author)
+            | Q(artist__name__iexact=chapter_comic_artist)
         )
         comics = (
             Comic.objects.prefetch_related(

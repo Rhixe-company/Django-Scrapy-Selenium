@@ -90,7 +90,7 @@ WEBPACK_LOADER["DEFAULT"]["CACHE"] = not DEBUG
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 if (
-    env("POSTGRES_ENGINE", default="django.db.backends.sqlite3")  # type: ignore  # noqa: PGH003
+    env("POSTGRES_ENGINE", default="django.db.backends.postgresql")  # type: ignore  # noqa: PGH003
     == "django.db.backends.postgresql"
 ):
     DATABASES = {

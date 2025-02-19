@@ -6,6 +6,12 @@ from django.utils.translation import gettext_lazy as _
 FILE_INPUT_CONTRADICTION = object()
 
 
+class MyDateInput(forms.widgets.DateTimeBaseInput):
+    input_type = "date"
+    format_key = "DATE_INPUT_FORMATS"
+    template_name = "partials/widgets/date.html"
+
+
 class MyRadioSelect(ChoiceWidget):
     input_type = "radio"
     template_name = "partials/widgets/radio.html"
@@ -110,6 +116,25 @@ class MyCheckboxSelectMultiple(forms.RadioSelect):
     input_type = "checkbox"
     template_name = "partials/widgets/checkbox_select.html"
     option_template_name = "partials/widgets/checkbox_option.html"
+    # template_name = "django/forms/widgets/checkbox_select.html" # noqa: ERA001
+    # option_template_name = "django/forms/widgets/checkbox_option.html" # noqa: ERA001
+
+    def use_required_attribute(self, initial):
+        # Don't use the 'required' attribute because browser validation would
+        # require all checkboxes to be checked instead of at least one.
+        return False
+
+    def value_omitted_from_data(self, data, files, name):
+        # HTML checkboxes don't appear in POST data if not checked, so it's
+        # never known if the value is actually omitted.
+        return False
+
+
+class MyAdminCheckboxSelectMultiple(forms.RadioSelect):
+    allow_multiple_selected = True
+    input_type = "checkbox"
+    template_name = "partials/widgets/checkbox_select2.html"
+    option_template_name = "partials/widgets/checkbox_option2.html"
     # template_name = "django/forms/widgets/checkbox_select.html" # noqa: ERA001
     # option_template_name = "django/forms/widgets/checkbox_option.html" # noqa: ERA001
 

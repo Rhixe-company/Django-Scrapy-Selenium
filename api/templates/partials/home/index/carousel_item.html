@@ -43,22 +43,41 @@
                 <div>
                   {% with images=item.get_comic_images_children %}
                     {% for img in images|slice:":1" %}
-                      <img fetchpriority="high"
-                           loading="eager"
-                           decoding="async"
-                           data-nimg="fill"
-                           class="blur-lg brightness-[0.2]"
-                           style="position: absolute;
-                                  height: 100%;
-                                  width: 100%;
-                                  left: 0;
-                                  top: 0;
-                                  right: 0;
-                                  bottom: 0;
-                                  object-fit: cover;
-                                  color: transparent"
-                           alt="{{ item.title|title }}  poster"
-                           src="{{ img.image.url }}" />
+                      {% if img.image %}
+                        <img fetchpriority="high"
+                             loading="eager"
+                             decoding="async"
+                             data-nimg="fill"
+                             class="blur-lg brightness-[0.2]"
+                             style="position: absolute;
+                                    height: 100%;
+                                    width: 100%;
+                                    left: 0;
+                                    top: 0;
+                                    right: 0;
+                                    bottom: 0;
+                                    object-fit: cover;
+                                    color: transparent"
+                             alt="{{ item.title|title }}  poster"
+                             src="{{ img.image.url }}" />
+                      {% else %}
+                        <img fetchpriority="high"
+                             loading="eager"
+                             decoding="async"
+                             data-nimg="fill"
+                             class="blur-lg brightness-[0.2]"
+                             style="position: absolute;
+                                    height: 100%;
+                                    width: 100%;
+                                    left: 0;
+                                    top: 0;
+                                    right: 0;
+                                    bottom: 0;
+                                    object-fit: cover;
+                                    color: transparent"
+                             alt="{{ item.title|title }}  poster"
+                             src="{{ img.url }}" />
+                      {% endif %}
                     {% endfor %}
                   {% endwith %}
                 </div>

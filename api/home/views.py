@@ -31,7 +31,7 @@ def index(request):
         page_obj = paginator.page(paginator.num_pages)
     page_obj = paginator.get_page(page_number)
     top = (
-        Comic.objects.get_top()
+        Comic.objects.get_top()  # type: ignore  # noqa: PGH003
         .prefetch_related(
             "comicitems",
             "genres",
@@ -42,7 +42,7 @@ def index(request):
         .filter(Q(rating__gte=10) | Q(rating__lte=9.9))
     )
     feat = (
-        Comic.objects.get_feat()
+        Comic.objects.get_feat()  # type: ignore  # noqa: PGH003
         .prefetch_related(
             "comicitems",
             "genres",
@@ -75,7 +75,7 @@ def comics(request):
     updated_atq = updated_at if updated_at is not None else ""
     if titleq:
         qs = (
-            Comic.objects.search(query=titleq)
+            Comic.objects.search(query=titleq)  # type: ignore  # noqa: PGH003
             .prefetch_related(
                 "comicitems",
                 "genres",
@@ -162,15 +162,12 @@ def comics(request):
 
 
 def digital(request):
-    context = {}
-    return render(request, "home/digital.html", context)
+    return render(request, "home/digital.html")
 
 
 def privacy(request):
-    context = {}
-    return render(request, "home/privacy.html", context)
+    return render(request, "home/privacy.html")
 
 
 def terms(request):
-    context = {}
-    return render(request, "home/terms.html", context)
+    return render(request, "home/terms.html")

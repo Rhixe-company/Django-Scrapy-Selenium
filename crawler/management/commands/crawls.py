@@ -1,9 +1,6 @@
-# from django.conf import settings  # noqa: ERA001
 import logging
 
 from django.core.management.base import BaseCommand
-
-# from redis import from_url  # noqa: ERA001
 from scrapy.crawler import CrawlerRunner
 from scrapy.utils.log import configure_logging
 from scrapy.utils.project import get_project_settings
@@ -14,29 +11,28 @@ from api.apps.models import Chapter
 from api.apps.models import ChapterImage
 from api.apps.models import Comic
 from api.apps.models import ComicImage
-from crawler.spiders.asuracomics import AsuracomicsSpider
+from crawler.management.commands import connection
+from crawler.spiders.run import RunSpider
 
 logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = "A  Custom command to  run AsuracomicSpider"
+    help = "A  Custom command to  run Runpider"
 
     def handle(self, *args, **options):
-        # urls = [f"https://asuracomic.net/series?page={i}" for i in range(1, 18)]  # noqa: E501, ERA001
-        # redisclient = from_url(settings.CELERY_BROKER_URL)  # noqa: ERA001
-        # redisclient.rpush(
-        #     "asuracomics_queue:start_urls",  # noqa: ERA001
-        #     urls,
-        # )  # noqa: ERA001, RUF100
         crawlsettings = get_project_settings()
         configure_logging(crawlsettings)
+        server = connection.from_settings(crawlsettings)
+        key = "run_queue:start_urls"
+        data = ""
+        server.rpush(key, data)
 
         runner = CrawlerRunner(settings=crawlsettings)
 
         @defer.inlineCallbacks
         def run():
-            yield runner.crawl(AsuracomicsSpider)
+            yield runner.crawl(RunSpider)
 
             reactor.stop()  # type: ignore  # noqa: PGH003
 

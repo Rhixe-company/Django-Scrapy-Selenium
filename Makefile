@@ -1,8 +1,8 @@
-pythonuser := myvenv/Scripts/python -u
-python := myvenv/Scripts/python
-# pythonuser := myvenv/bin/python3 -u
-# python := myvenv/bin/python3
-fix := fixtures/db.json
+# pythonuser := myvenv/Scripts/python -u
+# python := myvenv/Scripts/python
+pythonuser := myvenv/bin/python3 -u
+python := myvenv/bin/python3
+fix := fixtures/db1.json
 
 compose := docker compose -f docker-compose.local.yml
 
@@ -24,6 +24,9 @@ crawl:
 
 crawls:
 	$(python) manage.py crawls
+
+loadform:
+	$(python) manage.py loadform
 
 load:
 	$(python) manage.py load
@@ -58,10 +61,10 @@ celery:
 start:
 	$(python) manage.py runserver
 
-script:
-	$(python) manage.py runscript orm_script
 # script:
-# 	$(python) manage.py runscript count_script
+# 	$(python) manage.py runscript orm_script
+script:
+	$(python) manage.py runscript count_script
 
 server:
 	$(python) -m gunicorn --config gunicorn-cfg.py config.wsgi

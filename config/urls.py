@@ -21,6 +21,7 @@ urlpatterns = [
     path("accounts/", include("allauth.socialaccount.urls")),
     path("captcha/", include("captcha.urls")),
     path("ckeditor/", include("ckeditor_uploader.urls")),
+    path("celery-progress/", include("celery_progress.urls")),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

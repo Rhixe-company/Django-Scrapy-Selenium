@@ -7,7 +7,11 @@
   {% translate 'Update Comic Form' %}
 {% endblock head_title %}
 {% block content %}
-  <main>
-    {% include "partials/comics/form.html" %}
-  </main>
+  <div class="mx-auto max-w-screen-xl ">
+    <div id='container'
+         class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+      <!-- Include Partials Comics Update -->
+      {% include "partials/comics/update.html" %}
+    </div>
+  </div>
 {% endblock content %}

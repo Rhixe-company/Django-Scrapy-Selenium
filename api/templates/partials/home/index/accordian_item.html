@@ -13,18 +13,33 @@
            href="{{ item.get_absolute_url }}">
           {% with images=item.get_comic_images_children %}
             {% for img in images|slice:":1" %}
-              <img alt="{{ item.title|title }} poster"
-                   fetchpriority="high"
-                   width="0"
-                   height="0"
-                   decoding="async"
-                   data-nimg="1"
-                   class="w-full cursor-pointer"
-                   style="color: transparent;
-                          width: 100px;
-                          height: auto;
-                          max-height: 110px"
-                   src="{{ img.image.url }}" />
+              {% if img.image %}
+                <img alt="{{ item.title|title }} poster"
+                     fetchpriority="high"
+                     width="0"
+                     height="0"
+                     decoding="async"
+                     data-nimg="1"
+                     class="w-full cursor-pointer"
+                     style="color: transparent;
+                            width: 100px;
+                            height: auto;
+                            max-height: 110px"
+                     src="{{ img.image.url }}" />
+              {% else %}
+                <img alt="{{ item.title|title }} poster"
+                     fetchpriority="high"
+                     width="0"
+                     height="0"
+                     decoding="async"
+                     data-nimg="1"
+                     class="w-full cursor-pointer"
+                     style="color: transparent;
+                            width: 100px;
+                            height: auto;
+                            max-height: 110px"
+                     src="{{ img.url }}" />
+              {% endif %}
             {% endfor %}
           {% endwith %}
         </a>

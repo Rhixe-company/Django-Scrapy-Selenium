@@ -1,14 +1,17 @@
+from __future__ import annotations
+
 from contextlib import suppress
 
-from itemadapter.adapter import ItemAdapter
+from itemadapter import ItemAdapter
+from itemadapter.adapter import ItemAdapter  # noqa: F811
 from scrapy.exceptions import DropItem
 from scrapy.http.request import NO_CALLBACK
-from scrapy.http.request import Request
-
-from crawler.pipelines.images.pipe import ImagesPipeline
+from scrapy.http.request import Request  # type: ignore  # noqa: PGH003  # noqa: F811
+from scrapy.pipelines.images import ImagesPipeline
 
 
 class CrawlerDownloadPipeline(ImagesPipeline):
+
     @classmethod
     def from_settings(cls, settings):
         # s3store = cls.STORE_SCHEMES["s3"]  # noqa: ERA001
@@ -23,32 +26,42 @@ class CrawlerDownloadPipeline(ImagesPipeline):
         store_uri = settings["IMAGES_STORE"]
         return cls(store_uri, settings=settings)
 
+    @classmethod
+    def from_crawler(cls, crawler):
+        return cls.from_settings(crawler.settings)  # type: ignore  # noqa: PGH003
+
     def get_media_requests(self, item, info):
         adapter = ItemAdapter(item)
         if adapter.get("image_urls"):
             if adapter.get("slug"):
                 urls = ItemAdapter(item).get(self.images_urls_field, [])
-                return [
-                    Request(
-                        u,
-                        meta={"comicfolderslug": item.get("slug")},
-                        callback=NO_CALLBACK,
-                    )
-                    for u in urls
-                ]
+                for browser in ["chrome110", "edge99", "safari15_5"]:
+                    return [
+                        Request(
+                            u,
+                            meta={
+                                "impersonate": browser,
+                                "comicfolderslug": item.get("slug"),
+                            },
+                            callback=NO_CALLBACK,
+                        )
+                        for u in urls
+                    ]
             if adapter.get("comicslug") and adapter.get("chapterslug"):
                 urls = ItemAdapter(item).get(self.images_urls_field, [])
-                return [
-                    Request(
-                        u,
-                        meta={
-                            "comicfolderslug": item.get("comicslug"),
-                            "chapterfolderslug": item.get("chapterslug"),
-                        },
-                        callback=NO_CALLBACK,
-                    )
-                    for u in urls
-                ]
+                for browser in ["chrome110", "edge99", "safari15_5"]:
+                    return [
+                        Request(
+                            u,
+                            meta={
+                                "impersonate": browser,
+                                "comicfolderslug": item.get("comicslug"),
+                                "chapterfolderslug": item.get("chapterslug"),
+                            },
+                            callback=NO_CALLBACK,
+                        )
+                        for u in urls
+                    ]
             return None
         msg = f"Missing field in get_media_requests: {item!r}"
         raise DropItem(msg)

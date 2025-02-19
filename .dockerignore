@@ -8,5 +8,17 @@
 .readthedocs.yml
 .travis.yml
 venv
+myvenv
+api/media/
+api/media-bak/
 .git
 .envs/
+.scrapy
+comics.json
+comicsnew.json
+comics2.json
+chapters.json
+chaptersnew.json
+chapters2.json
+api.sqlite3
+api-bak.sqlite3

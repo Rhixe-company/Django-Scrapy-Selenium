@@ -9,6 +9,7 @@ from api.apps.models import ComicStatus
 from api.apps.models import Genre
 from api.apps.models import Type
 from api.users.models import User
+from api.users.widgets import MyAdminCheckboxSelectMultiple
 from api.users.widgets import MyCheckboxSelectMultiple
 from api.users.widgets import MyRadioSelect
 
@@ -41,7 +42,7 @@ class ChapterFilter(django_filters.FilterSet):
                 "hx-target": "#container",
                 "hx-indicator": ".progress",
                 "hx-swap": "outerHTML",
-                "script": "on htmx:afterOnLoad set my value to ''",
+                "_": "on htmx:afterOnLoad  put '' into @value of #id_name",
             },
         )
 
@@ -55,15 +56,16 @@ class MyMultipleChoiceFilter(django_filters.ModelMultipleChoiceFilter):
 
 class ComicFilter(django_filters.FilterSet):
     type = MyMultipleChoiceFilter(
+        label=_("Types"),
         queryset=Type.objects.all(),
-        widget=MyCheckboxSelectMultiple,
+        widget=MyAdminCheckboxSelectMultiple,
         field_name="type__name",
         lookup_expr="in",
         to_field_name="name",
     )
     genres = MyMultipleChoiceFilter(
         queryset=Genre.objects.all(),
-        widget=MyCheckboxSelectMultiple,
+        widget=MyAdminCheckboxSelectMultiple,
         lookup_expr="in",
         field_name="genres__name",
         to_field_name="name",
@@ -100,8 +102,8 @@ class ComicFilter(django_filters.FilterSet):
                 "hx-target": "#container",
                 "hx-indicator": ".progress",
                 "hx-swap": "outerHTML",
-                "script": "on htmx:afterOnLoad set my value to ''",
-                "_": "on input show <tbody>tr/> in closest <table/> when its textContent.toLowerCase() contains my value.toLowerCase()",  # noqa: E501
+                "_": "on htmx:afterOnLoad  put '' into @value of #id_title",
+                # "_": "on input show <tbody>tr/> in closest <table/> when its textContent.toLowerCase() contains my value.toLowerCase()",  # noqa: E501
             },
         )
         self.form.fields["genres"].widget.attrs.update(
@@ -137,7 +139,7 @@ class UserFilter(django_filters.FilterSet):
                 "hx-target": "#container",
                 "hx-indicator": ".progress",
                 "hx-swap": "outerHTML",
-                "script": "on htmx:afterOnLoad set my value to ''",
+                "_": "on htmx:afterOnLoad  put '' into @value of #id_email",
             },
         )
 

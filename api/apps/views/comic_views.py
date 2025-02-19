@@ -1,7 +1,6 @@
 from django.conf import settings
 from django.db.models import Q
 from django.http import Http404
-from django.http import HttpRequest
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
@@ -9,7 +8,6 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django_htmx.http import trigger_client_event
-from django_htmx.middleware import HtmxDetails
 from django_tables2 import RequestConfig
 
 from api.apps.filters import ComicFilter
@@ -23,129 +21,67 @@ from api.apps.models import ComicImage
 from api.apps.tables import ComicTable
 from api.users.decorators import admin_only
 from api.users.decorators import user_only
-
-
-# Typing pattern recommended by django-stubs:
-# https://github.com/typeddjango/django-stubs#how-can-i-create-a-httprequest-thats-guaranteed-to-have-an-authenticated-user
-class HtmxHttpRequest(HttpRequest):
-    htmx: HtmxDetails
+from crawler.tasks import get_comics_count
 
 
 @user_only
 @admin_only
 @require_http_methods(["GET"])
-def comic_list_view(
-    request: HtmxHttpRequest,
-) -> HttpResponse:
-    title = request.GET.get("title")  # type: ignore  # noqa: PGH003
-    types = request.GET.getlist("type")
-    status = request.GET.get("status")
-    updated_at = request.GET.get("updated_at")
-    genres = request.GET.getlist("genres")
-    titleq = title if title is not None else ""
-    statusq = status if status is not None else ""
-    typesq = types if types is not None else ""
-    genresq = genres if genres is not None else ""
-    updated_atq = updated_at if updated_at is not None else ""
-    if titleq:
-        qs = (
-            Comic.objects.search(query=titleq)  # type: ignore  # noqa: PGH003
-            .prefetch_related(
-                "comicitems",
-                "genres",
-                "followers",
-                "comicchapters",
-            )
-            .select_related("user", "author", "type", "artist")
+def progress_view(request):
+    result = get_comics_count.delay(10)
+    return render(
+        request,
+        "comics/display_progress.html",
+        context={"task_id": result.task_id},
+    )
+
+
+@user_only
+@admin_only
+@require_http_methods(["GET"])
+def comic_list_view(request):
+    htmx_template_name = "partials/comics/container.html"
+    template_name = "comics/comic_list.html"
+    qs = (
+        Comic.objects.prefetch_related(
+            "comicitems",
+            "genres",
+            "followers",
+            "comicchapters",
         )
-    elif statusq:
-        qs = (
-            Comic.objects.prefetch_related(
-                "comicitems",
-                "genres",
-                "followers",
-                "comicchapters",
-            )
-            .select_related("user", "author", "type", "artist")
-            .filter(Q(status__icontains=statusq))
-        )
-    elif typesq:
-        qs = (
-            Comic.objects.prefetch_related(
-                "comicitems",
-                "genres",
-                "followers",
-                "comicchapters",
-            )
-            .select_related("user", "author", "type", "artist")
-            .filter(Q(type__name__in=typesq))
-        )
-    elif genresq:
-        qs = (
-            Comic.objects.prefetch_related(
-                "comicitems",
-                "genres",
-                "followers",
-                "comicchapters",
-            )
-            .select_related("user", "author", "type", "artist")
-            .filter(Q(genres__name__in=genresq))
-        )
-    elif updated_atq:
-        qs = (
-            Comic.objects.prefetch_related(
-                "comicitems",
-                "genres",
-                "followers",
-                "comicchapters",
-            )
-            .select_related("user", "author", "type", "artist")
-            .all()
-            .order_by(updated_atq)
-        )
-    else:
-        qs = (
-            Comic.objects.prefetch_related(
-                "comicitems",
-                "genres",
-                "followers",
-                "comicchapters",
-            )
-            .select_related("user", "author", "type", "artist")
-            .all()
-        )
+        .select_related("user", "author", "type", "artist")
+        .all()
+    )
 
     comic_filter = ComicFilter(
         request.GET,
         queryset=qs,
     )
 
-    table = ComicTable(qs)
+    table = ComicTable(comic_filter.qs)
     RequestConfig(request, paginate={"per_page": settings.PAGINATE_BY}).configure(table)  # type: ignore  # noqa: PGH003
-    htmx_template_name = "partials/comics/container.html"
-    template_name = "comics/comic_list.html"
     context = {"filter": comic_filter, "table": table}
     if request.htmx:
-        htmx_template_name += "#container-section"
+        htmx_template_name += "#comic-container"
         return render(request, htmx_template_name, context)
     return render(request, template_name, context)
 
 
 @require_http_methods(["GET"])
 def comic_detail_hx_view(
-    request: HtmxHttpRequest,
+    request,
     slug=None,
-) -> HttpResponse:
+):
     if not request.htmx:
         raise Http404
     try:
         obj = get_object_or_404(Comic, slug=slug)
-        comic_type = obj.type
-        comic_author = obj.author
-        comic_artist = obj.artist
+        comic_type = obj.type.name
+        comic_author = obj.author.name
+        comic_artist = obj.artist.name
         comiclookups = (
-            Q(type__name__iexact=comic_type)
-            | Q(author__name__iexact=comic_author)
+            Q(author__name__iexact=comic_author)
+            | Q(type__name__iexact=comic_type)
             | Q(artist__name__iexact=comic_artist)
         )
         comics = (
@@ -170,7 +106,7 @@ def comic_detail_hx_view(
 
 
 @require_http_methods(["GET"])
-def comic_detail_view(request: HtmxHttpRequest, slug=None) -> HttpResponse:
+def comic_detail_view(request, slug=None):
     hx_url = reverse("comics:hx_comic_detail", kwargs={"slug": slug})
 
     context = {"hx_url": hx_url}
@@ -180,15 +116,10 @@ def comic_detail_view(request: HtmxHttpRequest, slug=None) -> HttpResponse:
 @user_only
 @admin_only
 @require_http_methods(["GET", "POST"])
-def comic_create_view(
-    request: HtmxHttpRequest,
-) -> HttpResponse:
+def comic_create_view(request):
     form = ComicForm(request.POST or None)
-    context = {
-        "form": form,
-    }
     htmx_template_name = "partials/comics/create.html"
-    template_name = "comics/add_comic.html"
+    template_name = "comics/create_comic.html"
     if form.is_valid():
         obj = form.save(commit=False)
         obj.user = request.user
@@ -203,15 +134,15 @@ def comic_create_view(
             return HttpResponse("Created", headers=headers)
         return redirect(success_url)
     if request.htmx:
-        htmx_template_name += "#form-section"
-        return render(request, htmx_template_name, context)
-    return render(request, template_name, context)
+        htmx_template_name += "#create-form-section"
+        return render(request, htmx_template_name, {"form": form})
+    return render(request, template_name, {"form": form})
 
 
 @user_only
 @admin_only
 @require_http_methods(["GET", "POST"])
-def comic_update_view(request: HtmxHttpRequest, slug=None) -> HttpResponse:
+def comic_update_view(request, slug=None):
     obj = get_object_or_404(Comic, slug=slug)
     form = ComicForm(request.POST or None, instance=obj)
     htmx_template_name = "partials/comics/update.html"
@@ -224,12 +155,6 @@ def comic_update_view(request: HtmxHttpRequest, slug=None) -> HttpResponse:
         "comics:hx_chapter_create",
         kwargs={"parent_slug": obj.slug},
     )
-    context = {
-        "form": form,
-        "object": obj,
-        "new_comic_image_url": new_comic_image_url,
-        "new_comic_chapter_url": new_comic_chapter_url,
-    }
     if form.is_valid():
         obj = form.save(commit=False)
         obj.numchapters = obj.get_chapters_children().count()
@@ -242,15 +167,36 @@ def comic_update_view(request: HtmxHttpRequest, slug=None) -> HttpResponse:
             return HttpResponse("Created", headers=headers)
         return redirect(success_url)
     if request.htmx:
-        htmx_template_name += "#form-section"
-        return render(request, htmx_template_name, context)
-    return render(request, template_name, context)
+        htmx_template_name += "#update-form-section"
+        return render(
+            request,
+            htmx_template_name,
+            {
+                "form": form,
+                "object": obj,
+                "new_comic_image_url": new_comic_image_url,
+                "new_comic_chapter_url": new_comic_chapter_url,
+            },
+        )
+
+    return render(
+        request,
+        template_name,
+        {
+            "form": form,
+            "object": obj,
+            "new_comic_image_url": new_comic_image_url,
+            "new_comic_chapter_url": new_comic_chapter_url,
+        },
+    )
 
 
 @user_only
 @admin_only
 @require_http_methods(["GET", "DELETE"])
-def comic_delete_view(request: HtmxHttpRequest, slug=None) -> HttpResponse:
+def comic_delete_view(request, slug=None):
+    htmx_template_name = "partials/comics/delete.html"
+    template_name = "comics/delete_comic.html"
     try:
         obj = (
             Comic.objects.prefetch_related(
@@ -279,13 +225,16 @@ def comic_delete_view(request: HtmxHttpRequest, slug=None) -> HttpResponse:
             )
         return redirect(success_url)
     context = {"object": obj}
-    return render(request, "comics/delete.html", context)
+    if request.htmx:
+        htmx_template_name += "#delete-form-section"
+        return render(request, htmx_template_name, context)
+    return render(request, template_name, context)
 
 
 @user_only
 @admin_only
 @require_http_methods(["GET", "DELETE"])
-def comic_image_delete_all_view(request: HtmxHttpRequest) -> HttpResponse:
+def comic_image_delete_all_view(request):
     data = request.GET.getlist("mycheck", "")  # type: ignore  # noqa: PGH003
 
     comic_images = ComicImage.objects.filter(id__in=data)
@@ -303,7 +252,7 @@ def comic_image_delete_all_view(request: HtmxHttpRequest) -> HttpResponse:
 @user_only
 @admin_only
 @require_http_methods(["GET", "DELETE"])
-def comic_delete_all_view(request: HtmxHttpRequest) -> HttpResponse:
+def comic_delete_all_view(request):
     data = request.GET.getlist("id", "")  # type: ignore  # noqa: PGH003
 
     comics = Comic.objects.filter(id__in=data)
@@ -322,10 +271,10 @@ def comic_delete_all_view(request: HtmxHttpRequest) -> HttpResponse:
 @admin_only
 @require_http_methods(["GET", "POST"])
 def comic_images_update_hx_view(
-    request: HtmxHttpRequest,
+    request,
     parent_slug=None,
     id=None,  # noqa: A002
-) -> HttpResponse:
+):
     template_name = "comics/upload-image.html"
     if request.htmx:
         template_name = "partials/comics/images-inline-form.html"
@@ -380,10 +329,10 @@ def comic_images_update_hx_view(
 @admin_only
 @require_http_methods(["GET", "DELETE"])
 def comic_images_delete_view(
-    request: HtmxHttpRequest,
+    request,
     parent_slug=None,
     id=None,  # noqa: A002
-) -> HttpResponse:
+):
     try:
         obj = ComicImage.objects.select_related("comic").get(
             comic__slug=parent_slug,
@@ -413,10 +362,10 @@ def comic_images_delete_view(
 @admin_only
 @require_http_methods(["GET", "POST"])
 def comic_chapters_update_hx_view(
-    request: HtmxHttpRequest,
+    request,
     parent_slug=None,
     id=None,  # noqa: A002
-) -> HttpResponse:
+):
     template_name = "comics/upload-chapter.html"
     if request.htmx:
         template_name = "partials/comics/chapters-inline-form.html"
@@ -472,10 +421,10 @@ def comic_chapters_update_hx_view(
 @admin_only
 @require_http_methods(["GET", "DELETE"])
 def comic_chapters_delete_view(
-    request: HtmxHttpRequest,
+    request,
     parent_slug=None,
     id=None,  # noqa: A002
-) -> HttpResponse:
+):
     try:
         obj = (
             Chapter.objects.prefetch_related("chapteritems")

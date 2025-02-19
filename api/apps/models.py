@@ -54,12 +54,12 @@ def comic_location(instance, filename):
 
 
 class ComicStatus(models.TextChoices):
-    COMPLETED = "Completed"
-    ONGOING = "Ongoing"
-    HIATUS = "Hiatus"
-    DROPPED = "Dropped"
-    SEASON_END = "Season End"
-    COMING_SOON = "Coming Soon"
+    COMPLETED = "completed", "Completed"
+    ONGOING = "ongoing", "Ongoing"
+    HIATUS = "hiatus", "Hiatus"
+    DROPPED = "dropped", "Dropped"
+    SEASON_END = "season end", "Season End"
+    COMING_SOON = "coming soon", "Coming Soon"
 
 
 class ComicQuerySet(models.QuerySet):
@@ -114,9 +114,10 @@ class ChapterManager(models.Manager):
 
 
 class TypeStatus(models.TextChoices):
-    MANGA = "Manga"
-    MANHWA = "Manhwa"
-    MANHUA = "Manhua"
+    MANGA = "manga", "Manga"
+    MANHWA = "manhwa", "Manhwa"
+    MANHUA = "manhua", "Manhua"
+    COMIC = "comic", "Comic"
 
 
 class Genre(models.Model):

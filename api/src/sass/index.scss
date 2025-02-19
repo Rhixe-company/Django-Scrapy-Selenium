@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import 'project/fonts';
+@import 'project/form';
+@import 'project/alpine';
+@import 'project/htmx';
+@import 'project/scrolltop';
+@import 'project/ud';
+@import 'project/table';
+@import 'app/app';
+@import 'app/rating';
+@import 'app/carousel';

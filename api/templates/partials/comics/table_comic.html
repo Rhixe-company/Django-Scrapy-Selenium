@@ -1,11 +1,17 @@
 {% load static i18n %}
 
-<div class="flex w-max items-center gap-2">
+<div class="flex w-fit items-center gap-1">
   {% with images=record.get_comic_images_children %}
     {% for img in images|slice:":1" %}
-      <img class="size-10 rounded-full object-cover"
-           src="{{ img.image.url }}"
-           alt="{{ record.title|title }} avatar" />
+      {% if img.image %}
+        <img class="size-10 rounded-full object-cover"
+             src="{{ img.image.url }}"
+             alt="{{ record.title|title }} avatar" />
+      {% else %}
+        <img class="size-10 rounded-full object-cover"
+             src="{{ img.url }}"
+             alt="{{ record.title|title }} avatar" />
+      {% endif %}
     {% endfor %}
   {% endwith %}
   <div class="flex flex-col">

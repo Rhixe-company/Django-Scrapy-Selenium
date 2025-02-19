@@ -13,18 +13,15 @@ class MaterializeCssCheckboxColumn(tables.CheckBoxColumn):
         default = {"type": "checkbox", "name": bound_column.name, "value": value}
         if self.is_checked(value, record):
             default.update({"checked": "checked"})
+
         general = self.attrs.get("input")
         specific = self.attrs.get("td__input")
         attrs = tables.utils.AttributeDict(default, **(specific or general or {}))
-        html = (
-            f'<label class="flex items-center cursor-pointer text-neutral-600 dark:text-neutral-300"><div class="relative flex items-center"><input {attrs.as_html()} class="before:content['  # noqa: E501
-            '] peer relative size-4 cursor-pointer appearance-none overflow-hidden rounded border border-neutral-300 bg-white before:absolute before:inset-0 checked:border-black checked:before:bg-black focus:outline focus:outline-2 focus:outline-offset-2 focus:outline-neutral-800 checked:focus:outline-black active:outline-offset-0 dark:border-neutral-700 dark:bg-neutral-900 dark:checked:border-white dark:checked:before:bg-white dark:focus:outline-neutral-300 dark:checked:focus:outline-white"  :checked="checkAll" /><svg xmlns="http://www.w3.org/2000/svg"viewBox="0 0 24 24"aria-hidden="true"stroke="currentColor"fill="none"stroke-width="4"class="pointer-events-none invisible absolute left-1/2 top-1/2 size-3 -translate-x-1/2 -translate-y-1/2 text-neutral-100 peer-checked:visible dark:text-black"><path stroke-linecap="round"stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" ></svg></div></label>'  # noqa: E501
-        )
+        html = f"<div class='flex items-center'><input class='w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600' {attrs.as_html()}/><label class='sr-only'></label></div>"  # noqa: E501
         return mark_safe(html)  # noqa: S308
 
 
 class ComicTable(tables.Table):
-    id = MaterializeCssCheckboxColumn(orderable=True)
     comic = tables.TemplateColumn(
         orderable=True,
         template_name="partials/comics/table_comic.html",
@@ -35,11 +32,12 @@ class ComicTable(tables.Table):
     )
 
     updated_at = tables.DateColumn(orderable=True, format=settings.FORMAT)
+    check = MaterializeCssCheckboxColumn(accessor="id")
 
     class Meta:
         model = Comic
         sequence = (
-            "id",
+            "check",
             "comic",
             "status",
             "type",
@@ -47,14 +45,14 @@ class ComicTable(tables.Table):
             "actions",
         )
         fields = (
-            "id",
+            "check",
             "comic",
             "status",
             "type",
             "updated_at",
             "actions",
         )
-        template_name = "partials/comics/custom_table.html"
+        template_name = "partials/comics/tailwind.html"
         attrs = {
             "class": "mytable",
             "td": {

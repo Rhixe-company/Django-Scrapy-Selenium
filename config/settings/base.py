@@ -11,7 +11,7 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 APPS_DIR = BASE_DIR / "api"
 env = environ.Env()
 
-READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)  # type: ignore  # noqa: PGH003
+READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=True)  # type: ignore  # noqa: PGH003
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
     env.read_env(str(BASE_DIR / ".env"))
@@ -294,7 +294,7 @@ LOGGING = {
     "root": {"level": "INFO", "handlers": ["console"]},
 }
 
-REDIS_URL = env("REDIS_URL", default="redis://redis:6379/0")  # type: ignore  # noqa: PGH003
+REDIS_URL = env("REDIS_URL", default="redis://localhost:6379/0")  # type: ignore  # noqa: PGH003
 REDIS_SSL = REDIS_URL.startswith("rediss://")
 
 # Celery
@@ -412,7 +412,7 @@ CKEDITOR_CONFIGS = {
     "default": {
         "toolbar": "full",
         "removePlugins": "exportpdf",
-        "extraPlugins": ",".join(["codesnippet", "widget", "html5video", "youtube"]),  # noqa: FLY002
+        "extraPlugins": "codesnippet,widget,html5video,youtube",
     },
 }
 

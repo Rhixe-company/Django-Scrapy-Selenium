@@ -1,0 +1,11 @@
+.mytable {
+  @apply w-full text-sm text-left text-gray-500 dark:text-gray-400;
+}
+
+.mytablerow {
+  @apply hover:bg-gray-100 dark:hover:bg-gray-700;
+}
+
+.mytablecol {
+  @apply p-1 text-sm font-normal text-gray-500 whitespace-normal dark:text-gray-400;
+}

@@ -1,5 +1,14 @@
 ### Python template
 # Byte-compiled / optimized / DLL files
+.scrapy
+comics.json
+comicsnew.json
+comics2.json
+chapters.json
+chaptersnew.json
+chapters2.json
+api.sqlite3
+api-bak.sqlite3
 __pycache__/
 *.py[cod]
 *$py.class
@@ -264,6 +273,7 @@ dump.rdb
 
 ### Project template
 api/media/
+api/media-bak/
 
 .pytest_cache/
 .ipython/
