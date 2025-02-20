@@ -1,5 +1,24 @@
 {% load static i18n partials %}
 
 {% partialdef form-section inline %}
-{% include "partials/users/form.html" %}
+<!-- Add User Modal -->
+<div class="fixed flex z-30 w-full items-center justify-center  inset-0  bg-black/20 p-4 pb-8 backdrop-blur-md lg:p-8"
+     id="add-user-modal"
+     x-cloak
+     x-show="modalCreate"
+     x-transition.opacity.duration.200ms
+     x-trap.inert.noscroll="modalCreate"
+     x-on:keydown.esc.window="modalCreate = true"
+     x-on:click.self="modalCreate = true"
+     role="dialog"
+     aria-modal="true"
+     aria-labelledby="defaultModalTitle">
+  <div x-show="modalCreate"
+       x-transition:enter="transition ease-out duration-200 delay-100 motion-reduce:transition-opacity"
+       x-transition:enter-start="opacity-0 scale-50"
+       x-transition:enter-end="opacity-100 scale-100"
+       class="flex max-w-2xl flex-col gap-4 overflow-hidden rounded-sm border border-neutral-300 bg-white text-neutral-600 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-300">
+    {% include "partials/users/createform.html" %}
+  </div>
+</div>
 {% endpartialdef %}

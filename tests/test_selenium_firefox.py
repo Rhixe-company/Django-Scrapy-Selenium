@@ -57,7 +57,6 @@ def get_default_firefox_options(arguments, binary):
 
 
 def get_default_firefox_service(executable):
-
     return webdriver.FirefoxService(
         executable_path=executable,
         log_output="logs.txt",

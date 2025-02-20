@@ -2,14 +2,11 @@
 
 {% partialdef container-section inline %}
 <div id='container'
-     class="rounded-lg border border-gray-200  p-2 shadow-sm dark:border-gray-700  sm:p-3">
+     class="min[925px]:p-0 relative max-[882px]:p-4 max-[786px]:p-0 lg:my-0">
   <!-- Card header -->
   {% include "partials/users/hero.html" %}
   <!-- Table -->
   {% include "partials/users/table.html" %}
-  <div class="progress">
-    <div class="indeterminate"></div>
-  </div>
   <!-- Card Footer -->
   {% include "partials/users/pagination.html" %}
 </div>

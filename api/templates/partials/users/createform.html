@@ -1,0 +1,85 @@
+{% load static i18n example %}
+
+<!-- Modal header -->
+<div class="flex items-center justify-between border-b border-neutral-300 bg-neutral-50/60 p-4 dark:border-neutral-700 dark:bg-neutral-950/20">
+  <h3 id="defaultModalTitle"
+      class="font-semibold tracking-wide text-neutral-900 dark:text-white">Add new user</h3>
+  <button x-on:click="modalCreate = false" aria-label="close modal">
+    <svg xmlns="http://www.w3.org/2000/svg"
+         viewBox="0 0 24 24"
+         aria-hidden="true"
+         stroke="currentColor"
+         fill="none"
+         stroke-width="1.4"
+         class="w-5 h-5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+  </button>
+</div>
+<form action="#">
+  <!-- Modal body -->
+  <div class="px-4 py-8">
+    <div class="grid grid-cols-6 gap-6">
+      <div class="col-span-6 sm:col-span-3">
+        <label for="first-name"
+               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">First Name</label>
+        <input type="text"
+               name="first-name"
+               id="first-name"
+               class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+               placeholder="Bonnie"
+               required />
+      </div>
+      <div class="col-span-6 sm:col-span-3">
+        <label for="last-name"
+               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Last Name</label>
+        <input type="text"
+               name="last-name"
+               id="last-name"
+               class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+               placeholder="Green"
+               required />
+      </div>
+      <div class="col-span-6 sm:col-span-3">
+        <label for="email"
+               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+        <input type="email"
+               name="email"
+               id="email"
+               class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+               placeholder="example@company.com"
+               required />
+      </div>
+      <div class="col-span-6 sm:col-span-3">
+        <label for="position"
+               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Position</label>
+        <input type="text"
+               name="position"
+               id="position"
+               class="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+               placeholder="e.g. React developer"
+               required />
+      </div>
+      <div class="col-span-6">
+        <label for="biography"
+               class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Biography</label>
+        <textarea id="biography"
+                  rows="4"
+                  class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                  placeholder="👨‍💻Full-stack web developer. Open-source contributor."></textarea>
+      </div>
+    </div>
+  </div>
+  <!-- Modal Footer -->
+  <div class="flex flex-col-reverse justify-between gap-2 border-t border-neutral-300 bg-neutral-50/60 p-4 dark:border-neutral-700 dark:bg-neutral-950/20 sm:flex-row sm:items-center md:justify-end">
+    <button x-on:click="modalCreate = false"
+            type="button"
+            class="whitespace-nowrap rounded-sm px-4 py-2 text-center text-sm font-medium tracking-wide text-neutral-600 transition hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black active:opacity-100 active:outline-offset-0 dark:text-neutral-300 dark:focus-visible:outline-white">
+      Cancel
+    </button>
+    <button type="submit"
+            class="whitespace-nowrap rounded-sm bg-black border border-black px-4 py-2 text-center text-sm font-medium tracking-wide text-neutral-100 transition hover:opacity-75 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black active:opacity-100 active:outline-offset-0 dark:bg-white dark:border-white dark:text-black dark:focus-visible:outline-white">
+      Create
+    </button>
+  </div>
+</form>
