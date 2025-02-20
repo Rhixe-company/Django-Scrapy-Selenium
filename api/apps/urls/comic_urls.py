@@ -10,9 +10,9 @@ normalurlpatterns = [
         name="comic_list",
     ),
     path(
-        "progress/",
-        view=views.progress_view,
-        name="progress_view",
+        "task/",
+        view=views.task_view,
+        name="task_view",
     ),
     path(
         "remove/images/",

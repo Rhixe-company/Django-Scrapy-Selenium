@@ -27,7 +27,7 @@ from crawler.tasks import get_comics_count
 @user_only
 @admin_only
 @require_http_methods(["GET"])
-def progress_view(request):
+def task_view(request):
     result = get_comics_count.delay(10)  # type: ignore  # noqa: PGH003
     return render(
         request,

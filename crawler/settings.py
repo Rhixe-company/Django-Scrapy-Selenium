@@ -13,6 +13,7 @@ from shutil import which
 
 import django
 from django.conf import settings
+from scrapy.utils.reactor import install_reactor
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 sys.path.append(os.path.join(BASE_DIR, "config"))  # noqa: PTH118
@@ -77,8 +78,8 @@ CONCURRENT_REQUESTS_PER_IP = 64
 DOWNLOADER_MIDDLEWARES = {
     "scrapy.downloadermiddlewares.useragent.UserAgentMiddleware": None,
     "crawler.middlewares.rotate.RotateUserAgentMiddleware": 540,
-    "crawler.middlewares.retry.TooManyRequestsRetryMiddleware": 541,
-    "crawler.middlewares.default.CrawlerDownloaderMiddleware": 543,
+    # "crawler.middlewares.retry.TooManyRequestsRetryMiddleware": 541,
+    # "crawler.middlewares.default.CrawlerDownloaderMiddleware": 543,
     "crawler.middlewares.main.SeleniumMiddleware": 800,
 }
 
@@ -93,9 +94,8 @@ DOWNLOADER_MIDDLEWARES = {
 ITEM_PIPELINES = {
     "crawler.pipelines.download.MyImagesPipeline": 1,
     "crawler.pipelines.default.CrawlerDefaultPipeline": 200,
-    # "crawler.pipelines.dupelicate.CrawlerDupelicatePipeline": 300,
-    "crawler.pipelines.appsformdb.CrawlerAppsDbFormPipeline": 400,
-    # "crawler.pipelines.redis.red.CrawlerRedisPipeline": 500,
+    "crawler.pipelines.appsformdb.CrawlerAppsDbFormPipeline": 300,
+    # "crawler.pipelines.redis.red.CrawlerRedisPipeline": 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -114,18 +114,21 @@ ITEM_PIPELINES = {
 # Enable and configure HTTP caching (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
 HTTPCACHE_ENABLED = True
-HTTPCACHE_EXPIRATION_SECS = 0
-HTTPCACHE_DIR = "scrapy"
+HTTPCACHE_EXPIRATION_SECS = 86400
+HTTPCACHE_DIR = "cache"
 HTTPCACHE_IGNORE_HTTP_CODES = list(range(300, 501))
 HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"
+HTTPCACHE_GZIP = True
 
 # Set settings whose default value is deprecated to a future-proof value
-TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
+TWISTED_REACTOR = install_reactor(
+    "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
+)
 FEED_EXPORT_ENCODING = "utf-8"
-DOWNLOAD_HANDLERS = {  # noqa: ERA001, RUF100
+DOWNLOAD_HANDLERS = {
     "http": "scrapy_impersonate.ImpersonateDownloadHandler",
     "https": "scrapy_impersonate.ImpersonateDownloadHandler",
-}  # noqa: ERA001, RUF100
+}
 FEEDS = {
     "comics.json": {
         "format": "json",
@@ -144,18 +147,54 @@ FEEDS = {
         "indent": 4,
     },
 }
-IMAGES_EXPIRES = 730
 RETRY_TIMES = 2
 RETRY_ENABLED = True
 RETRY_HTTP_CODES = list(range(300, 501))
-MEDIA_ALLOW_REDIRECTS = True
+
 DOWNLOAD_FAIL_ON_DATALOSS = True
 LOG_LEVEL = "INFO"
+
+# AWS
+# IMAGES_STORE = "s3://bucket/images"  # noqa: ERA001
+# IMAGES_STORE_S3_ACL = "public-read"  # noqa: ERA001
+# AWS_ENDPOINT_URL = "http://minio.example.com:9000"  # noqa: ERA001
+# AWS_USE_SSL = False  # or True (None by default)  # noqa: ERA001
+# AWS_VERIFY = False  # or True (None by default)  # noqa: ERA001
+
+# GCLOUD
+# IMAGES_STORE = "gs://bucket/images/"  # noqa: ERA001
+# GCS_PROJECT_ID = "project_id"  # noqa: ERA001
+# IMAGES_STORE_GCS_ACL = "publicRead"  # noqa: ERA001
+
+
+# LOCAL
 IMAGES_STORE = settings.MEDIA_ROOT
-# REDIS_URL = settings.CELERY_BROKER_URL  # noqa: ERA001
-# DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"  # noqa: ERA001
-# SCHEDULER = "scrapy_redis.scheduler.Scheduler"  # noqa: ERA001
-# SCHEDULER_PERSIST = False  # noqa: ERA001
+
+IMAGES_URLS_FIELD = "image_urls"
+IMAGES_RESULT_FIELD = "images"
+
+# 1460 days of delay for files expiration
+FILES_EXPIRES = 1460
+
+# 730 days of delay for images expiration
+IMAGES_EXPIRES = 730
+
+
+# IMAGES_THUMBS = {  # noqa: ERA001, RUF100
+#     "small": (50, 50),  # noqa: ERA001
+#     "big": (270, 270),  # noqa: ERA001
+# }  # noqa: ERA001, RUF100
+
+
+IMAGES_MIN_HEIGHT = 110
+IMAGES_MIN_WIDTH = 110
+
+MEDIA_ALLOW_REDIRECTS = True
+
+# REDIS_URL = settings.CELERY_BROKER_URL
+# DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+# SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+# SCHEDULER_PERSIST = False
 
 # SELENIUM_DRIVER_NAME = "firefox"  # noqa: ERA001
 # SELENIUM_DRIVER_EXECUTABLE_PATH = which("geckodriver")  # noqa: ERA001

@@ -9,7 +9,6 @@ from scrapy.utils.httpobj import urlparse_cached
 
 
 class MyImagesPipeline(ImagesPipeline):
-
     def get_media_requests(self, item, info):
         adapter = ItemAdapter(item)
         if adapter.get("image_urls"):

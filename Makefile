@@ -6,14 +6,14 @@ compose := docker compose -f docker-compose.local.yml
 python:
 	py
 
-container-build:
-	$(compose) build
+compose-build:
+	$(compose) build redis
 
-container-down:
+compose-down:
 	$(compose) down --remove-orphans -t 0
 
-daemon:
-	$(compose) up -d
+compose-daemon:
+	$(compose) up -d redis
 
 crawl:
 	py manage.py crawl
@@ -36,11 +36,11 @@ super-user:
 system-clean:
 	bash bash/docker-clean.sh
 
-logs:
+compose-logs:
 	$(compose) logs -f
 
-logs-django:
-	$(compose) logs -f django nginx postgres celeryworker
+compose-logs-services:
+	$(compose) logs -f django node postgres celeryworker redis
 
 delete:
 	sudo rm -r ./data ./staticfiles ./dist
@@ -96,8 +96,6 @@ format:
 format-check:
 	py -m djlint ./api/templates/**/**/**/*.html --format-css --format-js --check
 
-# dumpdata:
-# 	py manage.py dumpdata -e apps.ChapterImage users apps home --indent 4
 dumpdata:
 	py -Xutf8 manage.py dumpdata users apps home --indent 4 -o $(fix)
 

@@ -18,7 +18,7 @@ class RunSpider(Spider):
 
     def start_requests(self):
         # Custom start URLs
-        urls = ["https://asuracomic.net/series/reborn-as-the-enemy-prince-d4f83eb5"]
+        urls = ["https://asuracomic.net/series/solo-leveling-0bf45648"]
 
         for url in urls:
             msg = f"Page: {url}"
@@ -247,18 +247,18 @@ class RunSpider(Spider):
             loader.add_value("chaptertitle", chaptertitle)
         loader.add_value("chaptername", chaptername)
         loader.add_value("chapterslug", chapterslug)
-        image_urls = response.xpath(
-            '//div[contains(@class, "w-full mx-auto center")]/img[contains(@class, "object-cover mx-auto")]/@src',  # noqa: E501
-        ).getall()
-        # image_urls = response.request.meta["driver"].find_elements(  # type: ignore  # noqa: E501, PGH003
-        #     By.XPATH,
-        #     "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501, ERA001
-        # )  # noqa: ERA001, RUF100
+        # image_urls = response.xpath(  # noqa: ERA001, RUF100
+        #     '//div[contains(@class, "w-full mx-auto center")]/img[contains(@class, "object-cover mx-auto")]/@src',  # noqa: E501, ERA001
+        # ).getall()
+        image_urls = response.request.meta["driver"].find_elements(
+            By.XPATH,
+            "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501
+        )
         if image_urls:
             images = []
-            for img in image_urls:
-                # images.append(img.get_attribute("src"))  # noqa: E501, ERA001, PERF401, RUF100
-                images.append(response.urljoin(img))  # noqa: PERF401
+            for img in image_urls[0:2]:
+                images.append(img.get_attribute("src"))  # noqa: PERF401
+                # images.append(response.urljoin(img))  # noqa: ERA001
             loader.add_value("image_urls", images)
             msg = f"Total Images found: {len(images)}"
             logger.info(msg)

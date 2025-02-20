@@ -21981,5 +21981,33 @@
       }
     ],
     "spider": "run1"
+  },
+  {
+    "url": "https://asuracomic.net/series/solo-leveling-58299846/chapter/200",
+    "updated_at": "2024-07-13",
+    "comictitle": "Solo Leveling",
+    "comicslug": "solo-leveling",
+    "chaptertitle": "Side Story 21 { THE END }",
+    "chaptername": "Chapter 200",
+    "chapterslug": "solo-leveling-chapter-200",
+    "image_urls": [
+      "https://gg.asuracomic.net/storage/media/241374/conversions/01-optimized.webp",
+      "https://gg.asuracomic.net/storage/media/241392/conversions/02-optimized.webp"
+    ],
+    "images": [
+      {
+        "url": "https://gg.asuracomic.net/storage/media/241374/conversions/01-optimized.webp",
+        "path": "solo-leveling/solo-leveling-chapter-200/01-optimized.webp",
+        "checksum": "822d332f62e93be441e433f342946c55",
+        "status": "uptodate"
+      },
+      {
+        "url": "https://gg.asuracomic.net/storage/media/241392/conversions/02-optimized.webp",
+        "path": "solo-leveling/solo-leveling-chapter-200/02-optimized.webp",
+        "checksum": "f56849dad5f27d4497335bc34329f5bf",
+        "status": "uptodate"
+      }
+    ],
+    "spider": "run"
   }
 ]

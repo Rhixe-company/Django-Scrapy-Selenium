@@ -5,7 +5,10 @@ from celery.utils.log import get_task_logger
 from celery_progress.backend import ProgressRecorder
 from django.core.management import call_command
 
+from api.apps.models import Chapter
+from api.apps.models import ChapterImage
 from api.apps.models import Comic
+from api.apps.models import ComicImage
 from api.users.models import User
 
 logger = get_task_logger(__name__)
@@ -34,6 +37,7 @@ def get_users_count(self, seconds):
 def get_comics_count(self, seconds):
     """A pointless Celery task to demonstrate usage."""
     logger.info("A pointless Celery task to demonstrate usage.")
+    call_command("crawl")
     progress_recorder = ProgressRecorder(self)
     for i in range(seconds):
         time.sleep(1)
@@ -43,16 +47,40 @@ def get_comics_count(self, seconds):
             seconds,
             description="Get Comics Count description",
         )
-    return {
-        "comics": Comic.objects.all(),
-        "comics_count": Comic.objects.count(),
+    comics = (
+        Comic.objects.prefetch_related(
+            "comicitems",
+            "comicchapters",
+            "genres",
+            "followers",
+        )
+        .select_related("author", "category", "artist", "user")
+        .all()
+    )
+    comic_images = ComicImage.objects.select_related("comic").all()
+    chapters = (
+        Chapter.objects.prefetch_related("chapteritems").select_related("comic").all()
+    )
+
+    chapter_images = ChapterImage.objects.select_related("comic", "chapter").all()
+    logger.info = {
+        "Comics": comics.values("title", "slug"),
+        "Comics_Count": comics.count(),
+        "ComicsImage": comic_images.values("image", "url", "comic"),
+        "ComicsImage_Count": comic_images.count(),
+        "Chapters": chapters.values("name", "slug", "numpages"),
+        "Chapters_Count": chapters.count(),
+        "ChaptersImage": chapter_images.values("image", "url", "chapter"),
+        "ChaptersImage_Count": chapter_images.count(),
     }
+    return "Done "
 
 
 @shared_task(bind=True, name="Crawl task")
 def crawl_task(self, seconds):
     """A Celery task to Run Crawl Custom command crawl."""
     logger.info("A Celery task to Run Crawl Custom command crawl")
+    call_command("crawls")
     progress_recorder = ProgressRecorder(self)
 
     for i in range(seconds):
@@ -64,4 +92,29 @@ def crawl_task(self, seconds):
             description="Crawl task description",
         )
 
-    return call_command("crawl")
+    comics = (
+        Comic.objects.prefetch_related(
+            "comicitems",
+            "comicchapters",
+            "genres",
+            "followers",
+        )
+        .select_related("author", "category", "artist", "user")
+        .all()
+    )
+    comic_images = ComicImage.objects.select_related("comic").all()
+    chapters = (
+        Chapter.objects.prefetch_related("chapteritems").select_related("comic").all()
+    )
+
+    chapter_images = ChapterImage.objects.select_related("comic", "chapter").all()
+    return {
+        "Comics": comics.values("title", "slug"),
+        "Comics_Count": comics.count(),
+        "ComicsImage": comic_images.values("image", "url", "comic"),
+        "ComicsImage_Count": comic_images.count(),
+        "Chapters": chapters.values("name", "slug", "numpages"),
+        "Chapters_Count": chapters.count(),
+        "ChaptersImage": chapter_images.values("image", "url", "chapter"),
+        "ChaptersImage_Count": chapter_images.count(),
+    }
