@@ -85,7 +85,7 @@ class ComicItem(Item):
         output_processor=TakeFirst(),
     )
     type = Field(
-        input_processor=MapCompose(strip_html, comments_html, get_html, lower_function),
+        input_processor=MapCompose(strip_html, comments_html, get_html),
         output_processor=TakeFirst(),
     )
     updated_at = Field(

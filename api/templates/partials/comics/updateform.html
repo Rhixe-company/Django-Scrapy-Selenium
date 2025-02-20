@@ -1,16 +1,16 @@
 {% load static i18n l10n example %}
 
-<div x-data="{ formItem: 'one' }"
+<div x-data="{ comicformItem: false, comicimageformItem: false, chapterformItem: false }"
      class="w-full divide-y divide-neutral-300 overflow-hidden rounded-sm border border-neutral-300 bg-neutral-50/40 text-neutral-600 dark:divide-neutral-700 dark:border-neutral-700 dark:bg-neutral-900/50 dark:text-neutral-300">
   <div>
     <button id="controlsComicItem"
             type="button"
             class="flex w-full items-center justify-between gap-4 bg-neutral-50 p-4 text-left underline-offset-2 hover:bg-neutral-50/75 focus-visible:bg-neutral-50/75 focus-visible:underline focus-visible:outline-hidden dark:bg-neutral-900 dark:hover:bg-neutral-900/75 dark:focus-visible:bg-neutral-900/75"
             aria-controls="comicItem"
-            x-on:click="formItem = 'one'"
-            x-bind:class="formItem === 'one' ? 'text-onSurfaceStrong dark:text-onSurfaceDarkStrong font-bold'  : 'text-onSurface dark:text-onSurfaceDark font-medium'"
-            x-bind:aria-expanded="formItem === 'one' ? 'true' : 'false'">
-      Comics?
+            x-on:click="comicformItem = !comicformItem"
+            x-bind:class="comicformItem ? 'text-onSurfaceStrong dark:text-onSurfaceDarkStrong font-bold'  : 'text-onSurface dark:text-onSurfaceDark font-medium'"
+            x-bind:aria-expanded="comicformItem ? 'true' : 'false'">
+      Comics
       <svg xmlns="http://www.w3.org/2000/svg"
            viewBox="0 0 24 24"
            fill="none"
@@ -18,12 +18,12 @@
            stroke="currentColor"
            class="size-5 shrink-0 transition"
            aria-hidden="true"
-           x-bind:class="formItem === 'one'  ?  'rotate-180'  :  ''">
+           x-bind:class="comicformItem  ?  'rotate-180'  :  ''">
         <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
       </svg>
     </button>
     <div x-cloak
-         x-show="formItem === 'one'"
+         x-show="comicformItem"
          id="comicItem"
          role="region"
          aria-labelledby="controlsComicItem"
@@ -37,7 +37,7 @@
         <button type="button"
                 href='{% url "comics:comic_list" %}'
                 hx-get='{% url "comics:comic_list" %}'
-                hx-indicator='.progress'
+                hx-indicator=".progress"
                 hx-target='#container'
                 hx-push-url='true'
                 type="button"
@@ -56,9 +56,16 @@
       </div>
       <div class="p-4 text-sm sm:text-base text-pretty">
         <form class="mb-6"
-              hx-target='#update-form'
+              action='.'
+              method="POST"
+              hx-target='#form-container'
               hx-post='{{ object.get_edit_url }}'
+              hx-indicator=".progress"
               {% if form.instance.id %} hx-trigger='submit, change delay:500ms' {% else %} hx-trigger='submit' {% endif %}>
+          {% csrf_token %}
+          {% for hidden_field in form.hidden_fields %}{{ hidden_field.errors }} {{ hidden_field }}{% endfor %}
+          {{ form.non_form_errors }}
+          {% include "partials/htmx/spinner.html" %}
           <div class='mb-4'>
             <div class="grid grid-cols-6 gap-6">
               {% for field in form %}
@@ -90,7 +97,7 @@
             <button x-on:click="drawerUpdate = false"
                     href='{% url "comics:comic_list" %}'
                     hx-get='{% url "comics:comic_list" %}'
-                    hx-indicator='.progress'
+                    hx-indicator=".progress"
                     hx-target='#container'
                     hx-push-url='true'
                     class="inline-flex items-center justify-center text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800"
@@ -117,9 +124,9 @@
                 type="button"
                 class="flex w-full items-center justify-between gap-4 bg-neutral-50 p-4 text-left underline-offset-2 hover:bg-neutral-50/75 focus-visible:bg-neutral-50/75 focus-visible:underline focus-visible:outline-hidden dark:bg-neutral-900 dark:hover:bg-neutral-900/75 dark:focus-visible:bg-neutral-900/75"
                 aria-controls="comicImageItem"
-                x-on:click="formItem = 'two'"
-                x-bind:class="formItem === 'two' ? 'text-onSurfaceStrong dark:text-onSurfaceDarkStrong font-bold'  : 'text-onSurface dark:text-onSurfaceDark font-medium'"
-                x-bind:aria-expanded="formItem === 'two' ? 'true' : 'false'">
+                x-on:click="comicimageformItem = !comicimageformItem"
+                x-bind:class="comicimageformItem ? 'text-onSurfaceStrong dark:text-onSurfaceDarkStrong font-bold'  : 'text-onSurface dark:text-onSurfaceDark font-medium'"
+                x-bind:aria-expanded="comicimageformItem ? 'true' : 'false'">
           Comic Images
           <svg xmlns="http://www.w3.org/2000/svg"
                viewBox="0 0 24 24"
@@ -128,24 +135,44 @@
                stroke="currentColor"
                class="size-5 shrink-0 transition"
                aria-hidden="true"
-               x-bind:class="formItem === 'two'  ?  'rotate-180'  :  ''">
+               x-bind:class="comicimageformItem  ?  'rotate-180'  :  ''">
             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
           </svg>
         </button>
         <div x-cloak
-             x-show="formItem === 'two'"
+             x-show="comicimageformItem"
              id="comicImageItem"
              role="region"
              aria-labelledby="controlsComicImageItem"
              x-collapse>
-          <div class="flow-root mb-2">
-            <ul role="list" class="divide-y divide-gray-200 dark:divide-gray-700">
+          <div id="comic-image-create"
+               class="flow-root mb-2 divide-y divide-gray-200 dark:divide-gray-700">
+            <ul role="list" class="">
               {% for img in images %}
                 {% include "partials/comics/images-inline.html" with object=img %}
               {% endfor %}
             </ul>
           </div>
-          {% if new_comic_image_url %}<div id='comic-create'></div>{% endif %}
+          {% if new_comic_image_url %}
+            <div class="flex flex-row justify-between gap-2  bg-neutral-50/60 p-2 dark:bg-neutral-950/20  items-center ">
+              <button class="cursor-pointer whitespace-nowrap  tracking-wide  transition hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black active:opacity-100 active:outline-offset-0 dark:text-neutral-300 dark:focus-visible:outline-white inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">
+                <svg class="w-4 h-4 mr-2"
+                     fill="currentColor"
+                     viewBox="0 0 20 20"
+                     xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd">
+                  </path>
+                </svg>
+                Delete All Comic Images
+              </button>
+              <button class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                      href="{{ new_comic_image_url }}"
+                      hx-get="{{ new_comic_image_url }}"
+                      hx-target='#comic-image-create'
+                      hx-indicator='.progress'
+                      hx-swap='beforeend'>{% translate "Add New Comic Image Form" %}</button>
+            </div>
+          {% endif %}
         </div>
       </div>
     {% endwith %}
@@ -155,9 +182,9 @@
                 type="button"
                 class="flex w-full items-center justify-between gap-4 bg-neutral-50 p-4 text-left underline-offset-2 hover:bg-neutral-50/75 focus-visible:bg-neutral-50/75 focus-visible:underline focus-visible:outline-hidden dark:bg-neutral-900 dark:hover:bg-neutral-900/75 dark:focus-visible:bg-neutral-900/75"
                 aria-controls="chapterItem"
-                x-on:click="formItem = 'three'"
-                x-bind:class="formItem === 'three' ? 'text-onSurfaceStrong dark:text-onSurfaceDarkStrong font-bold'  : 'text-onSurface dark:text-onSurfaceDark font-medium'"
-                x-bind:aria-expanded="formItem === 'three' ? 'true' : 'false'">
+                x-on:click="chapterformItem = !chapterformItem"
+                x-bind:class="chapterformItem ? 'text-onSurfaceStrong dark:text-onSurfaceDarkStrong font-bold'  : 'text-onSurface dark:text-onSurfaceDark font-medium'"
+                x-bind:aria-expanded="chapterformItem ? 'true' : 'false'">
           Chapters
           <svg xmlns="http://www.w3.org/2000/svg"
                viewBox="0 0 24 24"
@@ -166,41 +193,44 @@
                stroke="currentColor"
                class="size-5 shrink-0 transition"
                aria-hidden="true"
-               x-bind:class="formItem === 'three'  ?  'rotate-180'  :  ''">
+               x-bind:class="chapterformItem  ?  'rotate-180'  :  ''">
             <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
           </svg>
         </button>
         <div x-cloak
-             x-show="formItem === 'three'"
+             x-show="chapterformItem"
              id="chapterItem"
              role="region"
              aria-labelledby="controlsChapterItem"
              x-collapse>
-          <div class="bg-[#222222]">
-            <div>
-              <div class="p-4">
-                <input class="w-full rounded-sm border bg-[#343434] px-2.5 py-1 placeholder:text-sm placeholder:text-[#a2a2a2c7] focus:border-none focus:outline-none focus:ring-0"
-                       placeholder="Search Chapter. Example: {{ object.get_chapters_children.last.name }} or {{ object.get_chapters_children.first.name }}"
-                       type="text"
-                       value="" />
-              </div>
-              <div id='comic-chapter-create'
-                   class="scrollbar-thumb-themecolor scrollbar-track-transparent scrollbar-thin mr-3 max-h-[20rem] space-y-2.5 overflow-y-auto pb-4 pl-4 pr-2">
-                {% for chap in chapters %}
-                  {% include "partials/comics/chapters-inline.html" with object=chap %}
-                {% endfor %}
-              </div>
-              <div class="flex flex-row justify-between gap-2 border-t border-neutral-300 bg-neutral-50/60 p-2 dark:border-neutral-700 dark:bg-neutral-950/20  items-center ">
-                {% if new_comic_chapter_url %}
-                  <button class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
-                          href="{{ new_comic_chapter_url }}"
-                          hx-get="{{ new_comic_chapter_url }}"
-                          hx-target='#comic-chapter-create'
-                          hx-swap='beforeend'>{% translate "Add New Comic Chapter Form" %}</button>
-                {% endif %}
-              </div>
+          <div class="bg-[#222222] divide-y divide-gray-200 dark:divide-gray-700"
+               id='comic-chapter-create'>
+            <div class="scrollbar-thumb-themecolor scrollbar-track-transparent scrollbar-thin mr-3 max-h-[20rem] space-y-2.5 overflow-y-auto pb-4 pl-4 pr-2">
+              {% for chap in chapters %}
+                {% include "partials/comics/chapters-inline.html" with object=chap %}
+              {% endfor %}
             </div>
           </div>
+          {% if new_comic_chapter_url %}
+            <div class="flex flex-row justify-between gap-2 border-t border-neutral-300 bg-neutral-50/60 p-2 dark:border-neutral-700 dark:bg-neutral-950/20  items-center ">
+              <button class="cursor-pointer whitespace-nowrap  tracking-wide  transition hover:opacity-75 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black active:opacity-100 active:outline-offset-0 dark:text-neutral-300 dark:focus-visible:outline-white inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">
+                <svg class="w-4 h-4 mr-2"
+                     fill="currentColor"
+                     viewBox="0 0 20 20"
+                     xmlns="http://www.w3.org/2000/svg">
+                  <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd">
+                  </path>
+                </svg>
+                Delete All Chapters
+              </button>
+              <button class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800"
+                      href="{{ new_comic_chapter_url }}"
+                      hx-get="{{ new_comic_chapter_url }}"
+                      hx-target='#comic-chapter-create'
+                      hx-indicator='.progress'
+                      hx-swap='beforeend'>{% translate "Add New Chapter" %}</button>
+            </div>
+          {% endif %}
         </div>
       </div>
     {% endwith %}

@@ -20,7 +20,7 @@ def load(request: HttpRequest) -> dict[str, str]:
             "followers",
             "comicchapters",
         )
-        .select_related("user", "author", "type", "artist")
+        .select_related("user", "author", "category", "artist")
         .filter(Q(updated_at__gte=mdate))
     )
     week = (
@@ -31,7 +31,7 @@ def load(request: HttpRequest) -> dict[str, str]:
             "followers",
             "comicchapters",
         )
-        .select_related("user", "author", "type", "artist")
+        .select_related("user", "author", "category", "artist")
         .filter(Q(updated_at__gte=wdate))
     )
     allc = (
@@ -42,7 +42,7 @@ def load(request: HttpRequest) -> dict[str, str]:
             "followers",
             "comicchapters",
         )
-        .select_related("user", "author", "type", "artist")
+        .select_related("user", "author", "category", "artist")
         .filter(Q(updated_at__gte=ydate))
     )
 

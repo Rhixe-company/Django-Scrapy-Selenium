@@ -10,28 +10,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {% block css %}
-      <link rel="stylesheet"
-            href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism.min.css"
-            integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ=="
-            crossorigin="anonymous"
-            referrerpolicy="no-referrer" />
-      <link rel="manifest" href="{% static 'manifest.json' %}" />
-      <link rel="icon"
-            type="image/webp"
-            sizes="192x192"
-            href="{% static 'logo-192x192.webp' %}" />
-      <link rel="icon"
-            type="image/webp"
-            sizes="512x512"
-            href="{% static 'logo-512x512.webp' %}" />
-      <link rel="icon" href="{% static 'favicon.webp' %}" />
-      <!-- Your stuff: Third-party CSS libraries go here -->
-      <!-- This file stores project-specific CSS -->
-      {% render_bundle 'project' 'css' %}
-      {% comment %} <link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-      <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-            rel="stylesheet" /> {% endcomment %}
+      {% include "partials/base/style.html" %}
     {% endblock css %}
     <title>
       {% block title %}
@@ -39,32 +18,26 @@
       {% endblock title %}
     </title>
     {% block javascript %}
-      {% comment %} <script src="{% static 'flowbite.min.js' %}"></script> {% endcomment %}
-      {% comment %} <script src="{% static 'hyperscript.js' %}"></script> {% endcomment %}
-      <script src="{% static 'jquery-3.6.3.min.js' %}"></script>
-      <script src="{% static 'sweetalert2.all.min.js' %}"></script>
-      <link rel="stylesheet" href="{% static 'sweetalert2.min.css' %}" />
-      {% comment %}
-      <script src="{% static 'theme.js' %}"></script> {% endcomment %}
-      {% comment %} <script async defer src="{% static 'buttons.js' %}"></script> {% endcomment %}
-      <!-- place project specific Javascript in this file -->
-      {% render_bundle 'project' 'js' attrs='defer' %}
-      {% comment %} <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/styles/devibeans.min.css" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.6.0/highlight.min.js"></script>
-<script>
-  hljs.highlightAll();
-</script> {% endcomment %}
-{% endblock javascript %}
-</head>
-{% comment %} <body _="on every htmx:beforeSend in <button:not(.no-disable)/> tell it toggle [disabled='true'] until htmx:afterOnLoad" hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' class="min-h-screen antialiased bg-secondarybackground __variable_5d1e58 clickup-chrome-ext_installed" style="margin: 0 !important" data-new-gr-c-s-check-loaded="14.1215.0" data-gr-ext-installed="" cz-shortcut-listen="true"> {% endcomment %}
-<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}' class="min-h-screen antialiased bg-secondarybackground __variable_5d1e58 clickup-chrome-ext_installed" style="margin: 0 !important" data-new-gr-c-s-check-loaded="14.1215.0" data-gr-ext-installed="" cz-shortcut-listen="true">
-{% include "partials/base/header.html" %}
-<div style="overflow: hidden; max-width: 1220px; margin: 0 auto; position: relative; padding-bottom: 9rem">
-<div class="lg:mx-3.5 lg:my-0 relative max-[786px]:p-0 max-[882px]:p-4 min[925px]:p-0">
-{% block main %}
-{% endblock main %}
-</div>
-</div>
-{% include "partials/base/footer.html" %}
-</body>
+      {% include "partials/base/script.html" %}
+    {% endblock javascript %}
+  </head>
+  <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+        class="min-h-screen antialiased bg-secondarybackground __variable_5d1e58 clickup-chrome-ext_installed"
+        style="margin: 0 !important"
+        data-new-gr-c-s-check-loaded="14.1215.0"
+        data-gr-ext-installed=""
+        cz-shortcut-listen="true">
+    {% include "partials/base/header.html" %}
+    <div style="overflow: hidden;
+                max-width: 1220px;
+                margin: 0 auto;
+                position: relative;
+                padding-bottom: 9rem">
+      <div class="lg:mx-3.5 lg:my-0 relative max-[786px]:p-0 max-[882px]:p-4 min[925px]:p-0">
+        {% block main %}
+        {% endblock main %}
+      </div>
+    </div>
+    {% include "partials/base/footer.html" %}
+  </body>
 </html>

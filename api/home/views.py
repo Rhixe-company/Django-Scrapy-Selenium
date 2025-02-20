@@ -17,7 +17,7 @@ def index(request):
             "followers",
             "comicchapters",
         )
-        .select_related("user", "author", "type", "artist")
+        .select_related("user", "author", "category", "artist")
         .all()
     )
     paginator = Paginator(queryset, settings.PAGINATE_BY)
@@ -38,7 +38,7 @@ def index(request):
             "followers",
             "comicchapters",
         )
-        .select_related("user", "author", "type", "artist")
+        .select_related("user", "author", "category", "artist")
         .filter(Q(rating__gte=10) | Q(rating__lte=9.9))
     )
     feat = (
@@ -49,7 +49,7 @@ def index(request):
             "followers",
             "comicchapters",
         )
-        .select_related("user", "author", "type", "artist")
+        .select_related("user", "author", "category", "artist")
         .filter(Q(rating__gte=9.9) | Q(rating__lte=9.8))
     )
     context = {
@@ -64,13 +64,13 @@ def index(request):
 
 def comics(request):
     title = request.GET.get("title")
-    types = request.GET.getlist("type")
+    category = request.GET.getlist("category")
     status = request.GET.get("status")
     updated_at = request.GET.get("updated_at")
     genres = request.GET.getlist("genres")
     titleq = title if title is not None else ""
     statusq = status if status is not None else ""
-    typesq = types if types is not None else ""
+    categoryq = category if category is not None else ""
     genresq = genres if genres is not None else ""
     updated_atq = updated_at if updated_at is not None else ""
     if titleq:
@@ -82,7 +82,7 @@ def comics(request):
                 "followers",
                 "comicchapters",
             )
-            .select_related("user", "author", "type", "artist")
+            .select_related("user", "author", "category", "artist")
         )
     elif statusq:
         qs = (
@@ -92,10 +92,10 @@ def comics(request):
                 "followers",
                 "comicchapters",
             )
-            .select_related("user", "author", "type", "artist")
+            .select_related("user", "author", "category", "artist")
             .filter(Q(status__icontains=statusq))
         )
-    elif typesq:
+    elif categoryq:
         qs = (
             Comic.objects.prefetch_related(
                 "comicitems",
@@ -103,8 +103,8 @@ def comics(request):
                 "followers",
                 "comicchapters",
             )
-            .select_related("user", "author", "type", "artist")
-            .filter(Q(type__name__in=typesq))
+            .select_related("user", "author", "category", "artist")
+            .filter(Q(category__pk__in=categoryq))
         )
     elif genresq:
         qs = (
@@ -114,8 +114,8 @@ def comics(request):
                 "followers",
                 "comicchapters",
             )
-            .select_related("user", "author", "type", "artist")
-            .filter(Q(genres__name__in=genresq))
+            .select_related("user", "author", "category", "artist")
+            .filter(Q(genres__pk__in=genresq))
         )
     elif updated_atq:
         qs = (
@@ -125,7 +125,7 @@ def comics(request):
                 "followers",
                 "comicchapters",
             )
-            .select_related("user", "author", "type", "artist")
+            .select_related("user", "author", "category", "artist")
             .all()
             .order_by(updated_atq)
         )
@@ -137,7 +137,7 @@ def comics(request):
                 "followers",
                 "comicchapters",
             )
-            .select_related("user", "author", "type", "artist")
+            .select_related("user", "author", "category", "artist")
             .all()
         )
     comic_filter = SearchFilter(request.GET, queryset=qs)

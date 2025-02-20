@@ -18,8 +18,8 @@
        x-show="drawerUpdate"
        x-transition.opacity.duration.200ms
        x-trap.inert.noscroll="drawerUpdate"
-       x-on:keydown.esc.window="drawerUpdate = false"
-       x-on:click.self="drawerUpdate = false"
+       x-on:keydown.esc.window="drawerUpdate = true"
+       x-on:click.self="drawerUpdate = true"
        class="fixed right-0 top-0 z-40 h-screen p-4 overflow-y-auto   w-4/5 bg-black/30  backdrop-blur-md"
        :class="drawerUpdate ? '' : 'transition-transform -translate-x-full'"
        role="dialog"
@@ -34,7 +34,6 @@
          hx-get='{{ record.get_edit_url }}'
          hx-trigger='intersect once'
          hx-indicator='.progress'
-         hx-target='#update-form'
          hx-push-url='true'>{% include "partials/comics/update.html" %}</div>
   </div>
 </div>
@@ -55,8 +54,8 @@
        x-show="drawerDelete"
        x-transition.opacity.duration.200ms
        x-trap.inert.noscroll="drawerDelete"
-       x-on:keydown.esc.window="drawerDelete = false"
-       x-on:click.self="drawerDelete = false"
+       x-on:keydown.esc.window="drawerDelete = true"
+       x-on:click.self="drawerDelete = true"
        class="fixed right-0 top-0 z-40 h-screen p-4 overflow-y-auto   w-4/5 bg-black/30  backdrop-blur-md"
        :class="drawerDelete ? '' : 'transition-transform -translate-x-full'"
        role="dialog"
@@ -71,7 +70,7 @@
          hx-get='{{ record.get_delete_url }}'
          hx-trigger='intersect once'
          hx-indicator='.progress'
-         hx-target='#delete-form'
+         hx-target='#form-container'
          hx-push-url='true'>{% include "partials/comics/delete.html" %}</div>
   </div>
 </div>

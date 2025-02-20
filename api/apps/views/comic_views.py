@@ -28,7 +28,7 @@ from crawler.tasks import get_comics_count
 @admin_only
 @require_http_methods(["GET"])
 def progress_view(request):
-    result = get_comics_count.delay(10)
+    result = get_comics_count.delay(10)  # type: ignore  # noqa: PGH003
     return render(
         request,
         "comics/display_progress.html",
@@ -49,7 +49,7 @@ def comic_list_view(request):
             "followers",
             "comicchapters",
         )
-        .select_related("user", "author", "type", "artist")
+        .select_related("user", "author", "category", "artist")
         .all()
     )
 
@@ -76,12 +76,12 @@ def comic_detail_hx_view(
         raise Http404
     try:
         obj = get_object_or_404(Comic, slug=slug)
-        comic_type = obj.type.name
+        comic_category = obj.category.name  # type: ignore  # noqa: PGH003
         comic_author = obj.author.name
         comic_artist = obj.artist.name
         comiclookups = (
             Q(author__name__iexact=comic_author)
-            | Q(type__name__iexact=comic_type)
+            | Q(category__name__iexact=comic_category)
             | Q(artist__name__iexact=comic_artist)
         )
         comics = (
@@ -91,7 +91,7 @@ def comic_detail_hx_view(
                 "followers",
                 "comicchapters",
             )
-            .select_related("user", "author", "type", "artist")
+            .select_related("user", "author", "category", "artist")
             .filter(comiclookups)
             .distinct()[0:5]
         )
@@ -124,8 +124,8 @@ def comic_create_view(request):
         obj = form.save(commit=False)
         obj.user = request.user
         obj.save()
-        obj.numChapters = obj.get_chapters_children().count()
-        obj.numItems = obj.get_comic_images_children().count()
+        obj.numchapters = obj.get_chapters_children().count()
+        obj.numitems = obj.get_comic_images_children().count()
         obj.save()
         form.save_m2m()
         success_url = obj.get_edit_url()
@@ -163,8 +163,17 @@ def comic_update_view(request, slug=None):
         form.save_m2m()
         success_url = obj.get_edit_url()
         if request.htmx:
-            headers = {"HX-Redirect": success_url}
-            return HttpResponse("Created", headers=headers)
+            htmx_template_name += "#update-form-section"
+            return render(
+                request,
+                htmx_template_name,
+                {
+                    "form": form,
+                    "object": obj,
+                    "new_comic_image_url": new_comic_image_url,
+                    "new_comic_chapter_url": new_comic_chapter_url,
+                },
+            )
         return redirect(success_url)
     if request.htmx:
         htmx_template_name += "#update-form-section"
@@ -178,7 +187,6 @@ def comic_update_view(request, slug=None):
                 "new_comic_chapter_url": new_comic_chapter_url,
             },
         )
-
     return render(
         request,
         template_name,
@@ -205,7 +213,7 @@ def comic_delete_view(request, slug=None):
                 "genres",
                 "followers",
             )
-            .select_related("author", "type", "artist", "user")
+            .select_related("author", "category", "artist", "user")
             .get(slug=slug)
         )
     except:  # noqa: E722
@@ -218,11 +226,8 @@ def comic_delete_view(request, slug=None):
         obj.delete()
         success_url = reverse("comics:comic_list")
         if request.htmx:
-            response = HttpResponse("")
-            return trigger_client_event(
-                response,
-                "comic-deleted",
-            )
+            headers = {"HX-Redirect": success_url}
+            return HttpResponse("Created", headers=headers)
         return redirect(success_url)
     context = {"object": obj}
     if request.htmx:
@@ -270,7 +275,7 @@ def comic_delete_all_view(request):
 @user_only
 @admin_only
 @require_http_methods(["GET", "POST"])
-def comic_images_update_hx_view(
+def comic_image_update_hx_view(
     request,
     parent_slug=None,
     id=None,  # noqa: A002
@@ -286,7 +291,7 @@ def comic_images_update_hx_view(
                 "genres",
                 "followers",
             )
-            .select_related("author", "type", "artist", "user")
+            .select_related("author", "category", "artist", "user")
             .get(slug=parent_slug)
         )
     except:  # noqa: E722
@@ -328,7 +333,7 @@ def comic_images_update_hx_view(
 @user_only
 @admin_only
 @require_http_methods(["GET", "DELETE"])
-def comic_images_delete_view(
+def comic_image_delete_view(
     request,
     parent_slug=None,
     id=None,  # noqa: A002
@@ -361,7 +366,7 @@ def comic_images_delete_view(
 @user_only
 @admin_only
 @require_http_methods(["GET", "POST"])
-def comic_chapters_update_hx_view(
+def comic_chapter_update_hx_view(
     request,
     parent_slug=None,
     id=None,  # noqa: A002
@@ -377,7 +382,7 @@ def comic_chapters_update_hx_view(
                 "genres",
                 "followers",
             )
-            .select_related("author", "type", "artist", "user")
+            .select_related("author", "category", "artist", "user")
             .get(slug=parent_slug)
         )
     except:  # noqa: E722
@@ -408,7 +413,6 @@ def comic_chapters_update_hx_view(
     context = {"url": url, "comic_url": comic_url, "object": instance, "form": form}
     if form.is_valid():
         new_obj = form.save(commit=False)
-        new_obj.comic = parent_obj
         new_obj.save()
         context["object"] = new_obj
         if request.htmx:
@@ -420,7 +424,7 @@ def comic_chapters_update_hx_view(
 @user_only
 @admin_only
 @require_http_methods(["GET", "DELETE"])
-def comic_chapters_delete_view(
+def comic_chapter_delete_view(
     request,
     parent_slug=None,
     id=None,  # noqa: A002

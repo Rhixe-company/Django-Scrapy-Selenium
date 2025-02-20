@@ -1,43 +1,29 @@
 import logging
 
 from django.core.management.base import BaseCommand
-from scrapy.crawler import CrawlerRunner
+from scrapy.crawler import CrawlerProcess
 from scrapy.utils.log import configure_logging
 from scrapy.utils.project import get_project_settings
-from twisted.internet import defer
-from twisted.internet import reactor
 
 from api.apps.models import Chapter
 from api.apps.models import ChapterImage
 from api.apps.models import Comic
 from api.apps.models import ComicImage
-from crawler.management.commands import connection
-from crawler.spiders.run import RunSpider
+from crawler.spiders.run1 import Run1Spider
 
 logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = "A  Custom command to  run Runpider"
+    help = "A  Custom command to  run1 Run1Spider"
 
     def handle(self, *args, **options):
         crawlsettings = get_project_settings()
         configure_logging(crawlsettings)
-        server = connection.from_settings(crawlsettings)
-        key = "run_queue:start_urls"
-        data = ""
-        server.rpush(key, data)
 
-        runner = CrawlerRunner(settings=crawlsettings)
-
-        @defer.inlineCallbacks
-        def run():
-            yield runner.crawl(RunSpider)
-
-            reactor.stop()  # type: ignore  # noqa: PGH003
-
-        run()
-        reactor.run()  # type: ignore  # noqa: PGH003
+        process = CrawlerProcess(settings=crawlsettings)
+        process.crawl(Run1Spider)
+        process.start()
         comics = (
             Comic.objects.prefetch_related(
                 "comicitems",
@@ -45,7 +31,7 @@ class Command(BaseCommand):
                 "genres",
                 "followers",
             )
-            .select_related("author", "type", "artist", "user")
+            .select_related("author", "category", "artist", "user")
             .all()
         )
 

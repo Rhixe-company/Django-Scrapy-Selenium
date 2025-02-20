@@ -10,6 +10,7 @@ module.exports = {
     entry: {
         project: path.resolve(__dirname, "../", "api", "src", "project"),
         carousel: path.resolve(__dirname, "../", "api", "src", "carousel"),
+        alerts: path.resolve(__dirname, "../", "api", "src", "alerts"),
     },
     output: {
         path: path.resolve(__dirname, "../", "dist", "webpack_bundles"),

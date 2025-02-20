@@ -1,5 +1,5 @@
 # define an alias for the specific python version used in this file.
-FROM docker.io/python:3.12.8-slim-bookworm AS python
+FROM docker.io/python:3.13.2-slim-bookworm AS python
 
 # Python build stage
 FROM python AS python-build-stage
@@ -30,6 +30,7 @@ ARG APP_HOME=/app
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV BUILD_ENV=${BUILD_ENVIRONMENT}
+ENV CHROMEDRIVER_VERSION=120.0.6099.71
 
 WORKDIR ${APP_HOME}
 
@@ -39,10 +40,10 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   sudo git bash-completion nano ssh
 
 # Create devcontainer user and add it to sudoers
-RUN groupadd --gid 1000 dev-user \
-  && useradd --uid 1000 --gid dev-user --shell /bin/bash --create-home dev-user \
-  && echo dev-user ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/dev-user \
-  && chmod 0440 /etc/sudoers.d/dev-user
+RUN groupadd --gid 1000 bot \
+  && useradd --uid 1000 --gid bot --shell /bin/bash --create-home bot \
+  && echo bot ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/bot \
+  && chmod 0440 /etc/sudoers.d/bot
 
 
 # Install required system dependencies
@@ -52,9 +53,21 @@ RUN apt-get update && apt-get install --no-install-recommends -y \
   wait-for-it \
   # Translations dependencies
   gettext \
+  wget \
+  unzip \
   # cleaning up unused files
   && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false \
   && rm -rf /var/lib/apt/lists/*
+
+
+# RUN wget -q https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+# # RUN apt-get install -y ./google-chrome-stable_current_amd64.deb
+
+# ### install chromedriver
+# RUN wget https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROMEDRIVER_VERSION/linux64/chromedriver-linux64.zip \
+#   && unzip chromedriver-linux64.zip && rm -dfr chromedriver_linux64.zip \
+#   && mv /chromedriver-linux64/chromedriver /usr/bin/chromedriver \
+#   && chmod +x /usr/bin/chromedriver
 
 # All absolute dir copies ignore workdir instruction. All relative dir copies are wrt to the workdir instruction
 # copy python dependency wheels from python-build-stage

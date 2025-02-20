@@ -3,11 +3,11 @@ from django.db import models
 from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
+from api.apps.models import Category
 from api.apps.models import Chapter
 from api.apps.models import Comic
 from api.apps.models import ComicStatus
 from api.apps.models import Genre
-from api.apps.models import Type
 from api.users.models import User
 from api.users.widgets import MyAdminCheckboxSelectMultiple
 from api.users.widgets import MyCheckboxSelectMultiple
@@ -38,7 +38,7 @@ class ChapterFilter(django_filters.FilterSet):
                 "placeholder": _("Search for chapters"),
                 "class": "",
                 "hx-get": reverse_lazy("chapters:chapter_list"),
-                "hx-trigger": "keyup[target.value.length    >   3]    changed delay:1s",
+                "hx-trigger": "keyup[target.value.length > 3] changed delay:500ms, search",  # noqa: E501
                 "hx-target": "#container",
                 "hx-indicator": ".progress",
                 "hx-swap": "outerHTML",
@@ -55,13 +55,12 @@ class MyMultipleChoiceFilter(django_filters.ModelMultipleChoiceFilter):
 
 
 class ComicFilter(django_filters.FilterSet):
-    type = MyMultipleChoiceFilter(
-        label=_("Types"),
-        queryset=Type.objects.all(),
-        widget=MyAdminCheckboxSelectMultiple,
-        field_name="type__name",
+    category = MyMultipleChoiceFilter(
+        queryset=Category.objects.all(),
+        label=_("Categorys"),
+        field_name="category__name",
         lookup_expr="in",
-        to_field_name="name",
+        widget=MyAdminCheckboxSelectMultiple,
     )
     genres = MyMultipleChoiceFilter(
         queryset=Genre.objects.all(),
@@ -88,7 +87,7 @@ class ComicFilter(django_filters.FilterSet):
 
     class Meta:
         model = Comic
-        fields = ("title", "type", "status", "genres", "updated_at")
+        fields = ("title", "category", "status", "genres", "updated_at")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -98,12 +97,12 @@ class ComicFilter(django_filters.FilterSet):
                 "class": "",
                 "type": "search",
                 "hx-get": reverse_lazy("comics:comic_list"),
-                "hx-trigger": "keyup[target.value.length    >   3]    changed delay:1s",
+                "hx-trigger": "keyup[target.value.length > 3] changed delay:500ms, search",  # noqa: E501
                 "hx-target": "#container",
                 "hx-indicator": ".progress",
                 "hx-swap": "outerHTML",
                 "_": "on htmx:afterOnLoad  put '' into @value of #id_title",
-                # "_": "on input show <tbody>tr/> in closest <table/> when its textContent.toLowerCase() contains my value.toLowerCase()",  # noqa: E501
+                # "_": "on input show <tbody>tr/> in closest <table/> when its textContent.toLowerCase() contains my value.toLowerCase()",  # noqa: E501, ERA001
             },
         )
         self.form.fields["genres"].widget.attrs.update(
@@ -111,9 +110,15 @@ class ComicFilter(django_filters.FilterSet):
                 "class": "",
             },
         )
-        self.form.fields["type"].widget.attrs.update(
+        self.form.fields["category"].widget.attrs.update(
             {
                 "class": "",
+                "hx-get": reverse_lazy("comics:comic_list"),
+                "hx-trigger": "change delay:1s",
+                "hx-target": "#container",
+                "hx-indicator": ".progress",
+                "hx-swap": "outerHTML",
+                "hx-replace-url": "true",
             },
         )
 
@@ -135,7 +140,7 @@ class UserFilter(django_filters.FilterSet):
                 "placeholder": _("Search for users"),
                 "class": "",
                 "hx-get": reverse_lazy("users:user_list"),
-                "hx-trigger": "keyup[target.value.length    >   3]    changed delay:1s",
+                "hx-trigger": "keyup[target.value.length > 3] changed delay:500ms, search",  # noqa: E501
                 "hx-target": "#container",
                 "hx-indicator": ".progress",
                 "hx-swap": "outerHTML",
@@ -145,12 +150,12 @@ class UserFilter(django_filters.FilterSet):
 
 
 class SearchFilter(django_filters.FilterSet):
-    type = MyMultipleChoiceFilter(
-        queryset=Type.objects.all(),
-        widget=MyCheckboxSelectMultiple,
-        field_name="type__name",
+    category = MyMultipleChoiceFilter(
+        queryset=Category.objects.all(),
+        label=_("Categorys"),
+        field_name="category__name",
         lookup_expr="in",
-        to_field_name="name",
+        widget=MyAdminCheckboxSelectMultiple,
     )
     genres = MyMultipleChoiceFilter(
         queryset=Genre.objects.all(),
@@ -177,7 +182,7 @@ class SearchFilter(django_filters.FilterSet):
 
     class Meta:
         model = Comic
-        fields = ("search", "type", "status", "genres", "updated_at")
+        fields = ("search", "category", "status", "genres", "updated_at")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -192,7 +197,7 @@ class SearchFilter(django_filters.FilterSet):
                 "class": "",
             },
         )
-        self.form.fields["type"].widget.attrs.update(
+        self.form.fields["category"].widget.attrs.update(
             {
                 "class": "",
             },

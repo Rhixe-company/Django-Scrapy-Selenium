@@ -1,6 +1,6 @@
 {% load static i18n example %}
 
-<div x-data="{ openGenres: false, openType: false, openStatus: false, openOrder: false,openTitle: false, openedWithKeyboard: false }"
+<div x-data="{ openGenres: false, openCategory: false, openStatus: false, openOrder: false,openTitle: false, openedWithKeyboard: false }"
      @keydown.esc.window="openedWithKeyboard = false">
   <div class="grid grid-cols-2 sm:grid-cols-5 bg-[#222222] sm:gap-[6px] gap-[3px] px-2.5 sm:px-3 pt-[12px]">
     <div class="bg-[#222222] sm:m-[2px] m-[4px]">
@@ -44,14 +44,14 @@
       </button>
     </div>
     <div class="bg-[#222222] sm:m-[2px] m-[4px]">
-      <button @click="openType = !openType"
+      <button @click="openCategory = !openCategory"
               aria-haspopup="true"
               @keydown.space.prevent="openedWithKeyboard = true"
               @keydown.enter.prevent="openedWithKeyboard = true"
               @keydown.down.prevent="openedWithKeyboard = true"
-              :aria-expanded="openType || openedWithKeyboard"
+              :aria-expanded="openCategory || openedWithKeyboard"
               class="inline-flex items-center whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2 w-full hover:cursor-pointer justify-center text-[#ccc] text-[12px] font-normal pl-[20px] align-middle hover:bg-white hover:text-black h-[26px] border-solid rounded-[2px] bg-[#333]">
-        <span class="mt-0.5 capitalize">{% translate "Type All" %}</span>
+        <span class="mt-0.5 capitalize">{% translate "Category All" %}</span>
         <svg width="14"
              height="14"
              viewBox="0 0 15 15"
@@ -172,15 +172,15 @@
       </div>
     </div>
     <div x-cloak
-         x-show="openType || openedWithKeyboard"
+         x-show="openCategory || openedWithKeyboard"
          x-transition
          x-trap="openedWithKeyboard"
-         @click.outside="openType = false, openedWithKeyboard = false"
+         @click.outside="openCategory = false, openedWithKeyboard = false"
          @keydown.down.prevent="$focus.wrap().next()"
          @keydown.up.prevent="$focus.wrap().previous()"
          class="bg-[#333] sm:max-h-[240px] overflow-hidden overflow-y-auto w-[68%] border-[#333333] mt-[-30px] sm:mt-1 absolute rounded-none z-10  max-[600px]:w-[100%] max-[768px]:w-[96.5%] max-[860px]:w-[93%] max-[882px]:w-[63%] max-[912px]:w-[66%]">
       <div class=" px-1 pb-1 overflow-y-auto text-sm text-gray-700 dark:text-gray-200 grid grid-cols-2 gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-        {{ filter.form.type }}
+        {{ filter.form.category }}
       </div>
     </div>
     <div x-cloak

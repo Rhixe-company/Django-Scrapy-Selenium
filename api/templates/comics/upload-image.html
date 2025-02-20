@@ -1,5 +1,13 @@
 {% extends "./base.html" %}
 
+{% load static i18n %}
+
+{% block head_title %}
+  {% translate 'Update Comic Image Form' %}
+{% endblock head_title %}
 {% block content %}
-  {% include 'partials/comics/images-inline-form.html' %}
+  <div>
+    {% include "partials/htmx/spinner.html" %}
+    {% include 'partials/comics/images-inline-form.html' %}
+  </div>
 {% endblock content %}

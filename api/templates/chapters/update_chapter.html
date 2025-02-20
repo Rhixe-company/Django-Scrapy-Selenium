@@ -7,7 +7,10 @@
   {% translate 'Update Chapter Form' %}
 {% endblock head_title %}
 {% block content %}
-  <main>
-    {% include "partials/chapters/form.html" %}
-  </main>
+  <div id='container' class="mx-auto max-w-screen-xl ">
+    <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+      <!-- Include Partials Chapters Update -->
+      {% include "partials/chapters/update.html" %}
+    </div>
+  </div>
 {% endblock content %}

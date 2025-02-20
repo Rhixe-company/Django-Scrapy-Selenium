@@ -113,13 +113,6 @@ class ChapterManager(models.Manager):
         return self.get_queryset().search(query=query)
 
 
-class TypeStatus(models.TextChoices):
-    MANGA = "manga", "Manga"
-    MANHWA = "manhwa", "Manhwa"
-    MANHUA = "manhua", "Manhua"
-    COMIC = "comic", "Comic"
-
-
 class Genre(models.Model):
     name = models.CharField(_("Name"), max_length=200, unique=True)
 
@@ -159,22 +152,18 @@ class Artist(models.Model):
         return self.comicartist.all()  # type: ignore  # noqa: PGH003
 
 
-class Type(models.Model):
-    name = models.CharField(
-        _("Name"),
-        max_length=6,
-        choices=TypeStatus.choices,
-    )
+class Category(models.Model):
+    name = models.CharField(_("Name"), max_length=7, unique=True)
 
     class Meta:
-        verbose_name_plural = "Types"
-        verbose_name = "Type"
+        verbose_name_plural = "Categorys"
+        verbose_name = "Category"
 
     def __str__(self):
         return self.name
 
     def get_comics_children(self):
-        return self.comictype.all()  # type: ignore  # noqa: PGH003
+        return self.comiccategory.all()  # type: ignore  # noqa: PGH003
 
 
 class Comic(models.Model):
@@ -210,12 +199,12 @@ class Comic(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateField()
     updated = models.DateTimeField(auto_now=True)
-    type = models.ForeignKey(
-        Type,
+    category = models.ForeignKey(
+        Category,
         on_delete=models.CASCADE,
         null=True,
         blank=True,
-        related_name="comictype",
+        related_name="comiccategory",
     )
     genres = models.ManyToManyField(Genre, blank=True)
     author = models.ForeignKey(

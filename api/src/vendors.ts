@@ -3,10 +3,7 @@ import "@fortawesome/fontawesome-free/scss/regular.scss";
 import "@fortawesome/fontawesome-free/scss/solid.scss";
 import "@fortawesome/fontawesome-free/scss/brands.scss";
 import "@fortawesome/fontawesome-free/scss/v4-shims.scss";
-import "sweetalert2/dist/sweetalert2.js";
-import "sweetalert2/src/sweetalert2.scss";
 import "./sass/index.scss";
-
 import Events from "./dom/events";
 import { initAccordions } from "./components/accordion";
 import { initCollapses } from "./components/collapse";

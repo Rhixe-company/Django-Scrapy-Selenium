@@ -8,12 +8,12 @@ from scrapy.exceptions import DropItem
 
 from api.apps.models import Artist
 from api.apps.models import Author
+from api.apps.models import Category
 from api.apps.models import Chapter
 from api.apps.models import ChapterImage
 from api.apps.models import Comic
 from api.apps.models import ComicImage
 from api.apps.models import Genre
-from api.apps.models import Type
 
 logger = logging.getLogger(__name__)
 
@@ -51,9 +51,9 @@ class CrawlerAppsDbPipeline:
                         password="R4I7gcJHX",  # noqa: S106
                     )
                 if images:
-                    ty = Type.objects.filter(Q(name__icontains=te)).update_or_create(
-                        name=te,
-                    )[0]
+                    ty = Category.objects.filter(
+                        Q(name__icontains=te),
+                    ).update_or_create(name=te)[0]
                     au = Author.objects.filter(
                         Q(name__icontains=author),
                     ).update_or_create(name=author)[0]
@@ -76,7 +76,7 @@ class CrawlerAppsDbPipeline:
                             rating=rating,
                             status=status,
                             updated_at=updated_at,
-                            type=ty,
+                            category=ty,
                             artist=ar,
                             author=au,
                             user=user,

@@ -26,7 +26,12 @@
 </div>
 <!-- Drawer Footer -->
 <div class="flex flex-col-reverse justify-between gap-2 border-t border-neutral-300 bg-neutral-50/60 p-4 dark:border-neutral-700 dark:bg-neutral-950/20 sm:flex-row sm:items-center md:justify-end">
-  <button type="button"
+  <button id="comicButton"
+          type="button"
+          hx-delete='{{ object.get_delete_url }}'
+          hx-trigger='confirmed'
+          hx-target='#form-container'
+          hx-push-url='true'
           class="text-gray-900 bg-red-600 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm inline-flex items-center px-3 py-2.5 text-center mr-2 dark:focus:ring-red-900">
     Yes, I'm sure
   </button>
@@ -35,9 +40,12 @@
           href='{% url "comics:comic_list" %}'
           hx-get='{% url "comics:comic_list" %}'
           hx-indicator='.progress'
-          hx-target='#container'
+          hx-target='#form-container'
           hx-push-url='true'
           class="text-gray-900 bg-white hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 border border-gray-200 font-medium inline-flex items-center rounded-lg text-sm px-3 py-2.5 text-center dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700 dark:focus:ring-gray-700">
     No, cancel
   </button>
 </div>
+{% load render_bundle from webpack_loader %}
+
+{% render_bundle 'alerts' 'js' attrs='defer' %}

@@ -48,29 +48,42 @@ def main():
     closecon(driver)
 
 
-def get_default_chrome_options():
+def get_default_chrome_options(arguments, binary):
     options = Options()
-    options.add_argument("-headless")
-    options.add_argument(
-        "--no-sandbox",  # type: ignore  # noqa: PGH003
-    )
-    options.add_argument(
-        "--disable-gpu",
-    )
-    options.add_argument("--enable-javascript")
-    options.add_argument("--disable-extensions")
-    options.binary_location = which("chromium")  # type: ignore  # noqa: PGH003
+    for argument in arguments:
+        options.add_argument(argument)
+    options.binary_location = binary  # type: ignore  # noqa: PGH003
     return options
 
 
-def get_default_chrome_service():
+def get_default_chrome_service(executable):
 
-    return webdriver.ChromeService(executable_path=which("chromedriver"), service_args=["--log", "info"])  # type: ignore  # noqa: PGH003
+    return webdriver.ChromeService(
+        executable_path=executable,
+        log_output="logs.txt",
+        service_args=["--log", "info"],
+        prefs={
+            "dom.ipc.processCount": 8,
+            "javascript.options.showInConsole": False,
+        },
+    )  # type: ignore  # noqa: PGH003
 
 
 def startcon():
-    service = get_default_chrome_service()  # type: ignore  # noqa: PGH003
-    options = get_default_chrome_options()
+    EXECUTABLE_PATH = which("chromedriver")  # noqa: N806
+    service = get_default_chrome_service(executable=EXECUTABLE_PATH)  # type: ignore  # noqa: PGH003
+    ARGUMENTS = [  # noqa: N806
+        "--headless",
+        "--no-sandbox",
+        "--disable-gpu",
+        "--enable-javascript",
+        "--disable-extensions",
+    ]
+    EXECUTABLE_PATH = which("chrome")  # noqa: N806
+    options = get_default_chrome_options(
+        arguments=ARGUMENTS,
+        binary=EXECUTABLE_PATH,
+    )
     driver = webdriver.Chrome(service=service, options=options)
     driver.get("https://asuracomic.net/series/nano-machine-923317b4/chapter/239")
     return driver

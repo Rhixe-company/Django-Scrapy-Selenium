@@ -32,9 +32,8 @@
         Update
       </button>
       <button hx-delete='{{ object.get_delete_url }}'
+              id="chapterButton"
               hx-trigger='confirmed'
-              onClick="Swal.fire({title: 'Delete', icon: 'error', confirmButtonText: 'Confirm', text:'Are you sure you want to delete {{ object.name }}?'}).then((result)=>{ if(result.isConfirmed){ htmx.trigger(this, 'confirmed'); } })"
-              hx-target="this"
               hx-on::before-request="const ch = document.getElementById('chapter-{{ object.id }}'); ch.classList.add('hidden')"
               hx-on::after-request="const ch = document.getElementById('chapter-{{ object.id }}'); ch.classList.remove('hidden'); if (!event.detail.successfull) { const errorSpan = document.createElement('span'); errorSpan.textContent = 'Failed to delete comic'; errorSpan.classList.add('text-gray-300'); this.closest('button').appendChild(errorSpan) } "
               hx-on:comic-chapter-deleted="const ch = document.getElementById('chapter-{{ object.id }}'); ch.classList.add('hidden')"
@@ -53,3 +52,6 @@
     </div>
   </div>
 </div>
+{% load render_bundle from webpack_loader %}
+
+{% render_bundle 'alerts' 'js' attrs='defer' %}

@@ -4,7 +4,6 @@ from django.core.paginator import PageNotAnInteger
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import Http404
-from django.http import HttpRequest
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
@@ -12,7 +11,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django_htmx.http import trigger_client_event
-from django_htmx.middleware import HtmxDetails
+from django_tables2 import RequestConfig
 
 from api.apps.filters import ChapterFilter
 from api.apps.forms import ChapterForm
@@ -21,57 +20,46 @@ from api.apps.forms import CommentForm
 from api.apps.models import Chapter
 from api.apps.models import ChapterImage
 from api.apps.models import Comic
+from api.apps.tables import ChapterTable
 from api.users.decorators import admin_only
 from api.users.decorators import user_only
-
-
-# Typing pattern recommended by django-stubs:
-# https://github.com/typeddjango/django-stubs#how-can-i-create-a-httprequest-thats-guaranteed-to-have-an-authenticated-user
-class HtmxHttpRequest(HttpRequest):
-    htmx: HtmxDetails
 
 
 @user_only
 @admin_only
 @require_http_methods(["GET"])
-def chapter_list_view(
-    request: HtmxHttpRequest,
-) -> HttpResponse:
-    qs = Chapter.objects.prefetch_related("chapteritems").select_related("comic").all()
-    chapter_filter = ChapterFilter(request.GET, queryset=qs)
-    paginator = Paginator(chapter_filter.qs, settings.PAGINATE_BY)
-    page_number = request.GET.get("page")
-    try:
-        page_obj = paginator.page(page_number)  # type: ignore  # noqa: PGH003
-    except PageNotAnInteger:
-        page_obj = paginator.page(1)
-
-    except EmptyPage:
-        page_obj = paginator.page(paginator.num_pages)
-    page_obj = paginator.get_page(page_number)
+def chapter_list_view(request):
     htmx_template_name = "partials/chapters/container.html"
     template_name = "chapters/chapter_list.html"
-    context = {"filter": chapter_filter, "object_list": page_obj}
+    qs = Chapter.objects.prefetch_related("chapteritems").select_related("comic").all()
+    chapter_filter = ChapterFilter(
+        request.GET,
+        queryset=qs,
+    )
+    table = ChapterTable(chapter_filter.qs)
+    RequestConfig(request, paginate={"per_page": settings.PAGINATE_BY}).configure(table)  # type: ignore  # noqa: PGH003
+    context = {"filter": chapter_filter, "table": table}
     if request.htmx:
-        htmx_template_name += "#container-section"
+        htmx_template_name += "#chapter-container"
         return render(request, htmx_template_name, context)
     return render(request, template_name, context)
 
 
 @require_http_methods(["GET", "POST"])
 def chapter_detail_hx_view(
-    request: HtmxHttpRequest,
+    request,
     slug=None,
-) -> HttpResponse:
-    # if not request.htmx:
-    #     raise Http404
+):
+    if not request.htmx:
+        raise Http404
     try:
         obj = get_object_or_404(Chapter, slug=slug)
-        chapter_comic_type = obj.comic.type.name  # type: ignore  # noqa: PGH003
+        pages = obj.get_chapter_images_children()
+        chapter_comic_category = obj.comic.category.name  # type: ignore  # noqa: PGH003
         chapter_comic_author = obj.comic.author.name  # type: ignore  # noqa: PGH003
         chapter_comic_artist = obj.comic.artist.name  # type: ignore  # noqa: PGH003
         chapterlookups = (
-            Q(type__name__iexact=chapter_comic_type)
+            Q(category__name__iexact=chapter_comic_category)
             | Q(author__name__iexact=chapter_comic_author)
             | Q(artist__name__iexact=chapter_comic_artist)
         )
@@ -82,7 +70,7 @@ def chapter_detail_hx_view(
                 "followers",
                 "comicchapters",
             )
-            .select_related("user", "author", "type", "artist")
+            .select_related("user", "author", "category", "artist")
             .filter(chapterlookups)
             .distinct()[0:6]
         )
@@ -98,21 +86,19 @@ def chapter_detail_hx_view(
         except EmptyPage:
             page_obj = paginator.page(paginator.num_pages)
         page_obj = paginator.get_page(page_number)
-        form = CommentForm
         if request.method == "POST":
-            form = CommentForm(request.POST)
-            if form.is_valid:
-                comment = form.save(commit=False)
+            commentform = CommentForm(request.POST)
+            if commentform.is_valid():
+                comment = commentform.save(commit=False)
                 comment.user = request.user
                 comment.chapter = obj
                 comment.comic = obj.comic
                 comment.save()
-                form = CommentForm
         context = {
             "items": comics,
             "object": obj,
             "comments": comments,
-            "form": form,
+            "form": CommentForm(),
             "chapters": chapters,
             "object_list": page_obj,
         }
@@ -120,15 +106,13 @@ def chapter_detail_hx_view(
         obj = None
     if obj is None:
         return HttpResponse("Not found.")
+
+    context = {"object": obj, "commentform": CommentForm()}
     return render(request, "partials/chapter/detail.html", context)
 
 
 @require_http_methods(["GET"])
-@user_only
-def chapter_detail_view(
-    request: HtmxHttpRequest,
-    slug=None,
-) -> HttpResponse:
+def chapter_detail_view(request, slug=None):
     hx_url = reverse("chapters:hx_chapter_detail", kwargs={"slug": slug})
 
     context = {"hx_url": hx_url}
@@ -138,15 +122,10 @@ def chapter_detail_view(
 @user_only
 @admin_only
 @require_http_methods(["GET", "POST"])
-def chapter_create_view(
-    request: HtmxHttpRequest,
-) -> HttpResponse:
+def chapter_create_view(request):
     form = ChapterForm(request.POST or None)
-    context = {
-        "form": form,
-    }
     htmx_template_name = "partials/chapters/create.html"
-    template_name = "chapters/add_chapter.html"
+    template_name = "chapters/create_chapter.html"
     if form.is_valid():
         obj = form.save(commit=False)
         obj.save()
@@ -158,18 +137,15 @@ def chapter_create_view(
             return HttpResponse("Created", headers=headers)
         return redirect(success_url)
     if request.htmx:
-        htmx_template_name += "#form-section"
-        return render(request, htmx_template_name, context)
-    return render(request, template_name, context)
+        htmx_template_name += "#create-form-section"
+        return render(request, htmx_template_name, {"form": form})
+    return render(request, template_name, {"form": form})
 
 
 @user_only
 @admin_only
 @require_http_methods(["GET", "POST"])
-def chapter_update_view(
-    request: HtmxHttpRequest,
-    slug=None,
-) -> HttpResponse:
+def chapter_update_view(request, slug=None):
     obj = get_object_or_404(Chapter, slug=slug)
     form = ChapterForm(request.POST or None, instance=obj)
     htmx_template_name = "partials/chapters/update.html"
@@ -178,33 +154,51 @@ def chapter_update_view(
         "chapters:hx_image_create",
         kwargs={"parent_slug": obj.slug},
     )
-    context = {
-        "form": form,
-        "object": obj,
-        "new_chapter_image_url": new_chapter_image_url,
-    }
     if form.is_valid():
         obj = form.save(commit=False)
         obj.numpages = obj.get_chapter_images_children().count()
         obj.save()
         success_url = obj.get_edit_url()
         if request.htmx:
-            headers = {"HX-Redirect": success_url}
-            return HttpResponse("Created", headers=headers)
+            htmx_template_name += "#update-form-section"
+            return render(
+                request,
+                htmx_template_name,
+                {
+                    "form": form,
+                    "object": obj,
+                    "new_chapter_image_url": new_chapter_image_url,
+                },
+            )
         return redirect(success_url)
     if request.htmx:
-        htmx_template_name += "#form-section"
-        return render(request, htmx_template_name, context)
-    return render(request, template_name, context)
+        htmx_template_name += "#update-form-section"
+        return render(
+            request,
+            htmx_template_name,
+            {
+                "form": form,
+                "object": obj,
+                "new_chapter_image_url": new_chapter_image_url,
+            },
+        )
+    return render(
+        request,
+        template_name,
+        {
+            "form": form,
+            "object": obj,
+            "new_chapter_image_url": new_chapter_image_url,
+        },
+    )
 
 
 @user_only
 @admin_only
 @require_http_methods(["GET", "DELETE"])
-def chapter_delete_view(
-    request: HtmxHttpRequest,
-    slug=None,
-) -> HttpResponse:
+def chapter_delete_view(request, slug=None):
+    htmx_template_name = "partials/chapters/delete.html"
+    template_name = "chapters/delete_chapter.html"
     try:
         obj = (
             Chapter.objects.prefetch_related("chapteritems")
@@ -221,26 +215,63 @@ def chapter_delete_view(
         obj.delete()
         success_url = reverse("chapters:chapter_list")
         if request.htmx:
-            response = HttpResponse("")
-            return trigger_client_event(
-                response,
-                "chapter-deleted",
-            )
+            headers = {"HX-Redirect": success_url}
+            return HttpResponse("Created", headers=headers)
         return redirect(success_url)
     context = {"object": obj}
-    return render(request, "chapters/delete.html", context)
+    if request.htmx:
+        htmx_template_name += "#delete-form-section"
+        return render(request, htmx_template_name, context)
+    return render(request, template_name, context)
+
+
+@user_only
+@admin_only
+@require_http_methods(["GET", "DELETE"])
+def chapter_image_delete_all_view(request):
+    data = request.GET.getlist("mycheck", "")  # type: ignore  # noqa: PGH003
+
+    chapter_images = ChapterImage.objects.filter(id__in=data)
+    print(list(chapter_images))  # noqa: T201
+
+    if request.htmx:
+        response = HttpResponse("")
+        return trigger_client_event(
+            response,
+            "chapter-deleted",
+        )
+    return render(request, "chapters/delete.html")
+
+
+@user_only
+@admin_only
+@require_http_methods(["GET", "DELETE"])
+def chapter_delete_all_view(request):
+    data = request.GET.getlist("id", "")  # type: ignore  # noqa: PGH003
+
+    chapters = Chapter.objects.filter(id__in=data)
+    print(list(chapters))  # noqa: T201
+
+    if request.htmx:
+        response = HttpResponse("")
+        return trigger_client_event(
+            response,
+            "chapter-deleted",
+        )
+    return render(request, "chapters/delete.html")
 
 
 @user_only
 @admin_only
 @require_http_methods(["GET", "POST"])
-def chapter_images_update_hx_view(
-    request: HtmxHttpRequest,
+def chapter_image_update_hx_view(
+    request,
     parent_slug=None,
     id=None,  # noqa: A002
-) -> HttpResponse:
-    if not request.htmx:
-        raise Http404
+):
+    template_name = "chapters/upload-image.html"
+    if request.htmx:
+        template_name = "partials/chapters/images-inline-form.html"
     try:
         parent_obj = (
             Chapter.objects.prefetch_related("chapteritems")
@@ -250,11 +281,11 @@ def chapter_images_update_hx_view(
     except:  # noqa: E722
         parent_obj = None
     if parent_obj is None:
-        return HttpResponse("Not found.")
+        raise Http404
     instance = None
     if id is not None:
         try:
-            instance = ChapterImage.objects.select_related("comic", "chapter").get(
+            instance = ChapterImage.objects.select_related("chapter").get(
                 chapter=parent_obj,
                 id=id,
             )
@@ -272,25 +303,27 @@ def chapter_images_update_hx_view(
     context = {"url": url, "chapter_url": chapter_url, "object": instance, "form": form}
     if form.is_valid():
         new_obj = form.save(commit=False)
+        img = form.cleaned_data.get("image")
+        new_obj.image = img
         new_obj.chapter = parent_obj
-        new_obj.comic = parent_obj.comic
         new_obj.save()
         context["object"] = new_obj
-        return render(request, "partials/chapters/images-inline.html", context)
+        if request.htmx:
+            return render(request, "partials/chapters/images-inline.html", context)
 
-    return render(request, "partials/chapters/images-inline-form.html", context)
+    return render(request, template_name, context)
 
 
 @user_only
 @admin_only
 @require_http_methods(["GET", "DELETE"])
-def chapter_images_delete_view(
-    request: HtmxHttpRequest,
+def chapter_image_delete_view(
+    request,
     parent_slug=None,
     id=None,  # noqa: A002
-) -> HttpResponse:
+):
     try:
-        obj = ChapterImage.objects.select_related("comic", "chapter").get(
+        obj = ChapterImage.objects.select_related("chapter").get(
             chapter__slug=parent_slug,
             id=id,
         )

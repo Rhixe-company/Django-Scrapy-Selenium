@@ -1,4 +1,4 @@
-import { Alpine as AlpineType } from "alpinejs";
+import Alpine from "alpinejs";
 import Accordion from "../components/accordion";
 import Carousel from "../components/carousel";
 import Collapse from "../components/collapse";
@@ -30,7 +30,6 @@ declare global {
         InputCounter: typeof InputCounter;
         CopyClipboard: typeof Clipboard;
         Datepicker: typeof Datepicker;
-        Alpine: typeof AlpineType;
         initAccordions: () => void;
         initCarousels: () => void;
         initCollapses: () => void;
@@ -48,5 +47,6 @@ declare global {
         initFlowbite: () => void;
         FlowbiteInstances: any;
         htmx: any;
+        Alpine: any;
     }
 }

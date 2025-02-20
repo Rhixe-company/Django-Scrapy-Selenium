@@ -4,7 +4,6 @@ from selenium import webdriver
 from selenium.common import ElementNotInteractableException
 from selenium.common import NoSuchElementException
 from selenium.webdriver.common.by import By
-from selenium.webdriver.firefox.firefox_profile import FirefoxProfile
 from selenium.webdriver.firefox.options import Options
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.webdriver.support.wait import WebDriverWait
@@ -49,30 +48,42 @@ def main():
     closecon(driver)
 
 
-def get_default_firefox_options():
+def get_default_firefox_options(arguments, binary):
     options = Options()
-    firefox_profile = FirefoxProfile()
-    firefox_profile.set_preference("javascript.enabled", True)  # noqa: FBT003
-    options.profile = firefox_profile
-    options.add_argument("-headless")
-    options.add_argument(
-        "--no-sandbox",  # type: ignore  # noqa: PGH003
-    )
-    options.add_argument(
-        "--disable-gpu",
-    )
-    options.binary_location = which("firefox")  # type: ignore  # noqa: PGH003
+    for argument in arguments:
+        options.add_argument(argument)
+    options.binary_location = binary  # type: ignore  # noqa: PGH003
     return options
 
 
-def get_default_firefox_service():
+def get_default_firefox_service(executable):
 
-    return webdriver.FirefoxService(executable_path=which("geckodriver"), service_args=["--log", "info"])  # type: ignore  # noqa: PGH003
+    return webdriver.FirefoxService(
+        executable_path=executable,
+        log_output="logs.txt",
+        service_args=["--log", "info"],
+        prefs={
+            "dom.ipc.processCount": 8,
+            "javascript.options.showInConsole": False,
+        },
+    )  # type: ignore  # noqa: PGH003
 
 
 def startcon():
-    service = get_default_firefox_service()  # type: ignore  # noqa: PGH003
-    options = get_default_firefox_options()
+    EXECUTABLE_PATH = which("geckodriver")  # noqa: N806
+    service = get_default_firefox_service(executable=EXECUTABLE_PATH)  # type: ignore  # noqa: PGH003
+    ARGUMENTS = [  # noqa: N806
+        "--headless",
+        "--no-sandbox",
+        "--disable-gpu",
+        "--enable-javascript",
+        "--disable-extensions",
+    ]
+    EXECUTABLE_PATH = which("firefox")  # noqa: N806
+    options = get_default_firefox_options(
+        arguments=ARGUMENTS,
+        binary=EXECUTABLE_PATH,
+    )
     driver = webdriver.Firefox(service=service, options=options)
     driver.get("https://asuracomic.net/series/nano-machine-923317b4/chapter/239")
     return driver

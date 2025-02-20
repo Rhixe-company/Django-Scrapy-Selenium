@@ -21,6 +21,11 @@ class MaterializeCssCheckboxColumn(tables.CheckBoxColumn):
         return mark_safe(html)  # noqa: S308
 
 
+class ImageColumn(tables.Column):
+    def render(self, value):
+        return format_html('<img src="{}" />', value)
+
+
 class ComicTable(tables.Table):
     comic = tables.TemplateColumn(
         orderable=True,
@@ -40,7 +45,7 @@ class ComicTable(tables.Table):
             "check",
             "comic",
             "status",
-            "type",
+            "rating",
             "updated_at",
             "actions",
         )
@@ -48,7 +53,7 @@ class ComicTable(tables.Table):
             "check",
             "comic",
             "status",
-            "type",
+            "rating",
             "updated_at",
             "actions",
         )
@@ -68,36 +73,38 @@ class ComicTable(tables.Table):
         }
         row_attrs = {"id": lambda record: record.pk, "class": "mytablerow"}
 
-    def render_status(self, value):
-        if value == "Completed":
+    def render_status(self, value):  # noqa: PLR0911
+        if value.lower() == "completed":
             return format_html(
                 "<span class='mr-2 rounded-md border border-green-100 bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:border-green-500 dark:bg-gray-700 dark:text-green-400'>{}</span>",  # noqa: E501
                 value,
             )
-        if value == "Dropped":
+        if value.lower() == "dropped":
             return format_html(
                 "<span class='mr-2 rounded-md border border-red-100 bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:border-red-500 dark:bg-gray-700 dark:text-red-400'>{}</span>",  # noqa: E501
                 value,
             )
-        if value == "Hiatus":
+        if value.lower() == "hiatus":
             return format_html(
                 "<span class='mr-2 rounded-md border border-blue-100 bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:border-blue-500 dark:bg-gray-700 dark:text-blue-400'>{}</span>",  # noqa: E501
                 value,
             )
-        if value == "Season End":
+        if value.lower() == "season end":
             return format_html(
                 "<span class='mr-2 rounded-md border border-orange-100 bg-orange-100 px-2.5 py-0.5 text-xs font-medium text-orange-800 dark:border-orange-500 dark:bg-gray-700 dark:text-orange-400'>{}</span>",  # noqa: E501
                 value,
             )
-        if value == "Coming Soon":
+        if value.lower() == "coming soon":
             return format_html(
                 "<span class='mr-2 rounded-md border border-violet-100 bg-violet-100 px-2.5 py-0.5 text-xs font-medium text-violet-800 dark:border-violet-500 dark:bg-gray-700 dark:text-violet-400'>{}</span>",  # noqa: E501
                 value,
             )
-        return format_html(
-            "<span class='mr-2 rounded-md border border-purple-100 bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:border-purple-500 dark:bg-gray-700 dark:text-purple-400'>{}</span>",  # noqa: E501
-            value,
-        )
+        if value.lower() == "ongoing":
+            return format_html(
+                "<span class='mr-2 rounded-md border border-purple-100 bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:border-purple-500 dark:bg-gray-700 dark:text-purple-400'>{}</span>",  # noqa: E501
+                value,
+            )
+        return None
 
 
 class ChapterTable(tables.Table):
@@ -117,6 +124,7 @@ class ChapterTable(tables.Table):
         sequence = (
             "id",
             "chapter",
+            "comic",
             "numpages",
             "updated_at",
             "actions",
@@ -124,11 +132,12 @@ class ChapterTable(tables.Table):
         fields = (
             "id",
             "chapter",
+            "comic",
             "numpages",
             "updated_at",
             "actions",
         )
-        template_name = "partials/chapters/custom_table.html"
+        template_name = "partials/chapters/tailwind.html"
         attrs = {
             "class": "mytable",
             "td": {
@@ -144,6 +153,13 @@ class ChapterTable(tables.Table):
         }
         row_attrs = {"data-id": lambda record: record.pk, "class": "mytablerow"}
 
+    def render_comic(self, record):
+        value = record.comic.get_comic_images_children().first().image.url
+        return format_html(
+            '<img class="size-10 rounded-full object-cover" src="{}" />',
+            value,
+        )
+
 
 class UserTable(tables.Table):
     id = MaterializeCssCheckboxColumn(orderable=True)
@@ -155,22 +171,25 @@ class UserTable(tables.Table):
         orderable=True,
         template_name="partials/users/table_actions.html",
     )
+    image = ImageColumn("image")
 
     class Meta:
         model = User
         sequence = (
             "id",
             "user",
+            "image",
             "is_active",
             "actions",
         )
         fields = (
             "id",
             "user",
+            "image",
             "is_active",
             "actions",
         )
-        template_name = "partials/users/custom_table.html"
+        template_name = "partials/users/tailwind.html"
         attrs = {
             "class": "mytable",
             "td": {

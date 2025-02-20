@@ -13,7 +13,6 @@ from shutil import which
 
 import django
 from django.conf import settings
-from scrapy.utils.reactor import install_reactor
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 sys.path.append(os.path.join(BASE_DIR, "config"))  # noqa: PTH118
@@ -80,8 +79,7 @@ DOWNLOADER_MIDDLEWARES = {
     "crawler.middlewares.rotate.RotateUserAgentMiddleware": 540,
     "crawler.middlewares.retry.TooManyRequestsRetryMiddleware": 541,
     "crawler.middlewares.default.CrawlerDownloaderMiddleware": 543,
-    # "crawler.middlewares.main.SeleniumMiddleware": 800,
-    "crawler.middlewares.main1.SeleniumMiddleware": 800,
+    "crawler.middlewares.main.SeleniumMiddleware": 800,
 }
 
 # Enable or disable extensions
@@ -93,11 +91,11 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "crawler.pipelines.download1.MyImagesPipeline": 1,
-    # "crawler.pipelines.download.CrawlerDownloadPipeline": 1,
-    "crawler.pipelines.dupelicate.CrawlerDupelicatePipeline": 200,
-    "crawler.pipelines.appsformdb.CrawlerAppsDbFormPipeline": 300,
-    # "crawler.pipelines.redis.red.CrawlerRedisPipeline": 400,
+    "crawler.pipelines.download.MyImagesPipeline": 1,
+    "crawler.pipelines.default.CrawlerDefaultPipeline": 200,
+    # "crawler.pipelines.dupelicate.CrawlerDupelicatePipeline": 300,
+    "crawler.pipelines.appsformdb.CrawlerAppsDbFormPipeline": 400,
+    # "crawler.pipelines.redis.red.CrawlerRedisPipeline": 500,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -128,18 +126,8 @@ DOWNLOAD_HANDLERS = {  # noqa: ERA001, RUF100
     "http": "scrapy_impersonate.ImpersonateDownloadHandler",
     "https": "scrapy_impersonate.ImpersonateDownloadHandler",
 }  # noqa: ERA001, RUF100
-# SELENIUM_DRIVER_NAME = "firefox"  # noqa: ERA001
-SELENIUM_DRIVER_NAME = "chrome"
-SELENIUM_DRIVER_EXECUTABLE_PATH = None  # Use webdriver-manager to manage the path
-SELENIUM_DRIVER_ARGUMENTS = [
-    "--headless",
-    "--no-sandbox",
-    "--disable-gpu",
-    "--enable-javascript",
-    "--disable-extensions",
-]
 FEEDS = {
-    "comics2.json": {
+    "comics.json": {
         "format": "json",
         "encoding": "utf8",
         "store_empty": False,
@@ -147,7 +135,7 @@ FEEDS = {
         "fields": None,
         "indent": 4,
     },
-    "chapters2.json": {
+    "chapters.json": {
         "format": "json",
         "encoding": "utf8",
         "store_empty": False,
@@ -162,14 +150,23 @@ RETRY_ENABLED = True
 RETRY_HTTP_CODES = list(range(300, 501))
 MEDIA_ALLOW_REDIRECTS = True
 DOWNLOAD_FAIL_ON_DATALOSS = True
-LOG_LEVEL = "DEBUG"
+LOG_LEVEL = "INFO"
 IMAGES_STORE = settings.MEDIA_ROOT
-REDIS_URL = settings.CELERY_BROKER_URL
-# DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
-# SCHEDULER = "scrapy_redis.scheduler.Scheduler"
-# SCHEDULER_PERSIST = False
+# REDIS_URL = settings.CELERY_BROKER_URL  # noqa: ERA001
+# DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"  # noqa: ERA001
+# SCHEDULER = "scrapy_redis.scheduler.Scheduler"  # noqa: ERA001
+# SCHEDULER_PERSIST = False  # noqa: ERA001
 
-SELENIUM_DRIVER_NAME = "firefox"
-SELENIUM_DRIVER_EXECUTABLE_PATH = which("geckodriver")
-SELENIUM_BROWSER_EXECUTABLE_PATH = which("firefox")
-SELENIUM_DRIVER_ARGUMENTS = ["-headless", "--no-sandbox", "--disable-gpu"]
+# SELENIUM_DRIVER_NAME = "firefox"  # noqa: ERA001
+# SELENIUM_DRIVER_EXECUTABLE_PATH = which("geckodriver")  # noqa: ERA001
+# SELENIUM_BROWSER_EXECUTABLE_PATH = which("firefox")  # noqa: ERA001
+SELENIUM_DRIVER_NAME = "chrome"
+SELENIUM_DRIVER_EXECUTABLE_PATH = which("chromedriver")
+SELENIUM_BROWSER_EXECUTABLE_PATH = which("chrome")
+SELENIUM_DRIVER_ARGUMENTS = [
+    "--headless",
+    "--no-sandbox",
+    # "--disable-gpu",
+    "--enable-javascript",
+    # "--disable-extensions",
+]

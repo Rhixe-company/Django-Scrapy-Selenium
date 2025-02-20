@@ -3,17 +3,20 @@ import logging
 
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.exceptions import MultipleObjectsReturned
 from django.core.management.base import BaseCommand
 from django.db.models import Q
+from django.db.utils import IntegrityError
 
 from api.apps.forms import ArtistForm
 from api.apps.forms import AuthorForm
+from api.apps.forms import CategoryForm
 from api.apps.forms import ChapterForm
 from api.apps.forms import ComicForm
 from api.apps.forms import GenreForm
-from api.apps.forms import TypeForm
 from api.apps.models import Artist
 from api.apps.models import Author
+from api.apps.models import Category
 from api.apps.models import Chapter
 from api.apps.models import ChapterImage
 from api.apps.models import Comic
@@ -28,6 +31,17 @@ class Command(BaseCommand):
     def handle(self, *args, **options):  # noqa: C901, PLR0915
         def save_comics(comics_data):  # noqa: C901, PLR0912, PLR0915
             for item in comics_data:
+                usermodel = get_user_model()
+                user = usermodel.objects.filter(
+                    Q(email__icontains="admin@rhixe.company")
+                    | Q(username__icontains="adminbot"),
+                ).first()
+                if not user:
+                    user = usermodel.objects.create_superuser(
+                        email="admin@rhixe.company",
+                        username="adminbot",
+                        password="R4I7gcJHX",  # noqa: S106
+                    )
                 images = item.get("images")
                 title = item["title"]
                 slug = item["slug"]
@@ -40,156 +54,134 @@ class Command(BaseCommand):
                 numchapters = item["numchapters"]
                 numitems = len(images)
                 serialization = item["serialization"]
-                te = item.get("type")
-                author = item.get("author", "none")
-                artist = item.get("artist", "none")
-                genres = item.get("genres", "none")
-                usermodel = get_user_model()
-                user = usermodel.objects.filter(
-                    Q(email__icontains="admin@rhixe.company")
-                    | Q(username__icontains="adminbot"),
-                ).first()
-                if not user:
-                    user = usermodel.objects.create_superuser(
-                        email="admin@rhixe.company",
-                        username="adminbot",
-                        password="R4I7gcJHX",  # noqa: S106
-                    )
-                authorform = AuthorForm(
-                    {
-                        "name": author,
-                    },
-                )
-                artistform = ArtistForm(
-                    {
-                        "name": artist,
-                    },
-                )
-                typeform = TypeForm(
-                    {
-                        "name": te.lower(),
-                    },
-                )
-                if authorform.is_bound is True:
-                    if authorform.is_valid():
-                        authorform.save()
-                if artistform.is_bound is True:
-                    if artistform.is_valid():
-                        artistform.save()
-                gens = []
-                for gen in genres:
-                    genreform = GenreForm(
+                ca = item.get("type")
+                author = item.get("author")
+                artist = item.get("artist")
+                genres = item.get("genres")
+                if images:
+                    authorform = AuthorForm(
                         {
-                            "name": gen,
+                            "name": author,
                         },
                     )
-                    if genreform.is_bound is True:
-                        if genreform.is_valid():
-                            g = genreform.save()
-                            gens.append(g.pk)
-                if typeform.is_bound is True:
-                    if typeform.is_valid():
-                        nwte = typeform.save()
-                        nwar = Artist.objects.get(name=artist)
-                        nwau = Author.objects.get(name=author)
-                        comic_data = {
-                            "title": title,
-                            "slug": slug,
-                            "description": description,
-                            "rating": rating,
-                            "status": status.lower(),
-                            "url": url,
-                            "spider": spider,
-                            "updated_at": updated_at,
-                            "numchapters": numchapters,
-                            "numitems": numitems,
-                            "serialization": serialization,
-                            "type": nwte,
-                            "author": nwau,
-                            "artist": nwar,
-                            "genres": gens,
-                        }
-                        oldcomic = Comic.objects.filter(
-                            Q(title__icontains=title) | Q(slug__icontains=slug),
-                        ).first()
-                        comicform = ComicForm(comic_data)
-                        if comicform.is_bound is True:
+                    artistform = ArtistForm(
+                        {
+                            "name": artist,
+                        },
+                    )
+                    categoryform = CategoryForm(
+                        {
+                            "name": ca,
+                        },
+                    )
+                    if authorform.is_bound is True:
+                        if authorform.is_valid():
+                            authorform.save()
+                    if artistform.is_bound is True:
+                        if artistform.is_valid():
+                            artistform.save()
+                    gens = []
+                    if genres:
+                        for gen in genres:
+                            genreform = GenreForm(
+                                {
+                                    "name": gen,
+                                },
+                            )
+                            if genreform.is_bound is True:
+                                if genreform.is_valid():
+                                    g = genreform.save()
+                                    gens.append(g.pk)
+                    if categoryform.is_bound is True:
+                        if categoryform.is_valid():
+                            categoryform.save()
+                    nwca = Category.objects.get(name=ca)
+                    nwar = Artist.objects.get(name=artist)
+                    nwau = Author.objects.get(name=author)
+                    comic_data = {
+                        "title": title,
+                        "slug": slug,
+                        "description": description,
+                        "rating": rating,
+                        "status": status,
+                        "url": url,
+                        "spider": spider,
+                        "updated_at": updated_at,
+                        "numchapters": numchapters,
+                        "numitems": numitems,
+                        "serialization": serialization,
+                        "category": nwca,
+                        "author": nwau,
+                        "artist": nwar,
+                        "genres": gens,
+                    }
+                    comicform = ComicForm(comic_data)
+                    if comicform.is_bound is True:
+                        try:
                             if comicform.is_valid():
                                 newcomic = comicform.save(commit=False)
                                 newcomic.user = user
                                 newcomic.save()
                                 comicform.save_m2m()
-                                msg1 = f"{newcomic.title} has been created!!"
-                                logger.info(msg1)
-                            else:
-                                oldcomic.description = description
-                                oldcomic.rating = rating
-                                oldcomic.status = status
-                                oldcomic.url = url
-                                oldcomic.spider = spider
-                                oldcomic.url = url
-                                oldcomic.updated_at = updated_at
-                                oldcomic.numchapters = numchapters
-                                oldcomic.numitems = numitems
-                                oldcomic.serialization = serialization
-                                oldcomic.type = nwte
-                                oldcomic.author = nwau
-                                oldcomic.artist = nwar
-                                oldcomic.save()
-                                msg2 = f"{oldcomic.title} has been updated!!"
-                                logger.error(msg2)
-                        if images:
-                            for comicimg in images:
-                                link = comicimg["url"]
-                                image = comicimg["path"]
-                                oldcomicc = Comic.objects.filter(
-                                    Q(title__icontains=title) | Q(slug__icontains=slug),
-                                ).first()
-                                ComicImage.objects.filter(
-                                    Q(image=image) | Q(url__iexact=link),
-                                ).update_or_create(
-                                    url=link,
-                                    image=image,
-                                    comic=oldcomicc,
-                                )[
-                                    0
-                                ]
-                        else:
-                            msg4 = f"{slug} has no images!!"
-                            logger.error(msg4)
+                                msg2 = f"Creating - {newcomic.slug}"
+                                logger.info(msg2)
+                        except IntegrityError:
+                            msg3 = f"Dropping - {title}"
+                            logger.error(msg3)  # noqa: TRY400
+                    for comicimg in images:
+                        link = comicimg["url"]
+                        image = comicimg["path"]
+                        comquery = Q(slug__exact=slug) | Q(title__exact=title)
+                        try:
+                            oldcomic = Comic.objects.get(comquery)
+                        except MultipleObjectsReturned:
+                            oldcomic = Comic.objects.filter(comquery).first()
+                        ComicImage.objects.filter(
+                            Q(image=image) | Q(url__iexact=link),
+                        ).update_or_create(url=link, image=image, comic=oldcomic)[0]
 
         def save_chapters(chapters_data):
-            for citem in chapters_data:
-                chapterimages = citem.get("images")
-                comicslug = citem["comicslug"]
-                comictitle = citem["comictitle"]
-                name = citem["chaptername"]
-                title = citem.get("chaptertitle", "")
-                slug = citem["chapterslug"]
-                url = citem["url"]
-                spider = citem["spider"]
-                updated_at = citem.get("updated_at")
+            for item in chapters_data:
+                chapterimages = item.get("images")
+                comicslug = item["comicslug"]
+                comictitle = item["comictitle"]
+                name = item["chaptername"]
+                title = item.get("chaptertitle", "")
+                slug = item["chapterslug"]
+                url = item["url"]
+                spider = item["spider"]
+                updated_at = item.get("updated_at")
                 numpages = len(chapterimages)
-                comicquery = Q(slug__icontains=comicslug) | Q(
-                    title__icontains=comictitle,
+                chapterquery = Q(slug__exact=slug) | Q(comic__slug__exact=comicslug)
+                comicquery = Q(slug__exact=comicslug) | Q(
+                    title__exact=comictitle,
                 )
-                comicobj = (
+                if (
                     Comic.objects.prefetch_related(
                         "comicitems",
                         "comicchapters",
                         "genres",
                         "followers",
                     )
-                    .select_related("author", "type", "artist", "user")
+                    .select_related("author", "category", "artist", "user")
                     .filter(comicquery)
-                )
-                if comicobj.exists():
-                    chapterquery = (
-                        Q(slug__icontains=slug)
-                        | Q(name__icontains=name)
-                        | Q(comic__slug__exact=comicobj.first().slug)
-                    )
+                    .exists()
+                ):
                     if chapterimages:
+                        try:
+                            dbcomic = (
+                                Comic.objects.prefetch_related(
+                                    "comicitems",
+                                    "comicchapters",
+                                    "genres",
+                                    "followers",
+                                )
+                                .select_related("author", "category", "artist", "user")
+                                .get(comicquery)
+                            )
+                        except MultipleObjectsReturned:
+                            dbcomic = Comic.objects.filter(comicquery).first()
+
                         chapter_data = {
                             "title": title,
                             "slug": slug,
@@ -198,122 +190,102 @@ class Command(BaseCommand):
                             "spider": spider,
                             "updated_at": updated_at,
                             "numpages": numpages,
+                            "comic": dbcomic,
                         }
-                        oldchapter = (
-                            Chapter.objects.prefetch_related("chapteritems")
-                            .select_related("comic")
-                            .filter(chapterquery)
-                            .first()
-                        )
                         chapterform = ChapterForm(chapter_data)
                         if chapterform.is_bound is True:
-                            if chapterform.is_valid():
-                                chapterdbcomic = (
-                                    Comic.objects.prefetch_related(
-                                        "comicitems",
-                                        "comicchapters",
-                                        "genres",
-                                        "followers",
-                                    )
-                                    .select_related("author", "type", "artist", "user")
-                                    .filter(comicquery)
+                            try:
+                                if chapterform.is_valid():
+                                    chapter = chapterform.save(commit=False)
+                                    chapter.save()
+                                    msg3 = f"Creating - {chapter.slug}"
+                                    logger.info(msg3)
+                            except IntegrityError:
+                                msg3 = f"Dropping - {slug}"
+                                logger.info(msg3)
+                        # cimgs = []  # noqa: ERA001
+                        for image in chapterimages:
+                            try:
+                                dbchapter = (
+                                    Chapter.objects.prefetch_related("chapteritems")
+                                    .select_related("comic")
+                                    .get(chapterquery)
+                                )
+                            except MultipleObjectsReturned:
+                                dbchapter = (
+                                    Chapter.objects.prefetch_related("chapteritems")
+                                    .select_related("comic")
+                                    .filter(chapterquery)
                                     .first()
                                 )
-                                chapter = chapterform.save(commit=False)
-                                chapter.comic = chapterdbcomic
-                                chapter.save()
-                            else:
-                                chapterdbcomicc = (
-                                    Comic.objects.prefetch_related(
-                                        "comicitems",
-                                        "comicchapters",
-                                        "genres",
-                                        "followers",
-                                    )
-                                    .select_related("author", "type", "artist", "user")
-                                    .filter(comicquery)
-                                    .first()
-                                )
-                                oldchapter.comic = chapterdbcomicc
-                                oldchapter.title = title
-                                oldchapter.spider = spider
-                                oldchapter.url = url
-                                oldchapter.updated_at = updated_at
-                                oldchapter.numpages = numpages
-                                oldchapter.save()
-                                msg2 = f"{oldchapter.slug} has been updated!!"
-                                logger.error(msg2)
-                        for chapterimg in chapterimages:
-                            clink = chapterimg["url"]
-                            cimage = chapterimg["path"]
-                            oldchapterr = (
-                                Chapter.objects.prefetch_related("chapteritems")
-                                .select_related("comic")
-                                .filter(
-                                    Q(slug__icontains=slug) | Q(name__icontains=name),
-                                )
-                                .first()
-                            )
-                            chapterdbcomiccc = (
-                                Comic.objects.prefetch_related(
-                                    "comicitems",
-                                    "comicchapters",
-                                    "genres",
-                                    "followers",
-                                )
-                                .select_related("author", "type", "artist", "user")
-                                .filter(comicquery)
-                                .first()
-                            )
-
-                            oldimg = ChapterImage.objects.filter(  # noqa: E501, ERA001, RUF100
-                                ~Q(image__contains=oldchapterr.slug),  # type: ignore  # noqa: PGH003
-                            )
-                            # oldimg = (
-                            #     ChapterImage.objects.filter(  # noqa: E501, ERA001, RUF100
-                            #         chapter=oldchapterr,
-                            #     )
-                            #     .filter(  # noqa: E501, ERA001, RUF100
-                            #         comic=oldchapterr.comic,
-                            #     )
-                            #     .filter(  # noqa: E501, ERA001, RUF100
-                            #         ~Q(image__icontains=oldchapterr.slug),  # type: ignore  # noqa: PGH003
-                            #     )
-                            # )
-                            if oldimg.exists():
-                                msg = f"{oldimg.first().image.url} exists!!"
-                                logger.error(msg)
-                                # oldimg.delete()
+                            newurl = image["url"]
+                            newimage = image["path"]
+                            # cimgs.append(newimage)  # noqa: ERA001
                             ChapterImage.objects.filter(
-                                Q(image=cimage) | Q(url__iexact=clink),
+                                Q(image=newimage) | Q(url__iexact=newurl),
                             ).update_or_create(
-                                url=clink,
-                                image=cimage,
-                                chapter=oldchapterr,
-                                comic=chapterdbcomiccc,
-                            )[
-                                0
-                            ]
+                                url=newurl,
+                                image=newimage,
+                                chapter=dbchapter,
+                                comic=dbchapter.comic,
+                            )[0]
+                        # chapter_images = ChapterImage.objects.filter(  # noqa: E501, ERA001, RUF100
+                        #     Q(chapter=chapter)  # noqa: ERA001
+                        # ).filter(Q(image__in=cimgs))
+                        # msg = {  # noqa: ERA001, RUF100
+                        #     "chapter_slug": chapter.slug,  # noqa: ERA001
+                        #     "chapter_numpages": chapter.numpages,  # noqa: ERA001
+                        #     "images": chapter_images,  # noqa: ERA001
+                        #     "images_count": chapter_images.count(),  # noqa: ERA001
+                        # }  # noqa: ERA001, RUF100
+                        # logger.error(msg)  # noqa: ERA001
+
                     else:
-                        msg5 = f"{slug} has not images"
+                        msg4 = f"{slug} Has No Images"
                         logger.error(
-                            msg5,
+                            msg4,
                         )
                 else:
-                    msg6 = f"{comicslug} Does not Exists"
+                    msg4 = f"{comicslug} Does Not Exists"
                     logger.error(
-                        msg6,
+                        msg4,
                     )
 
-        def save_data():
-            base = settings.BASE_DIR
-            # comics_file = str(base / "comics.json")
-            # with open(comics_file, encoding="utf-8") as comic_file:  # noqa: PTH123
-            #     comics_data = json.load(comic_file)
-            #     save_comics(comics_data=comics_data)
-            chapters_file = str(base / "chapters.json")
-            with open(chapters_file, encoding="utf-8") as chapter_file:  # noqa: PTH123
-                chapters_data = json.load(chapter_file)
-                save_chapters(chapters_data=chapters_data)
+        base = settings.BASE_DIR
+        comics_file = str(base / "comics.json")
+        with open(comics_file, encoding="utf-8") as comic_file:  # noqa: PTH123
+            comics_data = json.load(comic_file)
+            save_comics(comics_data=comics_data)
+        chapters_file = str(base / "chapters.json")
+        with open(chapters_file, encoding="utf-8") as chapter_file:  # noqa: PTH123
+            chapters_data = json.load(chapter_file)
+            save_chapters(chapters_data=chapters_data)
+        comics = (
+            Comic.objects.prefetch_related(
+                "comicitems",
+                "comicchapters",
+                "genres",
+                "followers",
+            )
+            .select_related("author", "category", "artist", "user")
+            .all()
+        )
+        comic_images = ComicImage.objects.select_related("comic").all()
+        chapters = (
+            Chapter.objects.prefetch_related("chapteritems")
+            .select_related("comic")
+            .all()
+        )
 
-        save_data()
+        chapter_images = ChapterImage.objects.select_related("comic", "chapter").all()
+        context = {
+            "Comics": comics.values("title", "slug"),
+            "Comics_Count": comics.count(),
+            "ComicsImage": comic_images.values("image", "url", "comic"),
+            "ComicsImage_Count": comic_images.count(),
+            "Chapters": chapters.values("name", "slug", "numpages"),
+            "Chapters_Count": chapters.count(),
+            "ChaptersImage": chapter_images.values("image", "url", "chapter"),
+            "ChaptersImage_Count": chapter_images.count(),
+        }
+        logger.info(context)

@@ -1,15 +1,14 @@
-# Define here the models for your spider middleware
-#
-# See documentation in:
-# https://docs.scrapy.org/en/latest/topics/spider-middleware.html
+"""This module contains the ``SeleniumMiddleware`` scrapy middleware"""
 
 from importlib import import_module
 
-# useful for handling different item types with a single interface
 from scrapy import signals
 from scrapy.exceptions import NotConfigured
-from scrapy.http import HtmlResponse  # type: ignore  # noqa: PGH003
+from scrapy.http.response.html import HtmlResponse
 from scrapy_selenium.http import SeleniumRequest
+from selenium import webdriver
+from selenium.common import ElementNotInteractableException
+from selenium.common import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 
 
@@ -20,9 +19,8 @@ class SeleniumMiddleware:
         self,
         driver_name,
         driver_executable_path,
-        browser_executable_path,
-        command_executor,
         driver_arguments,
+        browser_executable_path,
     ):
         """Initialize the selenium webdriver
 
@@ -36,8 +34,6 @@ class SeleniumMiddleware:
             A list of arguments to initialize the driver
         browser_executable_path: str
             The path of the executable binary of the browser
-        command_executor: str
-            Selenium remote server endpoint
         """
 
         webdriver_base_path = f"selenium.webdriver.{driver_name}"
@@ -49,72 +45,37 @@ class SeleniumMiddleware:
         driver_options_klass = getattr(driver_options_module, "Options")  # noqa: B009
 
         driver_options = driver_options_klass()
-
         if browser_executable_path:
             driver_options.binary_location = browser_executable_path
         for argument in driver_arguments:
             driver_options.add_argument(argument)
+        if driver_name and driver_name.lower() == "chrome":
+            driver_service = webdriver.ChromeService(
+                executable_path=driver_executable_path,
+                log_output="logs.txt",
+                service_args=["--log", "info"],
+                prefs={
+                    "dom.ipc.processCount": 8,
+                    "javascript.options.showInConsole": False,
+                },
+            )
+        if driver_name and driver_name.lower() == "firefox":
+            driver_service = webdriver.FirefoxService(
+                executable_path=driver_executable_path,
+                log_output="logs.txt",
+                service_args=["--log", "info"],
+                prefs={
+                    "dom.ipc.processCount": 8,
+                    "javascript.options.showInConsole": False,
+                },
+            )
 
         driver_kwargs = {
-            "executable_path": driver_executable_path,
-            f"{driver_name}_options": driver_options,
+            "service": driver_service,
+            "options": driver_options,
         }
 
-        # locally installed driver
-        if driver_executable_path is not None:
-            driver_kwargs = {
-                "executable_path": driver_executable_path,
-                f"{driver_name}_options": driver_options,
-            }
-            self.driver = driver_klass(**driver_kwargs)
-        # remote driver
-        elif command_executor is not None:
-            from selenium import webdriver
-
-            capabilities = driver_options.to_capabilities()
-            self.driver = webdriver.Remote(
-                command_executor=command_executor,
-                desired_capabilities=capabilities,  # type: ignore  # noqa: PGH003
-            )
-        # webdriver-manager
-        else:
-            # selenium4+
-            from shutil import which
-
-            from selenium import webdriver
-
-            if driver_name and driver_name.lower() == "chrome":
-                from selenium.webdriver.chrome.options import Options
-                from selenium.webdriver.chrome.service import Service
-
-                newoptions = Options()
-                newoptions.add_argument("-headless")
-                newoptions.add_argument(
-                    "--no-sandbox",  # type: ignore  # noqa: PGH003
-                )
-                newoptions.add_argument(
-                    "--disable-gpu",
-                )
-                newoptions.binary_location = which("chromium")  # type: ignore  # noqa: PGH003
-                # newoptions.binary_location = "C:/Users/Alexa/Downloads/chrome-win64/chrome-win64/chrome.exe "  # noqa: E501, ERA001
-                service = Service()
-                self.driver = webdriver.Chrome(service=service, options=newoptions)
-            if driver_name and driver_name.lower() == "firefox":
-
-                from selenium.webdriver.firefox.options import Options
-                from selenium.webdriver.firefox.service import Service
-
-                newoptions = Options()
-                newoptions.add_argument("-headless")
-                newoptions.add_argument(
-                    "--no-sandbox",  # type: ignore  # noqa: PGH003
-                )
-                newoptions.add_argument(
-                    "--disable-gpu",
-                )
-                newoptions.binary_location = which("firefox")  # type: ignore  # noqa: PGH003
-                service = Service()
-                self.driver = webdriver.Chrome(service=service, options=newoptions)  # type: ignore  # noqa: PGH003
+        self.driver = driver_klass(**driver_kwargs)
 
     @classmethod
     def from_crawler(cls, crawler):
@@ -125,21 +86,10 @@ class SeleniumMiddleware:
         browser_executable_path = crawler.settings.get(
             "SELENIUM_BROWSER_EXECUTABLE_PATH",
         )
-        command_executor = crawler.settings.get("SELENIUM_COMMAND_EXECUTOR")
         driver_arguments = crawler.settings.get("SELENIUM_DRIVER_ARGUMENTS")
 
-        if driver_name is None:
-            msg = "SELENIUM_DRIVER_NAME must be set"
-            raise NotConfigured(msg)
-
-        # let's use webdriver-manager when nothing is specified instead | RN just for Chrome  # noqa: E501
-        if (driver_name.lower() != "chrome") and (
-            driver_executable_path is None and command_executor is None
-        ):
-            msg = (
-                "Either SELENIUM_DRIVER_EXECUTABLE_PATH "
-                "or SELENIUM_COMMAND_EXECUTOR must be set"
-            )
+        if not driver_name or not driver_executable_path:
+            msg = "SELENIUM_DRIVER_NAME and SELENIUM_DRIVER_EXECUTABLE_PATH must be set"
             raise NotConfigured(
                 msg,
             )
@@ -147,9 +97,8 @@ class SeleniumMiddleware:
         middleware = cls(
             driver_name=driver_name,
             driver_executable_path=driver_executable_path,
-            browser_executable_path=browser_executable_path,
-            command_executor=command_executor,
             driver_arguments=driver_arguments,
+            browser_executable_path=browser_executable_path,
         )
 
         crawler.signals.connect(middleware.spider_closed, signals.spider_closed)
@@ -168,7 +117,7 @@ class SeleniumMiddleware:
             self.driver.add_cookie({"name": cookie_name, "value": cookie_value})
 
         if request.wait_until:
-            WebDriverWait(self.driver, request.wait_time).until(request.wait_until)  # type: ignore  # noqa: PGH003
+            WebDriverWait(self.driver, request.wait_time, ignored_exceptions=[NoSuchElementException, ElementNotInteractableException]).until(request.wait_until)  # type: ignore  # noqa: E501, PGH003
 
         if request.screenshot:
             request.meta["screenshot"] = self.driver.get_screenshot_as_png()

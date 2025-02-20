@@ -1,24 +1,23 @@
 from django import forms
-from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 
 from api.apps.models import Artist
 from api.apps.models import Author
+from api.apps.models import Category
 from api.apps.models import Chapter
 from api.apps.models import ChapterImage
 from api.apps.models import Comic
 from api.apps.models import ComicImage
 from api.apps.models import Comment
 from api.apps.models import Genre
-from api.apps.models import Type
 from api.users.widgets import MyCustomCKEditorWidget
 from api.users.widgets import MyCustomImageWidget
 from api.users.widgets import MyDateInput
 
 
-class TypeForm(forms.ModelForm):
+class CategoryForm(forms.ModelForm):
     class Meta:
-        model = Type
+        model = Category
         fields = ("name",)
 
 
@@ -41,6 +40,7 @@ class GenreForm(forms.ModelForm):
 
 
 class ComicForm(forms.ModelForm):
+
     class Meta:
         model = Comic
         fields = (
@@ -53,7 +53,7 @@ class ComicForm(forms.ModelForm):
             "serialization",
             "url",
             "updated_at",
-            "type",
+            "category",
             "author",
             "artist",
             "genres",
@@ -69,6 +69,12 @@ class ComicForm(forms.ModelForm):
         self.fields["title"].widget.attrs.update(
             {
                 "placeholder": _("Enter Title"),
+                "class": "custom_char_input",
+            },
+        )
+        self.fields["slug"].widget.attrs.update(
+            {
+                "placeholder": _("Enter Slug"),
                 "class": "custom_char_input",
             },
         )
@@ -125,7 +131,7 @@ class ComicForm(forms.ModelForm):
                 "class": "custom_select_input",
             },
         )
-        self.fields["type"].widget.attrs.update(
+        self.fields["category"].widget.attrs.update(
             {
                 "class": "custom_select_input",
             },
@@ -146,46 +152,36 @@ class ComicForm(forms.ModelForm):
             },
         )
 
-    def clean_title(self):
-        title = self.cleaned_data["title"]
-        comicquery = Q(title__iexact=title)
-        comic = (
-            Comic.objects.prefetch_related(
-                "comicitems",
-                "comicchapters",
-                "genres",
-                "followers",
-            )
-            .select_related("author", "type", "artist", "user")
-            .filter(comicquery)
-        )
-        if comic.exists():
-            msg = f"Error: {title} Already exists in the database!"
-            raise forms.ValidationError(
-                msg,
-            )
-        return title
+    def clean(self):
+        return self.cleaned_data
 
 
 class ComicImageForm(forms.ModelForm):
     class Meta:
         model = ComicImage
         fields = ("image", "url")
-        # widgets = {
-        #     "image": MyCustomImageWidget(
-        #         attrs={"aria-describedby": "image_input_help"},
-        #     ),
-        # }
+        widgets = {
+            "image": MyCustomImageWidget(
+                attrs={"aria-describedby": "image_input_help"},
+            ),
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field in self.fields:
-            f = str(field)
-            new_data = {
-                "placeholder": _(f"Enter your {f}"),  # noqa: INT001
-                "class": "",
-            }
-            self.fields[str(field)].widget.attrs.update(new_data)
+        self.fields["url"].widget.attrs.update(
+            {
+                "placeholder": _("Enter Url"),
+                "class": "custom_char_input",
+            },
+        )
+        self.fields["image"].widget.attrs.update(
+            {
+                "class": "custom_image_input",
+            },
+        )
+
+    def clean(self):
+        return self.cleaned_data
 
 
 class ChapterForm(forms.ModelForm):
@@ -199,7 +195,7 @@ class ChapterForm(forms.ModelForm):
             "url",
             "numpages",
             "updated_at",
-            # "comic",
+            "comic",
         )
         widgets = {
             "updated_at": forms.DateInput(
@@ -211,13 +207,55 @@ class ChapterForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field in self.fields:
-            f = str(field)
-            new_data = {
-                "placeholder": _(f"Enter your {f}"),  # noqa: INT001
-                "class": "",
-            }
-            self.fields[str(field)].widget.attrs.update(new_data)
+        self.fields["comic"].widget.attrs.update(
+            {
+                "class": "custom_select_input",
+            },
+        )
+        self.fields["name"].widget.attrs.update(
+            {
+                "placeholder": _("Enter Name"),
+                "class": "custom_char_input",
+            },
+        )
+        self.fields["title"].widget.attrs.update(
+            {
+                "placeholder": _("Enter Title"),
+                "class": "custom_char_input",
+            },
+        )
+        self.fields["slug"].widget.attrs.update(
+            {
+                "placeholder": _("Enter Slug"),
+                "class": "custom_char_input",
+            },
+        )
+        self.fields["numpages"].widget.attrs.update(
+            {
+                "placeholder": _("0"),
+                "class": "custom_char_input",
+            },
+        )
+        self.fields["spider"].widget.attrs.update(
+            {
+                "placeholder": _("Enter Spider"),
+                "class": "custom_char_input",
+            },
+        )
+        self.fields["updated_at"].widget.attrs.update(
+            {
+                "class": "custom_char_input",
+            },
+        )
+        self.fields["url"].widget.attrs.update(
+            {
+                "placeholder": _("Enter Url"),
+                "class": "custom_char_input",
+            },
+        )
+
+    def clean(self):
+        return self.cleaned_data
 
 
 class ChapterImageForm(forms.ModelForm):
@@ -232,13 +270,20 @@ class ChapterImageForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field in self.fields:
-            f = str(field)
-            new_data = {
-                "placeholder": _(f"Enter your {f}"),  # noqa: INT001
-                "class": "",
-            }
-            self.fields[str(field)].widget.attrs.update(new_data)
+        self.fields["url"].widget.attrs.update(
+            {
+                "placeholder": _("Enter Url"),
+                "class": "custom_char_input",
+            },
+        )
+        self.fields["image"].widget.attrs.update(
+            {
+                "class": "custom_image_input",
+            },
+        )
+
+    def clean(self):
+        return self.cleaned_data
 
 
 class CommentForm(forms.ModelForm):
@@ -258,3 +303,6 @@ class CommentForm(forms.ModelForm):
                 },
             ),
         }
+
+    def clean(self):
+        return self.cleaned_data

@@ -1,10 +1,8 @@
 import logging
 
 from scrapy.http.request import Request
-from scrapy.linkextractors.lxmlhtml import LxmlLinkExtractor as LinkExtractor
 from scrapy.loader import ItemLoader
-from scrapy.spiders.crawl import CrawlSpider
-from scrapy.spiders.crawl import Rule
+from scrapy.spiders import Spider
 from scrapy_selenium import SeleniumRequest
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
@@ -15,32 +13,37 @@ from crawler.items import ComicItem
 logger = logging.getLogger(__name__)
 
 
-class Run1Spider(CrawlSpider):
+class Run1Spider(Spider):
     name = "run1"
-
-    max_idle_time = 0
-
-    le_comic_details = LinkExtractor(
-        restrict_xpaths="//div[@class='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-3 p-4']/a",  # noqa: E501
-    )
-
-    rule_comic_details = Rule(le_comic_details, callback="comicpage", follow=False)
-
-    rules = (rule_comic_details,)
 
     def start_requests(self):
         # Custom start URLs
         urls = [
             f"https://asuracomic.net/series?page={i}&order=update" for i in range(1, 19)
         ]
-        for browser in ["chrome110", "edge99", "safari15_5"]:
 
-            for url in urls:
-                yield Request(
-                    url,
-                    meta={
-                        "impersonate": browser,
-                    },
+        for url in urls:
+            msg = f"Page: {url}"
+            logger.info(msg)
+            yield Request(
+                url=url,
+                meta={
+                    "impersonate": "chrome124",
+                },
+                callback=self.comicspage,
+            )
+
+    def comicspage(self, response):
+        links = response.xpath(
+            "//div[@class='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-3 p-4']/a/@href",  # noqa: E501
+        ).getall()
+        if links:
+            for link in links:
+                msg = f"Page: {response.urljoin(link)}"
+                logger.info(msg)
+                yield response.follow(
+                    response.urljoin(link),
+                    callback=self.comicpage,
                 )
 
     def comicpage(self, response):  # noqa: C901, PLR0912, PLR0915
@@ -204,7 +207,7 @@ class Run1Spider(CrawlSpider):
             for x, y in zip(chapters, chapters_time, strict=False):
                 yield SeleniumRequest(
                     url=response.urljoin(x),
-                    wait_time=10,
+                    wait_time=2,
                     wait_until=ec.presence_of_element_located(
                         (
                             By.XPATH,
@@ -262,9 +265,14 @@ class Run1Spider(CrawlSpider):
         image_urls = response.xpath(
             '//div[contains(@class, "w-full mx-auto center")]/img[contains(@class, "object-cover mx-auto")]/@src',  # noqa: E501
         ).getall()
+        # image_urls = response.request.meta["driver"].find_elements(  # type: ignore  # noqa: E501, PGH003
+        #     By.XPATH,
+        #     "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501, ERA001
+        # )  # noqa: ERA001, RUF100
         if image_urls:
             images = []
             for img in image_urls[0:2]:
+                # images.append(img.get_attribute("src"))  # noqa: E501, ERA001, PERF401, RUF100
                 images.append(response.urljoin(img))  # noqa: PERF401
             loader.add_value("image_urls", images)
             msg = f"Total Images found: {len(images)}"

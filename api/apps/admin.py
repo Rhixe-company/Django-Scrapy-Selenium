@@ -13,6 +13,7 @@ from unfold.contrib.forms.widgets import WysiwygWidget
 
 from api.apps.models import Artist
 from api.apps.models import Author
+from api.apps.models import Category
 from api.apps.models import Chapter
 from api.apps.models import ChapterImage
 from api.apps.models import Comic
@@ -20,7 +21,6 @@ from api.apps.models import ComicImage
 from api.apps.models import ComicStatus
 from api.apps.models import Comment
 from api.apps.models import Genre
-from api.apps.models import Type
 from api.apps.models import UserItem
 from api.users.admin import CustomDropdownFilter
 from api.users.admin import CustomTextFilter
@@ -479,8 +479,8 @@ class GenreAdminClass(ModelAdmin, ImportExportModelAdmin):
     }
 
 
-@admin.register(Type)
-class TypeAdminClass(ModelAdmin, ImportExportModelAdmin):
+@admin.register(Category)
+class CategoryAdminClass(ModelAdmin, ImportExportModelAdmin):
     # Display fields in changeform in compressed mode
     compressed_fields = True  # Default: False
 
@@ -492,7 +492,7 @@ class TypeAdminClass(ModelAdmin, ImportExportModelAdmin):
         "model_field_name": "html.unescape",
         "other_field_name": lambda content: content.strip(),
     }
-    model = Type
+    model = Category
     search_fields = ("name",)
     # Display submit button in filters
     list_filter_submit = True
