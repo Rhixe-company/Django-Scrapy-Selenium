@@ -1,5 +1,5 @@
 .mytable {
-  @apply w-full text-sm text-left text-gray-500 dark:text-gray-400;
+  @apply min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600;
 }
 
 .mytablerow {
@@ -7,5 +7,5 @@
 }
 
 .mytablecol {
-  @apply p-1 text-sm font-normal text-gray-500 whitespace-normal dark:text-gray-400;
+  @apply p-4;
 }

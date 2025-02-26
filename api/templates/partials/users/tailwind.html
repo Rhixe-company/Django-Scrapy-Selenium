@@ -82,10 +82,10 @@
     {% endblock table %}
     <!-- Modal footer -->
     <div class="items-center p-6 border-t border-gray-200 rounded-b dark:border-gray-700">
-      <button id='deleteChapters'
-              hx-get='{% url "chapters:delete_all_chapters" %}'
+      <button id='deleteUsers'
+              hx-get='{% url "users:delete_all_users" %}'
               hx-indicator='.progress'
-              hx-target='#chapter-container'
+              hx-target='#user-container'
               hx-include="[name='id']"
               hx-push-url='false'
               disabled="true"
@@ -106,7 +106,7 @@
         $(document).ready(function() {
           const checkall = $('#custom-table table thead tr th input[type="checkbox"]');
           const checkboxes = $('#custom-table table tbody tr td input[type="checkbox"]');
-          const submitButton = $("#deleteChapters");
+          const submitButton = $("#deleteUsers");
           checkall.on('change', function(event) {
             const numCheckall = $(checkall).filter(':checked').length;
             if (numCheckall >= 1) {

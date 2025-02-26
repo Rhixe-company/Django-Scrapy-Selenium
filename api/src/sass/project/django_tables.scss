@@ -1,0 +1,18 @@
+.cus_ongoing{
+  @apply mr-2 rounded-md border border-purple-100 bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:border-purple-500 dark:bg-gray-700 dark:text-purple-400;
+}
+.cus_completed{
+  @apply mr-2 rounded-md border border-green-100 bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:border-green-500 dark:bg-gray-700 dark:text-green-400;
+}
+.cus_dropped{
+  @apply mr-2 rounded-md border border-red-100 bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:border-red-500 dark:bg-gray-700 dark:text-red-400;
+}
+.cus_hiatus{
+  @apply mr-2 rounded-md border border-blue-100 bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:border-blue-500 dark:bg-gray-700 dark:text-blue-400;
+}
+.cus_season_end{
+  @apply mr-2 rounded-md border border-orange-100 bg-orange-100 px-2.5 py-0.5 text-xs font-medium text-orange-800 dark:border-orange-500 dark:bg-gray-700 dark:text-orange-400;
+}
+.cus_coming_soon{
+  @apply mr-2 rounded-md border border-violet-100 bg-violet-100 px-2.5 py-0.5 text-xs font-medium text-violet-800 dark:border-violet-500 dark:bg-gray-700 dark:text-violet-400;
+}

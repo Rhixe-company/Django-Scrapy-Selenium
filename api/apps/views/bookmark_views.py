@@ -47,7 +47,7 @@ def bookmarks(request):
             "followers",
             "comicchapters",
         )
-        .select_related("user", "author", "type", "artist")
+        .select_related("user", "author", "category", "artist")
         .filter(monthly)
         .order_by("-updated_at")[0:10]
     )
@@ -58,7 +58,7 @@ def bookmarks(request):
             "followers",
             "comicchapters",
         )
-        .select_related("user", "author", "type", "artist")
+        .select_related("user", "author", "category", "artist")
         .filter(weekly)
         .order_by("-updated_at")[0:10]
     )
@@ -69,7 +69,7 @@ def bookmarks(request):
             "followers",
             "comicchapters",
         )
-        .select_related("user", "author", "type", "artist")
+        .select_related("user", "author", "category", "artist")
         .all()
         .order_by("-updated_at")[0:10]
     )

@@ -39,7 +39,7 @@ class ChapterFilter(django_filters.FilterSet):
                 "class": "",
                 "hx-get": reverse_lazy("chapters:chapter_list"),
                 "hx-trigger": "keyup[target.value.length > 3] changed delay:500ms, search",  # noqa: E501
-                "hx-target": "#container",
+                "hx-target": "#chapter-container",
                 "hx-indicator": ".progress",
                 "hx-swap": "outerHTML",
                 "_": "on htmx:afterOnLoad  put '' into @value of #id_name",
@@ -98,7 +98,7 @@ class ComicFilter(django_filters.FilterSet):
                 "type": "search",
                 "hx-get": reverse_lazy("comics:comic_list"),
                 "hx-trigger": "keyup[target.value.length > 3] changed delay:500ms, search",  # noqa: E501
-                "hx-target": "#container",
+                "hx-target": "#comic-container",
                 "hx-indicator": ".progress",
                 "hx-swap": "outerHTML",
                 "_": "on htmx:afterOnLoad  put '' into @value of #id_title",
@@ -115,7 +115,7 @@ class ComicFilter(django_filters.FilterSet):
                 "class": "",
                 "hx-get": reverse_lazy("comics:comic_list"),
                 "hx-trigger": "change delay:1s",
-                "hx-target": "#container",
+                "hx-target": "#comic-container",
                 "hx-indicator": ".progress",
                 "hx-swap": "outerHTML",
                 "hx-replace-url": "true",
@@ -124,27 +124,27 @@ class ComicFilter(django_filters.FilterSet):
 
 
 class UserFilter(django_filters.FilterSet):
-    email = django_filters.CharFilter(
+    cemail = django_filters.CharFilter(
         field_name="email",
         lookup_expr="icontains",
     )
 
     class Meta:
         model = User
-        fields = ("email",)
+        fields = ("cemail",)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.form.fields["email"].widget.attrs.update(
+        self.form.fields["cemail"].widget.attrs.update(
             {
                 "placeholder": _("Search for users"),
                 "class": "",
                 "hx-get": reverse_lazy("users:user_list"),
                 "hx-trigger": "keyup[target.value.length > 3] changed delay:500ms, search",  # noqa: E501
-                "hx-target": "#container",
+                "hx-target": "#user-container",
                 "hx-indicator": ".progress",
                 "hx-swap": "outerHTML",
-                "_": "on htmx:afterOnLoad  put '' into @value of #id_email",
+                "_": "on htmx:afterOnLoad  put '' into @value of #id_cemail",
             },
         )
 

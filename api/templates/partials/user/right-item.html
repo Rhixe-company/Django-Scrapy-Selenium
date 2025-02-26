@@ -21,17 +21,13 @@
                 {% endif %}
               </div>
               <div class="min-w-0 flex-1">
-                <p class="mb-0.5 truncate text-base font-semibold leading-none text-gray-900 dark:text-white">
-                  {% trans object.first_name %} {% trans object.last_name %}
-                </p>
+                <p class="mb-0.5 truncate text-base font-semibold leading-none text-gray-900 dark:text-white">{% trans object.first_name %} {% trans object.last_name %}</p>
                 <p class="mb-1 truncate text-sm font-normal text-primary-700 dark:text-primary-500">{% trans object.email %}</p>
-                <p class="text-xs font-medium text-gray-500 dark:text-gray-400">
-                  {% trans 'Last seen:' %} {{ object.last_login|timesince }}
-                </p>
+                <p class="text-xs font-medium text-gray-500 dark:text-gray-400">{% trans 'Last seen:' %} {{ object.last_login|timesince }}</p>
               </div>
             </div>
             <div class="inline-flex w-auto items-center xl:w-full 2xl:w-auto">
-              <a href="{% url 'users:update_user' %}"
+              <a href="{% url 'users:update_user' object.id %}"
                  class="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-center text-sm font-medium text-gray-900 hover:bg-gray-100 focus:ring-4 focus:ring-primary-300 dark:border-gray-600 dark:bg-gray-900 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Update</a>
             </div>
           </div>
@@ -43,9 +39,7 @@
     <h3 class="mb-4 text-xl font-semibold dark:text-white">{% trans "Language" %}</h3>
     <div class="mb-4">
       <label for="settings-language"
-             class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">
-        {% trans "Select language" %}
-      </label>
+             class="mb-2 block text-sm font-medium text-gray-900 dark:text-white">{% trans "Select language" %}</label>
       {% get_available_languages as LANGUAGES %} {% get_language_info_list for LANGUAGES as languages %}
       <select id="settings-language"
               name="languages"

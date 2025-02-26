@@ -1,14 +1,11 @@
 {% extends "users/base.html" %}
 
 {% comment %} djlint:on {% endcomment %}
-{% load static i18n example %}
+{% load static i18n %}
 
 {% block head_title %}
   {% translate 'Users List' %}
 {% endblock head_title %}
 {% block content %}
-  <div class="mx-auto max-w-screen-xl ">
-    <!-- Include Partials Users Container -->
-    {% include "partials/users/container.html" %}
-  </div>
+  {% include "partials/users/container.html" %}
 {% endblock content %}

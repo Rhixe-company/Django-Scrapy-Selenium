@@ -1,5 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-const colors = require("tailwindcss/colors");
 module.exports = {
     content: [
         "./api/templates/**/**/**/**/**/*.html",
@@ -11,16 +10,15 @@ module.exports = {
     theme: {
         extend: {
             colors: {
-                gray: colors.gray,
                 themecolor: "#913fe2",
-                background: "var(--background)",
-                foreground: "var(--foreground)",
-                card: "var(--card)",
-                "card-foreground": "var(--card-foreground)",
-                popover: "var(--popover)",
-                "popover-foreground": "var(--popover-foreground)",
+                // background: "var(--background)",
+                // foreground: "var(--foreground)",
+                // card: "var(--card)",
+                // "card-foreground": "var(--card-foreground)",
+                // popover: "var(--popover)",
+                // "popover-foreground": "var(--popover-foreground)",
                 primary: {
-                    "": "var(--primary)",
+                    // "": "var(--primary)",
                     50: "#eff6ff",
                     100: "#dbeafe",
                     200: "#bfdbfe",
@@ -33,19 +31,19 @@ module.exports = {
                     900: "#1e3a8a",
                     950: "#172554",
                 },
-                "primary-foreground": "var(--primary-foreground)",
-                secondary: "var(--secondary)",
-                "secondary-foreground": "var(--secondary-foreground)",
-                muted: "var(--muted)",
-                "muted-foreground": "var(--muted-foreground)",
-                accent: "var(--accent)",
-                "accent-foreground": "var(--accent-foreground)",
-                destructive: "var(--destructive)",
-                "destructive-foreground": "var(--destructive-foreground)",
-                border: "var(--border)",
-                input: "var(--input)",
-                ring: "var(--ring)",
-                radius: "var(--radius)",
+                // "primary-foreground": "var(--primary-foreground)",
+                // secondary: "var(--secondary)",
+                // "secondary-foreground": "var(--secondary-foreground)",
+                // muted: "var(--muted)",
+                // "muted-foreground": "var(--muted-foreground)",
+                // accent: "var(--accent)",
+                // "accent-foreground": "var(--accent-foreground)",
+                // destructive: "var(--destructive)",
+                // "destructive-foreground": "var(--destructive-foreground)",
+                // border: "var(--border)",
+                // input: "var(--input)",
+                // ring: "var(--ring)",
+                // radius: "var(--radius)",
             },
             fontFamily: {
                 body: [
@@ -87,16 +85,10 @@ module.exports = {
     },
     plugins: [
         require("tw-elements/plugin.cjs"),
-        require("./plugin")({
-            charts: true,
-            forms: true,
-            tooltips: true,
-            datatables: true,
-            wysiwyg: true,
-        }),
         require("flowbite-typography"),
         require("flowbite/plugin"),
         require("daisyui"),
+        require("flowbite-typography"),
     ],
     // daisyUI config (optional - here are the default values)
     daisyui: {

@@ -76,16 +76,16 @@ class User(AbstractUser):
                 img.save(self.image.path)
 
     def get_absolute_url(self) -> str:
-        return reverse("users:detail_user", kwargs={"pk": self.pk})
+        return reverse("users:user_detail", kwargs={"id": self.id})
 
     def get_edit_url(self) -> str:
-        return reverse("users:update_user")
+        return reverse("users:update_user", kwargs={"id": self.id})
 
     def get_hx_url(self) -> str:
-        return reverse("users:hx_user_detail", kwargs={"pk": self.pk})
+        return reverse("users:hx_user_detail", kwargs={"id": self.id})
 
     def get_delete_url(self) -> str:
-        return reverse("users:delete_user", kwargs={"pk": self.pk})
+        return reverse("users:delete_user", kwargs={"id": self.id})
 
     def get_user_comics_children(self):
         return self.comicuser.all()

@@ -21,23 +21,61 @@ class MaterializeCssCheckboxColumn(tables.CheckBoxColumn):
         return mark_safe(html)  # noqa: S308
 
 
-class ImageColumn(tables.Column):
+class MyChoiceColumn(tables.Column):
     def render(self, value):
-        return format_html('<img src="{}" />', value)
+        if value == "Ongoing":
+            html = f"<span class='cus_ongoing'>{value}</span>"
+        elif value == "Completed":
+            html = f"<span class='cus_completed'>{value}</span>"
+        elif value == "Dropped":
+            html = f"<span class='cus_dropped'>{value}</span>"
+        elif value == "Hiatus":
+            html = f"<span class='cus_hiatus'>{value}</span>"
+        elif value == "Season End":
+            html = f"<span class='cus_season_end'>{value}</span>"
+        elif value == "Coming Soon":
+            html = f"<span class='cus_coming_soon'>{value}</span>"
+        else:
+            html = "None"
+        return format_html(html)
+
+
+class ComicCustomColumn(tables.Column):
+    def render(self, record):
+        img = record.get_comic_images_children().first()
+        if img.image:
+            html = f"<img class='w-10 h-10 rounded-full' alt='{record.title} avatar' src='{img.image.url}' /><div class='text-sm font-normal text-gray-500 dark:text-gray-400'><div class='text-base font-semibold text-gray-900 dark:text-white'><a href='{record.get_absolute_url()}'>{record.title}</a></div><div class='text-sm font-normal text-gray-500 dark:text-gray-400'>{record.category.name}</div></div>"  # noqa: E501
+        else:
+            html = f"<div class='text-sm font-normal text-gray-500 dark:text-gray-400'><div class='text-base font-semibold text-gray-900 dark:text-white'><a href='{record.get_absolute_url()}'>{record.title}</a></div><div class='text-sm font-normal text-gray-500 dark:text-gray-400'>{record.category.name}</div></div>"  # noqa: E501
+        return format_html(html)
+
+
+class ChapterCustomColumn(tables.Column):
+    def render(self, value, record):
+        pass
+
+
+class UserCustomColumn(tables.Column):
+    def render(self, value, record):
+        pass
+
+
+# class ImageColumn(tables.Column):
+#     def render(self, value):
+#         return format_html('<img src="{}" />', value.url)  # noqa: ERA001
 
 
 class ComicTable(tables.Table):
-    comic = tables.TemplateColumn(
-        orderable=True,
-        template_name="partials/comics/table_comic.html",
-    )
     actions = tables.TemplateColumn(
         orderable=True,
         template_name="partials/comics/table_actions.html",
     )
 
+    # url = tables.URLColumn()
     updated_at = tables.DateColumn(orderable=True, format=settings.FORMAT)
     check = MaterializeCssCheckboxColumn(accessor="id")
+    comic = ComicCustomColumn(linkify=False, accessor="title", verbose_name="Comic")
+    status = MyChoiceColumn(accessor="status")
 
     class Meta:
         model = Comic
@@ -46,6 +84,7 @@ class ComicTable(tables.Table):
             "comic",
             "status",
             "rating",
+            # "url",
             "updated_at",
             "actions",
         )
@@ -54,9 +93,15 @@ class ComicTable(tables.Table):
             "comic",
             "status",
             "rating",
+            # "url",
             "updated_at",
             "actions",
         )
+        unlocalize = (
+            # "comic",
+            "rating",
+        )
+        localize = ("id",)
         template_name = "partials/comics/tailwind.html"
         attrs = {
             "class": "mytable",
@@ -72,39 +117,6 @@ class ComicTable(tables.Table):
             },
         }
         row_attrs = {"id": lambda record: record.pk, "class": "mytablerow"}
-
-    def render_status(self, value):  # noqa: PLR0911
-        if value.lower() == "completed":
-            return format_html(
-                "<span class='mr-2 rounded-md border border-green-100 bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:border-green-500 dark:bg-gray-700 dark:text-green-400'>{}</span>",  # noqa: E501
-                value,
-            )
-        if value.lower() == "dropped":
-            return format_html(
-                "<span class='mr-2 rounded-md border border-red-100 bg-red-100 px-2.5 py-0.5 text-xs font-medium text-red-800 dark:border-red-500 dark:bg-gray-700 dark:text-red-400'>{}</span>",  # noqa: E501
-                value,
-            )
-        if value.lower() == "hiatus":
-            return format_html(
-                "<span class='mr-2 rounded-md border border-blue-100 bg-blue-100 px-2.5 py-0.5 text-xs font-medium text-blue-800 dark:border-blue-500 dark:bg-gray-700 dark:text-blue-400'>{}</span>",  # noqa: E501
-                value,
-            )
-        if value.lower() == "season end":
-            return format_html(
-                "<span class='mr-2 rounded-md border border-orange-100 bg-orange-100 px-2.5 py-0.5 text-xs font-medium text-orange-800 dark:border-orange-500 dark:bg-gray-700 dark:text-orange-400'>{}</span>",  # noqa: E501
-                value,
-            )
-        if value.lower() == "coming soon":
-            return format_html(
-                "<span class='mr-2 rounded-md border border-violet-100 bg-violet-100 px-2.5 py-0.5 text-xs font-medium text-violet-800 dark:border-violet-500 dark:bg-gray-700 dark:text-violet-400'>{}</span>",  # noqa: E501
-                value,
-            )
-        if value.lower() == "ongoing":
-            return format_html(
-                "<span class='mr-2 rounded-md border border-purple-100 bg-purple-100 px-2.5 py-0.5 text-xs font-medium text-purple-800 dark:border-purple-500 dark:bg-gray-700 dark:text-purple-400'>{}</span>",  # noqa: E501
-                value,
-            )
-        return None
 
 
 class ChapterTable(tables.Table):
@@ -171,24 +183,32 @@ class UserTable(tables.Table):
         orderable=True,
         template_name="partials/users/table_actions.html",
     )
-    image = ImageColumn("image")
+    # image = ImageColumn(accessor="image")  # noqa: ERA001
 
     class Meta:
         model = User
         sequence = (
             "id",
             "user",
-            "image",
+            # "image",
+            "first_name",
+            "last_name",
             "is_active",
+            "is_superuser",
             "actions",
         )
         fields = (
             "id",
             "user",
-            "image",
+            # "image",
+            "first_name",
+            "last_name",
             "is_active",
+            "is_superuser",
             "actions",
         )
+        unlocalize = ("user",)
+        localize = ("id",)
         template_name = "partials/users/tailwind.html"
         attrs = {
             "class": "mytable",
@@ -206,13 +226,25 @@ class UserTable(tables.Table):
         row_attrs = {"data-id": lambda record: record.pk, "class": "mytablerow"}
 
     def render_is_active(self, value):
-        if value is False:
+        if value is True:
             return format_html(
-                "<div class='flex items-center'><div class='h-2.5 w-2.5 rounded-full bg-red-500 mr-2'></div>{}</div>",  # noqa: E501
+                '<div class="flex items-center"><div class="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"></div>{}</div>',  # noqa: E501
                 value,
             )
 
         return format_html(
-            "<div class='flex items-center'><div class='h-2.5 w-2.5 rounded-full bg-green-400 mr-2'></div>{}</div>",  # noqa: E501
+            '<div class="flex items-center"><div class="h-2.5 w-2.5 rounded-full bg-red-400 mr-2"></div>{}</div>',  # noqa: E501
+            value,
+        )
+
+    def render_is_superuser(self, value):
+        if value is True:
+            return format_html(
+                '<div class="flex items-center"><div class="h-2.5 w-2.5 rounded-full bg-green-400 mr-2"></div>{}</div>',  # noqa: E501
+                value,
+            )
+
+        return format_html(
+            '<div class="flex items-center"><div class="h-2.5 w-2.5 rounded-full bg-red-400 mr-2"></div>{}</div>',  # noqa: E501
             value,
         )

@@ -24,6 +24,7 @@
   "devDependencies": {
     "@babel/core": "^7.16.5",
     "@babel/preset-env": "^7.16.5",
+    "@eslint/js": "^9.21.0",
     "@fortawesome/fontawesome-free": "^6.5.2",
     "@popperjs/core": "^2.11.8",
     "@types/alpinejs": "^3.13.10",
@@ -44,14 +45,11 @@
     "css-loader": "^7.1.2",
     "css-minimizer-webpack-plugin": "^7.0.0",
     "daisyui": "^4.12.23",
-    "eslint": "^9.20.1",
-    "eslint-config-prettier": "^10.0.1",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-prettier": "^5.2.3",
-    "eslint-plugin-tailwindcss": "^3.18.0",
+    "eslint": "^9.21.0",
     "file-loader": "^6.2.0",
     "flowbite": "^2.5.2",
     "flowbite-typography": "^1.0.3",
+    "globals": "^16.0.0",
     "mini-css-extract-plugin": "^2.4.5",
     "node-sass-tilde-importer": "^1.0.2",
     "pixrem": "^5.0.0",
@@ -76,13 +74,13 @@
     "ts-loader": "^9.5.1",
     "tsconfig-paths-webpack-plugin": "^4.2.0",
     "typescript": "^5.4.5",
+    "typescript-eslint": "^8.25.0",
     "url-loader": "^4.1.1",
     "webpack": "^5.82.0",
     "webpack-bundle-tracker": "^3.0.1",
     "webpack-cli": "^6.0.1",
     "webpack-dev-server": "^5.0.2",
-    "webpack-merge": "^6.0.1",
-    "windicss": "^3.5.6"
+    "webpack-merge": "^6.0.1"
   },
   "optionalDependencies": {
     "sass-embedded": "^1.83.4"
@@ -104,11 +102,6 @@
     "clean": "rimraf  dist"
   },
   "files": [
-    "lib",
-    "dist",
-    "types",
-    "plugin.d.ts",
-    "plugin.js",
-    "plugin-windicss.js"
+    "dist"
   ]
 }

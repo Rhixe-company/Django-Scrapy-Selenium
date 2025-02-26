@@ -2,16 +2,16 @@
 {% load i18n l10n %}
 
 {% block table-wrapper %}
-  <div class="overflow-x-auto">
+  <div id="custom-table"  class="overflow-x-auto">
     {% block table %}
-      <table id="example" {% render_attrs table.attrs  class='table-xs' %}>
+      <table {% render_attrs table.attrs  class='table-xs' %}>
         {% block table.thead %}
           {% if table.show_header %}
             <thead class="bg-gray-100 dark:bg-gray-700" {{ table.attrs.thead.as_html }}>
               <tr>
                 {% for column in table.columns %}
                   {% if forloop.first %}
-                    <th scope="col" class="w-4 p-4" {{ column.attrs.th.as_html }}>
+                    <th scope="col" class="p-4" {{ column.attrs.th.as_html }}>
                       <div class="flex items-center">
                         <input type="checkbox"
                                class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600" />
@@ -41,8 +41,8 @@
               {% block table.tbody.row %}
                 <tr {{ row.attrs.as_html }}>
                   {% for column, cell in row.items %}
-                    {% if forloop.last %}
-                      <td class='p-1 space-y-2 flex flex-col whitespace-normal'>
+                    {% if column.header == 'Comic' %}
+                      <td class='p-4 flex items-center mr-12 space-x-6 whitespace-nowrap'>
                         {% if column.localize == None %}
                           {{ cell }}
                         {% else %}
@@ -94,5 +94,53 @@
         {% endblock table.tfoot %}
       </table>
     {% endblock table %}
+    <!-- Modal footer -->
+    <div class="items-center p-6 border-t border-gray-200 rounded-b dark:border-gray-700">
+      <button id='deleteComics'
+              hx-get='{% url "comics:delete_all_comics" %}'
+              hx-indicator='.progress'
+              hx-target='#comic-container'
+              hx-include="[name='id']"
+              hx-push-url='false'
+              disabled="true"
+              class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+              type="button">
+        <svg class="w-6 h-6 mr-2"
+             fill="currentColor"
+             viewBox="0 0 20 20"
+             xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd">
+          </path>
+        </svg>
+        Delete all
+      </button>
+    </div>
+    {% block scripts %}
+      <script>
+        $(document).ready(function() {
+          const checkall = $('#custom-table table thead tr th input[type="checkbox"]');
+          const checkboxes = $('#custom-table table tbody tr td input[type="checkbox"]');
+          const submitButton = $("#deleteComics");
+          checkall.on('change', function(event) {
+            const numCheckall = $(checkall).filter(':checked').length;
+            if (numCheckall >= 1) {
+              $(checkall).filter(':not(:checked)').prop('disabled', true);
+              $(checkboxes).prop('checked', true);
+              $(submitButton).prop('disabled', false);
+            } else {
+              $(checkall).prop('checked', false);
+              $(checkboxes).prop('checked', false);
+              $(submitButton).prop('disabled', true);
+            }
+          });
+          checkboxes.click(function() {
+            submitButton.attr("disabled", !checkboxes.is(":checked"));
+          });
+        });
+        document.body.addEventListener("deleteEvent", function(evt) {
+          alert(evt.detail.message);
+        });
+      </script>
+    {% endblock %}
   </div>
 {% endblock table-wrapper %}

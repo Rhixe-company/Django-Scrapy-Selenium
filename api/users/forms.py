@@ -30,6 +30,7 @@ class UserAdminCreationForm(admin_forms.UserCreationForm):
     class Meta(admin_forms.UserCreationForm.Meta):  # type: ignore[name-defined]
         model = User
         error_messages = {
+            "username": {"unique": _("This username has already been taken.")},
             "email": {"unique": _("This email has already been taken.")},
         }
 
@@ -39,16 +40,24 @@ class UserChangeForm(forms.ModelForm):
         model = User
         fields = (
             "email",
-            "name",
             "username",
             "first_name",
             "last_name",
+            "is_active",
+            "is_superuser",
             "image",
         )
         widgets = {
             "image": MyCustomImageWidget(
-                attrs={"aria-describedby": "image_input_help"},
+                attrs={
+                    "aria-describedby": "image_input_help",
+                    "class": "custom_image_input",
+                },
             ),
+        }
+        error_messages = {
+            "username": {"unique": _("This username has already been taken.")},
+            "email": {"unique": _("This email has already been taken.")},
         }
 
     def __init__(self, *args, **kwargs):
@@ -56,25 +65,35 @@ class UserChangeForm(forms.ModelForm):
         self.fields["email"].widget.attrs.update(
             {
                 "placeholder": _("Enter your Email"),
-                "class": "",
+                "class": "custom_char_input",
             },
         )
         self.fields["username"].widget.attrs.update(
             {
                 "placeholder": _("Enter your Username"),
-                "class": "",
+                "class": "custom_char_input",
             },
         )
         self.fields["first_name"].widget.attrs.update(
             {
                 "placeholder": _("Enter your First Name"),
-                "class": "",
+                "class": "custom_char_input",
             },
         )
         self.fields["last_name"].widget.attrs.update(
             {
                 "placeholder": _("Enter your Last Name"),
-                "class": "",
+                "class": "custom_char_input",
+            },
+        )
+        self.fields["is_active"].widget.attrs.update(
+            {
+                "class": "custom_checkbox_input",
+            },
+        )
+        self.fields["is_superuser"].widget.attrs.update(
+            {
+                "class": "custom_checkbox_input",
             },
         )
 
@@ -87,6 +106,23 @@ class UserCreationForm(admin_forms.UserCreationForm):
 
     class Meta(admin_forms.UserCreationForm.Meta):  # type: ignore[name-defined]
         model = User
+        fields = (
+            "email",
+            "username",
+            # "first_name",
+            # "last_name",
+            "password1",
+            "password2",
+            "image",
+        )
+        widgets = {
+            "image": MyCustomImageWidget(
+                attrs={
+                    "aria-describedby": "image_input_help",
+                    "class": "custom_image_input",
+                },
+            ),
+        }
         error_messages = {
             "username": {"unique": _("This username has already been taken.")},
             "email": {"unique": _("This email has already been taken.")},
@@ -94,13 +130,30 @@ class UserCreationForm(admin_forms.UserCreationForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        for field in self.fields:
-            f = str(field)
-            new_data = {
-                "placeholder": _(f"Enter your {f}"),  # noqa: INT001
-                "class": "",
-            }
-            self.fields[str(field)].widget.attrs.update(new_data)
+        self.fields["email"].widget.attrs.update(
+            {
+                "placeholder": _("Enter your Email"),
+                "class": "custom_char_input",
+            },
+        )
+        self.fields["username"].widget.attrs.update(
+            {
+                "placeholder": _("Enter your Username"),
+                "class": "custom_char_input",
+            },
+        )
+        self.fields["password1"].widget.attrs.update(
+            {
+                "placeholder": _("Enter your Password"),
+                "class": "custom_char_input",
+            },
+        )
+        self.fields["password2"].widget.attrs.update(
+            {
+                "placeholder": _("Enter your Password Again"),
+                "class": "custom_char_input",
+            },
+        )
 
 
 class UserSignupForm(SignupForm):

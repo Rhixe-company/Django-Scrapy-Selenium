@@ -11,7 +11,6 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django_htmx.http import trigger_client_event
-from django_tables2 import RequestConfig
 
 from api.apps.filters import ChapterFilter
 from api.apps.forms import ChapterForm
@@ -37,7 +36,7 @@ def chapter_list_view(request):
         queryset=qs,
     )
     table = ChapterTable(chapter_filter.qs)
-    RequestConfig(request, paginate={"per_page": settings.PAGINATE_BY}).configure(table)  # type: ignore  # noqa: PGH003
+    table.paginate(page=request.GET.get("page", 1), per_page=settings.PAGINATE_BY)
     context = {"filter": chapter_filter, "table": table}
     if request.htmx:
         htmx_template_name += "#chapter-container"
@@ -95,6 +94,7 @@ def chapter_detail_hx_view(
                 comment.comic = obj.comic
                 comment.save()
         context = {
+            "pages": pages,
             "items": comics,
             "object": obj,
             "comments": comments,

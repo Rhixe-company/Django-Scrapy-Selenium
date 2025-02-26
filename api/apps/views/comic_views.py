@@ -8,7 +8,6 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from django_htmx.http import trigger_client_event
-from django_tables2 import RequestConfig
 
 from api.apps.filters import ComicFilter
 from api.apps.forms import ChapterForm
@@ -59,7 +58,7 @@ def comic_list_view(request):
     )
 
     table = ComicTable(comic_filter.qs)
-    RequestConfig(request, paginate={"per_page": settings.PAGINATE_BY}).configure(table)  # type: ignore  # noqa: PGH003
+    table.paginate(page=request.GET.get("page", 1), per_page=settings.PAGINATE_BY)
     context = {"filter": comic_filter, "table": table}
     if request.htmx:
         htmx_template_name += "#comic-container"
@@ -77,8 +76,8 @@ def comic_detail_hx_view(
     try:
         obj = get_object_or_404(Comic, slug=slug)
         comic_category = obj.category.name  # type: ignore  # noqa: PGH003
-        comic_author = obj.author.name
-        comic_artist = obj.artist.name
+        comic_author = obj.author.name  # type: ignore  # noqa: PGH003
+        comic_artist = obj.artist.name  # type: ignore  # noqa: PGH003
         comiclookups = (
             Q(author__name__iexact=comic_author)
             | Q(category__name__iexact=comic_category)

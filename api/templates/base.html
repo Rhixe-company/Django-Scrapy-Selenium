@@ -10,7 +10,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     {% block css %}
-      {% include "partials/base/style.html" %}
+      <link rel="manifest" href="{% static 'manifest.json' %}" />
+      <link rel="icon"
+            type="image/webp"
+            sizes="192x192"
+            href="{% static 'logo-192x192.webp' %}" />
+      <link rel="icon"
+            type="image/webp"
+            sizes="512x512"
+            href="{% static 'logo-512x512.webp' %}" />
+      <link rel="icon" href="{% static 'favicon.webp' %}" />
+      {% render_bundle 'project' 'css' %}
     {% endblock css %}
     <title>
       {% block title %}
@@ -18,7 +28,8 @@
       {% endblock title %}
     </title>
     {% block javascript %}
-      {% include "partials/base/script.html" %}
+      <script src="{% static 'jquery-3.6.3.min.js' %}"></script>
+      {% render_bundle 'project' 'js' attrs='defer' %}
     {% endblock javascript %}
   </head>
   <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
