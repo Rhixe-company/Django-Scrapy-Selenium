@@ -3,9 +3,9 @@
     "source.fixAll.eslint": "explicit"
   },
   "editor.formatOnSave": true,
-  "eslint.workingDirectories": [
-    "../app",
-  ],
+  // "eslint.workingDirectories": [
+  //   "../app",
+  // ],
   "tailwindCSS.classAttributes": [
     "class",
     "className",
@@ -30,7 +30,7 @@
   },
   "files.associations": {
     "../app/api/templates/*.html": "html",
-    "../app/api/templates/**/**/**/*.html": "django-html",
+    "../app/api/templates/**/**/**/**/*.html": "django-html",
     "../app/api/templates/**/*.txt": "django-txt",
     "../app/requirements/*.txt": "pip-requirements",
   },
@@ -98,7 +98,7 @@
     "linting.mypyPath": "myvenv/Scripts/mypy"
   },
   "[django-html]": {
-    "editor.defaultFormatter": "junstyle.vscode-django-support"
+    "editor.defaultFormatter": "monosans.djlint"
   },
   "[properties]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"

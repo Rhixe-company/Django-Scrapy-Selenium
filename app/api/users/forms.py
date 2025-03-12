@@ -213,13 +213,13 @@ class MyCustomLoginForm(LoginForm):
         self.fields["login"].widget.attrs.update(
             {
                 "placeholder": _("Enter your Email"),
-                "class": "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:text-sm",  # noqa: E501
+                "class": "",  # noqa: E501
             },
         )
         self.fields["password"].widget.attrs.update(
             {
                 "placeholder": _("Password"),
-                "class": "block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 shadow-sm focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500 sm:text-sm",  # noqa: E501
+                "class": "",  # noqa: E501
             },
         )
         self.fields["remember"].widget.attrs.update(

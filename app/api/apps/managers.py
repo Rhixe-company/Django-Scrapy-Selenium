@@ -20,13 +20,13 @@ class ComicQuerySet(models.QuerySet):
     def query_rating(self, query=None):
         if query is None or query == "":
             return self.none()
-        lookups = Q(rating__gt=query)
+        lookups = Q(rating__gte=query) & Q(status="ongoing")
         return self.filter(lookups)
 
     def query_updated_at(self, query=None):
         if query is None or query == "":
             return self.none()
-        lookups = Q(updated_at__gte=query)
+        lookups = Q(updated_at__gt=query)
         return self.filter(lookups)
 
 

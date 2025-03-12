@@ -20,7 +20,7 @@ urlpatterns = [
     path("accounts/", include("allauth.urls")),
     path("accounts/", include("allauth.socialaccount.urls")),
     path("captcha/", include("captcha.urls")),
-    path("ckeditor/", include("ckeditor_uploader.urls")),
+    path("ckeditor5/", include("django_ckeditor_5.urls")),
     path("celery-progress/", include("celery_progress.urls")),
 ]
 if settings.DEBUG:

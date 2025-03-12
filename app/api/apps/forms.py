@@ -10,7 +10,7 @@ from api.apps.models import Comic
 from api.apps.models import ComicImage
 from api.apps.models import Comment
 from api.apps.models import Genre
-from api.users.widgets import MyCustomCKEditorWidget
+from django_ckeditor_5.widgets import CKEditor5Widget
 from api.users.widgets import MyCustomImageWidget
 from api.users.widgets import MyDateInput
 
@@ -290,12 +290,9 @@ class CommentForm(forms.ModelForm):
         model = Comment
         fields = ("text",)
         widgets = {
-            "text": MyCustomCKEditorWidget(
-                attrs={
-                    "class": "custom_textarea_input",
-                    "rows": "2",
-                    "placeholder": _("Write a comment..."),
-                },
+            "text": CKEditor5Widget(
+                attrs={"class": "django_ckeditor_5"},
+                config_name="comment",
             ),
         }
 

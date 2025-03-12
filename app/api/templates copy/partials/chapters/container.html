@@ -1,0 +1,24 @@
+{% load static i18n partials example %}
+{% load render_table from django_tables2 %}
+
+{% partialdef chapter-container inline %}
+<div id='chapter-container'
+     class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden"
+     hx-trigger="deleteEvent from:body, updateEvent from:body, createEvent from:body"
+     hx-get="{% url 'chapters:chapter_list' %}"
+     hx-swap="outerHTML"
+     hx-push-url="true"
+     hx-target="#chapter-container"
+     hx-indicator=".progress">
+  <!-- Htmx progress Indicator -->
+  <div class="progress  my-1">
+    <div class="indeterminate"></div>
+  </div>
+  <!-- Include Partials Chapters Hero -->
+  {% include "partials/chapters/hero.html" %}
+  <!-- Include Partials Chapters Table -->
+  {% render_table table %}
+  <!-- Include Partials Chapters Pagination -->
+  {% include "partials/chapters/pagination.html" %}
+</div>
+{% endpartialdef %}

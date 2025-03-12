@@ -137,3 +137,9 @@ else:
     }
 # DATABASES = {"default": env.db("DATABASE_URL")}  # noqa: ERA001
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
+# STORAGES = {
+#     "default": {"BACKEND": "config.storage.CustomStorage"},
+#     "staticfiles": {
+#         "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+#     },
+# }

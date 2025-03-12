@@ -1,0 +1,13 @@
+{% extends "./base.html" %}
+
+{% load static i18n %}
+
+{% block head_title %}
+  {% translate 'Update Chapter Form' %}
+{% endblock head_title %}
+{% block content %}
+  <div id='comic-edit-drawer'>
+    {% include "partials/htmx/spinner.html" %}
+    {% include 'partials/comics/chapters-inline-form.html' %}
+  </div>
+{% endblock content %}

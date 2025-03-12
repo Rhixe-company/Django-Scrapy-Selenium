@@ -1,7 +1,7 @@
 # models.py
 import uuid
 
-from ckeditor_uploader.fields import RichTextUploadingField
+from django_ckeditor_5.fields import CKEditor5Field
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.urls import reverse
@@ -220,13 +220,13 @@ class Comic(models.Model):
     def get_delete_url(self) -> str:
         return reverse("comics:delete_comic", kwargs={"slug": self.slug})
 
-    def get_comic_images_children(self):
+    def get_images(self):
         return self.comicimages.all()  # type: ignore  # noqa: PGH003
 
-    def get_chapters_children(self):
+    def get_chapters(self):
         return self.comicchapters.all()  # type: ignore  # noqa: PGH003
 
-    def get_comments_children(self):
+    def get_comments(self):
         return self.comiccomments.all()  # type: ignore  # noqa: PGH003
 
 
@@ -346,10 +346,10 @@ class Chapter(models.Model):
     def get_delete_url(self) -> str:
         return reverse("chapters:delete_chapter", kwargs={"slug": self.slug})
 
-    def get_chapter_images_children(self):
+    def get_images(self):
         return self.chapterimages.all()  # type: ignore  # noqa: PGH003
 
-    def get_comments_children(self):
+    def get_comments(self):
         return self.chaptercomments.all()  # type: ignore  # noqa: PGH003
 
 
@@ -404,11 +404,7 @@ class ChapterImage(models.Model):
 
 
 class Comment(models.Model):
-    text = RichTextUploadingField(
-        "Text",
-        null=True,
-        config_name="default",
-    )  # type: ignore  # noqa: PGH003
+    text = CKEditor5Field("Text", config_name="extends")
     chapter = models.ForeignKey(
         Chapter,
         on_delete=models.CASCADE,

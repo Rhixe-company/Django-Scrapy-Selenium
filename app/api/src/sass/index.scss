@@ -1,22 +1,16 @@
-@import url("https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-.myblack {
-    @apply bg-[url(../../static/black.webp)];
-}
-
-@import "app/rating";
+@import "app/style";
 @import "app/carousel";
-@import "app/scrolltotop";
-@import "app/loginmodal";
-
-@import "project/fonts";
-@import "project/form";
-@import "project/alpine";
-@import "project/htmx";
-@import "project/scrolltop";
-@import "project/ud";
-@import "project/table";
-@import "project/django_tables";
+@import "app/rating";
+@import "app/scroll";
+@import "app/login_modal";
+// @import "project/fonts";
+// @import "project/form";
+// @import "project/alpine";
+// @import "project/htmx";
+// @import "project/scrolltop";
+// @import "project/ud";
+// @import "project/table";
+// @import "project/django_tables";
+.myblack {
+    @apply bg-[url(../../static/images/files/black.webp)];
+}

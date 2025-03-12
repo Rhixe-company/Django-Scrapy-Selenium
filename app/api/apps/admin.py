@@ -77,7 +77,7 @@ class ComicAdminClass(ModelAdmin, ImportExportModelAdmin):
         "title",
         "slug",
         ("updated_at", RangeDateFilter),  # Date filter
-        ("timestamp", RangeDateTimeFilter),  # Datetime filter
+        ("created_at", RangeDateTimeFilter),  # Datetime filter
         ("updated", RangeDateTimeFilter),  # Datetime filter
     )
 
@@ -265,7 +265,7 @@ class ChapterAdminClass(ModelAdmin, ImportExportModelAdmin):
         "name",
         "slug",
         ("updated_at", RangeDateFilter),  # Date filter
-        ("timestamp", RangeDateTimeFilter),  # Datetime filter
+        ("created_at", RangeDateTimeFilter),  # Datetime filter
         ("updated", RangeDateTimeFilter),  # Datetime filter
     )
 
@@ -662,7 +662,7 @@ class CommentAdminClass(ModelAdmin, ImportExportModelAdmin):
         CustomTextFilter,
         CustomDropdownFilter,
         "text",
-        ("timestamp", RangeDateTimeFilter),
+        ("created_at", RangeDateTimeFilter),
     )
 
     list_display = ("text",)

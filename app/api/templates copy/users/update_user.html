@@ -1,0 +1,94 @@
+{% extends "users/base.html" %}
+
+{% comment %} djlint:on {% endcomment %}
+{% load static i18n widget_tweaks %}
+
+{% block head_title %}
+  {% translate 'Update User Form' %}
+{% endblock head_title %}
+{% block content %}
+  <div id='edit-user-modal-{{ object.id }}' class="mx-auto max-w-screen-xl ">
+    <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+      <!-- Include Partials Users Update -->
+      <div class="fixed flex z-30 w-full items-center justify-center  inset-0  bg-black/20 p-4 pb-8 backdrop-blur-md lg:p-8">
+        <div class="flex max-w-2xl flex-col gap-4 overflow-hidden rounded-sm border border-neutral-300 bg-white text-neutral-600 dark:border-neutral-700 dark:bg-neutral-900 dark:text-neutral-300">
+          <!-- Modal header -->
+          <div class="flex items-center justify-between border-b border-neutral-300 bg-neutral-50/60 p-4 dark:border-neutral-700 dark:bg-neutral-950/20">
+            <h3 id="defaultUpdateModalTitle"
+                class="font-semibold tracking-wide text-neutral-900 dark:text-white">Edit this user</h3>
+            <button type="button"
+                    href='{% url "users:user_list" %}'
+                    hx-get='{% url "users:user_list" %}'
+                    hx-indicator=".progress"
+                    hx-target='#edit-user-modal-{{ object.id }}'
+                    hx-push-url='true'>
+              <svg xmlns="http://www.w3.org/2000/svg"
+                   viewBox="0 0 24 24"
+                   aria-hidden="true"
+                   stroke="currentColor"
+                   fill="none"
+                   stroke-width="1.4"
+                   class="w-5 h-5">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+          <form action='.'
+                method="POST"
+                enctype="multipart/form-data"
+                hx-target='#add-user-modal'
+                hx-post='{{ object.get_edit_url }}'
+                hx-encoding="multipart/form-data"
+                hx-indicator=".progress">
+            {% csrf_token %}
+            {% for hidden_field in form.hidden_fields %}{{ hidden_field.errors }} {{ hidden_field }}{% endfor %}
+            {{ form.non_form_errors }}
+            <!-- Modal body -->
+            <!-- Modal body -->
+            <div class="px-4 py-8">
+              <div class="grid grid-cols-6 gap-6">
+                {% for field in form %}
+                  {% if forloop.last %}
+                    <div class="col-span-6">
+                      <div class="ml-3 text-xs text-red-400">{{ field.errors }}</div>
+                      <label for="{{ field.id }}"
+                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ field.label }}:</label>
+                      {{ field }}
+                      <div class="mt-1 text-gray-500">{{ field.help_text|safe }}</div>
+                    </div>
+                  {% else %}
+                    <div class="col-span-6 sm:col-span-3">
+                      <div class="ml-3 text-xs text-red-400">{{ field.errors }}</div>
+                      <label for="{{ field.id }}"
+                             class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ field.label }}:</label>
+                      {{ field }}
+                      <div class="mt-1 text-gray-500">{{ field.help_text|safe }}</div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+            </div>
+            <!-- Modal Footer -->
+            <div class="flex flex-col-reverse justify-between gap-2 border-t border-neutral-300 bg-neutral-50/60 p-4 dark:border-neutral-700 dark:bg-neutral-950/20 sm:flex-row sm:items-center md:justify-end">
+              <button type="submit"
+                      class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+                Update
+              </button>
+              <button type="button"
+                      href='{% url "users:user_list" %}'
+                      hx-get='{% url "users:user_list" %}'
+                      hx-indicator=".progress"
+                      hx-target='#edit-user-modal-{{ object.id }}'
+                      hx-push-url='true'
+                      class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">Cancel</button>
+            </div>
+            <!-- Htmx progress Indicator -->
+            <div class="progress  p-1">
+              <div class="indeterminate"></div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

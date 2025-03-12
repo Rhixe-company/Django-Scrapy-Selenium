@@ -1,0 +1,16 @@
+{% extends "comics/base.html" %}
+
+{% comment %} djlint:on {% endcomment %}
+{% load static i18n widget_tweaks %}
+
+{% block head_title %}
+  {% translate 'Update Comic Form' %}
+{% endblock head_title %}
+{% block content %}
+  <div id='comic-container' class="mx-auto max-w-screen-xl ">
+    <div class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden">
+      <!-- Include Partials Comics Update -->
+      {% include "partials/comics/update.html" %}
+    </div>
+  </div>
+{% endblock content %}

@@ -1,0 +1,14 @@
+{% extends "chapters/base.html" %}
+
+{% comment %} djlint:on {% endcomment %}
+{% load static i18n example %}
+
+{% block head_title %}
+  {% translate 'Chapters List' %}
+{% endblock head_title %}
+{% block content %}
+  <div class="mx-auto max-w-screen-xl ">
+    <!-- Include Partials Chapters Container -->
+    {% include "partials/chapters/container.html" %}
+  </div>
+{% endblock content %}

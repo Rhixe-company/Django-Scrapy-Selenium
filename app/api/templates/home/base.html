@@ -1,15 +1,27 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
 
 {% load static i18n %}
 
 {% block title %}
-  {% block head_title %}
-    {% trans "Index" %}
-  {% endblock head_title %}
-{% endblock title %}
+    {% block head_title %}
+        {% translate 'index' %}
+    {% endblock %}
+{% endblock %}
 {% block main %}
-  <div class="w-[100%]">
-    {% block content %}
-    {% endblock content %}
-  </div>
-{% endblock main %}
+    <div class="max-w-[1220px] pt-2" style="overflow: hidden;
+              margin: 0 auto;
+              padding-bottom: 9rem">
+        <div class="">
+            <div class="w-[100%]">
+                <div style="overflow: hidden;
+                    max-width: 1220px;
+                    margin: 0 auto;
+                    position: relative">
+                    {% block content %}
+
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

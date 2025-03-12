@@ -109,7 +109,7 @@ def comic_detail_hx_view(
 def comic_detail_view(request, slug=None):
     hx_url = reverse("comics:hx_comic_detail", kwargs={"slug": slug})
 
-    context = {"hx_url": hx_url}
+    context = {"form": CommentForm(),"hx_url": hx_url}
     return render(request, "comics/detail.html", context)
 
 

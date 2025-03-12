@@ -9,7 +9,8 @@ module.exports = {
     context: path.join(__dirname, "../"),
     entry: {
         project: path.resolve(__dirname, "../", "api", "src", "project"),
-        carousel: path.resolve(__dirname, "../", "api", "src", "carousel"),
+        accordian: path.resolve(__dirname, "../", "api", "src", "accordian"),
+        // carousel: path.resolve(__dirname, "../", "api", "src", "carousel"),
         // alerts: path.resolve(__dirname, "../", "api", "src", "alerts"),
     },
     output: {
@@ -147,5 +148,5 @@ module.exports = {
             }),
         ],
     },
-    target: ["web", "es6"],
+    target: "web",
 };

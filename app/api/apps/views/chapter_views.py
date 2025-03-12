@@ -56,7 +56,7 @@ def chapter_detail_hx_view(
         raise Http404
     try:
         obj = get_object_or_404(Chapter, slug=slug)
-        pages = obj.get_chapter_images_children()
+        pages = obj.get_images()
         chapter_comic_category = obj.comic.category.name  # type: ignore  # noqa: PGH003
         chapter_comic_author = obj.comic.author.name  # type: ignore  # noqa: PGH003
         chapter_comic_artist = obj.comic.artist.name  # type: ignore  # noqa: PGH003
@@ -76,8 +76,8 @@ def chapter_detail_hx_view(
             .filter(chapterlookups)
             .distinct()[0:6]
         )
-        comments = obj.get_comments_children()
-        chapters = obj.comic.get_chapters_children()
+        comments = obj.get_comments()
+        chapters = obj.comic.get_chapters()
         paginator = Paginator(chapters, 1)
         page_number = request.GET.get("page")
         try:

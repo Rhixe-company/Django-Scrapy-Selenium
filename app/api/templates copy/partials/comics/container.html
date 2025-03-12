@@ -1,0 +1,24 @@
+{% load static i18n partials example %}
+{% load render_table from django_tables2 %}
+
+{% partialdef comic-container inline %}
+<div id='comic-container'
+     class="bg-white dark:bg-gray-800 relative shadow-md sm:rounded-lg overflow-hidden"
+     hx-trigger="deleteEvent from:body, updateEvent from:body, createEvent from:body"
+     hx-get="{% url 'comics:comic_list' %}"
+     hx-swap="outerHTML"
+     hx-push-url="true"
+     hx-target="#comic-container"
+     hx-indicator=".progress">
+  <!-- Htmx progress Indicator -->
+  <div class="progress  my-1">
+    <div class="indeterminate"></div>
+  </div>
+  <!-- Include Partials Comics Hero -->
+  {% include "partials/comics/hero.html" %}
+  <!-- Include Partials Comics Table -->
+  {% render_table table %}
+  <!-- Include Partials Comics Pagination -->
+  {% include "partials/comics/pagination.html" %}
+</div>
+{% endpartialdef %}

@@ -1,4 +1,4 @@
-from ckeditor.widgets import CKEditorWidget
+
 from django import forms
 from django.forms.widgets import ChoiceWidget
 from django.utils.translation import gettext_lazy as _
@@ -28,9 +28,6 @@ class MyRadioSelect(ChoiceWidget):
             return ""
         return super().id_for_label(id_, index)
 
-
-class MyCustomCKEditorWidget(CKEditorWidget):
-    template_name = "partials/widgets/ckwidget.html"
 
 
 class MyCustomImageWidget(forms.ClearableFileInput):

@@ -3,3 +3,4 @@ import "./hyper_init";
 import "./htmx_init";
 import "./backtotop";
 import "./navbar";
+import "./searchbar";
