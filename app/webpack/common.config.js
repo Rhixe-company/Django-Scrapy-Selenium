@@ -87,7 +87,7 @@ module.exports = {
                             sassOptions: {
                                 // Your sass options
                             },
-                            implementation: require("sass"),
+                            implementation: require("dart-sass"),
                         },
                     },
                 ],

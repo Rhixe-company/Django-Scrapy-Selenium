@@ -44,6 +44,7 @@
     "css-loader": "^7.1.2",
     "css-minimizer-webpack-plugin": "^7.0.2",
     "daisyui": "^5.0.3",
+    "dart-sass": "^1.25.0",
     "file-loader": "^6.2.0",
     "flowbite": "^3.1.2",
     "mini-css-extract-plugin": "^2.9.2",
@@ -61,7 +62,6 @@
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "rimraf": "^6.0.1",
-    "sass": "1.77.6",
     "sass-loader": "^16.0.5",
     "source-map-loader": "^5.0.0",
     "style-loader": "^4.0.0",
@@ -101,8 +101,7 @@
     "dev": "cross-env NODE_ENV=development webpack serve --config webpack/dev.config.js",
     "build": "cross-env NODE_ENV=production webpack --config webpack/prod.config.js",
     "clean": "rimraf  dist",
-    "check-updates": "npm-check-updates --deep",
-    "install-updates": "npm-check-updates --deep -i"
+    "check-updates": "npm-check-updates --deep -i"
   },
   "files": [
     "dist"
