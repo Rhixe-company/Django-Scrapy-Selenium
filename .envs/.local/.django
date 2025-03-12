@@ -1,0 +1,28 @@
+# General
+# ------------------------------------------------------------------------------
+USE_DOCKER=yes
+IPYTHONDIR=/app/.ipython
+# Redis
+# ------------------------------------------------------------------------------
+REDIS_URL=redis://redis:6379/0
+
+# Celery
+# ------------------------------------------------------------------------------
+
+# Flower
+CELERY_FLOWER_USER=debug
+CELERY_FLOWER_PASSWORD=debug
+
+# Email
+# ------------------------------------------------------------------------------
+DJANGO_SERVER_EMAIL=rhixecompany@gmail.com
+
+DJANGO_DEFAULT_FROM_EMAIL=noreply@rhixescans.company
+DJANGO_EMAIL_SUBJECT_PREFIX=Read Free High Quality Comics here!
+EMAIL_HOST=smtp.gmail.com
+EMAIL_PORT=465
+EMAIL_HOST_USER=rhixecompany@gmail.com
+EMAIL_HOST_PASSWORD=oojXLvn3bS
+DJANGO_EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+
+DATABASE_URL=postgres://debug:debug@postgres:5432/api

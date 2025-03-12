@@ -1,0 +1,13 @@
+{% extends "./base.html" %}
+
+{% load static i18n %}
+
+{% block head_title %}
+  {% translate 'Update Chapter Image Form' %}
+{% endblock head_title %}
+{% block content %}
+  <div id='chapter-edit-drawer'>
+    {% include "partials/htmx/spinner.html" %}
+    {% include 'partials/chapters/images-inline-form.html' %}
+  </div>
+{% endblock content %}

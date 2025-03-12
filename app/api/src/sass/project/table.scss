@@ -1,0 +1,11 @@
+.mytable {
+  @apply min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600;
+}
+
+.mytablerow {
+  @apply hover:bg-gray-100 dark:hover:bg-gray-700;
+}
+
+.mytablecol {
+  @apply p-4;
+}

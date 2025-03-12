@@ -1,0 +1,59 @@
+{% load static i18n %}
+{% load render_bundle from webpack_loader %}
+
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}"
+      class="__variable_5d1e58 dark"
+      style=""
+      data-headlessui-focus-visible="">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+    {% block css %}
+      <link rel="manifest" href="{% static 'manifest.json' %}" />
+      <link rel="icon"
+            type="image/webp"
+            sizes="192x192"
+            href="{% static 'logo-192x192.webp' %}" />
+      <link rel="icon"
+            type="image/webp"
+            sizes="512x512"
+            href="{% static 'logo-512x512.webp' %}" />
+      <link rel="icon" href="{% static 'favicon.webp' %}" />
+      <link rel="stylesheet" href="{% static 'sweetalert2.min.css' %}" />
+      {% render_bundle 'project' 'css' attrs='defer' %}
+    {% endblock css %}
+    <title>
+      {% block title %}
+        {% trans "Rhixe Scans" %}
+      {% endblock title %}
+    </title>
+    {% block javascript %}
+      <script src="{% static 'jquery-3.6.3.min.js' %}"></script>
+      <script src="{% static 'sweetalert2.all.min.js' %}"></script>
+      {% render_bundle 'project' 'js' attrs='defer' %}
+    {% endblock javascript %}
+  </head>
+  <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+        class="min-h-screen antialiased bg-secondarybackground __variable_5d1e58 clickup-chrome-ext_installed"
+        style="margin: 0 !important"
+        data-new-gr-c-s-check-loaded="14.1226.0"
+        data-gr-ext-installed=""
+        cz-shortcut-listen="true">
+    {% include "partials/base/header.html" %}
+    <div style="overflow: hidden;
+                max-width: 1220px;
+                margin: 0 auto;
+                position: relative;
+                padding-bottom: 9rem">
+      <div class="lg:mx-3.5 lg:my-0 relative max-[786px]:p-0 max-[882px]:p-4 min[925px]:p-0">
+        {% block main %}
+        {% endblock main %}
+      </div>
+    </div>
+    {% include "partials/base/footer.html" %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/datepicker.min.js"></script>
+  </body>
+</html>
