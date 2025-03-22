@@ -70,7 +70,7 @@ services:
     image: rhixe/api:postgres
     container_name: postgres
     volumes:
-      - ./data/postgres:/var/lib/postgresql
+      - ./data/postgres:/var/lib/postgresql/data
       - ./data/postgres_backups:/backups
     ports:
       - "5432:5432"

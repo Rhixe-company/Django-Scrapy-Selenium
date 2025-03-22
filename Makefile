@@ -10,13 +10,13 @@ COMPOSEFILE     = ./docker-compose.local.yml
 
 
 compose_daemon:
-	$(COMPOSEEXEC) -f $(COMPOSEFILE) up -d
+	$(COMPOSEEXEC) -f $(COMPOSEFILE) up -d postgres redis redis-slave
 
 compose_build:
 	$(COMPOSEEXEC) -f $(COMPOSEFILE) build
 
 compose_logs:
-	$(COMPOSEEXEC) -f $(COMPOSEFILE) logs -f
+	$(COMPOSEEXEC) -f $(COMPOSEFILE) logs -f postgres redis redis-slave
 
 compose_down:
 	$(COMPOSEEXEC) -f $(COMPOSEFILE) down --remove-orphans -t 0

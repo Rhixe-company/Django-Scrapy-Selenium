@@ -292,7 +292,7 @@ LOGGING = {
 }
 
 REDIS_URL = env("REDIS_URL", default="redis://localhost:6379/0")  # type: ignore  # noqa: PGH003
-REDIS_SSL = REDIS_URL.startswith("rediss://")
+REDIS_SSL = REDIS_URL.startswith("rediss://")  # type: ignore  # noqa: PGH003
 
 # Celery
 # ------------------------------------------------------------------------------
@@ -404,11 +404,10 @@ PAGINATE_BY = 20
 FORMAT = "F j, Y"
 
 
-
 # Your stuff...
 # ------------------------------------------------------------------------------
 
-customColorPalette = [
+customColorPalette = [  # noqa: N816
     {"color": "hsl(4, 90%, 58%)", "label": "Red"},
     {"color": "hsl(340, 82%, 52%)", "label": "Pink"},
     {"color": "hsl(291, 64%, 42%)", "label": "Purple"},
