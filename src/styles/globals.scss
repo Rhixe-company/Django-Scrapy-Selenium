@@ -1,0 +1,10 @@
+@use "sass:meta";
+@use "variables.scss";
+
+html {
+  overflow: auto !important;
+  padding-right: 0 !important;
+}
+
+@include meta.load-css("imag_style.scss");
+@include meta.load-css("rating.scss");

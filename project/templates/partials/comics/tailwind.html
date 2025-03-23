@@ -1,0 +1,162 @@
+{% load django_tables2 %}
+{% load i18n l10n %}
+
+{% block table-wrapper %}
+  <div id="custom-table"  class="overflow-x-auto">
+    {% block table %}
+      <table {% render_attrs table.attrs  class='table-xs' %}>
+        {% block table.thead %}
+          {% if table.show_header %}
+            <thead class="bg-gray-100 dark:bg-gray-700" {{ table.attrs.thead.as_html }}>
+              <tr>
+                {% for column in table.columns %}
+                  {% if forloop.first %}
+                    <th scope="col" class="p-4" {{ column.attrs.th.as_html }}>
+                      <div class="flex items-center">
+                        <input type="checkbox"
+                               class="w-4 h-4 border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:focus:ring-primary-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600" />
+                        <label class="sr-only">checkbox</label>
+                      </div>
+                    </th>
+                  {% else %}
+                    <th scope="col"
+                        class="p-4 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400"
+                        {{ column.attrs.th.as_html }}>
+                      {% if column.orderable %}
+                        <div class="flex items-center">
+                          {{ column.header }}
+                          <button href="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}"
+                                  hx-get="{% querystring table.prefixed_order_by_field=column.order_by_alias.next %}"
+                                  hx-swap="outerHTML"
+                                  hx-push-url="true"
+                                  hx-target="#comic-container"
+                                  hx-indicator="#spinner">
+                            <svg class="w-3 h-3 ms-1.5"
+                                 aria-hidden="true"
+                                 xmlns="http://www.w3.org/2000/svg"
+                                 fill="currentColor"
+                                 viewBox="0 0 24 24">
+                              <path d="M8.574 11.024h6.852a2.075 2.075 0 0 0 1.847-1.086 1.9 1.9 0 0 0-.11-1.986L13.736 2.9a2.122 2.122 0 0 0-3.472 0L6.837 7.952a1.9 1.9 0 0 0-.11 1.986 2.074 2.074 0 0 0 1.847 1.086Zm6.852 1.952H8.574a2.072 2.072 0 0 0-1.847 1.087 1.9 1.9 0 0 0 .11 1.985l3.426 5.05a2.123 2.123 0 0 0 3.472 0l3.427-5.05a1.9 1.9 0 0 0 .11-1.985 2.074 2.074 0 0 0-1.846-1.087Z" />
+                            </svg>
+                          </button>
+                        </div>
+                      {% else %}
+                        {{ column.header }}
+                      {% endif %}
+                    </th>
+                  {% endif %}
+                {% endfor %}
+              </tr>
+            </thead>
+          {% endif %}
+        {% endblock table.thead %}
+        {% block table.tbody %}
+          <tbody class="bg-white divide-y divide-gray-200 dark:bg-gray-800 dark:divide-gray-700"
+                 {{ table.attrs.tbody.as_html }}>
+            {% for row in table.paginated_rows %}
+              {% block table.tbody.row %}
+                <tr {{ row.attrs.as_html }}>
+                  {% for column, cell in row.items %}
+                    {% if column.header == 'Comic' %}
+                      <td class='p-4 flex items-center mr-12 space-x-6 whitespace-nowrap'>
+                        {% if column.localize == None %}
+                          {{ cell }}
+                        {% else %}
+                          {% if column.localize %}
+                            {{ cell|localize }}
+                          {% else %}
+                            {{ cell|unlocalize }}
+                          {% endif %}
+                        {% endif %}
+                      </td>
+                    {% else %}
+                      <td {{ column.attrs.td.as_html }}>
+                        {% if column.localize == None %}
+                          {{ cell }}
+                        {% else %}
+                          {% if column.localize %}
+                            {{ cell|localize }}
+                          {% else %}
+                            {{ cell|unlocalize }}
+                          {% endif %}
+                        {% endif %}
+                      </td>
+                    {% endif %}
+                  {% endfor %}
+                </tr>
+              {% endblock table.tbody.row %}
+            {% empty %}
+              {% if table.empty_text %}
+                {% block table.tbody.empty_text %}
+                  <tr>
+                    <td colspan="{{ table.columns|length }}">{{ table.empty_text }}</td>
+                  </tr>
+                {% endblock table.tbody.empty_text %}
+              {% endif %}
+            {% endfor %}
+          </tbody>
+        {% endblock table.tbody %}
+        {% block table.tfoot %}
+          <tfoot {{ table.attrs.tfoot.as_html }}>
+            {% if table.has_footer %}
+              <tr>
+                {% for column in table.columns %}
+                  <td {{ column.attrs.tf.as_html }}>{{ column.footer }}
+                  </td>
+                {% endfor %}
+              </tr>
+            {% endif %}
+          </tfoot>
+        {% endblock table.tfoot %}
+      </table>
+    {% endblock table %}
+    <!-- Modal footer -->
+    <div class="items-center p-6 border-t border-gray-200 rounded-b dark:border-gray-700">
+      <button id='deleteComics'
+              hx-get='{% url "comics:delete_all_comics" %}'
+              hx-indicator='.progress'
+              hx-target='#comic-container'
+              hx-include="[name='id']"
+              hx-push-url='false'
+              disabled="true"
+              class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900"
+              type="button">
+        <svg class="w-6 h-6 mr-2"
+             fill="currentColor"
+             viewBox="0 0 20 20"
+             xmlns="http://www.w3.org/2000/svg">
+          <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd">
+          </path>
+        </svg>
+        Delete all
+      </button>
+    </div>
+    {% block scripts %}
+      <script>
+        $(document).ready(function() {
+          const checkall = $('#custom-table table thead tr th input[type="checkbox"]');
+          const checkboxes = $('#custom-table table tbody tr td input[type="checkbox"]');
+          const submitButton = $("#deleteComics");
+          checkall.on('change', function(event) {
+            const numCheckall = $(checkall).filter(':checked').length;
+            if (numCheckall >= 1) {
+              $(checkall).filter(':not(:checked)').prop('disabled', true);
+              $(checkboxes).prop('checked', true);
+              $(submitButton).prop('disabled', false);
+            } else {
+              $(checkall).prop('checked', false);
+              $(checkboxes).prop('checked', false);
+              $(submitButton).prop('disabled', true);
+            }
+          });
+          checkboxes.click(function() {
+            submitButton.attr("disabled", !checkboxes.is(":checked"));
+          });
+        });
+        document.body.addEventListener("deleteEvent", function(evt) {
+          alert(evt.detail.message);
+        });
+      </script>
+    {% endblock %}
+  </div>
+{% endblock table-wrapper %}

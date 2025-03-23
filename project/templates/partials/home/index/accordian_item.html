@@ -1,0 +1,68 @@
+{% load static i18n %}
+
+{% for item in items %}
+  <div>
+    <div class="relative flex h-[104px] overflow-hidden border-b border-[#383838] px-[15px] py-3">
+      <div class="flex items-center justify-center">
+        <div class="vertical-middle absolute ml-[25px] h-[25px] w-[25px] rounded-[3px] border-[0.5px] border-solid border-[#888] text-center text-[14px] leading-[25px] text-[#888]">{{ forloop.counter }}</div>
+      </div>
+      <div class="float-left mb-2.5 ml-[37px] mr-2 mt-0.5 flex h-[72px] max-h-[80px] max-w-[55px] overflow-hidden rounded-[3px]">
+        <a href="{{ item.get_absolute_url }}"
+           class="decoration-none overflow-hidden text-[13px] font-[500] text-[#fff]">
+          {% for bimage in item.get_images|slice:":1" %}
+            <img alt="poster"
+                 fetchpriority="high"
+                 width="0"
+                 height="0"
+                 decoding="async"
+                 data-nimg="1"
+                 class="w-full cursor-pointer"
+                 style="color: transparent;
+                        width: 100px;
+                        height: auto;
+                        max-height: 110px"
+                 src="{{ bimage.image.url }}" />
+          {% endfor %}
+        </a>
+      </div>
+      <div class="w-full overflow-hidden p-0">
+        <span class="block"><a href="{{ item.get_absolute_url }}"
+   class="hover:text-themecolor block cursor-pointer overflow-hidden text-[13px] font-[500] leading-[1.2] text-[#fff] md:text-[12px] xl:text-[13px]">{{ item.title }}</a></span>
+        <span>
+          <p class="mt-1 text-[12px] leading-[1.3] text-[#888] sm:hidden xl:inline-block">
+            <b>Genres:</b>
+            {% for genre in item.genres.all %}
+              <a href="genres=1"
+                 class="hover:text-themecolor cursor-pointer text-white">{{ genre.name }},</a>
+            {% endfor %}
+          </p>
+        </span>
+        <span>
+          <p class="mt-1 hidden overflow-hidden text-[11px] leading-[1.2] text-[#888] sm:inline-block sm:text-[11px] md:text-[12px] lg:text-[11px] xl:hidden">
+            <b>Genres:</b>
+            {% for genre in item.genres.all %}
+              <a href="genres=1"
+                 class="hover:text-themecolor cursor-pointer text-white"
+                 style="margin-bottom: -10px">{{ genre.name }},</a>
+            {% endfor %}
+          </p>
+        </span>
+        <div class="mt-[-2px]">
+          <div class="overflow-hidden">
+            <div class="float-left">
+              <div class="mb-[-1px] inline-block overflow-hidden">
+                <div class="rr--group rr--dir-x rr--space-sm"
+                     style="max-width: 70px;
+                            --rr--fill-on-color: #ffc700;
+                            --rr--fill-off-color: #686868"
+                     role="img"
+                     aria-label="Rated {{ item.rating }} on 10">{% include 'partials/home/index/rating.html' %}</div>
+              </div>
+            </div>
+            <div class="ml-[5px] inline-block text-[12px] italic leading-normal text-[#999]">{{ item.rating }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endfor %}

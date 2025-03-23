@@ -1,0 +1,109 @@
+{
+  "editor.formatOnSave": true,
+  "tailwindCSS.classAttributes": [
+    "class",
+    "className",
+    "theme"
+  ],
+  "tailwindCSS.experimental.classRegex": [
+    [
+      "twMerge\\(([^)]*)\\)",
+      "[\"'`]([^\"'`]*).*?[\"'`]"
+    ],
+    [
+      "createTheme\\(([^)]*)\\)",
+      "[\"'`]([^\"'`]*).*?[\"'`]"
+    ]
+  ],
+  "tailwindCSS.includeLanguages": {
+    "html": "django-html",
+    "typescript": "tsx"
+  },
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.experimental.configFile": "../tailwind.config.ts",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "files.associations": {
+    "../project/templates/*.html": "html",
+    "../project/templates/**/*.html": "django-html",
+    "../project/templates/**/*.txt": "django-txt",
+    "../requirements/*.txt": "pip-requirements"
+  },
+  "files.insertFinalNewline": true,
+  "files.exclude": {
+    ".git": true,
+    ".build": true,
+    ".profile-oss": true,
+    "**/.DS_Store": true,
+    ".vscode-test": true,
+    "cli/target": true,
+    "build/**/*.js.map": true,
+    "build/**/*.js": {
+      "when": "$(basename).ts"
+    },
+    "out": true, // set this to true to hide the "out" folder with the compiled JS files
+    "dist": false,
+    "**/*.pyc": true,
+    ".nyc_output": true,
+    "obj": true,
+    "bin": true,
+    "**/__pycache__": true,
+    "**/node_modules": false,
+    ".vscode test": false,
+    "**/.mypy_cache/**": true
+  },
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.typeCheckingMode": "basic",
+  "python.languageServer": "Pylance",
+  "[python]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "always"
+    },
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  "[django-html]": {
+    "editor.defaultFormatter": "monosans.djlint"
+  },
+  "[properties]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "javascript.preferences.quoteStyle": "single",
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[dotenv]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[shellscript]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[ignore]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[JSON]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[YAML]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[dockerfile]": {
+    "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+  },
+  "[tsx]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}

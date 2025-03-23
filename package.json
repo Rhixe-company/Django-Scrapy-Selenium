@@ -1,0 +1,78 @@
+{
+  "name": "project",
+  "version": "0.1.0",
+  "dependencies": {
+    "@headlessui/tailwindcss": "*",
+    "@heroicons/react": "^2.2.0",
+    "@popperjs/core": "^2.11.8",
+    "@reduxjs/toolkit": "^2.6.1",
+    "eslint-config-next": "^15.2.3",
+    "framer-motion": "^12.5.0",
+    "imagemin": "^9.0.1",
+    "imagemin-jpegtran": "^8.0.0",
+    "next": "^15.2.3",
+    "next-images": "^1.8.5",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-redux": "^9.2.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.16.5",
+    "@babel/preset-env": "^7.16.5",
+    "@eslint/eslintrc": "^3",
+    "@fortawesome/fontawesome-free": "^6.7.2",
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "@popperjs/core": "^2.10.2",
+    "autoprefixer": "^10.4.0",
+    "babel-loader": "^10.0.0",
+    "cross-env": "^7.0.3",
+    "css-loader": "^7.1.2",
+    "file-loader": "^6.2.0",
+    "mini-css-extract-plugin": "^2.4.5",
+    "node-sass-tilde-importer": "^1.0.2",
+    "npm-check-updates": "17.1.16",
+    "pixrem": "^5.0.0",
+    "postcss": "^8.3.11",
+    "postcss-loader": "^8.0.0",
+    "postcss-preset-env": "^10.0.3",
+    "prettier": "^3.5.3",
+    "prettier-plugin-tailwindcss": "^0.6.11",
+    "rimraf": "^6.0.1",
+    "sass": "1.77.6",
+    "sass-embedded": "^1.86.0",
+    "sass-loader": "^16.0.1",
+    "tailwindcss": "^4",
+    "ts-loader": "^9.5.2",
+    "tsconfig-paths-webpack-plugin": "^4.2.0",
+    "typescript": "^5.8.2",
+    "webpack": "^5.82.0",
+    "webpack-bundle-tracker": "^3.0.1",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.0.2",
+    "webpack-merge": "^6.0.1"
+  },
+  "engines": {
+    "node": "22.13"
+  },
+  "browserslist": [
+    "last 2 versions"
+  ],
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
+  },
+  "scripts": {
+    "dev_webpack": "webpack serve --config webpack/dev.config.js",
+    "build_webpack": "webpack --config webpack/prod.config.js",
+    "dev": "next dev",
+    "dev:turbo": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "clean": "rimraf  .next",
+    "check-updates": "npm-check-updates --deep -i"
+  }
+}

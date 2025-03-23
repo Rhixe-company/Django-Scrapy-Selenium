@@ -1,0 +1,5 @@
+{% load static i18n %}
+{% load render_bundle from webpack_loader %}
+
+<script src="{% static 'jquery-3.6.3.min.js' %}"></script>
+{% render_bundle 'project' 'js' attrs='defer' %}

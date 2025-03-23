@@ -1,0 +1,23 @@
+{% load static i18n partials %}
+
+{% partialdef update-form-section inline %}
+<!-- Main modal -->
+<div id="edit-user-modal-{{ record.id }}"
+     x-data="{modalUpdate: true}"
+     class="fixed left-0 right-0 top-0 z-50 flex h-modal w-full items-center justify-center overflow-y-auto overflow-x-hidden backdrop-blur-md"
+     x-bind:class="modalUpdate ? 'flex overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full  h-modal backdrop-blur-md'  : 'hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full  h-modal backdrop-blur-md'"
+     x-cloak
+     x-show="modalUpdate"
+     x-transition.opacity.duration.200ms
+     x-trap.inert.noscroll="modalUpdate"
+     x-on:keydown.esc.window="modalUpdate = true"
+     x-on:click.self="modalUpdate = true"
+     role="dialog"
+     aria-modal="true">
+  <div class="relative h-full w-full max-w-2xl p-4"
+       x-show="modalUpdate"
+       x-transition:enter="transition ease-out duration-200 delay-100 motion-reduce:transition-opacity"
+       x-transition:enter-start="opacity-0 scale-50"
+       x-transition:enter-end="opacity-100 scale-100">{% include "partials/users/updateform.html" %}</div>
+</div>
+{% endpartialdef %}

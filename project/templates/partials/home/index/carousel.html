@@ -1,0 +1,11 @@
+{% load static i18n %}
+
+<div class="loop owl-carousel full owl-loaded">
+    <div>
+        <div class="carousel-root">
+            <div class="carousel-slider carousel" style="width: 100%">
+                {% include 'partials/home/index/carousel_item.html' with items=topcomics %}
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,99 @@
+{% load static i18n %}
+
+<div class="flex flex-wrap bg-[#222222] p-[10px] md:hidden">
+  <!-- $ -->
+  {% for fitem in items %}
+    <div class="hover:text-themecolor group w-1/2 p-1.5 hover:cursor-pointer xs:w-1/2 sm:w-1/4">
+      <a href="{{ fitem.get_absolute_url }}">
+        <div>
+          <div class="relative flex h-[250px] overflow-hidden hover:opacity-60 md:h-[200px]">
+            <img alt=""
+                 loading="lazy"
+                 width="0"
+                 height="0"
+                 decoding="async"
+                 data-nimg="1"
+                 class="rounded-md"
+                 style="color: transparent;
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                        object-position: top"
+                 src="{% static 'images/files/e43c72fb-thumb-small.webp' %}" />
+            <div class="absolute bottom-[0px] left-[5px] mb-[5px] flex justify-center rounded-[3px] bg-[#a12e24] text-white">
+              <span class="px-[7px] py-[2px] text-[10px] font-bold">{{ fitem.category.name }}</span>
+            </div>
+          </div>
+          <div class="block h-auto w-[100%] items-center"
+               style="font-size: 13.3px;
+                      margin: 8px 0;
+                      margin-bottom: 5px;
+                      font-weight: 500;
+                      line-height: 19px;
+                      text-align: left;
+                      overflow: hidden">
+            <span class="block text-[13.3px] font-bold">{{ fitem.title }}</span><span class="text-[13px] text-[#999]">{{ fitem.get_chapters.first.name }}</span><span class="flex text-[12px] text-[#999]">
+              <div class="rr--group rr--dir-x rr--space-sm"
+                   style="max-width: 70px;
+                          --rr--fill-on-color: #ffc700;
+                          --rr--fill-off-color: #686868"
+                   role="img"
+                   aria-label="Rated {{ fitem.rating }} on 10">
+                {% include 'partials/home/index/rating.html' %}
+                <label class="ml-1">{{ fitem.rating }}</label>
+              </span>
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+    <!-- /$ -->
+  </div>
+  <div class="hidden flex-wrap bg-[#222222] p-[10px] md:flex">
+    <!-- $ -->
+    {% for litem in items %}
+      <div class="hover:text-themecolor group w-1/2 p-1.5 hover:cursor-pointer xs:w-1/3 sm:w-1/5">
+        <a href="{{ litem.get_absolute_url }}">
+          <div>
+            <div class="relative flex h-[250px] overflow-hidden hover:opacity-60 md:h-[200px]">
+              <img alt=""
+                   loading="lazy"
+                   width="0"
+                   height="0"
+                   decoding="async"
+                   data-nimg="1"
+                   class="rounded-md"
+                   style="color: transparent;
+                          width: 100%;
+                          height: 100%;
+                          object-fit: cover;
+                          object-position: top"
+                   src="{% static 'images/files/e43c72fb-thumb-small.webp' %}" />
+              <div class="absolute bottom-[0px] left-[5px] mb-[5px] flex justify-center rounded-[3px] bg-[#a12e24] text-white">
+                <span class="px-[7px] py-[2px] text-[10px] font-bold">{{ litem.category.name }}</span>
+              </div>
+            </div>
+            <div class="block h-auto w-[100%] items-center"
+                 style="font-size: 13.3px;
+                        margin: 8px 0;
+                        margin-bottom: 5px;
+                        font-weight: 500;
+                        line-height: 19px;
+                        text-align: left;
+                        overflow: hidden">
+              <span class="block text-[13.3px] font-bold">{{ litem.title }}</span><span class="text-[13px] text-[#999]">{{ litem.get_chapters.first.name }}</span><span class="flex text-[12px] text-[#999]">
+                <div class="rr--group rr--dir-x rr--space-sm"
+                     style="max-width: 70px;
+                            --rr--fill-on-color: #ffc700;
+                            --rr--fill-off-color: #686868"
+                     role="img"
+                     aria-label="Rated {{ litem.rating }} on 10">{% include 'partials/home/index/rating.html' %}</div>
+                <label class="ml-1">{{ litem.rating }}</label>
+              </span>
+            </div>
+          </div>
+        </a>
+      </div>
+    {% endfor %}
+    <!-- /$ -->
+  </div>

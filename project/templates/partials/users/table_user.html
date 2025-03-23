@@ -1,0 +1,17 @@
+{% load static i18n %}
+
+<div class="flex w-fit items-center gap-1">
+  {% if record.image %}
+    <img class="w-10 h-10 rounded-full"
+         src="{{ record.image.url }}"
+         alt="{{ record.username }} avatar" />
+  {% else %}
+    <img class="w-10 h-10 rounded-full"
+         src="{% static 'files/profile-picture.webp' %}"
+         alt="{{ record.username }} avatar" />
+  {% endif %}
+  <div class="text-sm font-normal text-gray-500 dark:text-gray-400">
+    <div class="text-base font-semibold text-gray-900 dark:text-white">{{ record.username }}</div>
+    <div class="text-sm font-normal text-gray-500 dark:text-gray-400">{{ record.email }}</div>
+  </div>
+</div>

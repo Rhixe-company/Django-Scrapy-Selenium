@@ -1,0 +1,55 @@
+{% load static i18n widget_tweaks example %}
+
+<div id='chapter-{{ object.id }}'
+     class="p-4 text-sm sm:text-base text-pretty">
+  <form class="mb-6"
+        action='.'
+        method="POST"
+        enctype="multipart/form-data"
+        hx-post='{% if url %}
+                   {{ url }}
+                 {% else %}
+                   .
+                 {% endif %}'
+        hx-swap="outerHTML"
+        hx-encoding="multipart/form-data"
+        hx-target='#chapter-{{ object.id }}'
+        hx-indicator=".progress"
+        {% if form.instance.id %}
+          hx-trigger='submit, change delay:500ms'
+        {% else %}
+          hx-trigger='submit'
+        {% endif %}>
+    {% csrf_token %}
+    {% for hidden_field in form.hidden_fields %}{{ hidden_field.errors }} {{ hidden_field }}{% endfor %}
+    {{ form.non_form_errors }}
+    <div class='mb-4'>
+      <div class="grid grid-cols-6 gap-6">
+        {% for field in form %}
+          <div class="col-span-6 sm:col-span-3">
+            <div class="ml-3 text-xs text-red-400">{{ field.errors }}</div>
+            <label for="{{ field.id }}"
+                   class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">{{ field.label }}:</label>
+            {{ field }}
+            <div class="mt-1 text-gray-500">{{ field.help_text|safe }}</div>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="flex flex-row justify-between gap-2 border-t border-neutral-300 bg-neutral-50/60 p-4 dark:border-neutral-700 dark:bg-neutral-950/20  items-center">
+      <button type="submit"
+              class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white rounded-lg bg-primary-700 hover:bg-primary-800 focus:ring-4 focus:ring-primary-300 dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">
+        {% trans "Submit" %}
+      </button>
+      <button href=' {{ comic_url }}'
+              hx-get='{{ comic_url }}'
+              hx-swap="outerHTML"
+              hx-target='#comic-edit-drawer'
+              hx-indicator=".progress"
+              hx-push-url='true'
+              class="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-red-600 rounded-lg hover:bg-red-800 focus:ring-4 focus:ring-red-300 dark:focus:ring-red-900">
+        {% trans "Cancel" %}
+      </button>
+    </div>
+  </form>
+</div>

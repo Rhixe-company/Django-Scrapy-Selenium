@@ -1,0 +1,105 @@
+{% load static i18n widget_tweaks example %}
+
+<div class="bg-[#222222] ">
+  <div class="py-2 px-5 border-b-[1px] border-b-[#A2A2A2]/20">
+    <h3 class="text-white font-semibold text-left text-base">Comments</h3>
+  </div>
+  <div class="p-4 space-y-4">
+    <form id="disqus_recommendations" style="margin-bottom: 12px;">
+      {% csrf_token %}
+      {% for hidden_field in form.hidden_fields %}{{ hidden_field.errors }} {{ hidden_field }}{% endfor %}
+      {{ form.non_form_errors }}
+      {{ form.as_p }}
+      <div class="flex flex-col-reverse justify-between gap-2 border-t border-neutral-300 bg-neutral-50/60 p-4 dark:border-neutral-700 dark:bg-neutral-950/20 sm:flex-row sm:items-center md:justify-end">
+        <button class="inline-flex items-center justify-center text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800"
+                type="submit">
+          <svg class="h-3.5 w-3.5 mr-2"
+               aria-hidden="true"
+               xmlns="http://www.w3.org/2000/svg"
+               fill="currentColor"
+               viewBox="0 0 20 20">
+            <path d="M18 2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2ZM2 18V7h6.7l.4-.409A4.309 4.309 0 0 1 15.753 7H18v11H2Z" />
+            <path d="M8.139 10.411 5.289 13.3A1 1 0 0 0 5 14v2a1 1 0 0 0 1 1h2a1 1 0 0 0 .7-.288l2.886-2.851-3.447-3.45ZM14 8a2.463 2.463 0 0 0-3.484 0l-.971.983 3.468 3.468.987-.971A2.463 2.463 0 0 0 14 8Z" />
+          </svg>
+          Create
+        </button>
+      </div>
+    </form>
+    <div id="disqus_thread">
+      {% for comment in comments %}
+        <article class="p-6 text-base bg-white border-t border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+          <footer class="flex justify-between items-center mb-2">
+            <div class="flex items-center">
+              <p class="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white font-semibold">
+                {% if comment.user.image %}
+                  <img class="mr-2 w-6 h-6 rounded-full"
+                       src="{{ comment.user.image.url }}"
+                       alt="{{ comment.user.username }}" />
+                {% else %}
+                  <img class="mr-2 w-6 h-6 rounded-full"
+                       src="https://flowbite.com/docs/images/people/profile-picture-4.jpg"
+                       alt="{{ comment.user.username }}" />
+                {% endif %}
+                {{ comment.user.username }}
+              </p>
+              <p class="text-sm text-gray-600 dark:text-gray-400">
+                <time pubdate
+                      datetime="{{ comment.timestamp }}"
+                      title="{{ comment.timestamp }}">{{ comment.timestamp }}</time>
+              </p>
+            </div>
+            <button id="dropdownComment{{ comment.id }}Button"
+                    data-dropdown-toggle="dropdownComment{{ comment.id }}"
+                    class="inline-flex items-center p-2 text-sm font-medium text-center text-gray-500 dark:text-gray-40 bg-white rounded-lg hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-gray-50 dark:bg-gray-900 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
+                    type="button">
+              <svg class="w-4 h-4"
+                   aria-hidden="true"
+                   xmlns="http://www.w3.org/2000/svg"
+                   fill="currentColor"
+                   viewBox="0 0 16 3">
+                <path d="M2 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Zm6.041 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM14 0a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3Z" />
+              </svg>
+            </button>
+            <!-- Dropdown menu -->
+            <div id="dropdownComment{{ comment.id }}"
+                 class="hidden z-10 w-36 bg-white rounded divide-y divide-gray-100 shadow dark:bg-gray-700 dark:divide-gray-600">
+              <ul class="py-1 text-sm text-gray-700 dark:text-gray-200"
+                  aria-labelledby="dropdownMenuIconHorizontalButton">
+                <li>
+                  <a href="#"
+                     class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Edit</a>
+                </li>
+                <li>
+                  <a href="#"
+                     class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Remove</a>
+                </li>
+                <li>
+                  <a href="#"
+                     class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Report</a>
+                </li>
+              </ul>
+            </div>
+          </footer>
+          <p class="text-gray-500 dark:text-gray-400">{{ comment.text|safe }}</p>
+          <div class="flex items-center mt-4 space-x-4">
+            <button type="button"
+                    class="flex items-center text-sm text-gray-500 hover:underline dark:text-gray-400 font-medium">
+              <svg class="mr-1.5 w-3.5 h-3.5"
+                   aria-hidden="true"
+                   xmlns="http://www.w3.org/2000/svg"
+                   fill="none"
+                   viewBox="0 0 20 18">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5h5M5 8h2m6-3h2m-5 3h6m2-7H2a1 1 0 0 0-1 1v9a1 1 0 0 0 1 1h3v5l5-5h8a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1Z" />
+              </svg>
+              {% translate "Reply" %}
+            </button>
+          </div>
+        </article>
+      {% empty %}
+        <article class="p-6 text-base bg-white border-t border-gray-200 dark:border-gray-700 dark:bg-gray-900">
+          <p class="text-red-500 dark:text-red-400">{% translate "No Comments." %}</p>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</div>
