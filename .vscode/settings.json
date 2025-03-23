@@ -29,11 +29,20 @@
     "strings": true
   },
   "files.associations": {
+    // "*.css": "tailwindcss",
+    // "*.scss": "tailwindcss",
     "../app/api/templates/*.html": "html",
     "../app/api/templates/**/**/**/**/*.html": "django-html",
     "../app/api/templates/**/*.txt": "django-txt",
     "../app/requirements/*.txt": "pip-requirements",
   },
+  "tailwindCSS.includeLanguages": {
+    "plaintext": "html",
+    "typescript": "tsx",
+    "javascript": "jsx"
+  },
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.experimental.configFile": "../app/tailwind.config.ts",
   "terminal.integrated.defaultProfile.windows": "Windows PowerShell",
   "files.insertFinalNewline": true,
   "files.exclude": {
@@ -144,5 +153,8 @@
   },
   "[dockerfile]": {
     "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+  },
+  "[tsx]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   }
 }

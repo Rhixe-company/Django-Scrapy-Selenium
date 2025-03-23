@@ -9,11 +9,14 @@ COMPOSEFILE     = ./docker-compose.local.yml
 
 
 
+compose_exec:
+	$(COMPOSEEXEC) -f $(COMPOSEFILE) exec django
+
 compose_daemon:
 	$(COMPOSEEXEC) -f $(COMPOSEFILE) up -d postgres redis redis-slave
 
 compose_build:
-	$(COMPOSEEXEC) -f $(COMPOSEFILE) build
+	$(COMPOSEEXEC) -f $(COMPOSEFILE) build postgres redis redis-slave
 
 compose_logs:
 	$(COMPOSEEXEC) -f $(COMPOSEFILE) logs -f postgres redis redis-slave

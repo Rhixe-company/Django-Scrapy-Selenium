@@ -4,25 +4,41 @@ from django.contrib import admin
 from django.urls import include
 from django.urls import path
 from django.views import defaults as default_views
+from drf_spectacular.views import SpectacularAPIView
+from drf_spectacular.views import SpectacularRedocView
+from drf_spectacular.views import SpectacularSwaggerView
+from rest_framework_simplejwt.views import TokenRefreshView
 
 urlpatterns = [
     path("", include("api.home.urls")),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
-    # User management
-    path("users/", include("api.users.urls", namespace="users")),
-    # Comic management
-    path("comics/", include("api.apps.urls.comic_urls", namespace="comics")),
-    # Chapter management
-    path("chapters/", include("api.apps.urls.chapter_urls", namespace="chapters")),
-    # Bookmark management
-    path("bookmarks/", include("api.apps.urls.bookmark_urls", namespace="bookmarks")),
     path("accounts/", include("allauth.urls")),
     path("accounts/", include("allauth.socialaccount.urls")),
-    path("captcha/", include("captcha.urls")),
     path("ckeditor5/", include("django_ckeditor_5.urls")),
     path("celery-progress/", include("celery_progress.urls")),
 ]
+# API URLS
+urlpatterns += [
+    # API base url
+    path("api/", include("api.apps.urls", namespace="api")),
+    path("silk/", include("silk.urls", namespace="silk")),
+    # DRF auth token
+    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
+    path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
+    # Optional UI:
+    path(
+        "api/schema/swagger-ui/",
+        SpectacularSwaggerView.as_view(url_name="schema"),
+        name="swagger-ui",
+    ),
+    path(
+        "api/schema/redoc/",
+        SpectacularRedocView.as_view(url_name="schema"),
+        name="redoc",
+    ),
+]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

@@ -1,0 +1,33 @@
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "http",
+        hostname: "localhost",
+        port: "8000",
+        pathname: "/media/**",
+        search: "",
+      },
+    ],
+  },
+  reactStrictMode: false,
+  devIndicators: {
+    // buildActivity: false,
+  },
+  experimental: {
+    turbo: {
+      // ...
+    },
+  },
+  webpack: function (config, options) {
+    // console.log(options.webpack.version);
+    return config;
+  },
+  sassOptions: {
+    implementation: "sass-embedded",
+  },
+};
+
+module.exports = nextConfig;

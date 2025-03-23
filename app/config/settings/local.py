@@ -3,7 +3,8 @@ from config.settings.base import *  # noqa: F403
 from config.settings.base import BASE_DIR
 from config.settings.base import INSTALLED_APPS
 from config.settings.base import MIDDLEWARE
-from config.settings.base import WEBPACK_LOADER
+
+# from config.settings.base import WEBPACK_LOADER
 from config.settings.base import env
 
 # GENERAL
@@ -16,7 +17,7 @@ SECRET_KEY = env(
     default="Qg206ZCIgUuVxpVrpPKXMfDTlr9FDnTGsLvGYsGB1WCwc9rdVoPyY5kzhv8dLoVz",  # type: ignore  # noqa: PGH003
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]  # noqa: S104
+ALLOWED_HOSTS = ["localhost"]  # noqa: S104
 
 # CACHES
 # ------------------------------------------------------------------------------
@@ -90,9 +91,9 @@ INSTALLED_APPS += ["django_extensions"]
 
 # https://docs.celeryq.dev/en/stable/userguide/configuration.html#task-eager-propagates
 CELERY_TASK_EAGER_PROPAGATES = True
-# django-webpack-loader
-# ------------------------------------------------------------------------------
-WEBPACK_LOADER["DEFAULT"]["CACHE"] = not DEBUG
+# # django-webpack-loader
+# # ------------------------------------------------------------------------------
+# WEBPACK_LOADER["DEFAULT"]["CACHE"] = not DEBUG
 # Your stuff...
 # ------------------------------------------------------------------------------
 # DATABASES

@@ -7,6 +7,7 @@ from api.apps.models import Category
 from api.apps.models import Chapter
 from api.apps.models import Comic
 from api.apps.models import Genre
+from api.apps.models import UserItem
 from api.users.models import User
 from api.users.widgets import MyAdminCheckboxSelectMultiple
 from api.users.widgets import MyCheckboxSelectMultiple
@@ -36,12 +37,12 @@ class ChapterFilter(django_filters.FilterSet):
             {
                 "placeholder": _("Search for chapters"),
                 "class": "",
-                "hx-get": reverse_lazy("chapters:chapter_list"),
-                "hx-trigger": "keyup[target.value.length > 3] changed delay:500ms, search",  # noqa: E501
-                "hx-target": "#chapter-container",
-                "hx-indicator": ".progress",
-                "hx-swap": "outerHTML",
-                "_": "on htmx:afterOnLoad  put '' into @value of #id_name",
+                # "hx-get": reverse_lazy("chapters:chapter_list"),
+                # "hx-trigger": "keyup[target.value.length > 3] changed delay:500ms, search",  # noqa: E501
+                # "hx-target": "#chapter-container",
+                # "hx-indicator": ".progress",
+                # "hx-swap": "outerHTML",
+                # "_": "on htmx:afterOnLoad  put '' into @value of #id_name",
             },
         )
 
@@ -95,12 +96,12 @@ class ComicFilter(django_filters.FilterSet):
                 "placeholder": _("Search for comics"),
                 "class": "",
                 "type": "search",
-                "hx-get": reverse_lazy("comics:comic_list"),
-                "hx-trigger": "keyup[target.value.length > 3] changed delay:500ms, search",  # noqa: E501
-                "hx-target": "#comic-container",
-                "hx-indicator": ".progress",
-                "hx-swap": "outerHTML",
-                "_": "on htmx:afterOnLoad  put '' into @value of #id_title",
+                # "hx-get": reverse_lazy("comics:comic_list"),
+                # "hx-trigger": "keyup[target.value.length > 3] changed delay:500ms, search",  # noqa: E501
+                # "hx-target": "#comic-container",
+                # "hx-indicator": ".progress",
+                # "hx-swap": "outerHTML",
+                # "_": "on htmx:afterOnLoad  put '' into @value of #id_title",
                 # "_": "on input show <tbody>tr/> in closest <table/> when its textContent.toLowerCase() contains my value.toLowerCase()",  # noqa: E501, ERA001
             },
         )
@@ -112,12 +113,12 @@ class ComicFilter(django_filters.FilterSet):
         self.form.fields["category"].widget.attrs.update(
             {
                 "class": "",
-                "hx-get": reverse_lazy("comics:comic_list"),
-                "hx-trigger": "change delay:1s",
-                "hx-target": "#comic-container",
-                "hx-indicator": ".progress",
-                "hx-swap": "outerHTML",
-                "hx-replace-url": "true",
+                # "hx-get": reverse_lazy("comics:comic_list"),
+                # "hx-trigger": "change delay:1s",
+                # "hx-target": "#comic-container",
+                # "hx-indicator": ".progress",
+                # "hx-swap": "outerHTML",
+                # "hx-replace-url": "true",
             },
         )
 
@@ -138,12 +139,12 @@ class UserFilter(django_filters.FilterSet):
             {
                 "placeholder": _("Search for users"),
                 "class": "",
-                "hx-get": reverse_lazy("users:user_list"),
-                "hx-trigger": "keyup[target.value.length > 3] changed delay:500ms, search",  # noqa: E501
-                "hx-target": "#user-container",
-                "hx-indicator": ".progress",
-                "hx-swap": "outerHTML",
-                "_": "on htmx:afterOnLoad  put '' into @value of #id_cemail",
+                # "hx-get": reverse_lazy("users:user_list"),
+                # "hx-trigger": "keyup[target.value.length > 3] changed delay:500ms, search",  # noqa: E501
+                # "hx-target": "#user-container",
+                # "hx-indicator": ".progress",
+                # "hx-swap": "outerHTML",
+                # "_": "on htmx:afterOnLoad  put '' into @value of #id_cemail",
             },
         )
 
@@ -201,3 +202,11 @@ class SearchFilter(django_filters.FilterSet):
                 "class": "",
             },
         )
+
+
+class UserItemFilter(django_filters.FilterSet):
+    class Meta:
+        model = UserItem
+        fields = {
+            "order": ["exact", "lt", "gt", "range"],
+        }

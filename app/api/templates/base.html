@@ -1,48 +1,25 @@
 {% load static i18n %}
-{% load render_bundle from webpack_loader %}
 
 {% get_current_language as LANGUAGE_CODE %}
 <!DOCTYPE html>
-<html lang="{{ LANGUAGE_CODE }}" class="__variable_5d1e58 dark font-sans">
+<html lang="{{ LANGUAGE_CODE }}">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="icon" href="{% static 'images/files/logo.webp' %}" />
-    {% block css %}
-      {% render_bundle 'project' 'css' %}
-    {% endblock css %}
     <title>
       {% block title %}
         {% trans "Rhixe Scans" %}
       {% endblock title %}
     </title>
-    <meta name="description" content="Read Comics" />
-    <meta property="og:title" content="Rhixe Scans" />
-    <meta property="og:description" content="Read Comics" />
-    <meta property="og:url" content="{% url 'index' %}" />
-    <meta property="og:site_name" content="Rhixe Scans" />
-    <meta property="og:locale" content="en_US" />
-    <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="Rhixe Scans" />
-    <meta name="twitter:description" content="Read Comics" />
-    {% block javascript %}
-      <script src="{% static 'js/jquery-3.6.3.min.js' %}"></script>
-      {% render_bundle 'project' 'js' attrs='defer' %}
-    {% endblock javascript %}
     {% block header %}{% endblock %}
   </head>
-  <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
-        class="min-h-screen antialiased bg-secondarybackground __variable_5d1e58 clickup-chrome-ext_installed"
-        style="margin: 0 !important"
-        cz-shortcut-listen="true"
-        data-new-gr-c-s-check-loaded="14.1226.0"
-        data-gr-ext-installed="">
-    {% include "partials/base/header.html" %}
+  <body>
     {% block main %}
       {% block content %}
+        <div>
+          <h3>Index Page</h3>
+        </div>
       {% endblock content %}
     {% endblock main %}
-    {% include "partials/base/footer.html" %}
   </body>
 </html>

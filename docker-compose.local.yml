@@ -35,8 +35,8 @@ networks:
           gateway: 192.169.0.1
 
 services:
-  django:
-    restart: always
+  django: &django
+    # restart: always
     build:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
@@ -50,8 +50,10 @@ services:
       postgres:
         condition: service_started
     volumes:
+      # - ./app:/app:z
+      # - ./api/media:/app/api/media:z
       - ./app:/app:z
-      - ./api/media:/app/api/media:z
+      - ./app/api/media:/app/api/media:z
     env_file:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
@@ -63,7 +65,7 @@ services:
         ipv4_address: 192.169.0.3
 
   postgres:
-    restart: always
+    # restart: always
     build:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
@@ -81,7 +83,7 @@ services:
         ipv4_address: 192.169.0.4
 
   redis:
-    restart: always
+    # restart: always
     build:
       context: .
       dockerfile: ./compose/production/redis/Dockerfile
@@ -95,7 +97,7 @@ services:
       app-network:
         ipv4_address: 192.169.0.5
   redis-slave:
-    restart: always
+    # restart: always
     build:
       context: .
       dockerfile: ./compose/production/redis-slave/Dockerfile
@@ -112,10 +114,8 @@ services:
       app-network:
         ipv4_address: 192.169.0.10
   celeryworker:
-    restart: always
-    build:
-      context: .
-      dockerfile: ./compose/local/django/Dockerfile
+    # restart: always
+    <<: *django
     image: rhixe/api:celeryworker
     container_name: celeryworker
     depends_on:
@@ -125,14 +125,6 @@ services:
         condition: service_started
       postgres:
         condition: service_started
-      django:
-        condition: service_started
-    volumes:
-      - ./app:/app:z
-      - ./api/media:/app/api/media:z
-    env_file:
-      - ./.envs/.local/.django
-      - ./.envs/.local/.postgres
     ports: []
     command: /start-celeryworker
     networks:
@@ -140,10 +132,8 @@ services:
         ipv4_address: 192.169.0.6
 
   celerybeat:
-    restart: always
-    build:
-      context: .
-      dockerfile: ./compose/local/django/Dockerfile
+    # restart: always
+    <<: *django
     image: rhixe/api:celerybeat
     container_name: celerybeat
     depends_on:
@@ -153,14 +143,6 @@ services:
         condition: service_started
       postgres:
         condition: service_started
-      django:
-        condition: service_started
-    volumes:
-      - ./app:/app:z
-      - ./api/media:/app/api/media:z
-    env_file:
-      - ./.envs/.local/.django
-      - ./.envs/.local/.postgres
     ports: []
     command: /start-celerybeat
     networks:
@@ -168,30 +150,13 @@ services:
         ipv4_address: 192.169.0.7
 
   flower:
-    restart: always
-    build:
-      context: .
-      dockerfile: ./compose/local/django/Dockerfile
+    # restart: always
+    <<: *django
     image: rhixe/api:flower
     container_name: flower
-    volumes:
-      - ./app:/app:z
-      - ./api/media:/app/api/media:z
-    env_file:
-      - ./.envs/.local/.django
-      - ./.envs/.local/.postgres
     ports:
       - "5555:5555"
     command: /start-flower
-    depends_on:
-      redis:
-        condition: service_started
-      redis-slave:
-        condition: service_started
-      postgres:
-        condition: service_started
-      django:
-        condition: service_started
     networks:
       app-network:
         ipv4_address: 192.169.0.8
@@ -209,7 +174,9 @@ services:
       - ./app:/app:z
       # http://jdlm.info/articles/2016/03/06/lessons-building-node-app-docker.html
       - /app/node_modules
-    command: npm run dev
+
+
+    command:  npm run dev
     ports:
       - "3000:3000"
     networks:
