@@ -80,7 +80,7 @@ DOWNLOADER_MIDDLEWARES = {
     "crawler.middlewares.rotate.RotateUserAgentMiddleware": 540,
     # "crawler.middlewares.retry.TooManyRequestsRetryMiddleware": 541,
     # "crawler.middlewares.default.CrawlerDownloaderMiddleware": 543,
-    "crawler.middlewares.main.SeleniumMiddleware": 800,
+    # "crawler.middlewares.main.SeleniumMiddleware": 800,
 }
 
 # Enable or disable extensions
@@ -94,8 +94,9 @@ DOWNLOADER_MIDDLEWARES = {
 ITEM_PIPELINES = {
     "crawler.pipelines.download.MyImagesPipeline": 1,
     "crawler.pipelines.default.CrawlerDefaultPipeline": 200,
-    "crawler.pipelines.appsformdb.CrawlerAppsDbFormPipeline": 300,
-    "crawler.pipelines.redis.red.CrawlerRedisPipeline": 400,
+    "crawler.pipelines.db.DbPipeline": 300,
+    # "crawler.pipelines.appsformdb.CrawlerAppsDbFormPipeline": 300,
+    # "crawler.pipelines.redis.red.CrawlerRedisPipeline": 400,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -130,7 +131,7 @@ DOWNLOAD_HANDLERS = {
     "https": "scrapy_impersonate.ImpersonateDownloadHandler",
 }
 FEEDS = {
-    "comics.json": {
+    "comics2.json": {
         "format": "json",
         "encoding": "utf8",
         "store_empty": False,
@@ -138,7 +139,7 @@ FEEDS = {
         "fields": None,
         "indent": 4,
     },
-    "chapters.json": {
+    "chapters2.json": {
         "format": "json",
         "encoding": "utf8",
         "store_empty": False,
@@ -191,10 +192,10 @@ IMAGES_MIN_WIDTH = 110
 
 MEDIA_ALLOW_REDIRECTS = True
 
-REDIS_URL = settings.CELERY_BROKER_URL
-DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
-SCHEDULER = "scrapy_redis.scheduler.Scheduler"
-SCHEDULER_PERSIST = False
+# REDIS_URL = settings.CELERY_BROKER_URL
+# DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+# SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+# SCHEDULER_PERSIST = False
 
 # SELENIUM_DRIVER_NAME = "firefox"  # noqa: ERA001
 # SELENIUM_DRIVER_EXECUTABLE_PATH = which("geckodriver")  # noqa: ERA001

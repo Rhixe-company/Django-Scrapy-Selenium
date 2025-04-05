@@ -1,11 +1,5 @@
 import logging
 
-from django.contrib.auth import get_user_model
-from django.db.models import Q
-from django.db.utils import IntegrityError
-from itemadapter.adapter import ItemAdapter
-from scrapy.exceptions import DropItem
-
 from api.apps.models import Artist
 from api.apps.models import Author
 from api.apps.models import Category
@@ -14,6 +8,11 @@ from api.apps.models import ChapterImage
 from api.apps.models import Comic
 from api.apps.models import ComicImage
 from api.apps.models import Genre
+from django.contrib.auth import get_user_model
+from django.db.models import Q
+from django.db.utils import IntegrityError
+from itemadapter.adapter import ItemAdapter
+from scrapy.exceptions import DropItem
 
 logger = logging.getLogger(__name__)
 

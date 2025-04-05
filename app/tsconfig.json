@@ -1,48 +1,43 @@
 {
   "compilerOptions": {
-    "target": "ES2017",
+    "target": "es5",
     "lib": [
       "dom",
-      "dom.iterable",
-      "esnext"
+      "es2017"
     ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": false,
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    "module": "commonjs",
+    "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react",
     "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "@/styles/*": [
-        "./src/styles/*"
-      ],
-      "@/components/*": [
-        "./src/components/*"
-      ],
-      "@/services/*": [
-        "./src/services/*"
-      ],
-    }
+    "outDir": "./dist/webpack_bundles/cjs/",
+    "rootDir": "./src/",
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noImplicitAny": true,
   },
   "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "next-env.d.ts"
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/types/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.d.tsx",
+    "src/types/**/*.d.tsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist",
+    "lib"
+  ],
+  "typeRoots": [
+    "./node_modules/@types",
+    "./src"
   ]
 }

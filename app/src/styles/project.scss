@@ -1,0 +1,44 @@
+@use "sass:meta";
+@include meta.load-css("tailwindcss");
+@include meta.load-css("../themes/default.scss");
+@plugin "./../../plugin.js";
+@plugin "flowbite-typography";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans:
+    "Fira", "ui-sans-serif", "system-ui", "-apple-system", "system-ui",
+    "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "Noto Sans", "sans-serif",
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-body:
+    "Fira", "ui-sans-serif", "system-ui", "-apple-system", "system-ui",
+    "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "Noto Sans", "sans-serif",
+    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-mono:
+    "ui-monospace", "SFMono-Regular", "Menlo", "Monaco", "Consolas",
+    "Liberation Mono", "Courier New", "monospace";
+  --spacing-2xl: 16rem;
+  --spacing-8xl: 90rem;
+  --text-2xs: 0.625rem;
+}
+
+/*
+“Have the courage to follow your heart and intuition. They somehow already know what you truly want to become. Everything else is secondary.”
+― Steve Jobs
+*/
+* {
+  border-color: hsl(var(--border));
+}
+html {
+  overflow: auto !important;
+  padding-right: 0 !important;
+}
+
+body {
+  --tw-bg-opacity: 1;
+  background-color: rgb(22 21 29 / var(--tw-bg-opacity, 1));
+  color: hsl(var(--foreground));
+  position: relative;
+  min-height: 100vh;
+}

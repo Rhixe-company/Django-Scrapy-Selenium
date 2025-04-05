@@ -1,12 +1,6 @@
 import json
 import logging
 
-from django.conf import settings
-from django.contrib.auth import get_user_model
-from django.core.management.base import BaseCommand
-from django.db.models import Q
-from django.db.utils import IntegrityError
-
 from api.apps.models import Artist
 from api.apps.models import Author
 from api.apps.models import Category
@@ -15,6 +9,11 @@ from api.apps.models import ChapterImage
 from api.apps.models import Comic
 from api.apps.models import ComicImage
 from api.apps.models import Genre
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.core.management.base import BaseCommand
+from django.db.models import Q
+from django.db.utils import IntegrityError
 
 logger = logging.getLogger(__name__)
 
@@ -24,18 +23,26 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):  # noqa: C901, PLR0915
         def save_comics(comics_data):
+            comics = Comic.objects.all()
+            comic_images = ComicImage.objects.select_related("comic").all()
+            logger.info(
+                {
+                    "Start Comics_Count": comics.count(),
+                    "Start ComicsImage_Count": comic_images.count(),
+                },
+            )
+            usermodel = get_user_model()
+            user = usermodel.objects.filter(
+                Q(email__icontains="admin@rhixe.company")
+                | Q(username__icontains="adminbot"),
+            ).first()
+            if not user:
+                user = usermodel.objects.create_superuser(  # type: ignore  # noqa: PGH003
+                    email="admin@rhixe.company",
+                    username="adminbot",
+                    password="R4I7gcJHX",  # noqa: S106
+                )
             for item in comics_data:
-                usermodel = get_user_model()
-                user = usermodel.objects.filter(
-                    Q(email__icontains="admin@rhixe.company")
-                    | Q(username__icontains="adminbot"),
-                ).first()
-                if not user:
-                    user = usermodel.objects.create_superuser(  # type: ignore  # noqa: PGH003
-                        email="admin@rhixe.company",
-                        username="adminbot",
-                        password="R4I7gcJHX",  # noqa: S106
-                    )
                 images = item.get("images")
                 title = item["title"]
                 slug = item["slug"]
@@ -61,10 +68,8 @@ class Command(BaseCommand):
                         slug,
                     )
                     if comic.exists():
-                        msg1 = f"{title} - {slug} Exists"
-                        logger.error(
-                            msg1,
-                        )
+                        msg = f"{title} - {slug} Exists"
+                        logger.error(msg)
                     else:
                         try:
                             newcomic = Comic.objects.update_or_create(
@@ -101,11 +106,30 @@ class Command(BaseCommand):
                                     status=image["status"],
                                     comic=newcomic,
                                 )[0]
-                        except IntegrityError:
-                            msg8 = f"{slug} - {title} Exists"
-                            logger.error(msg8)  # noqa: TRY400
+                        except IntegrityError as e:
+                            msg = f"{slug} - {title} Exists , Error: {e}"
+                            logger.exception(msg)  # noqa: B904, RUF100
+            logger.info(
+                {
+                    "Comics": comics[0:2],
+                    "ComicsImage": comic_images[0:2],
+                    "End Comics_Count": comics.count(),
+                    "End ComicsImage_Count": comic_images.count(),
+                },
+            )
 
         def save_chapters(chapters_data):
+            chapters = Chapter.objects.all()
+            chapter_images = ChapterImage.objects.select_related(
+                "comic",
+                "chapter",
+            ).all()
+            logger.info(
+                {
+                    "Start Chapters_Count": chapters.count(),
+                    "Start ChaptersImage_Count": chapter_images.count(),
+                },
+            )
             for item in chapters_data:
                 images = item.get("images")
                 comicslug = item["comicslug"]
@@ -131,11 +155,10 @@ class Command(BaseCommand):
                             comictitle,
                         )
                         if chapter.exists():
-                            msg3 = f"{chapter.first().chapter_id} - {chapter.first().slug} - {chapter.first().comic.title} Exists"  # noqa: E501
+                            msg = f"{chapter.first().chapter_id} - {chapter.first().slug} - {chapter.first().comic.title} Exists"  # noqa: E501
                             logger.error(
-                                msg3,
+                                msg,
                             )
-
                         else:
                             try:
                                 newchapter = Chapter.objects.update_or_create(
@@ -160,37 +183,32 @@ class Command(BaseCommand):
                                         chapter=newchapter,
                                         comic=dbcomic,
                                     )[0]
-                            except IntegrityError:
-                                msg7 = f"{slug} - {name} Exists"
-                                logger.error(msg7)  # noqa: TRY400
+                            except IntegrityError as e:
+                                msg = f"{slug} - {name} Exists, Error: {e}"
+                                logger.exception(msg)  # noqa: B904, RUF100
                 else:
-                    msg4 = f"{comictitle} Does Not Exists"
+                    msg = f"{comictitle} Does Not Exists"
                     logger.error(
-                        msg4,
+                        msg,
                     )
+            logger.info(
+                {
+                    "Chapters": chapters[0:2],
+                    "ChaptersImage": chapter_images[0:2],
+                    "End Chapters_Count": chapters.count(),
+                    "End ChaptersImage_Count": chapter_images.count(),
+                },
+            )
 
-        base = settings.BASE_DIR
-        comics_file = str(base / "comics.json")
-        with open(comics_file, encoding="utf-8") as comic_file:  # noqa: PTH123
-            comics_data = json.load(comic_file)
-            save_comics(comics_data=comics_data)
-        chapters_file = str(base / "chapters.json")
-        with open(chapters_file, encoding="utf-8") as chapter_file:  # noqa: PTH123
-            chapters_data = json.load(chapter_file)
-            save_chapters(chapters_data=chapters_data)
-        comics = Comic.objects.all()
-        comic_images = ComicImage.objects.select_related("comic").all()
-        chapters = Chapter.objects.all()
+        def load():
+            base = settings.BASE_DIR
+            comics_file = str(base / "comics.json")
+            with open(comics_file, encoding="utf-8") as comic_file:  # noqa: PTH123
+                comics_data = json.load(comic_file)
+                save_comics(comics_data=comics_data)
+            chapters_file = str(base / "chapters.json")
+            with open(chapters_file, encoding="utf-8") as chapter_file:  # noqa: PTH123
+                chapters_data = json.load(chapter_file)
+                save_chapters(chapters_data=chapters_data)
 
-        chapter_images = ChapterImage.objects.select_related("comic", "chapter").all()
-        context = {
-            "Comics": comics,
-            "Comics_Count": comics.count(),
-            "ComicsImage": comic_images,
-            "ComicsImage_Count": comic_images.count(),
-            "Chapters": chapters,
-            "Chapters_Count": chapters.count(),
-            "ChaptersImage": chapter_images,
-            "ChaptersImage_Count": chapter_images.count(),
-        }
-        logger.info(context)
+        load()

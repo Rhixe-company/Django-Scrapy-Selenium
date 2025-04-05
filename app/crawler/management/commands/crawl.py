@@ -1,14 +1,14 @@
 import logging
 
+from api.apps.models import Chapter
+from api.apps.models import ChapterImage
+from api.apps.models import Comic
+from api.apps.models import ComicImage
 from django.core.management.base import BaseCommand
 from scrapy.crawler import CrawlerProcess
 from scrapy.utils.log import configure_logging
 from scrapy.utils.project import get_project_settings
 
-from api.apps.models import Chapter
-from api.apps.models import ChapterImage
-from api.apps.models import Comic
-from api.apps.models import ComicImage
 from crawler.spiders.run import RunSpider
 
 logger = logging.getLogger(__name__)

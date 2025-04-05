@@ -1,11 +1,11 @@
 # models.py
 import uuid
 
-from django_ckeditor_5.fields import CKEditor5Field
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
+from django_ckeditor_5.fields import CKEditor5Field
 
 from api.apps.managers import ChapterManager
 from api.apps.managers import ComicManager
@@ -198,7 +198,10 @@ class Comic(models.Model):
         ordering = ["-updated_at"]
 
     def __str__(self):
-        return self.title
+        return f"{self.title}"
+
+    def get_absolute_url(self) -> str:
+        return reverse("comics:comic_detail", kwargs={"slug": self.slug})
 
     @property
     def has_chapters(self):
@@ -207,18 +210,6 @@ class Comic(models.Model):
     @property
     def has_images(self):
         return self.numimages > 1
-
-    def get_absolute_url(self) -> str:
-        return reverse("comics:comic_detail", kwargs={"slug": self.slug})
-
-    def get_hx_url(self) -> str:
-        return reverse("comics:hx_comic_detail", kwargs={"slug": self.slug})
-
-    def get_edit_url(self) -> str:
-        return reverse("comics:update_comic", kwargs={"slug": self.slug})
-
-    def get_delete_url(self) -> str:
-        return reverse("comics:delete_comic", kwargs={"slug": self.slug})
 
     def get_images(self):
         return self.comicimages.all()  # type: ignore  # noqa: PGH003
@@ -325,26 +316,17 @@ class Chapter(models.Model):
         verbose_name_plural = "Chapters"
         verbose_name = "Chapter"
         ordering = ["-updated_at"]
-        unique_together = ["comic", "name"]
+        unique_together = ["comic", "name", "title"]
 
     def __str__(self):
-        return f"Chapter {self.chapter_id} Comic {self.comic.title}"
-
-    @property
-    def has_images(self):
-        return self.numimages > 0
+        return f"{self.comic} - {self.name}"
 
     def get_absolute_url(self) -> str:
         return reverse("chapters:chapter_detail", kwargs={"slug": self.slug})
 
-    def get_hx_url(self) -> str:
-        return reverse("chapters:hx_chapter_detail", kwargs={"slug": self.slug})
-
-    def get_edit_url(self) -> str:
-        return reverse("chapters:update_chapter", kwargs={"slug": self.slug})
-
-    def get_delete_url(self) -> str:
-        return reverse("chapters:delete_chapter", kwargs={"slug": self.slug})
+    @property
+    def has_images(self):
+        return self.numimages > 0
 
     def get_images(self):
         return self.chapterimages.all()  # type: ignore  # noqa: PGH003

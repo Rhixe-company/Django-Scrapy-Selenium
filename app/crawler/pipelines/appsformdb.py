@@ -1,12 +1,5 @@
 import logging
 
-from django.contrib.auth import get_user_model
-from django.core.exceptions import MultipleObjectsReturned
-from django.db.models import Q
-from django.db.utils import IntegrityError
-from itemadapter.adapter import ItemAdapter
-from scrapy.exceptions import DropItem
-
 from api.apps.forms import ArtistForm
 from api.apps.forms import AuthorForm
 from api.apps.forms import CategoryForm
@@ -20,6 +13,12 @@ from api.apps.models import Chapter
 from api.apps.models import ChapterImage
 from api.apps.models import Comic
 from api.apps.models import ComicImage
+from django.contrib.auth import get_user_model
+from django.core.exceptions import MultipleObjectsReturned
+from django.db.models import Q
+from django.db.utils import IntegrityError
+from itemadapter.adapter import ItemAdapter
+from scrapy.exceptions import DropItem
 
 logger = logging.getLogger(__name__)
 
@@ -35,7 +34,7 @@ class CrawlerAppsDbFormPipeline:
                     | Q(username__icontains="adminbot"),
                 ).first()
                 if not user:
-                    user = usermodel.objects.create_superuser(
+                    user = usermodel.objects.create_superuser(  # type: ignore  # noqa: PGH003
                         email="admin@rhixe.company",
                         username="adminbot",
                         password="R4I7gcJHX",  # noqa: S106
@@ -229,7 +228,7 @@ class CrawlerAppsDbFormPipeline:
                                     url=newurl,
                                     image=newimage,
                                     chapter=dbchapter,
-                                    comic=dbchapter.comic,
+                                    comic=dbchapter.comic,  # type: ignore  # noqa: PGH003
                                 )[0]
                                 # chapter_images = ChapterImage.objects.filter(  # noqa: E501, ERA001, RUF100
                                 #     Q(chapter=chapter)  # noqa: ERA001

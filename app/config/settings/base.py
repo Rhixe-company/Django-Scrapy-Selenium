@@ -87,10 +87,10 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount.providers.google",
     "django_celery_beat",
     "django_celery_results",
-    # "django_htmx",
-    # "widget_tweaks",
-    # "captcha",
-    # "django_tables2",
+    "django_htmx",
+    "widget_tweaks",
+    "captcha",
+    "django_tables2",
     "django_filters",
     "celery_progress",
     "django_ckeditor_5",
@@ -98,11 +98,11 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "corsheaders",
     "drf_spectacular",
-    # "webpack_loader",
+    "webpack_loader",
     "import_export",
     "silk",
-    # "dynamic_formsets",
-    # "template_partials",
+    "dynamic_formsets",
+    "template_partials",
 ]
 
 LOCAL_APPS = [
@@ -131,9 +131,9 @@ AUTHENTICATION_BACKENDS = [
 AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
 # LOGIN_REDIRECT_URL = "users:redirect_user"
-# LOGIN_REDIRECT_URL = "users:redirect_user"
+LOGIN_REDIRECT_URL = "users:redirect_user"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
-# LOGIN_URL = "account_login"
+LOGIN_URL = "account_login"
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
@@ -182,8 +182,8 @@ STATIC_ROOT = str(BASE_DIR / "staticfiles")
 STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
 STATICFILES_DIRS = [
-    str(BASE_DIR / "public"),
-    str(BASE_DIR / ".next"),
+    str(BASE_DIR / "dist"),
+    str(APPS_DIR / "static"),
 ]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = [
@@ -347,8 +347,8 @@ CELERYD_HIJACK_ROOT_LOGGER = False
 # ------------------------------------------------------------------------------
 ACCOUNT_ALLOW_REGISTRATION = env.bool("DJANGO_ACCOUNT_ALLOW_REGISTRATION", True)  # type: ignore  # noqa: PGH003
 # https://docs.allauth.org/en/latest/account/configuration.html
-# ACCOUNT_LOGIN_METHODS = {"email"}
-ACCOUNT_AUTHENTICATION_METHOD = "email"
+ACCOUNT_LOGIN_METHODS = {"email"}
+# ACCOUNT_AUTHENTICATION_METHOD = "email"
 # https://docs.allauth.org/en/latest/account/configuration.html
 ACCOUNT_EMAIL_REQUIRED = True
 # https://docs.allauth.org/en/latest/account/configuration.html
@@ -443,14 +443,14 @@ SIMPLE_JWT = {
 
 # django-webpack-loader
 # ------------------------------------------------------------------------------
-# WEBPACK_LOADER = {
-#     "DEFAULT": {
-#         "CACHE": not DEBUG,
-#         "STATS_FILE": BASE_DIR / "dist/webpack_bundles/webpack-stats.json",
-#         "POLL_INTERVAL": 0.1,
-#         "IGNORE": [r".+\.hot-update.js", r".+\.map"],
-#     },
-# }
+WEBPACK_LOADER = {
+    "DEFAULT": {
+        "CACHE": not DEBUG,
+        "STATS_FILE": BASE_DIR / "dist/webpack_bundles/webpack-stats.json",
+        "POLL_INTERVAL": 0.1,
+        "IGNORE": [r".+\.hot-update.js", r".+\.map"],
+    },
+}
 PAGINATE_BY = 20
 FORMAT = "F j, Y"
 
