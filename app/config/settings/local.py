@@ -22,21 +22,21 @@ ALLOWED_HOSTS = ["localhost"]  # noqa: S104
 # CACHES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#caches
-# CACHES = {  # noqa: ERA001, RUF100
-#     "default": {  # noqa: ERA001, RUF100
-#         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",  # noqa: ERA001, RUF100
-#         "LOCATION": "",  # noqa: ERA001, RUF100
-#     },
-# }  # noqa: ERA001, RUF100
 CACHES = {  # noqa: ERA001, RUF100
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": CELERY_BROKER_URL,  # noqa: ERA001, F405, RUF100
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        },
+    "default": {  # noqa: ERA001, RUF100
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",  # noqa: ERA001, RUF100
+        "LOCATION": "",  # noqa: ERA001, RUF100
     },
 }  # noqa: ERA001, RUF100
+# CACHES = {  # noqa: ERA001, RUF100
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": CELERY_BROKER_URL,  # noqa: ERA001, F405, RUF100
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         },
+#     },
+# }  # noqa: ERA001, RUF100
 
 # EMAIL
 # ------------------------------------------------------------------------------

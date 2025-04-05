@@ -1,0 +1,144 @@
+GET http://localhost:8000/api/comics/ HTTP/1.1
+
+###
+GET http://localhost:8000/api/comics/top/ HTTP/1.1
+
+###
+GET http://localhost:8000/api/comics/featured/ HTTP/1.1
+
+###
+GET http://localhost:8000/api/comics/54ca0f08-3157-4d19-ab57-c2cbe5775a00/ HTTP/1.1
+
+###
+GET http://localhost:8000/api/chapters/ HTTP/1.1
+
+###
+GET http://localhost:8000/api/chapters/527e7905-d880-4b51-9973-dc97c6fafa86/ HTTP/1.1
+###
+GET http://localhost:8000/api/users/ HTTP/1.1
+
+###
+GET http://localhost:8000/api/users/1/ HTTP/1.1
+###
+GET http://localhost:8000/api/categorys/ HTTP/1.1
+
+###
+GET http://localhost:8000/api/categorys/1/ HTTP/1.1
+###
+GET http://localhost:8000/api/genres/ HTTP/1.1
+
+###
+GET http://localhost:8000/api/genres/1/ HTTP/1.1
+###
+GET http://localhost:8000/api/authors/ HTTP/1.1
+
+###
+GET http://localhost:8000/api/authors/1/ HTTP/1.1
+###
+GET http://localhost:8000/api/artists/ HTTP/1.1
+
+###
+GET http://localhost:8000/api/artists/1/ HTTP/1.1
+###
+GET http://localhost:8000/api/comments/ HTTP/1.1
+
+###
+GET http://localhost:8000/api/comments/1/ HTTP/1.1
+
+###
+DELETE http://localhost:8000/comics/2/ HTTP/1.1
+
+###
+PUT http://localhost:8000/comics/2/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI4Mzg1NDk2LCJpYXQiOjE3MjgzODUxOTYsImp0aSI6IjVkZTNjZGYxMzExZDQ4MmU5ZjVlN2E2M2FhNzQ3Y2IxIiwidXNlcl9pZCI6MX0.Lt7xSkdVv20Z-zn9rR2VrNn5n9rFdtlWR_xuT3jmP2Q
+
+{
+	"name": "Television",
+	"price": 300.00,
+	"stock": 14,
+	"description": "An amazing new TV"
+}
+
+###
+
+POST http://localhost:8000/comics/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI4MzIxOTM0LCJpYXQiOjE3MjgzMjE2MzQsImp0aSI6ImJhNjAwMDBiMTU3MzRkM2ZhMWZlN2VlNWY4ZDQ5NzE5IiwidXNlcl9pZCI6MX0.oytJ-fpp0gf4STT7qoGNBFHrGVHyexLYW2ZqGPL1gxU
+
+{
+	"name": "Television",
+	"price": 300.00,
+	"stock": 14,
+	"description": "An amazing new TV"
+}
+
+###
+POST http://localhost:8000/api/token/ HTTP/1.1
+Content-Type: application/json
+
+{
+	"username": "admin@rhixe.company",
+	"password": "R4I7gcJHX"
+}
+
+###
+POST http://localhost:8000/api/token/refresh/ HTTP/1.1
+Content-Type: application/json
+
+{
+	"refresh": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTc0MTM1NDk0OSwiaWF0IjoxNzQxMjY4NTQ5LCJqdGkiOiJmNTVhZTE1YmZhMGM0ZjIzYjgxZGQ4ODNlNDBiMWFiYyIsInVzZXJfaWQiOjF9.WCmFxU9Oz_sFjF-pnivfuJO5AXUYicIEXGVosBgsR3Y"
+}
+
+###
+GET http://localhost:8000/api/useritems/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQxMjcyMjc5LCJpYXQiOjE3NDEyNjg1NDksImp0aSI6ImI4YzQ0YTViNDAxZTQ1OGViZWNjYTA4MTI5MjBiNDdmIiwidXNlcl9pZCI6MX0.vcwDsSuQauPLspfDrpLKEzy8Cp0ODJYgmQhl1uCVH4s
+
+###
+GET http://localhost:8000/api/useritems/8f1e83a6-8f36-442e-8c1c-09dd1ae20484/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQxMjcyMTQ5LCJpYXQiOjE3NDEyNjg1NDksImp0aSI6IjY2NzZjNTRjMDM2YTQ2OWViMzExZWEzNmFhZmUyNGM5IiwidXNlcl9pZCI6MX0.ec8gLpWHPIdytt9c3kBfX3mjTffZ1rO9HrmhQ1gkktI
+
+###
+POST http://localhost:8000/api/useritems/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQxMjcyMTQ5LCJpYXQiOjE3NDEyNjg1NDksImp0aSI6IjY2NzZjNTRjMDM2YTQ2OWViMzExZWEzNmFhZmUyNGM5IiwidXNlcl9pZCI6MX0.ec8gLpWHPIdytt9c3kBfX3mjTffZ1rO9HrmhQ1gkktI
+
+{
+	"status": "Pending",
+	"items": [
+		{
+				"product": 2,
+				"quantity": 2
+		},
+		{
+				"product": 3,
+				"quantity": 1
+		}
+	]
+}
+
+###
+GET http://localhost:8000/api/useritems/90ea8fec-36ab-486e-8f0a-f40eb32032ff/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQxMjcyMTQ5LCJpYXQiOjE3NDEyNjg1NDksImp0aSI6IjY2NzZjNTRjMDM2YTQ2OWViMzExZWEzNmFhZmUyNGM5IiwidXNlcl9pZCI6MX0.ec8gLpWHPIdytt9c3kBfX3mjTffZ1rO9HrmhQ1gkktI
+
+PUT http://localhost:8000/api/useritems/90ea8fec-36ab-486e-8f0a-f40eb32032ff/ HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQxMjcyMTQ5LCJpYXQiOjE3NDEyNjg1NDksImp0aSI6IjY2NzZjNTRjMDM2YTQ2OWViMzExZWEzNmFhZmUyNGM5IiwidXNlcl9pZCI6MX0.ec8gLpWHPIdytt9c3kBfX3mjTffZ1rO9HrmhQ1gkktI
+
+{
+	"status": "Pending",
+	"items": [
+		{
+				"product": 2,
+				"quantity": 3
+		},
+		{
+				"product": 3,
+				"quantity": 1
+		}
+	]
+}
+
+###
+DELETE http://localhost:8000/api/useritems/90ea8fec-36ab-486e-8f0a-f40eb32032ff/ HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzQxMjcyMTQ5LCJpYXQiOjE3NDEyNjg1NDksImp0aSI6IjY2NzZjNTRjMDM2YTQ2OWViMzExZWEzNmFhZmUyNGM5IiwidXNlcl9pZCI6MX0.ec8gLpWHPIdytt9c3kBfX3mjTffZ1rO9HrmhQ1gkktI

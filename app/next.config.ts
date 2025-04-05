@@ -21,12 +21,14 @@ const nextConfig: NextConfig = {
       // ...
     },
   },
-  webpack: function (config, options) {
-    // console.log(options.webpack.version);
+  webpack: function (config) {
     return config;
   },
   sassOptions: {
-    implementation: "sass-embedded",
+    api: "modern-compiler",
+    sassOptions: {
+      // Your sass options
+    },
   },
 };
 

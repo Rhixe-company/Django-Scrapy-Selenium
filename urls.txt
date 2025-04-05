@@ -1,0 +1,47 @@
+__debug__/
+[name='index']
+admin/
+accounts/
+accounts/
+ckeditor5/
+celery-progress/
+api/comics/
+api/comics/top/
+api/comics/featured/
+api/comics/<str:comic_id>/
+api/chapters/
+api/chapters/<str:chapter_id>/
+api/categorys/
+api/categorys/<int:id>/
+api/authors/
+api/authors/<int:id>/
+api/artists/
+api/artists/<int:id>/
+api/genres/
+api/genres/<int:id>/
+api/token/ [name='token_obtain_pair']
+api/users/
+api/users/<int:id>/
+api/comments/
+api/comments/<int:id>/
+api/comic_images/
+api/comic_images/<str:comic_image_id>/
+api/chapter_images/
+api/chapter_images/<str:chapter_image_id>/
+api/^useritems/$ [name='useritem-list']
+api/^useritems\.(?P<format>[a-z0-9]+)/?$ [name='useritem-list']
+api/^useritems/(?P<pk>[^/.]+)/$ [name='useritem-detail']
+api/^useritems/(?P<pk>[^/.]+)\.(?P<format>[a-z0-9]+)/?$ [name='useritem-detail']
+api/[name='api-root']
+api/<drf_format_suffix:format> [name='api-root']
+silk/
+api/token/refresh/ [name='token_refresh']
+api/schema/ [name='schema']
+api/schema/swagger-ui/ [name='swagger-ui']
+api/schema/redoc/ [name='redoc']
+^media/(?P<path>.*)$
+^static/(?P<path>.*)$
+400/
+403/
+404/
+500/

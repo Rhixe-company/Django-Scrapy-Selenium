@@ -13,49 +13,48 @@ from api.apps.utils import delete_instance_image
 from api.apps.utils import slugify_instance_name
 from api.apps.utils import slugify_instance_title
 
+# @receiver([post_save, post_delete], sender=Comic)
+# def invalidate_comic_cache(sender, instance, **kwargs):
+#     """
+#     Invalidate comic list caches when a comic is created, updated, or deleted
+#     """
+#     print("Clearing comic cache")  # noqa: T201
 
-@receiver([post_save, post_delete], sender=Comic)
-def invalidate_comic_cache(sender, instance, **kwargs):
-    """
-    Invalidate comic list caches when a comic is created, updated, or deleted
-    """
-    print("Clearing comic cache")  # noqa: T201
-
-    # Clear comic list caches
-    cache.delete_pattern("*comic_list*")  # type: ignore  # noqa: PGH003
-
-
-@receiver([post_save, post_delete], sender=Chapter)
-def invalidate_chapter_cache(sender, instance, **kwargs):
-    """
-    Invalidate chapter list caches when a chapter is created, updated, or deleted
-    """
-    print("Clearing chapter cache")  # noqa: T201
-
-    # Clear chapter list caches
-    cache.delete_pattern("*chapter_list*")  # type: ignore  # noqa: PGH003
+#     # Clear comic list caches
+#     cache.delete_pattern("*comic_list*")  # type: ignore  # noqa: PGH003
 
 
-@receiver([post_save, post_delete], sender=ComicImage)
-def invalidate_comic_image_cache(sender, instance, **kwargs):
-    """
-    Invalidate comic_image list caches when a comic_image is created, updated, or deleted
-    """  # noqa: E501
-    print("Clearing comic_image cache")  # noqa: T201
+# @receiver([post_save, post_delete], sender=Chapter)
+# def invalidate_chapter_cache(sender, instance, **kwargs):
+#     """
+#     Invalidate chapter list caches when a chapter is created, updated, or deleted
+#     """
+#     print("Clearing chapter cache")  # noqa: T201
 
-    # Clear comic_image list caches
-    cache.delete_pattern("*comic_image_list*")  # type: ignore  # noqa: PGH003
+#     # Clear chapter list caches
+#     cache.delete_pattern("*chapter_list*")  # type: ignore  # noqa: PGH003
 
 
-@receiver([post_save, post_delete], sender=ChapterImage)
-def invalidate_chapter_image_cache(sender, instance, **kwargs):
-    """
-    Invalidate chapter_image list caches when a chapter_image is created, updated, or deleted
-    """  # noqa: E501
-    print("Clearing chapter_image cache")  # noqa: T201
+# @receiver([post_save, post_delete], sender=ComicImage)
+# def invalidate_comic_image_cache(sender, instance, **kwargs):
+#     """
+#     Invalidate comic_image list caches when a comic_image is created, updated, or deleted
+#     """  # noqa: E501
+#     print("Clearing comic_image cache")  # noqa: T201
 
-    # Clear chapter_image list caches
-    cache.delete_pattern("*chapter_image_list*")  # type: ignore  # noqa: PGH003
+#     # Clear comic_image list caches
+#     cache.delete_pattern("*comic_image_list*")  # type: ignore  # noqa: PGH003
+
+
+# @receiver([post_save, post_delete], sender=ChapterImage)
+# def invalidate_chapter_image_cache(sender, instance, **kwargs):
+#     """
+#     Invalidate chapter_image list caches when a chapter_image is created, updated, or deleted
+#     """  # noqa: E501
+#     print("Clearing chapter_image cache")  # noqa: T201
+
+#     # Clear chapter_image list caches
+#     cache.delete_pattern("*chapter_image_list*")  # type: ignore  # noqa: PGH003
 
 
 def comic_pre_save(sender, instance, *args, **kwargs):

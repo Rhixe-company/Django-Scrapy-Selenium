@@ -24,21 +24,23 @@
     ],
     "paths": {
       "@/*": [
-        "./pages/*"
+        "./src/*"
       ],
       "@/styles/*": [
-        "./styles/*"
+        "./src/styles/*"
       ],
       "@/components/*": [
-        "./components/*"
+        "./src/components/*"
+      ],
+      "@/services/*": [
+        "./src/services/*"
       ],
     }
   },
   "include": [
     "**/*.ts",
     "**/*.tsx",
-    "next-env.d.ts",
-    ".next/types/**/*.ts"
+    "next-env.d.ts"
   ],
   "exclude": [
     "node_modules"
