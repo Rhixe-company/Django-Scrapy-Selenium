@@ -50,7 +50,7 @@ CONCURRENT_REQUESTS = 128
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 0
+DOWNLOAD_DELAY = 4
 # The download delay setting will honor only one of:
 CONCURRENT_REQUESTS_PER_DOMAIN = 64
 CONCURRENT_REQUESTS_PER_IP = 64
@@ -94,7 +94,7 @@ DOWNLOADER_MIDDLEWARES = {
 ITEM_PIPELINES = {
     "crawler.pipelines.download.MyImagesPipeline": 1,
     "crawler.pipelines.default.CrawlerDefaultPipeline": 200,
-    "crawler.pipelines.db.DbPipeline": 300,
+    # "crawler.pipelines.db.DbPipeline": 300,
     # "crawler.pipelines.appsformdb.CrawlerAppsDbFormPipeline": 300,
     # "crawler.pipelines.redis.red.CrawlerRedisPipeline": 400,
 }
@@ -114,22 +114,22 @@ ITEM_PIPELINES = {
 
 # Enable and configure HTTP caching (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-HTTPCACHE_ENABLED = True
+HTTPCACHE_ENABLED = False
 HTTPCACHE_EXPIRATION_SECS = 86400
 HTTPCACHE_DIR = "cache"
 HTTPCACHE_IGNORE_HTTP_CODES = list(range(300, 501))
 HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"
-HTTPCACHE_GZIP = True
+HTTPCACHE_GZIP = False
 
 # Set settings whose default value is deprecated to a future-proof value
 TWISTED_REACTOR = install_reactor(
     "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
 )
 FEED_EXPORT_ENCODING = "utf-8"
-DOWNLOAD_HANDLERS = {
-    "http": "scrapy_impersonate.ImpersonateDownloadHandler",
-    "https": "scrapy_impersonate.ImpersonateDownloadHandler",
-}
+# DOWNLOAD_HANDLERS = {
+#     "http": "scrapy_impersonate.ImpersonateDownloadHandler",
+#     "https": "scrapy_impersonate.ImpersonateDownloadHandler",
+# }
 FEEDS = {
     "comics2.json": {
         "format": "json",

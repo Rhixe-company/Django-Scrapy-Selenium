@@ -7,7 +7,7 @@ const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const { SourceMapDevToolPlugin } = require("webpack");
 
 module.exports = {
-  target: ["web", "es5"],
+  target: "web",
   context: path.join(__dirname, "../"),
   entry: {
     project: path.resolve(__dirname, "../", "src", "project"),

@@ -6,19 +6,19 @@
         <a href="{% url 'index' %}" class="shrink-0"><h3 class="hover:text-themecolor text-white cursor-pointer text-sm">Rhixe Scans</h3></a><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-chevron-right w-3.5 h-3.5 shrink-0">
           <path d="m9 18 6-6-6-6"></path>
         </svg>
-        <h3 class="hover:text-themecolor cursor-pointer text-white text-sm shrink-0 w-[calc(100%-120px)] truncate">Comic List Page</h3>
+        <h3 class="hover:text-themecolor cursor-pointer text-white text-sm shrink-0 w-[calc(100%-120px)] truncate">Chapter List Page</h3>
       </div>
     </div>
   </div>
 
   <div class="bg-[#222222]">
     <div class="border-b-[1px] border-b-[#A2A2A2]/20">
-      <table id="comic-table">
+      <table id="chapter-table">
         <thead>
           <tr>
             <th>
               <span class="flex items-center">
-                Title<svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                Name<svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
                 </svg>
               </span>
@@ -26,7 +26,7 @@
 
             <th>
               <span class="flex items-center">
-                Image<svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                Comic<svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
                 </svg>
               </span>
@@ -40,14 +40,14 @@
             </th>
             <th>
               <span class="flex items-center">
-                Type<svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                Total Images<svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
                 </svg>
               </span>
             </th>
             <th>
               <span class="flex items-center">
-                Status<svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                Title<svg class="w-4 h-4 ms-1" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m8 15 4 4 4-4m0-6-4-4-4 4" />
                 </svg>
               </span>
@@ -58,19 +58,17 @@
           </tr>
         </thead>
         <tbody>
-          {% for comic in comics %}
+          {% for chapter in chapters %}
             <tr>
               <td class="font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                <a href="{{ comic.get_absolute_url }}">{{ comic.title }}</a>
+                <a href="{{ chapter.get_absolute_url }}">{{ chapter.name }}</a>
               </td>
               <td>
-                {% for img in comic.get_images|slice:'0:1' %}
-                  <a href="{{ comic.get_absolute_url }}"><img class="w-12 h-12 rounded-full" src="{{ img.image.url }}" alt="poster" /></a>
-                {% endfor %}
+                <a href="{{ chapter.comic.get_absolute_url }}">{{ chapter.comic.title }}</a>
               </td>
-              <td>{{ comic.updated_at }}</td>
-              <td>{{ comic.category.name }}</td>
-              <td>{{ comic.get_status_display }}</td>
+              <td>{{ chapter.updated_at }}</td>
+              <td>{{ chapter.numimages }}</td>
+              <td>{{ chapter.title }}</td>
               <td class='flex justify-between items-center'>
                 <button>Edit</button>
                 <button>Delete</button>

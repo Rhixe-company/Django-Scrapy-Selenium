@@ -328,7 +328,7 @@ class Chapter(models.Model):
             str: URL for chapter detail.
 
         """
-        return reverse("chapters:detail", kwargs={"chapter_id": self.chapter_id})
+        return reverse("libary:chapter_detail", kwargs={"slug": self.slug})
 
     @property
     def has_images(self):

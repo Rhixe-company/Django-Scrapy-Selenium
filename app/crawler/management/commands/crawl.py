@@ -1,57 +1,32 @@
 import logging
 
-from api.libary.models import Chapter
-from api.libary.models import ChapterImage
-from api.libary.models import Comic
-from api.libary.models import ComicImage
 from django.core.management.base import BaseCommand
-from scrapy.crawler import CrawlerProcess
+from scrapy.crawler import CrawlerRunner
 from scrapy.utils.log import configure_logging
 from scrapy.utils.project import get_project_settings
+from twisted.internet import defer
+from twisted.internet import reactor
 
-from crawler.spiders.run import RunSpider
+from crawler.spiders.tests import TestsSpider
 
 logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = "A  Custom command to  run RunSpider"
+    help = "A  Custom command to  tests TestsSpider"
 
     def handle(self, *args, **options):
         crawlsettings = get_project_settings()
         configure_logging(crawlsettings)
+        logger.info("starting spider")
+        runner = CrawlerRunner(settings=crawlsettings)
 
-        process = CrawlerProcess(settings=crawlsettings)
-        process.crawl(RunSpider)
-        process.start()
-        comics = (
-            Comic.objects.prefetch_related(
-                "comicitems",
-                "comicchapters",
-                "genres",
-                "followers",
-            )
-            .select_related("author", "category", "artist", "user")
-            .all()
-        )
+        @defer.inlineCallbacks
+        def run():
+            yield runner.crawl(TestsSpider)
 
-        comic_images = ComicImage.objects.select_related("comic").all()
-        chapters = (
-            Chapter.objects.prefetch_related("chapteritems")
-            .select_related("comic")
-            .all()
-        )
+            reactor.stop()  # type: ignore  # noqa: PGH003
 
-        chapter_images = ChapterImage.objects.select_related("comic", "chapter").all()
-        context = {
-            "Comics": comics.values(),
-            "ComicsImage": comic_images.values(),
-            "Chapters": chapters.values(),
-            "ChaptersImage": chapter_images.values(),
-            "Comics_Count": comics.count(),
-            "ComicsImage_Count": comic_images.count(),
-            "Chapters_Count": chapters.count(),
-            "ChaptersImage_Count": chapter_images.count(),
-        }
-
-        logger.info(context)
+        run()
+        reactor.run()  # type: ignore  # noqa: PGH003
+        logger.info("ending spider")

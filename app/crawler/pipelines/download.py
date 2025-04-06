@@ -1,19 +1,27 @@
-from pathlib import PurePosixPath
+import hashlib
+import mimetypes
+from pathlib import Path
+from typing import cast
 
 from itemadapter import ItemAdapter
 from scrapy.exceptions import DropItem
 from scrapy.http.request import NO_CALLBACK
 from scrapy.http.request import Request
-from scrapy.pipelines.images import ImagesPipeline
-from scrapy.utils.httpobj import urlparse_cached
+from scrapy.pipelines.files import FilesPipeline
+from scrapy.utils.python import to_bytes
 
 
-class MyImagesPipeline(ImagesPipeline):
-    def get_media_requests(self, item, info):
+class MyFilesPipeline(object):  # noqa: UP004
+    # Overridable Interface
+    def get_media_requests(
+        self,
+        item,
+        info,
+    ):
         adapter = ItemAdapter(item)
-        if adapter.get("image_urls"):
+        if adapter.get("file_urls"):
             if adapter.get("slug"):
-                urls = ItemAdapter(item).get(self.images_urls_field, [])
+                urls = ItemAdapter(item).get(self.file_urls_field, [])  # type: ignore  # noqa: PGH003
                 return [
                     Request(
                         u,
@@ -25,7 +33,7 @@ class MyImagesPipeline(ImagesPipeline):
                     for u in urls
                 ]
             if adapter.get("comicslug") and adapter.get("chapterslug"):
-                urls = ItemAdapter(item).get(self.images_urls_field, [])
+                urls = ItemAdapter(item).get(self.file_urls_field, [])  # type: ignore  # noqa: PGH003
                 return [
                     Request(
                         u,
@@ -41,33 +49,45 @@ class MyImagesPipeline(ImagesPipeline):
         msg = f"Missing field in get_media_requests: {item!r}"
         raise DropItem(msg)
 
-    def item_completed(self, results, item, info):
-        images = [x for ok, x in results if ok]
-        if not images:
-            msg = "Item contains no images"
-            raise DropItem(msg)
+    def file_path(
+        self,
+        request,
+        response,
+        info,
+        *,
+        item,
+    ):
         adapter = ItemAdapter(item)
-        adapter["images"] = images
-        return item
-
-    def file_path(self, request, response=None, info=None, *, item=None):
-        adapter = ItemAdapter(item)
-        if adapter.get("image_urls"):
-            if adapter.get("image_urls") and adapter.get("slug"):
-                return "{}/{}".format(
-                    request.meta["comicfolderslug"],
-                    PurePosixPath(urlparse_cached(request).path).name,
-                )
+        if adapter.get("file_urls"):
+            if adapter.get("file_urls") and adapter.get("slug"):
+                media_guid = hashlib.sha1(to_bytes(request.url)).hexdigest()  # nosec  # noqa: S324
+                media_ext = Path(request.url).suffix
+                # Handles empty and wild extensions by trying to guess the
+                # mime type then extension or default to empty string otherwise
+                if media_ext not in mimetypes.types_map:
+                    media_ext = ""
+                    media_type = mimetypes.guess_type(request.url)[0]
+                    if media_type:
+                        media_ext = cast(str, mimetypes.guess_extension(media_type))  # noqa: TC006
+                return f"{request.meta['comicfolderslug']}/{media_guid}{media_ext}"
             if (
-                adapter.get("image_urls")
+                adapter.get("file_urls")
                 and adapter.get("comicslug")
                 and adapter.get("chapterslug")
             ):
-                return "{}/{}/{}".format(
-                    request.meta["comicfolderslug"],
-                    request.meta["chapterfolderslug"],
-                    PurePosixPath(urlparse_cached(request).path).name,
-                )
+                media_guid = hashlib.sha1(to_bytes(request.url)).hexdigest()  # nosec  # noqa: S324
+                media_ext = Path(request.url).suffix
+                # Handles empty and wild extensions by trying to guess the
+                # mime type then extension or default to empty string otherwise
+                if media_ext not in mimetypes.types_map:
+                    media_ext = ""
+                    media_type = mimetypes.guess_type(request.url)[0]
+                    if media_type:
+                        media_ext = cast(str, mimetypes.guess_extension(media_type))  # noqa: TC006
+                return f"{request.meta['comicfolderslug']}/{request.meta['chapterfolderslug']}/{media_guid}{media_ext}"  # noqa: E501
             return None
         msg = f"Missing field in file_path: {item!r}"
         raise DropItem(msg)
+
+    def process_item(self, item, spider):
+        return item

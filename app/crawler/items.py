@@ -3,8 +3,11 @@
 # See documentation in:
 # https://docs.scrapy.org/en/latest/topics/items.html
 
+import os
+
 from dateparser import parse
 from django.utils.text import slugify
+from itemloaders.processors import Join
 from itemloaders.processors import MapCompose
 from itemloaders.processors import TakeFirst
 from scrapy.item import Field
@@ -12,6 +15,10 @@ from scrapy.item import Item
 from w3lib.html import remove_comments
 from w3lib.html import remove_tags
 from w3lib.html import strip_html5_whitespace
+
+
+def remove_extension(value):
+    return os.path.splitext(value)[0]  # noqa: PTH122
 
 
 def gen_slug(value):
@@ -71,7 +78,7 @@ class ComicItem(Item):
     )
     description = Field(
         input_processor=MapCompose(get_des, strip_html, comments_html, get_html),
-        output_processor=TakeFirst(),
+        output_processor=Join(),
     )
     slug = Field(input_processor=MapCompose(gen_slug), output_processor=TakeFirst())
 
@@ -111,8 +118,11 @@ class ComicItem(Item):
     spider = Field(output_processor=TakeFirst())
     numchapters = Field(output_processor=TakeFirst())
     numimages = Field(output_processor=TakeFirst())
-    image_urls = Field()
-    images = Field()
+    file_urls = Field()
+    files = Field()
+    file_name = Field(
+        input_processor=MapCompose(remove_extension), output_processor=TakeFirst()
+    )
 
 
 class ChapterItem(Item):
