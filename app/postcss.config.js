@@ -2,7 +2,12 @@
 
 module.exports = {
   plugins: {
-    "@tailwindcss/postcss": {},
+    tailwindcss: {},
+    autoprefixer: {},
+    "postcss-import": {},
+    "postcss-simple-vars": {},
+    "postcss-nested": {},
+    "postcss-preset-env": {},
     cssnano:
       process.env.NPM_ENV === "production" ? { preset: "default" } : false,
   },

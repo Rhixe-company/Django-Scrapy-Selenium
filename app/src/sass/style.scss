@@ -1,5 +1,5 @@
-@import "./app2.scss";
-
+@use "sass:meta";
+@include meta.load-css ("./util.scss");
 
 * {
   scrollbar-color: auto;
@@ -6912,6 +6912,3 @@ html {
 .myblack {
   background-image: url("../../api/static/images/black.webp");
 }
-
-@import "./carousel.scss";
-@import "./rating.scss";

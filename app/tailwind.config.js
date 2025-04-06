@@ -3,6 +3,7 @@ module.exports = {
   content: [
     "./api/templates/**/**/**/*.html",
     "./src/**/**/**/*.{js,ts,jsx,tsx,mdx,scss}",
+    "./node_modules/flowbite/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: "class",
   theme: {
@@ -60,13 +61,12 @@ module.exports = {
   },
   variants: {},
   plugins: [
-    // require("tailwindcss/plugin")({
-    //   charts: true,
-    //   forms: true,
-    //   tooltips: true,
-    //   datatables: true,
-    //   wysiwyg: true,
-    // }),
-    require("flowbite-typography"),
+    require("@tailwindcss/forms"),
+    require("@tailwindcss/typography"),
+    require("flowbite/plugin")({
+      charts: true,
+      datatables: true,
+      wysiwyg: true,
+    }),
   ],
 };
