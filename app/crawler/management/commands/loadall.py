@@ -1,0 +1,216 @@
+import json
+import logging
+
+from api.libary.models import Artist
+from api.libary.models import Author
+from api.libary.models import Category
+from api.libary.models import Chapter
+from api.libary.models import ChapterImage
+from api.libary.models import Comic
+from api.libary.models import ComicImage
+from api.libary.models import Genre
+from django.conf import settings
+from django.contrib.auth import get_user_model
+from django.core.management.base import BaseCommand
+from django.db.models import Q
+from django.db.utils import IntegrityError
+
+logger = logging.getLogger(__name__)
+
+
+class Command(BaseCommand):
+    help = "Generates comics for apps"
+
+    def handle(self, *args, **options):  # noqa: C901, PLR0915
+        def save_comics(comics_data):
+            comics = Comic.objects.all()
+            comic_images = ComicImage.objects.select_related("comic").all()
+            logger.info(
+                {
+                    "Start Comics_Count": comics.count(),
+                    "Start ComicsImage_Count": comic_images.count(),
+                },
+            )
+            usermodel = get_user_model()
+            user = usermodel.objects.filter(
+                Q(email__icontains="admin@rhixe.company")
+                | Q(username__icontains="adminbot"),
+            ).first()
+            if not user:
+                user = usermodel.objects.create_superuser(  # type: ignore  # noqa: PGH003
+                    email="admin@rhixe.company",
+                    username="adminbot",
+                    password="R4I7gcJHX",  # noqa: S106
+                )
+            for item in comics_data:
+                images = item.get("images")
+                title = item["title"]
+                slug = item["slug"]
+                description = item.get("description")
+                rating = item["rating"]
+                status = item["status"]
+                link = item["url"]
+                spider = item["spider"]
+                updated_at = item["updated_at"]
+                numchapters = item["numchapters"]
+                numimages = len(images)
+                serialization = item["serialization"]
+                category = item.get("category")
+                author = item.get("author")
+                artist = item.get("artist")
+                genres = item.get("genres")
+                if images:
+                    newauthor = Author.objects.update_or_create(name=author)[0]
+                    newartist = Artist.objects.update_or_create(name=artist)[0]
+                    newcategory = Category.objects.update_or_create(name=category)[0]
+                    comic = Comic.objects.get_search(  # type: ignore  # noqa: PGH003
+                        title,
+                        slug,
+                    )
+                    if comic.exists():
+                        msg = f"{title} - {slug} Exists"
+                        logger.error(msg)
+                    else:
+                        try:
+                            newcomic = Comic.objects.update_or_create(
+                                title=title,
+                                slug=slug,
+                                description=description,
+                                rating=rating,
+                                status=status,
+                                link=link,
+                                spider=spider,
+                                updated_at=updated_at,
+                                numchapters=numchapters,
+                                numimages=numimages,
+                                serialization=serialization,
+                                category=newcategory,
+                                author=newauthor,
+                                artist=newartist,
+                            )[0]
+                            msg = f"created {newcomic.title}"
+                            logger.info(
+                                msg,
+                            )
+                            if genres:
+                                for genre in genres:
+                                    newgenre = Genre.objects.update_or_create(
+                                        name=genre,
+                                    )[0]
+                                    newcomic.genres.add(newgenre)
+                                    newcomic.save()
+                            for image in images:
+                                ComicImage.objects.update_or_create(
+                                    link=image["url"],
+                                    image=image["path"],
+                                    status=image["status"],
+                                    comic=newcomic,
+                                )[0]
+                        except IntegrityError as e:
+                            msg = f"{slug} - {title} Exists , Error: {e}"
+                            logger.exception(msg)  # noqa: B904, RUF100
+            logger.info(
+                {
+                    "Comics": comics[0:2],
+                    "ComicsImage": comic_images[0:2],
+                    "End Comics_Count": comics.count(),
+                    "End ComicsImage_Count": comic_images.count(),
+                },
+            )
+
+        def save_chapters(chapters_data):
+            chapters = Chapter.objects.all()
+            chapter_images = ChapterImage.objects.select_related(
+                "comic",
+                "chapter",
+            ).all()
+            logger.info(
+                {
+                    "Start Chapters_Count": chapters.count(),
+                    "Start ChaptersImage_Count": chapter_images.count(),
+                },
+            )
+            for item in chapters_data:
+                images = item.get("images")
+                comicslug = item["comicslug"]
+                comictitle = item["comictitle"]
+                name = item["chaptername"]
+                title = item.get("chaptertitle", "")
+                slug = item["chapterslug"]
+                link = item["url"]
+                spider = item["spider"]
+                updated_at = item.get("updated_at")
+                numimages = len(images)
+                comic = Comic.objects.get_search(  # type: ignore  # noqa: PGH003
+                    comictitle,
+                    comicslug,
+                )
+                if (
+                    comic.exists()  # type: ignore  # noqa: PGH003
+                ):
+                    if images:
+                        dbcomic = comic.first()
+                        chapter = Chapter.objects.get_search(  # type: ignore  # noqa: PGH003
+                            name,
+                            slug,
+                            title,
+                            comictitle,
+                        )
+                        if chapter.exists():
+                            msg = f"{chapter.first().chapter_id} - {chapter.first().slug} - {chapter.first().comic.title} Exists"  # type: ignore  # noqa: E501, PGH003
+                            logger.error(
+                                msg,
+                            )
+                        else:
+                            try:
+                                newchapter = Chapter.objects.update_or_create(
+                                    title=title,
+                                    slug=slug,
+                                    name=name,
+                                    link=link,
+                                    spider=spider,
+                                    updated_at=updated_at,
+                                    numimages=numimages,
+                                    comic=dbcomic,
+                                )[0]
+                                msg2 = f"created {newchapter}"
+                                logger.info(
+                                    msg2,
+                                )
+                                for image in images:
+                                    ChapterImage.objects.update_or_create(
+                                        link=image["url"],
+                                        image=image["path"],
+                                        status=image["status"],
+                                        chapter=newchapter,
+                                        comic=dbcomic,
+                                    )[0]
+                            except IntegrityError as e:
+                                msg = f"{slug} - {name} Exists, Error: {e}"
+                                logger.exception(msg)  # noqa: B904, RUF100
+                else:
+                    msg = f"{comictitle} Does Not Exists"
+                    logger.error(
+                        msg,
+                    )
+            logger.info(
+                {
+                    "Chapters": chapters[0:2],
+                    "ChaptersImage": chapter_images[0:2],
+                    "End Chapters_Count": chapters.count(),
+                    "End ChaptersImage_Count": chapter_images.count(),
+                },
+            )
+
+        def load():
+            base = settings.BASE_DIR
+            comics_file = str(base / "comics.json")
+            with open(comics_file, encoding="utf-8") as comic_file:  # noqa: PTH123
+                comics_data = json.load(comic_file)
+                save_comics(comics_data=comics_data)
+            chapters_file = str(base / "chapters.json")
+            with open(chapters_file, encoding="utf-8") as chapter_file:  # noqa: PTH123
+                chapters_data = json.load(chapter_file)
+                save_chapters(chapters_data=chapters_data)
+
+        load()

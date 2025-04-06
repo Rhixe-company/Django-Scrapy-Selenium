@@ -1,0 +1,62 @@
+{% load static i18n %}
+{% load render_bundle from webpack_loader %}
+
+<!DOCTYPE html>
+{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE }}" class="__variable_5d1e58 dark">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Alexander E Iseghohi" />
+    <title>
+      {% block title %}
+        {% translate "Rhixescans" %}
+      {% endblock title %}
+    </title>
+    <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
+    {% block meta %}
+      <meta name="description" content="Read Comics Online!!!" />
+      <meta property="og:title" content="Rhixe Scans" />
+      <meta property="og:description" content="Read Comics Online!!!" />
+      <meta property="og:url" content="{% url 'index' %}" />
+      <meta property="og:site_name" content="Rhixe Scans" />
+      <meta property="og:locale" content="en_US" />
+      <meta property="og:type" content="website" />
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content="Rhixe Scans" />
+      <meta name="twitter:description" content="Read Comics" />
+    {% endblock meta %}
+    {% block header %}
+    {% endblock header %}
+    {% block css %}
+      <!-- Your stuff: Third-party CSS libraries go here -->
+      <!-- This file stores project-specific CSS -->
+      {% render_bundle 'project' 'css' %}
+      {% comment %} <link href="{% static 'select2/dist/css/select2.min.css' %}" rel="stylesheet" /> {% endcomment %}
+    {% endblock css %}
+    <!-- Le javascript
+    ================================================== -->
+    {# Placed at the top of the document so pages load faster with defer #}
+    {% block javascript %}
+      <!-- Vendor dependencies bundled as one file -->
+      {% render_bundle 'vendors' 'js' attrs='defer' %}
+      <!-- place project specific Javascript in this file -->
+      {% render_bundle 'project' 'js' attrs='defer' %}
+      {% comment %} <script src="{% static 'select2/dist/js/select2.min.js' %}"></script> {% endcomment %}
+    {% endblock javascript %}
+  </head>
+  <body class="min-h-screen antialiased bg-secondarybackground __variable_5d1e58 clickup-chrome-ext_installed"
+        style="margin: 0 !important"
+        cz-shortcut-listen="true"
+        data-new-gr-c-s-check-loaded="14.1226.0"
+        data-gr-ext-installed="">
+    {% block body %}
+      {% include "partials/base/header.html" %}
+      {% block main %}
+        {% block content %}
+        {% endblock content %}
+      {% endblock main %}
+      {% include "partials/base/footer.html" %}
+    {% endblock body %}
+  </body>
+</html>
