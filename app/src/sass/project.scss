@@ -31,3 +31,6 @@
 @include meta.load-css ("./carousel.scss");
 @include meta.load-css ("./scroll.scss");
 @include meta.load-css ("./rating.scss");
+@include meta.load-css ("./data-table/style.css");
+@include meta.load-css ("./data-table/editing.css");
+@include meta.load-css ("./data-table/column_filter.css");

@@ -1,2 +1,2 @@
 import "./sass/project.scss";
-// import "./theme";
+import "./table";

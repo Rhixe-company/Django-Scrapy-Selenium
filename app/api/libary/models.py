@@ -208,7 +208,7 @@ class Comic(models.Model):
             str: URL for comic detail.
 
         """
-        return reverse("comics:detail", kwargs={"comic_id": self.comic_id})
+        return reverse("libary:comic_detail", kwargs={"slug": self.slug})
 
     @property
     def has_chapters(self):

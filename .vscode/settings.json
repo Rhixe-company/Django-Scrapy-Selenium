@@ -107,7 +107,8 @@
     "linting.mypyPath": "myvenv/Scripts/mypy"
   },
   "[django-html]": {
-    "editor.defaultFormatter": "monosans.djlint"
+    "editor.defaultFormatter": "junstyle.vscode-django-support"
+    // "editor.defaultFormatter": "monosans.djlint"
   },
   "[properties]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"

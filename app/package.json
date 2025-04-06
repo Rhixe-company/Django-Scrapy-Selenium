@@ -11,7 +11,8 @@
     "htmx.org": "^1.9.12",
     "hyperscript.org": "^0.9.14",
     "jquery": "^3.7.1",
-    "select2": "~4.0"
+    "select2": "~4.0",
+    "simple-datatables": "^10.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.26.10",

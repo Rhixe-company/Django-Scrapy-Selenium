@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
+const plugin = require('tailwindcss/plugin')
 module.exports = {
   content: [
     "./api/templates/**/**/**/*.html",
@@ -62,11 +63,19 @@ module.exports = {
   variants: {},
   plugins: [
     require("@tailwindcss/forms"),
+    require("flowbite"),
     require("@tailwindcss/typography"),
-    require("flowbite/plugin")({
-      charts: true,
-      datatables: true,
-      wysiwyg: true,
+    plugin(function({ addUtilities, addComponents, e, config }) {
+      // Add your custom styles here
+
     }),
+
+//     require('./plugin')({
+//       charts: false,
+//       forms: true,
+//       tooltips: true,
+//       datatables: true,
+//       wysiwyg: false,
+//   }),
   ],
 };

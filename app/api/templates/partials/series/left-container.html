@@ -1,5 +1,238 @@
 {% load static i18n %}
 
-<div>
-  <h3>Series</h3>
+<div class="w-full min-[768px]:w-[100%] bg-[#222222] min-[880px]:w-[98%] min-[912px]:w-[98%] lg:w-[100%] mb-2">
+  <div class="relative flex justify-between align-baseline font-500 bg-[#222222] border-b-[1px] border-[#312f40] px-[15px] py-[8px] p-2 mt-5 sm:mt-0">
+    <h3 class="text-[15px] text-white font-semibold leading-5 m-0">Series list</h3>
+  </div>
+  <div>
+    <div class="grid grid-cols-2 sm:grid-cols-5 bg-[#222222] sm:gap-[6px] gap-[3px] px-2.5 sm:px-3 pt-[12px]">
+      <div class="bg-[#222222] sm:m-[2px] m-[4px]">
+        <button class="inline-flex items-center whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2 w-full hover:cursor-pointer justify-center text-[#ccc] text-[12px] font-normal pl-[20px] align-middle hover:bg-white hover:text-black h-[26px] border-solid rounded-[2px] bg-[#333]">
+          <span class="mt-0.5 capitalize">
+            <!--  -->Genre<!--  -->
+            <!--  -->
+            All
+          </span><svg width="14" height="14" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="ml-0">
+            <path d="M4.18179 6.18181C4.35753 6.00608 4.64245 6.00608 4.81819 6.18181L7.49999 8.86362L10.1818 6.18181C10.3575 6.00608 10.6424 6.00608 10.8182 6.18181C10.9939 6.35755 10.9939 6.64247 10.8182 6.81821L7.81819 9.81821C7.73379 9.9026 7.61934 9.95001 7.49999 9.95001C7.38064 9.95001 7.26618 9.9026 7.18179 9.81821L4.18179 6.81821C4.00605 6.64247 4.00605 6.35755 4.18179 6.18181Z" fill="none" stroke="currentColor" stroke-width="1"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="bg-[#222222] sm:m-[2px] m-[4px]">
+        <button class="inline-flex items-center whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2 w-full hover:cursor-pointer justify-center text-[#ccc] text-[12px] font-normal pl-[20px] align-middle hover:bg-white hover:text-black h-[26px] border-solid rounded-[2px] bg-[#333]">
+          <span class="mt-0.5 capitalize">
+            <!--  -->Status<!--  -->
+            <!--  -->All
+          </span><svg width="14" height="14" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="ml-0">
+            <path d="M4.18179 6.18181C4.35753 6.00608 4.64245 6.00608 4.81819 6.18181L7.49999 8.86362L10.1818 6.18181C10.3575 6.00608 10.6424 6.00608 10.8182 6.18181C10.9939 6.35755 10.9939 6.64247 10.8182 6.81821L7.81819 9.81821C7.73379 9.9026 7.61934 9.95001 7.49999 9.95001C7.38064 9.95001 7.26618 9.9026 7.18179 9.81821L4.18179 6.81821C4.00605 6.64247 4.00605 6.35755 4.18179 6.18181Z" fill="none" stroke="currentColor" stroke-width="1"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="bg-[#222222] sm:m-[2px] m-[4px]">
+        <button class="inline-flex items-center whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2 w-full hover:cursor-pointer justify-center text-[#ccc] text-[12px] font-normal pl-[20px] align-middle hover:bg-white hover:text-black h-[26px] border-solid rounded-[2px] bg-[#333]">
+          <span class="mt-0.5 capitalize">
+            <!--  -->Type<!--  -->
+            <!--  -->All
+          </span><svg width="14" height="14" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="ml-0">
+            <path d="M4.18179 6.18181C4.35753 6.00608 4.64245 6.00608 4.81819 6.18181L7.49999 8.86362L10.1818 6.18181C10.3575 6.00608 10.6424 6.00608 10.8182 6.18181C10.9939 6.35755 10.9939 6.64247 10.8182 6.81821L7.81819 9.81821C7.73379 9.9026 7.61934 9.95001 7.49999 9.95001C7.38064 9.95001 7.26618 9.9026 7.18179 9.81821L4.18179 6.81821C4.00605 6.64247 4.00605 6.35755 4.18179 6.18181Z" fill="none" stroke="currentColor" stroke-width="1"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="bg-[#222222] sm:m-[2px] m-[4px]">
+        <button class="inline-flex items-center whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2 w-full hover:cursor-pointer justify-center text-[#ccc] text-[12px] font-normal pl-[20px] align-middle hover:bg-white hover:text-black h-[26px] border-solid rounded-[2px] bg-[#333]">
+          <span class="mt-0.5 capitalize">
+            <!--  -->Order by<!--  -->
+            Last Up...
+          </span><svg width="14" height="14" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="ml-0">
+            <path d="M4.18179 6.18181C4.35753 6.00608 4.64245 6.00608 4.81819 6.18181L7.49999 8.86362L10.1818 6.18181C10.3575 6.00608 10.6424 6.00608 10.8182 6.18181C10.9939 6.35755 10.9939 6.64247 10.8182 6.81821L7.81819 9.81821C7.73379 9.9026 7.61934 9.95001 7.49999 9.95001C7.38064 9.95001 7.26618 9.9026 7.18179 9.81821L4.18179 6.81821C4.00605 6.64247 4.00605 6.35755 4.18179 6.18181Z" fill="none" stroke="currentColor" stroke-width="1"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="bg-[#222222] mt-[2px] ml-[2px] mb-[2px] mr-[3px] hidden sm:block">
+        <button class="inline-flex items-center whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2 w-full hover:cursor-pointer justify-center text-white text-[12px] font-normal border-none rounded-none h-[26px] bg-themecolor hover:bg-[#333] hover:text-white" type="submit" form="hook-form">
+          <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-0.5">
+            <path d="M10 6.5C10 8.433 8.433 10 6.5 10C4.567 10 3 8.433 3 6.5C3 4.567 4.567 3 6.5 3C8.433 3 10 4.567 10 6.5ZM9.30884 10.0159C8.53901 10.6318 7.56251 11 6.5 11C4.01472 11 2 8.98528 2 6.5C2 4.01472 4.01472 2 6.5 2C8.98528 2 11 4.01472 11 6.5C11 7.56251 10.6318 8.53901 10.0159 9.30884L12.8536 12.1464C13.0488 12.3417 13.0488 12.6583 12.8536 12.8536C12.6583 13.0488 12.3417 13.0488 12.1464 12.8536L9.30884 10.0159Z" fill="none" fill-rule="evenodd" clip-rule="evenodd" stroke="currentColor" stroke-width="1"></path>
+          </svg>
+          <span class="pt-0.5">Search</span>
+        </button>
+      </div>
+    </div>
+    <div class="grid grid-cols-1 bg-[#222222] gap-1 p-4 pb-1 pt-2 sm:hidden">
+      <button class="inline-flex items-center whitespace-nowrap ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 px-4 py-2 w-full hover:cursor-pointer justify-center text-white text-[12px] font-normal h-[26px] border-solid rounded-[2px] bg-themecolor hover:bg-[#333] hover:text-white" type="submit" form="hook-form">
+        <svg width="15" height="15" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg" class="mr-0.5">
+          <path d="M10 6.5C10 8.433 8.433 10 6.5 10C4.567 10 3 8.433 3 6.5C3 4.567 4.567 3 6.5 3C8.433 3 10 4.567 10 6.5ZM9.30884 10.0159C8.53901 10.6318 7.56251 11 6.5 11C4.01472 11 2 8.98528 2 6.5C2 4.01472 4.01472 2 6.5 2C8.98528 2 11 4.01472 11 6.5C11 7.56251 10.6318 8.53901 10.0159 9.30884L12.8536 12.1464C13.0488 12.3417 13.0488 12.6583 12.8536 12.8536C12.6583 13.0488 12.3417 13.0488 12.1464 12.8536L9.30884 10.0159Z" fill="none" fill-rule="evenodd" clip-rule="evenodd" stroke="currentColor" stroke-width="1"></path>
+        </svg>
+        <span class="pt-0.5">Search</span>
+      </button>
+    </div>
+    <div class="bg-[#222222] border-[#222222] sm:pr-3 sm:pl-3 overflow-hidden">
+      <div class="bg-[#333] sm:max-h-[240px] overflow-hidden overflow-y-auto w-[68%] border-[#333333] mt-[-30px] sm:mt-1 absolute rounded-none z-10 max-[600px]:w-[100%] max-[768px]:w-[96.5%] max-[860px]:w-[93%] max-[882px]:w-[63%] max-[912px]:w-[66%]">
+        <form id="hook-form" class=""></form>
+      </div>
+    </div>
+  </div>
+  <div class="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-3 p-4">
+    <a href="https://asuracomic.net/series/absolute-necromancer-faa4a07a">
+      <div class="w-full block sm:block hover:cursor-pointer group hover:text-themecolor">
+        <div>
+          <div class="flex h-[250px] md:h-[200px] overflow-hidden relative hover:opacity-60">
+            <span class="status bg-blue-700">Ongoing</span><img alt="" loading="lazy" width="0" height="0" decoding="async" data-nimg="1" class="rounded-md" style="
+              color: transparent;
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              object-position: top;
+            " src="{% static 'images/files/01JNQC2ZQ5BFJS67YKY1VDA0K5-thumb-small.webp' %}" />
+            <div class="absolute bottom-[0px] flex justify-center left-[5px] mb-[5px] rounded-[3px] text-white bg-[#a12e24]">
+              <span class="text-[10px] font-bold py-[2px] px-[7px]">MANHWA</span>
+            </div>
+          </div>
+          <div class="block w-[100%] h-auto items-center" style="
+            font-size: 13.3px;
+            margin: 8px 0;
+            margin-bottom: 5px;
+            font-weight: 500;
+            line-height: 19px;
+            text-align: left;
+            overflow: hidden;
+          ">
+            <span class="block text-[13.3px] font-bold">Absolute Necromancer</span><span class="text-[13px] text-[#999]">
+              Chapter
+              <!--  -->71
+            </span><span class="flex text-[12px] text-[#999]">
+              <div class="rr--group rr--dir-x rr--space-sm" style="
+                max-width: 70px;
+                --rr--fill-on-color: #ffc700;
+                --rr--fill-off-color: #686868;
+              " role="img" aria-label="Rated 4.75 on 5">
+                <div class="rr--box rr--on">
+                  <svg aria-hidden="true" class="rr--svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.99 24.1" preserveAspectRatio="xMidYMid meet">
+                    <g shape-rendering="geometricPrecision" transform="translate(-87.55 -48.8)">
+                      <path d="M112.46,57.88c-.23-.72-.88-1.22-1.63-1.27l-6.63-.46-2.45-6.19c-.27-.7-.95-1.16-1.7-1.16h0c-.75,0-1.42,.46-1.7,1.16l-2.5,6.23-6.58,.42c-.75,.05-1.4,.55-1.63,1.27-.24,.73,0,1.53,.58,2.02l5.07,4.28-1.51,5.92c-.21,.82,.1,1.69,.78,2.19,.66,.48,1.55,.5,2.24,.07l5.23-3.31h.02l5.63,3.56c.29,.19,.63,.29,.97,.29,1.02,0,1.83-.84,1.83-1.86,0-.16-.02-.31-.06-.47l-1.6-6.48,5.04-4.2c.59-.49,.82-1.29,.58-2.02Z"></path>
+                    </g>
+                  </svg>
+                </div>
+                <div class="rr--box rr--on">
+                  <svg aria-hidden="true" class="rr--svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.99 24.1" preserveAspectRatio="xMidYMid meet">
+                    <g shape-rendering="geometricPrecision" transform="translate(-87.55 -48.8)">
+                      <path d="M112.46,57.88c-.23-.72-.88-1.22-1.63-1.27l-6.63-.46-2.45-6.19c-.27-.7-.95-1.16-1.7-1.16h0c-.75,0-1.42,.46-1.7,1.16l-2.5,6.23-6.58,.42c-.75,.05-1.4,.55-1.63,1.27-.24,.73,0,1.53,.58,2.02l5.07,4.28-1.51,5.92c-.21,.82,.1,1.69,.78,2.19,.66,.48,1.55,.5,2.24,.07l5.23-3.31h.02l5.63,3.56c.29,.19,.63,.29,.97,.29,1.02,0,1.83-.84,1.83-1.86,0-.16-.02-.31-.06-.47l-1.6-6.48,5.04-4.2c.59-.49,.82-1.29,.58-2.02Z"></path>
+                    </g>
+                  </svg>
+                </div>
+                <div class="rr--box rr--on">
+                  <svg aria-hidden="true" class="rr--svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.99 24.1" preserveAspectRatio="xMidYMid meet">
+                    <g shape-rendering="geometricPrecision" transform="translate(-87.55 -48.8)">
+                      <path d="M112.46,57.88c-.23-.72-.88-1.22-1.63-1.27l-6.63-.46-2.45-6.19c-.27-.7-.95-1.16-1.7-1.16h0c-.75,0-1.42,.46-1.7,1.16l-2.5,6.23-6.58,.42c-.75,.05-1.4,.55-1.63,1.27-.24,.73,0,1.53,.58,2.02l5.07,4.28-1.51,5.92c-.21,.82,.1,1.69,.78,2.19,.66,.48,1.55,.5,2.24,.07l5.23-3.31h.02l5.63,3.56c.29,.19,.63,.29,.97,.29,1.02,0,1.83-.84,1.83-1.86,0-.16-.02-.31-.06-.47l-1.6-6.48,5.04-4.2c.59-.49,.82-1.29,.58-2.02Z"></path>
+                    </g>
+                  </svg>
+                </div>
+                <div class="rr--box rr--on">
+                  <svg aria-hidden="true" class="rr--svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.99 24.1" preserveAspectRatio="xMidYMid meet">
+                    <g shape-rendering="geometricPrecision" transform="translate(-87.55 -48.8)">
+                      <path d="M112.46,57.88c-.23-.72-.88-1.22-1.63-1.27l-6.63-.46-2.45-6.19c-.27-.7-.95-1.16-1.7-1.16h0c-.75,0-1.42,.46-1.7,1.16l-2.5,6.23-6.58,.42c-.75,.05-1.4,.55-1.63,1.27-.24,.73,0,1.53,.58,2.02l5.07,4.28-1.51,5.92c-.21,.82,.1,1.69,.78,2.19,.66,.48,1.55,.5,2.24,.07l5.23-3.31h.02l5.63,3.56c.29,.19,.63,.29,.97,.29,1.02,0,1.83-.84,1.83-1.86,0-.16-.02-.31-.06-.47l-1.6-6.48,5.04-4.2c.59-.49,.82-1.29,.58-2.02Z"></path>
+                    </g>
+                  </svg>
+                </div>
+                <div class="rr--box rr--on">
+                  <svg aria-hidden="true" class="rr--svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.99 24.1" preserveAspectRatio="xMidYMid meet">
+                    <g shape-rendering="geometricPrecision" transform="translate(-87.55 -48.8)">
+                      <path d="M112.46,57.88c-.23-.72-.88-1.22-1.63-1.27l-6.63-.46-2.45-6.19c-.27-.7-.95-1.16-1.7-1.16h0c-.75,0-1.42,.46-1.7,1.16l-2.5,6.23-6.58,.42c-.75,.05-1.4,.55-1.63,1.27-.24,.73,0,1.53,.58,2.02l5.07,4.28-1.51,5.92c-.21,.82,.1,1.69,.78,2.19,.66,.48,1.55,.5,2.24,.07l5.23-3.31h.02l5.63,3.56c.29,.19,.63,.29,.97,.29,1.02,0,1.83-.84,1.83-1.86,0-.16-.02-.31-.06-.47l-1.6-6.48,5.04-4.2c.59-.49,.82-1.29,.58-2.02Z"></path>
+                    </g>
+                  </svg>
+                </div>
+              </div>
+              <label class="ml-1">9.5</label>
+            </span>
+          </div>
+        </div>
+      </div>
+    </a>
+    <a href="https://asuracomic.net/series/logging-10000-years-into-the-future-8244a25a">
+      <div class="w-full block sm:block hover:cursor-pointer group hover:text-themecolor">
+        <div>
+          <div class="flex h-[250px] md:h-[200px] overflow-hidden relative hover:opacity-60">
+            <span class="status bg-blue-700">Ongoing</span><img alt="" loading="lazy" width="0" height="0" decoding="async" data-nimg="1" class="rounded-md" style="
+              color: transparent;
+              width: 100%;
+              height: 100%;
+              object-fit: cover;
+              object-position: top;
+            " src="{% static 'images/files/49ab5c70-thumb-small.webp' %}" />
+            <div class="absolute bottom-[0px] flex justify-center left-[5px] mb-[5px] rounded-[3px] text-white bg-[#009688]">
+              <span class="text-[10px] font-bold py-[2px] px-[7px]">MANHUA</span>
+            </div>
+          </div>
+          <div class="block w-[100%] h-auto items-center" style="
+            font-size: 13.3px;
+            margin: 8px 0;
+            margin-bottom: 5px;
+            font-weight: 500;
+            line-height: 19px;
+            text-align: left;
+            overflow: hidden;
+          ">
+            <span class="block text-[13.3px] font-bold">Logging 10,000 Years into the Future</span><span class="text-[13px] text-[#999]">
+              Chapter
+              <!--  -->198
+            </span><span class="flex text-[12px] text-[#999]">
+              <div class="rr--group rr--dir-x rr--space-sm" style="
+                max-width: 70px;
+                --rr--fill-on-color: #ffc700;
+                --rr--fill-off-color: #686868;
+              " role="img" aria-label="Rated 4.9 on 5">
+                <div class="rr--box rr--on">
+                  <svg aria-hidden="true" class="rr--svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.99 24.1" preserveAspectRatio="xMidYMid meet">
+                    <g shape-rendering="geometricPrecision" transform="translate(-87.55 -48.8)">
+                      <path d="M112.46,57.88c-.23-.72-.88-1.22-1.63-1.27l-6.63-.46-2.45-6.19c-.27-.7-.95-1.16-1.7-1.16h0c-.75,0-1.42,.46-1.7,1.16l-2.5,6.23-6.58,.42c-.75,.05-1.4,.55-1.63,1.27-.24,.73,0,1.53,.58,2.02l5.07,4.28-1.51,5.92c-.21,.82,.1,1.69,.78,2.19,.66,.48,1.55,.5,2.24,.07l5.23-3.31h.02l5.63,3.56c.29,.19,.63,.29,.97,.29,1.02,0,1.83-.84,1.83-1.86,0-.16-.02-.31-.06-.47l-1.6-6.48,5.04-4.2c.59-.49,.82-1.29,.58-2.02Z"></path>
+                    </g>
+                  </svg>
+                </div>
+                <div class="rr--box rr--on">
+                  <svg aria-hidden="true" class="rr--svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.99 24.1" preserveAspectRatio="xMidYMid meet">
+                    <g shape-rendering="geometricPrecision" transform="translate(-87.55 -48.8)">
+                      <path d="M112.46,57.88c-.23-.72-.88-1.22-1.63-1.27l-6.63-.46-2.45-6.19c-.27-.7-.95-1.16-1.7-1.16h0c-.75,0-1.42,.46-1.7,1.16l-2.5,6.23-6.58,.42c-.75,.05-1.4,.55-1.63,1.27-.24,.73,0,1.53,.58,2.02l5.07,4.28-1.51,5.92c-.21,.82,.1,1.69,.78,2.19,.66,.48,1.55,.5,2.24,.07l5.23-3.31h.02l5.63,3.56c.29,.19,.63,.29,.97,.29,1.02,0,1.83-.84,1.83-1.86,0-.16-.02-.31-.06-.47l-1.6-6.48,5.04-4.2c.59-.49,.82-1.29,.58-2.02Z"></path>
+                    </g>
+                  </svg>
+                </div>
+                <div class="rr--box rr--on">
+                  <svg aria-hidden="true" class="rr--svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.99 24.1" preserveAspectRatio="xMidYMid meet">
+                    <g shape-rendering="geometricPrecision" transform="translate(-87.55 -48.8)">
+                      <path d="M112.46,57.88c-.23-.72-.88-1.22-1.63-1.27l-6.63-.46-2.45-6.19c-.27-.7-.95-1.16-1.7-1.16h0c-.75,0-1.42,.46-1.7,1.16l-2.5,6.23-6.58,.42c-.75,.05-1.4,.55-1.63,1.27-.24,.73,0,1.53,.58,2.02l5.07,4.28-1.51,5.92c-.21,.82,.1,1.69,.78,2.19,.66,.48,1.55,.5,2.24,.07l5.23-3.31h.02l5.63,3.56c.29,.19,.63,.29,.97,.29,1.02,0,1.83-.84,1.83-1.86,0-.16-.02-.31-.06-.47l-1.6-6.48,5.04-4.2c.59-.49,.82-1.29,.58-2.02Z"></path>
+                    </g>
+                  </svg>
+                </div>
+                <div class="rr--box rr--on">
+                  <svg aria-hidden="true" class="rr--svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.99 24.1" preserveAspectRatio="xMidYMid meet">
+                    <g shape-rendering="geometricPrecision" transform="translate(-87.55 -48.8)">
+                      <path d="M112.46,57.88c-.23-.72-.88-1.22-1.63-1.27l-6.63-.46-2.45-6.19c-.27-.7-.95-1.16-1.7-1.16h0c-.75,0-1.42,.46-1.7,1.16l-2.5,6.23-6.58,.42c-.75,.05-1.4,.55-1.63,1.27-.24,.73,0,1.53,.58,2.02l5.07,4.28-1.51,5.92c-.21,.82,.1,1.69,.78,2.19,.66,.48,1.55,.5,2.24,.07l5.23-3.31h.02l5.63,3.56c.29,.19,.63,.29,.97,.29,1.02,0,1.83-.84,1.83-1.86,0-.16-.02-.31-.06-.47l-1.6-6.48,5.04-4.2c.59-.49,.82-1.29,.58-2.02Z"></path>
+                    </g>
+                  </svg>
+                </div>
+                <div class="rr--box rr--on">
+                  <svg aria-hidden="true" class="rr--svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24.99 24.1" preserveAspectRatio="xMidYMid meet">
+                    <g shape-rendering="geometricPrecision" transform="translate(-87.55 -48.8)">
+                      <path d="M112.46,57.88c-.23-.72-.88-1.22-1.63-1.27l-6.63-.46-2.45-6.19c-.27-.7-.95-1.16-1.7-1.16h0c-.75,0-1.42,.46-1.7,1.16l-2.5,6.23-6.58,.42c-.75,.05-1.4,.55-1.63,1.27-.24,.73,0,1.53,.58,2.02l5.07,4.28-1.51,5.92c-.21,.82,.1,1.69,.78,2.19,.66,.48,1.55,.5,2.24,.07l5.23-3.31h.02l5.63,3.56c.29,.19,.63,.29,.97,.29,1.02,0,1.83-.84,1.83-1.86,0-.16-.02-.31-.06-.47l-1.6-6.48,5.04-4.2c.59-.49,.82-1.29,.58-2.02Z"></path>
+                    </g>
+                  </svg>
+                </div>
+              </div>
+              <label class="ml-1">9.8</label>
+            </span>
+          </div>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class="flex items-center justify-center py-[15px] bg-[#222222]">
+    <div class="flex items-center justify-center py-[15px] bg-[#222222]">
+      <a style="pointer-events: none" class="flex items-center bg-slate-500 opacity-60 text-white px-5 py-1.5 rounded-[2px] text-[13px] w-[110px] cursor-pointer text-center mr-1">
+        <svg width="16" height="16" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.81809 4.18179C8.99383 4.35753 8.99383 4.64245 8.81809 4.81819L6.13629 7.49999L8.81809 10.1818C8.99383 10.3575 8.99383 10.6424 8.81809 10.8182C8.64236 10.9939 8.35743 10.9939 8.1817 10.8182L5.1817 7.81819C5.09731 7.73379 5.0499 7.61933 5.0499 7.49999C5.0499 7.38064 5.09731 7.26618 5.1817 7.18179L8.1817 4.18179C8.35743 4.00605 8.64236 4.00605 8.81809 4.18179Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" stroke="currentColor" stroke-width="1"></path>
+        </svg>Previous<!--  -->
+      </a><a style="pointer-events: auto" class="flex items-center bg-themecolor text-white px-8 py-1.5 rounded-[2px] text-[13px] w-[110px] text-center cursor-pointer">
+        Next<svg width="16" height="16" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M6.18194 4.18185C6.35767 4.00611 6.6426 4.00611 6.81833 4.18185L9.81833 7.18185C9.90272 7.26624 9.95013 7.3807 9.95013 7.50005C9.95013 7.6194 9.90272 7.73386 9.81833 7.81825L6.81833 10.8182C6.6426 10.994 6.35767 10.994 6.18194 10.8182C6.0062 10.6425 6.0062 10.3576 6.18194 10.1819L8.86374 7.50005L6.18194 4.81825C6.0062 4.64251 6.0062 4.35759 6.18194 4.18185Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd" stroke="currentColor" stroke-width="1"></path>
+        </svg>
+      </a>
+    </div>
+  </div>
 </div>
