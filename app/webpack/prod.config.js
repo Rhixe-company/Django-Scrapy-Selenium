@@ -12,4 +12,5 @@ module.exports = merge(commonConfig, {
   output: {
     publicPath: `${staticDevUrl}webpack_bundles/`,
   },
+  performance: { hints: false },
 });

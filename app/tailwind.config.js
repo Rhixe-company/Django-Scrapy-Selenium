@@ -2,16 +2,17 @@
 module.exports = {
   content: [
     "./api/templates/**/**/**/*.html",
-    "./src/**/**/**/*.ts",
-    "./src/**/**/**/*.js",
-    "./src/**/**/**/*.scss",
+    "./src/**/**/**/*.{js,ts,jsx,tsx,mdx,scss}",
   ],
   darkMode: "class",
   theme: {
     extend: {
+      colors: {
+        themecolor: "#913fe2",
+      },
       fontFamily: {
         sans: [
-          "Fira",
+          "Fira Sans",
           "ui-sans-serif",
           "system-ui",
           "-apple-system",
@@ -28,7 +29,7 @@ module.exports = {
           "Noto Color Emoji",
         ],
         body: [
-          "Fira",
+          "Fira Sans",
           "ui-sans-serif",
           "system-ui",
           "-apple-system",
