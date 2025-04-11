@@ -214,7 +214,7 @@ TEMPLATES = [
         "BACKEND": "django.template.backends.django.DjangoTemplates",
         # https://docs.djangoproject.com/en/dev/ref/settings/#dirs
         "DIRS": [
-            TEMPLATE_DIR_DATATB,
+            # TEMPLATE_DIR_DATATB,
             str(APPS_DIR / "templates"),
         ],
         # https://docs.djangoproject.com/en/dev/ref/settings/#app-dirs
