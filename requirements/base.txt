@@ -59,3 +59,4 @@ html5lib
 lxml
 twisted-iocpsupport
 wheel
+django-dynamic-datatb
