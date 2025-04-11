@@ -13,3 +13,10 @@
 .custom_file {
   @apply block w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400;
 }
+
+.custom_search {
+  @apply relative w-[95%] rounded-lg border-[1px] border-black bg-[#16151D] px-4 py-1 text-white outline-none sm:w-[55%] sm:py-2 md:w-[55%] lg:w-[40%];
+}
+.custom_search1 {
+  @apply border-input ring-offset-background flex h-10 w-full rounded-md border-0 bg-purple-800/50 px-3 py-2 pl-9 text-sm text-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-white/70 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-400 disabled:cursor-not-allowed disabled:opacity-50;
+}

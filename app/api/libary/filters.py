@@ -136,55 +136,30 @@ class UserFilter(django_filters.FilterSet):
 
 
 class SearchFilter(django_filters.FilterSet):
-    category = MyMultipleChoiceFilter(
-        queryset=Category.objects.all(),
-        label=_("Categorys"),
-        field_name="category__name",
-        lookup_expr="in",
-        widget=MyAdminCheckboxSelectMultiple,
-    )
-    genres = MyMultipleChoiceFilter(
-        queryset=Genre.objects.all(),
-        widget=MyCheckboxSelectMultiple,
-        lookup_expr="in",
-        field_name="genres__name",
-        to_field_name="name",
-    )
-    status = django_filters.ChoiceFilter(
-        choices=Comic.ComicStatus.choices,
-        empty_label=None,
-        widget=MyRadioSelect(),
-    )
-    updated_at = django_filters.ChoiceFilter(
-        choices=Order.choices,
-        empty_label=None,
-        widget=MyRadioSelect(),
-    )
-
     search = django_filters.CharFilter(
+        field_name="title",
+        lookup_expr="icontains",
+    )
+    search1 = django_filters.CharFilter(
         field_name="title",
         lookup_expr="icontains",
     )
 
     class Meta:
         model = Comic
-        fields = ("search", "category", "status", "genres", "updated_at")
+        fields = ("search", "search1")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.form.fields["search"].widget.attrs.update(
             {
-                "placeholder": _("Search for comics"),
+                "placeholder": _("Search"),
                 "class": "",
             },
         )
-        self.form.fields["genres"].widget.attrs.update(
+        self.form.fields["search1"].widget.attrs.update(
             {
-                "class": "",
-            },
-        )
-        self.form.fields["category"].widget.attrs.update(
-            {
+                "placeholder": _("Search comics..."),
                 "class": "",
             },
         )

@@ -4,7 +4,6 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 
 # from django.db.models import Q  # noqa: ERA001
-
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_ckeditor_5.fields import CKEditor5Field
@@ -68,8 +67,6 @@ class Genre(models.Model):
 class Author(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True, unique=True)
 
-
-
     def __str__(self):
         return self.name
 
@@ -79,8 +76,6 @@ class Author(models.Model):
 
 class Artist(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True, unique=True)
-
-
 
     def __str__(self):
         return self.name
@@ -187,7 +182,7 @@ class Comic(models.Model):
 
     class Meta:
         ordering = ["-updated_at"]
-        get_latest_by = "updated_at"
+        get_latest_by = "created_at"
 
     def __str__(self):
         return self.title
@@ -199,7 +194,7 @@ class Comic(models.Model):
             str: URL for comic detail.
 
         """
-        return reverse("libary:comic_detail", kwargs={"slug": self.slug})
+        return reverse("comics:detail", kwargs={"slug": self.slug})
 
     def get_update_url(self) -> str:
         """Get URL for comic's update view.
@@ -208,7 +203,7 @@ class Comic(models.Model):
             str: URL for comic update.
 
         """
-        return reverse("libary:comic_update", kwargs={"slug": self.slug})
+        return reverse("comics:update", kwargs={"slug": self.slug})
 
     def get_delete_url(self) -> str:
         """Get URL for comic's delete view.
@@ -217,7 +212,7 @@ class Comic(models.Model):
             str: URL for comic delete.
 
         """
-        return reverse("libary:comic_delete", kwargs={"slug": self.slug})
+        return reverse("comics:delete", kwargs={"slug": self.slug})
 
     @property
     def has_chapters(self):
@@ -267,7 +262,7 @@ class Chapter(models.Model):
 
     class Meta:
         ordering = ["-updated_at"]
-        get_latest_by = "updated_at"
+        get_latest_by = "created_at"
 
     def __str__(self):
         return self.name
@@ -279,7 +274,7 @@ class Chapter(models.Model):
             str: URL for chapter detail.
 
         """
-        return reverse("libary:chapter_detail", kwargs={"slug": self.slug})
+        return reverse("chapters:detail", kwargs={"slug": self.slug})
 
     @property
     def has_images(self):

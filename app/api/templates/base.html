@@ -26,15 +26,17 @@
       <meta name="twitter:title" content="Rhixe Scans" />
       <meta name="twitter:description" content="Read Comics" />
     {% endblock %}
-    {% block header %}{% endblock %}
+    {% block header %}
+
+    {% endblock %}
     {% block css %}
       <!-- Your stuff: Third-party CSS libraries go here -->
       <!-- This file stores project-specific CSS -->
       {% render_bundle 'project' 'css' %}
       <link href="{% static 'css/datatables.min.css' %}" rel="stylesheet" />
     {% endblock %}
-    <!--              Le javascript
-    ==================================================              -->
+    <!--                          Le javascript
+    ==================================================                          -->
     {# Placed at the top of the document so pages load faster with defer #}
     {% block javascript %}
       <!-- Vendor dependencies bundled as one file -->
@@ -43,18 +45,20 @@
       {% render_bundle 'project' 'js' attrs='defer' %}
     {% endblock %}
   </head>
-  <body class="min-h-screen antialiased bg-secondarybackground __variable_5d1e58 clickup-chrome-ext_installed font-sans"
-        style="margin: 0 !important"
-        cz-shortcut-listen="true"
-        data-new-gr-c-s-check-loaded="14.1226.0"
-        data-gr-ext-installed="">
+  <body class="min-h-screen antialiased bg-secondarybackground __variable_5d1e58 clickup-chrome-ext_installed font-sans" style="margin: 0 !important" cz-shortcut-listen="true" data-new-gr-c-s-check-loaded="14.1226.0" data-gr-ext-installed="">
     {% block body %}
       {% include 'partials/base/header.html' %}
       {% block main %}
-        {% block content %}{% endblock %}
+        {% block content %}
+
+        {% endblock %}
       {% endblock %}
       {% include 'partials/base/footer.html' %}
+      {% include 'partials/base/mobile_menu.html' %}
+      {% include 'partials/base/menu_dropdown.html' %}
     {% endblock %}
   </body>
-  {% block injs %}{% endblock %}
+  {% block injs %}
+
+  {% endblock %}
 </html>

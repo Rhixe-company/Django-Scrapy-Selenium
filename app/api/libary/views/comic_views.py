@@ -6,7 +6,7 @@ from api.libary.models import Comic
 from api.libary.tables import ComicTable
 
 
-def comic_list_view(request):
+def list_view(request):
     qs = (
         Comic.objects.prefetch_related(
             "comicimages",
@@ -25,7 +25,7 @@ def comic_list_view(request):
     return render(request, "libary/comics/list.html", context)
 
 
-def comic_detail_view(request, slug=None):
+def detail_view(request, slug=None):
     comic = get_object_or_404(Comic, slug=slug)
     context = {
         "object": comic,
@@ -33,8 +33,7 @@ def comic_detail_view(request, slug=None):
     return render(request, "libary/comics/detail.html", context)
 
 
-def comic_create_view(request):
-
+def create_view(request):
     context = {
         "form": ComicForm(),
     }
@@ -46,10 +45,10 @@ def comic_create_view(request):
             obj.save()
             form.save_m2m()
 
-
     return render(request, "libary/comics/create_form.html", context)
 
-def comic_update_view(request, slug=None):
+
+def update_view(request, slug=None):
     comic = get_object_or_404(Comic, slug=slug)
     context = {
         "form": ComicForm(instance=comic),
@@ -68,7 +67,7 @@ def comic_update_view(request, slug=None):
     return render(request, "libary/comics/update_form.html", context)
 
 
-def comic_delete_view(request, slug=None):
+def delete_view(request, slug=None):
     comic = get_object_or_404(Comic, slug=slug)
     context = {
         "object": comic,

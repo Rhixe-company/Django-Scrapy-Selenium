@@ -14,7 +14,7 @@ class ComicQuerySet(models.QuerySet):
     def query_updated_at(self, query: str | None):
         if query is None or query == "":
             return self.none()
-        lookups = Q(updated_at__gt=query)
+        lookups = Q(updated_at__gte=query)
         return self.filter(lookups)
 
 
