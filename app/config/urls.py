@@ -7,6 +7,7 @@ from django.views import defaults as default_views
 
 urlpatterns = [
     path("", include("api.home.urls")),
+    path("", include("django_dyn_dt.urls")),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management

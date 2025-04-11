@@ -9,9 +9,9 @@ from api.libary.models import Comic
 def load(request):
     week = now() - timedelta(weeks=1)
     month = now() - timedelta(weeks=4)
-    comics = Comic.objects.all()
-    weekcomics = Comic.objects.get_updated_at(week)  # type: ignore  # noqa: PGH003
-    monthcomics = Comic.objects.get_updated_at(month)  # type: ignore  # noqa: PGH003
+    comics = Comic.objects.all().order_by("-rating")
+    weekcomics = Comic.objects.get_updated_at(week).order_by("-updated_at")  # type: ignore  # noqa: PGH003
+    monthcomics = Comic.objects.get_updated_at(month).order_by("-created_at")  # type: ignore  # noqa: PGH003
     myfilter = SearchFilter()
 
     return {

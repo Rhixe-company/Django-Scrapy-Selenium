@@ -12,4 +12,5 @@ Alpine.plugin(persist);
 Alpine.plugin(focus);
 Alpine.plugin(collapse);
 Alpine.plugin(morph);
+
 Alpine.start();

@@ -4,3 +4,4 @@ import "./utils/htmx_init";
 import "./functions/backtotop";
 import "./functions/navbar";
 import "./functions/searchbar";
+import "./functions/myaccordian";

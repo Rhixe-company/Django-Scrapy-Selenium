@@ -14,9 +14,9 @@
   <script src="{% static 'js/jquery.min.js' %}"></script>
   <script src="{% static 'js/datatables.min.js' %}"></script>
   <script type="text/javascript">
-    $(document).ready(function() {
+    $(document).ready(function () {
       $("#comic_table").DataTable()
-      $("#comic_submit").on("click", function() {
+      $("#comic_submit").on("click", function () {
         $title = $("#id_title").val()
         $slug = $("#id_slug").val()
         $description = $("#id_description").val()
@@ -28,13 +28,13 @@
         $author = $("#id_author").val()
         $artist = $("#id_artist").val()
         $genres = $("#id_genres").val()
-
+    
         if ($title == "" || $slug == "" || $description == "" || $rating == "" || $updated_at == "" || $status == "" || $website == "" || $category == "" || $author == "" || $artist == "" || $genres == "") {
           alert("Please complete field")
         } else {
           $.ajax({
             type: "POST",
-            url: "{% url 'libary:comic_create' %}",
+            url: "{% url 'comics:create' %}",
             data: {
               title: $title,
               slug: $slug,
@@ -49,23 +49,22 @@
               genres: $genres,
               csrfmiddlewaretoken: $("input[name=csrfmiddlewaretoken]").val()
             },
-            success: function() {
-              alert('Save Data');
-              $("#id_title").val('');
-              $("#id_slug").val('');
-              $("#id_description").val('');
-              $("#id_rating").val('');
-              $("#id_updated_at").val('');
-              $("#id_status").val('');
-              $("#id_website").val('');
-              $("#id_category").val('');
-              $("#id_author").val('');
-              $("#id_artist").val('');
-              $("#id_genres").val('');
-              window.location = "{% url 'libary:comic_list' %}";
+            success: function () {
+              alert("Save Data")
+              $("#id_title").val("")
+              $("#id_slug").val("")
+              $("#id_description").val("")
+              $("#id_rating").val("")
+              $("#id_updated_at").val("")
+              $("#id_status").val("")
+              $("#id_website").val("")
+              $("#id_category").val("")
+              $("#id_author").val("")
+              $("#id_artist").val("")
+              $("#id_genres").val("")
+              window.location = "{% url 'comics:list' %}"
             }
-          });
-
+          })
         }
       })
     })

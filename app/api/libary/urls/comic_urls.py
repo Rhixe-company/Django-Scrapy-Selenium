@@ -6,7 +6,7 @@ app_name = "comics"
 
 urlpatterns = [
     path(
-        "comics/",
+        "",
         view=views.list_view,
         name="list",
     ),
