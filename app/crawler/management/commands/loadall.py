@@ -23,7 +23,7 @@ class Command(BaseCommand):
     help = "Generates comics for apps"
 
     def handle(self, *args, **options):  # noqa: C901, PLR0915
-        def save_comics(comics_data):  # noqa: C901
+        def save_comics(comics_data):
             comics = Comic.objects.all()
             comic_images = ComicImage.objects.select_related("comic").all()
             logger.info(
@@ -59,28 +59,24 @@ class Command(BaseCommand):
                 artist = item.get("artist")
                 genres = item.get("genres")
                 if images:
-                    newauthor = Author.objects.update_or_create(name=author)[0]
-                    newartist = Artist.objects.update_or_create(name=artist)[0]
-                    newcategory = Category.objects.update_or_create(name=category)[0]
+                    newauthor = Author.objects.get_or_create(name=author)[0]
+                    newartist = Artist.objects.get_or_create(name=artist)[0]
+                    newcategory = Category.objects.get_or_create(name=category)[0]
                     dbwebsite = Website.objects.filter(
                         Q(name__exact=item["spider"]) | Q(link__exact=item.get("url")),
                     ).first()
                     if not dbwebsite:
-                        dbwebsite = Website.objects.update_or_create(
+                        dbwebsite = Website.objects.get_or_create(
                             name=item["spider"],
                             link=item.get("url"),
                         )[0]
                     comic = Comic.objects.get_search(title, slug)
                     if comic.exists():
-                        if comic.first().slug == slug:  # type: ignore  # noqa: PGH003
-                            msg = f"{comic.first().pk} - {comic.first().slug} - {comic.first().title} Saving Exists"  # type: ignore  # noqa: E501, PGH003
-                            logger.info(msg)
-                        else:
-                            msg = f"{slug} - {title} Exists"
-                            logger.error(msg)
+                        msg = f"{slug} - {title} Exists"
+                        logger.error(msg)
                     else:
                         try:
-                            newcomic = Comic.objects.update_or_create(
+                            newcomic = Comic.objects.get_or_create(
                                 user=user,
                                 title=title,
                                 slug=slug,
@@ -98,14 +94,14 @@ class Command(BaseCommand):
                             )[0]
                             if genres:
                                 for genre in genres:
-                                    newgenre = Genre.objects.update_or_create(
+                                    newgenre = Genre.objects.get_or_create(
                                         name=genre,
                                     )[0]
 
                                     newcomic.genres.add(newgenre)
                                     newcomic.save()
                             for image in images:
-                                ComicImage.objects.update_or_create(
+                                ComicImage.objects.get_or_create(
                                     link=image["url"],
                                     image=image["path"],
                                     status=image["status"],
@@ -150,7 +146,7 @@ class Command(BaseCommand):
                     Q(name__exact=item["spider"]) | Q(link__exact=item.get("url")),
                 ).first()
                 if not dbwebsite:
-                    dbwebsite = Website.objects.update_or_create(
+                    dbwebsite = Website.objects.get_or_create(
                         name=item["spider"],
                         link=item.get("url"),
                     )[0]
@@ -160,21 +156,15 @@ class Command(BaseCommand):
                 ):
                     if images:
                         dbcomic = comic.first()
-                        chapter = Chapter.objects.get_search(slug, title)
+                        chapter = Chapter.objects.get_search(slug)
                         if chapter.exists():
-                            if chapter.first().slug == slug:  # type: ignore  # noqa: PGH003
-                                msg = f"{chapter.first().pk} - {chapter.first().slug} - {chapter.first().comic.title} Saving"  # type: ignore  # noqa: E501, PGH003
-                                logger.info(
-                                    msg,
-                                )
-                            else:
-                                msg = f"{slug} - {comictitle} Exists"
-                                logger.error(
-                                    msg,
-                                )
+                            msg = f"{slug} - {comictitle} Exists"
+                            logger.error(
+                                msg,
+                            )
                         else:
                             try:
-                                newchapter = Chapter.objects.update_or_create(
+                                newchapter = Chapter.objects.get_or_create(
                                     title=title,
                                     slug=slug,
                                     name=name,
@@ -183,18 +173,18 @@ class Command(BaseCommand):
                                     numimages=numimages,
                                     comic=dbcomic,
                                 )[0]
-                                for image in images:
-                                    ChapterImage.objects.update_or_create(
-                                        link=image["url"],
-                                        image=image["path"],
-                                        status=image["status"],
-                                        chapter=newchapter,
-                                        comic=dbcomic,
-                                    )[0]
-
                             except IntegrityError:
-                                msg = f"{slug} - {name} Exists"
-                                logger.exception(msg)  # noqa: B904, RUF100
+                                msg = f"{slug} - {name} Failed"
+                                logger.error(msg)  # noqa: B904, RUF100, TRY400
+                            for image in images:
+                                ChapterImage.objects.get_or_create(
+                                    link=image["url"],
+                                    image=image["path"],
+                                    status=image["status"],
+                                    chapter=newchapter,
+                                    comic=dbcomic,
+                                )[0]
+
                 else:
                     msg = f"{comictitle} Does Not Exists"
                     logger.error(

@@ -47,16 +47,16 @@ class ComicForm(forms.ModelForm):
             "slug",
             "description",
             "rating",
+            # "serialization",
+            "updated_at",
             "status",
             "website",
-            "serialization",
-            "updated_at",
             "category",
             "author",
             "artist",
             "genres",
-            "numchapters",
-            "numimages",
+            # "numchapters",
+            # "numimages",
         )
         widgets = {
             "updated_at": MyDateInput(),
@@ -67,79 +67,62 @@ class ComicForm(forms.ModelForm):
         self.fields["title"].widget.attrs.update(
             {
                 "placeholder": _("Enter Title"),
-                "class": "",
+                "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",  # noqa: E501
             },
         )
         self.fields["slug"].widget.attrs.update(
             {
                 "placeholder": _("Enter Slug"),
-                "class": "",
+                "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",  # noqa: E501
             },
         )
         self.fields["description"].widget.attrs.update(
             {
                 "placeholder": _("Enter Description"),
-                "class": "custom_textarea_input",
-                "rows": "2",
+                "class": "block p-1.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",  # noqa: E501
+                "rows": "4",
             },
         )
         self.fields["rating"].widget.attrs.update(
             {
-                "placeholder": _("0.0"),
-                "class": "",
+                "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",  # noqa: E501
             },
         )
-        self.fields["numchapters"].widget.attrs.update(
-            {
-                "placeholder": _("0"),
-                "class": "",
-            },
-        )
-        self.fields["numimages"].widget.attrs.update(
-            {
-                "placeholder": _("0"),
-                "class": "",
-            },
-        )
+
         self.fields["website"].widget.attrs.update(
             {
-                "class": "",
-            },
-        )
-        self.fields["updated_at"].widget.attrs.update(
-            {
-                "class": "",
-            },
-        )
-        self.fields["serialization"].widget.attrs.update(
-            {
-                "placeholder": _("Enter Serialization"),
-                "class": "",
-            },
-        )
-        self.fields["status"].widget.attrs.update(
-            {
-                "class": "",
-            },
-        )
-        self.fields["category"].widget.attrs.update(
-            {
-                "class": "",
-            },
-        )
-        self.fields["artist"].widget.attrs.update(
-            {
-                "class": "",
+                "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",  # noqa: E501
             },
         )
         self.fields["author"].widget.attrs.update(
             {
-                "class": "",
+                "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",  # noqa: E501
+            },
+        )
+        self.fields["artist"].widget.attrs.update(
+            {
+                "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",  # noqa: E501
+            },
+        )
+        self.fields["updated_at"].widget.attrs.update(
+            {
+                "class": "shadow-sm bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",  # noqa: E501
+            },
+        )
+
+        self.fields["status"].widget.attrs.update(
+            {
+                "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",  # noqa: E501
+            },
+        )
+        self.fields["category"].widget.attrs.update(
+            {
+                "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500",  # noqa: E501
             },
         )
         self.fields["genres"].widget.attrs.update(
             {
-                "class": "",
+                "class": "bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500",  # noqa: E501
             },
         )
 

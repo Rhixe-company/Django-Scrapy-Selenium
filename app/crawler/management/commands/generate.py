@@ -5,7 +5,6 @@ from api.libary.models import Chapter
 from api.libary.models import Comic
 from django.conf import settings
 from django.core.management.base import BaseCommand
-from django.db.models import Q
 
 logger = logging.getLogger(__name__)
 
@@ -19,13 +18,11 @@ class Command(BaseCommand):
             for item in comics_data:
                 title = item["title"]
                 slug = item["slug"]
-                comic = Comic.objects.filter(  # type: ignore  # noqa: PGH003
-                    Q(title__exact=title) | Q(slug__exact=slug),
-                )
+                comic = Comic.objects.get_search(title, slug)
                 if comic.exists():
                     if comic.first().slug == slug:  # type: ignore  # noqa: PGH003
                         newcomics.append(item)
-                        msg = f"{comic.first().comic_id} - {comic.first().slug} - {comic.first().title} Saving Exists"  # type: ignore  # noqa: E501, PGH003
+                        msg = f"{comic.first().pk} - {comic.first().slug} - {comic.first().title} Saving Exists"  # type: ignore  # noqa: E501, PGH003
                         logger.info(msg)
                     else:
                         msg = f"{slug} - {title} Exists"
@@ -40,13 +37,13 @@ class Command(BaseCommand):
             for item in chapters_data:
                 comictitle = item["comictitle"]
                 slug = item["chapterslug"]
-                chapter = Chapter.objects.filter(  # type: ignore  # noqa: PGH003
-                    Q(slug__exact=slug),
+                chapter = Chapter.objects.get_search(  # type: ignore  # noqa: PGH003
+                    slug,
                 )
                 if chapter.exists():
                     if chapter.first().slug == slug:  # type: ignore  # noqa: PGH003
                         newchapters.append(item)
-                        msg = f"{chapter.first().chapter_id} - {chapter.first().slug} - {chapter.first().comic.title} Saving"  # type: ignore  # noqa: E501, PGH003
+                        msg = f"{chapter.first().pk} - {chapter.first().slug} - {chapter.first().comic.title} Saving"  # type: ignore  # noqa: E501, PGH003
                         logger.info(
                             msg,
                         )

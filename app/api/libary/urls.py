@@ -12,6 +12,11 @@ urlpatterns = [
         name="comic_list",
     ),
     path(
+        "comic/create/",
+        view=comic_views.comic_create_view,
+        name="comic_create",
+    ),
+    path(
         "comic/<str:slug>/",
         view=comic_views.comic_detail_view,
         name="comic_detail",

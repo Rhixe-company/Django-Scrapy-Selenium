@@ -20,6 +20,7 @@ def comic_list_view(request):
     table = ComicTable(qs)
     context = {
         "table": table,
+        "form": ComicForm(),
     }
     return render(request, "libary/comics/list.html", context)
 
@@ -31,6 +32,22 @@ def comic_detail_view(request, slug=None):
     }
     return render(request, "libary/comics/detail.html", context)
 
+
+def comic_create_view(request):
+
+    context = {
+        "form": ComicForm(),
+    }
+    if request.method == "POST":
+        form = ComicForm(request.POST)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.save()
+            form.save_m2m()
+
+
+    return render(request, "libary/comics/create_form.html", context)
 
 def comic_update_view(request, slug=None):
     comic = get_object_or_404(Comic, slug=slug)

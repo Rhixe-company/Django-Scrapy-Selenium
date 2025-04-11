@@ -33,12 +33,10 @@ class ComicManager(models.Manager):
 
 
 class ChapterQuerySet(models.QuerySet):
-    def query_search(self, namequery: str | None, slugquery: str | None):
-        if namequery is None or namequery == "":
-            return self.none()
+    def query_search(self, slugquery: str | None):
         if slugquery is None or slugquery == "":
             return self.none()
-        lookups = Q(name__exact=namequery) | Q(slug__exact=slugquery)
+        lookups = Q(slug__exact=slugquery)
         return self.filter(lookups)
 
 
@@ -46,8 +44,7 @@ class ChapterManager(models.Manager):
     def get_queryset(self):
         return ChapterQuerySet(self.model, using=self._db)
 
-    def get_search(self, namequery: str | None, slugquery: str | None):
+    def get_search(self, slugquery: str | None):
         return self.get_queryset().query_search(
-            namequery=namequery,
             slugquery=slugquery,
         )

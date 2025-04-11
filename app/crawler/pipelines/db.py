@@ -136,7 +136,6 @@ class DbPipeline:
                         dbcomic = comic.first()
                         chapter = Chapter.objects.get_search(  # type: ignore  # noqa: PGH003
                             slug,
-                            title,
                         )
                         if chapter.exists():
                             msg = f"{slug} - {comictitle} Exists"

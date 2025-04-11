@@ -87,6 +87,9 @@
     "check-updates": "npm-check-updates --deep -i"
   },
   "files": [
-    "dist"
+    "dist",
+    "plugin.d.ts",
+    "plugin.js",
+    "plugin-windicss.js"
   ]
 }

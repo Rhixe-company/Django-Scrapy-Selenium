@@ -4,7 +4,7 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 
 # from django.db.models import Q  # noqa: ERA001
-from django.db.models.functions import Lower
+
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_ckeditor_5.fields import CKEditor5Field
@@ -68,8 +68,7 @@ class Genre(models.Model):
 class Author(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True, unique=True)
 
-    class Meta:
-        ordering = [Lower("name")]
+
 
     def __str__(self):
         return self.name
@@ -81,8 +80,7 @@ class Author(models.Model):
 class Artist(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True, unique=True)
 
-    class Meta:
-        ordering = [Lower("name")]
+
 
     def __str__(self):
         return self.name
@@ -188,7 +186,7 @@ class Comic(models.Model):
     objects: ClassVar[ComicManager] = ComicManager()
 
     class Meta:
-        ordering = [Lower("title")]
+        ordering = ["-updated_at"]
         get_latest_by = "updated_at"
 
     def __str__(self):
@@ -268,7 +266,7 @@ class Chapter(models.Model):
     objects: ClassVar[ChapterManager] = ChapterManager()
 
     class Meta:
-        ordering = [Lower("name")]
+        ordering = ["-updated_at"]
         get_latest_by = "updated_at"
 
     def __str__(self):
