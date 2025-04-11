@@ -11,7 +11,7 @@ from scrapy.pipelines.files import FilesPipeline
 from scrapy.utils.python import to_bytes
 
 
-class MyFilesPipeline(object):  # noqa: UP004
+class MyFilesPipeline(FilesPipeline):
     # Overridable Interface
     def get_media_requests(
         self,

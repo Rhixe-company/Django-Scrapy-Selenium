@@ -1,5 +1,7 @@
+from allauth.account.forms import LoginForm
 from allauth.account.forms import SignupForm
 from allauth.socialaccount.forms import SignupForm as SocialSignupForm
+from django import forms
 from django.contrib.auth import forms as admin_forms
 from django.forms import EmailField
 from django.utils.translation import gettext_lazy as _
@@ -35,6 +37,33 @@ class UserSignupForm(SignupForm):
     Check UserSocialSignupForm for accounts created from social.
     """
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["email"].widget.attrs.update(
+            {
+                "placeholder": _("Enter your Email"),
+                "class": "custom_char",
+            },
+        )
+        self.fields["username"].widget.attrs.update(
+            {
+                "placeholder": _("Username"),
+                "class": "custom_char",
+            },
+        )
+        self.fields["password1"].widget.attrs.update(
+            {
+                "placeholder": _("Password"),
+                "class": "custom_pass",
+            },
+        )
+        self.fields["password2"].widget.attrs.update(
+            {
+                "placeholder": _("Password Confirm"),
+                "class": "custom_pass",
+            },
+        )
+
 
 class UserSocialSignupForm(SocialSignupForm):
     """
@@ -42,3 +71,73 @@ class UserSocialSignupForm(SocialSignupForm):
     Default fields will be added automatically.
     See UserSignupForm otherwise.
     """
+
+
+class UserLoginForm(LoginForm):
+    """
+    Form that will be rendered on a user sign up section/screen.
+    Default fields will be added automatically.
+    Check UserSocialLoginForm for accounts created from social.
+    """
+
+    # add form fields here
+    def login(self, *args, **kwargs):
+        return super().login(*args, **kwargs)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["login"].widget.attrs.update(
+            {
+                "placeholder": _("Enter your Email"),
+                "class": "custom_char",
+            },
+        )
+        self.fields["password"].widget.attrs.update(
+            {
+                "placeholder": _("Password"),
+                "class": "custom_pass",
+            },
+        )
+        self.fields["remember"].widget.attrs.update(
+            {
+                "class": "peer custom_checkbox",
+            },
+        )
+
+
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("email", "username", "first_name", "last_name", "image")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["email"].widget.attrs.update(
+            {
+                "placeholder": _("Email"),
+                "class": "custom_text",
+            },
+        )
+        self.fields["username"].widget.attrs.update(
+            {
+                "placeholder": _("UserName"),
+                "class": "custom_text",
+            },
+        )
+        self.fields["first_name"].widget.attrs.update(
+            {
+                "placeholder": _("FirstName"),
+                "class": "custom_text",
+            },
+        )
+        self.fields["last_name"].widget.attrs.update(
+            {
+                "placeholder": _("LastName"),
+                "class": "custom_text",
+            },
+        )
+        self.fields["image"].widget.attrs.update(
+            {
+                "class": "custom_file",
+            },
+        )

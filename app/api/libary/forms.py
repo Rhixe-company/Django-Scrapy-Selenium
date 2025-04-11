@@ -50,7 +50,6 @@ class ComicForm(forms.ModelForm):
             "status",
             "spider",
             "serialization",
-            "link",
             "updated_at",
             "category",
             "author",
@@ -68,13 +67,13 @@ class ComicForm(forms.ModelForm):
         self.fields["title"].widget.attrs.update(
             {
                 "placeholder": _("Enter Title"),
-                "class": "custom_char_input",
+                "class": "",
             },
         )
         self.fields["slug"].widget.attrs.update(
             {
                 "placeholder": _("Enter Slug"),
-                "class": "custom_char_input",
+                "class": "",
             },
         )
         self.fields["description"].widget.attrs.update(
@@ -87,67 +86,60 @@ class ComicForm(forms.ModelForm):
         self.fields["rating"].widget.attrs.update(
             {
                 "placeholder": _("0.0"),
-                "class": "custom_char_input",
+                "class": "",
             },
         )
         self.fields["numchapters"].widget.attrs.update(
             {
                 "placeholder": _("0"),
-                "class": "custom_char_input",
+                "class": "",
             },
         )
         self.fields["numimages"].widget.attrs.update(
             {
                 "placeholder": _("0"),
-                "class": "custom_char_input",
+                "class": "",
             },
         )
         self.fields["spider"].widget.attrs.update(
             {
-                "placeholder": _("Enter Spider"),
-                "class": "custom_char_input",
+                "class": "",
             },
         )
         self.fields["updated_at"].widget.attrs.update(
             {
-                "class": "custom_char_input",
+                "class": "",
             },
         )
         self.fields["serialization"].widget.attrs.update(
             {
                 "placeholder": _("Enter Serialization"),
-                "class": "custom_char_input",
-            },
-        )
-        self.fields["link"].widget.attrs.update(
-            {
-                "placeholder": _("Enter Url"),
-                "class": "custom_char_input",
+                "class": "",
             },
         )
         self.fields["status"].widget.attrs.update(
             {
-                "class": "custom_select_input",
+                "class": "",
             },
         )
         self.fields["category"].widget.attrs.update(
             {
-                "class": "custom_select_input",
+                "class": "",
             },
         )
         self.fields["artist"].widget.attrs.update(
             {
-                "class": "custom_select_input",
+                "class": "",
             },
         )
         self.fields["author"].widget.attrs.update(
             {
-                "class": "custom_select_input",
+                "class": "",
             },
         )
         self.fields["genres"].widget.attrs.update(
             {
-                "class": "custom_mulselect_input",
+                "class": "",
             },
         )
 
@@ -173,7 +165,7 @@ class ComicImageForm(forms.ModelForm):
         self.fields["link"].widget.attrs.update(
             {
                 "placeholder": _("Enter Url"),
-                "class": "custom_char_input",
+                "class": "",
             },
         )
 
@@ -189,7 +181,6 @@ class ChapterForm(forms.ModelForm):
             "title",
             "slug",
             "spider",
-            "link",
             "numimages",
             "updated_at",
             "comic",
@@ -206,48 +197,42 @@ class ChapterForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields["comic"].widget.attrs.update(
             {
-                "class": "custom_select_input",
+                "class": "",
             },
         )
         self.fields["name"].widget.attrs.update(
             {
                 "placeholder": _("Enter Name"),
-                "class": "custom_char_input",
+                "class": "",
             },
         )
         self.fields["title"].widget.attrs.update(
             {
                 "placeholder": _("Enter Title"),
-                "class": "custom_char_input",
+                "class": "",
             },
         )
         self.fields["slug"].widget.attrs.update(
             {
                 "placeholder": _("Enter Slug"),
-                "class": "custom_char_input",
+                "class": "",
             },
         )
         self.fields["numimages"].widget.attrs.update(
             {
                 "placeholder": _("0"),
-                "class": "custom_char_input",
+                "class": "",
             },
         )
         self.fields["spider"].widget.attrs.update(
             {
                 "placeholder": _("Enter Spider"),
-                "class": "custom_char_input",
+                "class": "",
             },
         )
         self.fields["updated_at"].widget.attrs.update(
             {
-                "class": "custom_char_input",
-            },
-        )
-        self.fields["link"].widget.attrs.update(
-            {
-                "placeholder": _("Enter Url"),
-                "class": "custom_char_input",
+                "class": "",
             },
         )
 
@@ -273,7 +258,7 @@ class ChapterImageForm(forms.ModelForm):
         self.fields["link"].widget.attrs.update(
             {
                 "placeholder": _("Enter Url"),
-                "class": "custom_char_input",
+                "class": "",
             },
         )
 

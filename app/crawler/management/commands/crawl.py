@@ -7,13 +7,13 @@ from scrapy.utils.project import get_project_settings
 from twisted.internet import defer
 from twisted.internet import reactor
 
-from crawler.spiders.tests import TestsSpider
+from crawler.spiders.run2 import Run2Spider
 
 logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = "A  Custom command to  tests TestsSpider"
+    help = "A  Custom command to  run RunSpider"
 
     def handle(self, *args, **options):
         crawlsettings = get_project_settings()
@@ -23,7 +23,7 @@ class Command(BaseCommand):
 
         @defer.inlineCallbacks
         def run():
-            yield runner.crawl(TestsSpider)
+            yield runner.crawl(Run2Spider)
 
             reactor.stop()  # type: ignore  # noqa: PGH003
 

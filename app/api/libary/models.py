@@ -110,6 +110,28 @@ class Category(models.Model):
         return self.comiccategory.all()  # type: ignore  # noqa: PGH003
 
 
+class Spidermodel(models.Model):
+    name = models.CharField(_("Name"), max_length=200)
+    link = models.URLField(
+        _("Link"),
+        max_length=5000,
+        blank=True,
+    )
+
+    class Meta:
+        verbose_name_plural = "Spidermodels"
+        verbose_name = "Spidermodel"
+
+    def __str__(self):
+        return self.name
+
+    def get_spider_comics_children(self):
+        return self.comicspider.all()  # type: ignore  # noqa: PGH003
+
+    def get_spider_chapters_children(self):
+        return self.chapterspider.all()  # type: ignore  # noqa: PGH003
+
+
 class Comic(models.Model):
     class ComicStatus(models.TextChoices):
         COMPLETED = "completed", "Completed"
@@ -144,11 +166,10 @@ class Comic(models.Model):
     numchapters = models.PositiveIntegerField(
         _("Total Chapters"),
     )
-    spider = models.CharField(_("Spider"), max_length=500, blank=True)
-    link = models.URLField(
-        _("Link"),
-        max_length=5000,
-        blank=True,
+    spider = models.ForeignKey(
+        Spidermodel,
+        on_delete=models.CASCADE,
+        related_name="comicspider",
     )
     numimages = models.PositiveIntegerField(_("Total Images"))
     created_at = models.DateTimeField(auto_now_add=True)
@@ -209,6 +230,24 @@ class Comic(models.Model):
 
         """
         return reverse("libary:comic_detail", kwargs={"slug": self.slug})
+
+    def get_update_url(self) -> str:
+        """Get URL for comic's update view.
+
+        Returns:
+            str: URL for comic update.
+
+        """
+        return reverse("libary:comic_update", kwargs={"slug": self.slug})
+
+    def get_delete_url(self) -> str:
+        """Get URL for comic's delete view.
+
+        Returns:
+            str: URL for comic delete.
+
+        """
+        return reverse("libary:comic_delete", kwargs={"slug": self.slug})
 
     @property
     def has_chapters(self):
@@ -294,11 +333,10 @@ class Chapter(models.Model):
         blank=True,
         null=True,
     )
-    spider = models.CharField(_("Spider"), max_length=500, blank=True)
-    link = models.URLField(
-        _("Link"),
-        max_length=5000,
-        blank=True,
+    spider = models.ForeignKey(
+        Spidermodel,
+        on_delete=models.CASCADE,
+        related_name="chapterspider",
     )
     updated_at = models.DateField()
     created_at = models.DateTimeField(auto_now_add=True)

@@ -29,10 +29,11 @@ def get_slug(value):
     return value.split("/")[-1].split("-")[-0]
 
 
-def get_des(value):
+def clean_description(value):
     obj = "".join(str(x) for x in value)
     return (
-        obj.replace("\\n", "")
+        obj.replace("\n", "")
+        .replace("\\n", "")
         .replace("\r", "")
         .replace("\\r", "")
         .replace("rn", "")
@@ -48,6 +49,7 @@ def get_des(value):
         .replace("['", "")
         .replace("']", "")
         .replace("'", "")
+        .replace("\r", "")
     )
 
 
@@ -55,11 +57,11 @@ def get_date(value):
     return parse(value, languages=["en"], date_formats=["F j, Y"]).date()  # type: ignore  # noqa: PGH003
 
 
-def get_html(value):
+def strip_html(value):
     return remove_tags(value)
 
 
-def strip_html(value):
+def strip_html_space(value):
     return strip_html5_whitespace(value)
 
 
@@ -71,87 +73,101 @@ def lower_function(value):
     return value.lower()
 
 
+def clean_unicode(value):
+    return value.strip()
+
+
 class ComicItem(Item):
     title = Field(
-        input_processor=MapCompose(strip_html, comments_html, get_html),
+        input_processor=MapCompose(clean_unicode, strip_html),
         output_processor=TakeFirst(),
     )
     description = Field(
-        input_processor=MapCompose(get_des, strip_html, comments_html, get_html),
+        input_processor=MapCompose(
+            clean_unicode,
+            strip_html,
+            comments_html,
+            strip_html_space,
+            clean_description,
+        ),
         output_processor=Join(),
     )
-    slug = Field(input_processor=MapCompose(gen_slug), output_processor=TakeFirst())
+    slug = Field(
+        input_processor=MapCompose(clean_unicode, gen_slug),
+        output_processor=TakeFirst(),
+    )
 
     rating = Field(
-        input_processor=MapCompose(strip_html, comments_html, get_html),
+        input_processor=MapCompose(clean_unicode, strip_html),
         output_processor=TakeFirst(),
     )
     status = Field(
-        input_processor=MapCompose(strip_html, comments_html, get_html, lower_function),
+        input_processor=MapCompose(clean_unicode, strip_html, lower_function),
         output_processor=TakeFirst(),
     )
     category = Field(
-        input_processor=MapCompose(strip_html, comments_html, get_html),
+        input_processor=MapCompose(clean_unicode, strip_html),
         output_processor=TakeFirst(),
     )
     updated_at = Field(
-        input_processor=MapCompose(get_date),
+        input_processor=MapCompose(clean_unicode, get_date),
         output_processor=TakeFirst(),
     )
     serialization = Field(
-        input_processor=MapCompose(strip_html, comments_html, get_html),
+        input_processor=MapCompose(clean_unicode, strip_html),
         output_processor=TakeFirst(),
     )
 
     author = Field(
-        input_processor=MapCompose(strip_html, comments_html, get_html),
+        input_processor=MapCompose(clean_unicode, strip_html),
         output_processor=TakeFirst(),
     )
     artist = Field(
-        input_processor=MapCompose(strip_html, comments_html, get_html),
+        input_processor=MapCompose(clean_unicode, strip_html),
         output_processor=TakeFirst(),
     )
     genres = Field(
-        input_processor=MapCompose(strip_html, comments_html, get_html),
+        input_processor=MapCompose(clean_unicode, strip_html),
     )
-    link = Field(output_processor=TakeFirst())
-    spider = Field(output_processor=TakeFirst())
+    url = Field(output_processor=TakeFirst())
+    spider = Field()
     numchapters = Field(output_processor=TakeFirst())
     numimages = Field(output_processor=TakeFirst())
-    file_urls = Field()
-    files = Field()
-    file_name = Field(
-        input_processor=MapCompose(remove_extension), output_processor=TakeFirst()
+    image_urls = Field()
+    images = Field()
+    image_name = Field(
+        input_processor=MapCompose(remove_extension),
+        output_processor=TakeFirst(),
     )
 
 
 class ChapterItem(Item):
     comictitle = Field(
-        input_processor=MapCompose(strip_html, comments_html, get_html),
+        input_processor=MapCompose(clean_unicode, strip_html),
         output_processor=TakeFirst(),
     )
     comicslug = Field(
-        input_processor=MapCompose(gen_slug),
+        input_processor=MapCompose(clean_unicode, gen_slug),
         output_processor=TakeFirst(),
     )
     chaptertitle = Field(
-        input_processor=MapCompose(strip_html, comments_html, get_html),
+        input_processor=MapCompose(clean_unicode, strip_html),
         output_processor=TakeFirst(),
     )
     chaptername = Field(
-        input_processor=MapCompose(strip_html, comments_html, get_html),
+        input_processor=MapCompose(clean_unicode, strip_html),
         output_processor=TakeFirst(),
     )
     chapterslug = Field(
-        input_processor=MapCompose(gen_slug, get_html),
+        input_processor=MapCompose(clean_unicode, gen_slug, strip_html),
         output_processor=TakeFirst(),
     )
     updated_at = Field(
-        input_processor=MapCompose(get_date),
+        input_processor=MapCompose(clean_unicode, get_date),
         output_processor=TakeFirst(),
     )
     url = Field(output_processor=TakeFirst())
-    spider = Field(output_processor=TakeFirst())
+    spider = Field()
     numimages = Field(output_processor=TakeFirst())
     image_urls = Field()
     images = Field()

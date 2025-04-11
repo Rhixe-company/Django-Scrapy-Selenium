@@ -1,0 +1,60 @@
+{% load static i18n django_tables2 %}
+
+{% block table_wrapper %}
+  <div class="overflow-hidden shadow">
+    {% block table %}
+      <table id="comicc-table" class="min-w-full divide-y divide-gray-200 table-fixed dark:divide-gray-600" {% render_attrs table.attrs %}>
+        {% block table.thead %}
+          {% if table.show_header %}
+            <thead class="" {{ table.attrs.thead.as_html }}>
+              <tr>
+                {% for column in table.columns %}
+                  <th
+                  scope="col" class="p-1 text-xs font-medium text-left text-gray-500 uppercase dark:text-gray-400" {{ column.attrs.th.as_html }} >
+                    {{ column.header }}
+
+                  </th>
+                {% endfor %}
+              </tr>
+            </thead>
+          {% endif %}
+        {% endblock table.thead %}
+         {% block table.tbody %}
+          <tbody
+          class="divide-y divide-gray-200 dark:divide-gray-700" {{ table.attrs.tbody.as_html }}>
+            {% for row in table.paginated_rows %}
+              {% block table.tbody.row %}
+                <tr class="hover:bg-gray-100 dark:hover:bg-gray-700" {{ row.attrs.as_html }} >
+                  {% for column, cell in row.items %}
+                    <td  class="flex items-center p-1 whitespace-nowrap" {{ column.attrs.td.as_html }}>
+                      {% if column.localize == None %}
+                        {{ cell }}
+                      {% else %}
+                        {% if column.localize %}
+                          {{ cell|localize }}
+                        {% else %}
+                          {{ cell|unlocalize }}
+                        {% endif %}
+                      {% endif %}
+                    </td>
+                  {% endfor %}
+                </tr>
+              {% endblock table.tbody.row %}
+            {% comment %} {% empty %}
+              {% if table.empty_text %}
+                {% block table.tbody.empty_text %}
+                  <tr class="hover:bg-gray-100 dark:hover:bg-gray-700">
+                    <td colspan="{{ table.columns|length }}"
+                        class="p-2 text-base font-normal text-gray-900 whitespace-nowrap dark:text-white">
+                      {{ table.empty_text }}
+                    </td>
+                  </tr>
+                {% endblock table.tbody.empty_text %}
+              {% endif %} {% endcomment %}
+            {% endfor %}
+          </tbody>
+        {% endblock table.tbody %}
+      </table>
+    {% endblock table %}
+  </div>
+{% endblock table_wrapper %}

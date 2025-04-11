@@ -1,0 +1,14 @@
+{% load static i18n %}
+
+<div class="loop owl-carousel full owl-loaded">
+  <div>
+    <div class="carousel-root">
+      <div class="carousel carousel-slider" style="width: 100%">
+        {% include 'partials/index/carousel-item.html' %}
+      </div>
+    </div>
+  </div>
+</div>
+<div class="hidden overflow-hidden min-[882px]:hidden min-[883px]:block">
+  {% include 'partials/index/carousel-single.html' %}
+</div>

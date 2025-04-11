@@ -38,6 +38,7 @@
   },
   "tailwindCSS.includeLanguages": {
     "plaintext": "html",
+    "plaintext1": "django-html",
     "typescript": "tsx",
     "javascript": "jsx"
   },

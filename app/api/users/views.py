@@ -7,6 +7,7 @@ from django.views.generic import DetailView
 from django.views.generic import RedirectView
 from django.views.generic import UpdateView
 
+from api.users.forms import UserForm
 from api.users.models import User
 
 
@@ -21,7 +22,7 @@ user_detail_view = UserDetailView.as_view()
 
 class UserUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = User
-    fields = ["email", "user_name", "full_name", "first_name", "last_name", "image"]
+    form_class = UserForm
     success_message = _("Information successfully updated")
 
     def get_success_url(self) -> str:

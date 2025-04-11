@@ -1,43 +1,35 @@
-from django.views.generic import TemplateView
+from django.shortcuts import render
+
+from api.libary.models import Comic
 
 
-class IndexView(TemplateView):
-    template_name = "home/index.html"
+def index(request):
+    context = {
+        "comics": Comic.objects.all()[0:16],
+    }
+    return render(request, "home/index.html", context)
 
 
-index = IndexView.as_view()
+def series(request):
+    context = {}
+    return render(request, "home/series.html", context)
 
 
-class SeriesView(TemplateView):
-    template_name = "home/series.html"
+def bookmarks(request):
+    context = {}
+    return render(request, "home/bookmarks.html", context)
 
 
-series = SeriesView.as_view()
+def privacy(request):
+    context = {}
+    return render(request, "home/privacy.html", context)
 
 
-class BookmarksView(TemplateView):
-    template_name = "home/bookmarks.html"
+def dmca(request):
+    context = {}
+    return render(request, "home/dmca.html", context)
 
 
-bookmarks = BookmarksView.as_view()
-
-
-class PrivacyView(TemplateView):
-    template_name = "home/privacy.html"
-
-
-privacy = PrivacyView.as_view()
-
-
-class DmcaView(TemplateView):
-    template_name = "home/dmca.html"
-
-
-dmca = DmcaView.as_view()
-
-
-class TermsView(TemplateView):
-    template_name = "home/terms.html"
-
-
-terms = TermsView.as_view()
+def terms(request):
+    context = {}
+    return render(request, "home/terms.html", context)

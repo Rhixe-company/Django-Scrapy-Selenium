@@ -1,16 +1,15 @@
 @use "sass:meta";
 
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-@import url('datatables.net-dt');
-@include meta.load-css ("./functions/style.scss");
-@include meta.load-css ("./functions/carousel.scss");
-@include meta.load-css ("./functions/scroll.scss");
-@include meta.load-css ("./functions/rating.scss");
-@include meta.load-css ("./functions/data-table/style.scss");
-@include meta.load-css ("./functions/data-table/editing.scss");
-@include meta.load-css ("./functions/data-table/column_filter.scss");
+@include meta.load-css("./functions/style.scss");
+@include meta.load-css("./functions/carousel.scss");
+@include meta.load-css("./functions/scroll.scss");
+@include meta.load-css("./functions/rating.scss");
+@include meta.load-css("./functions/custom_form.scss");
+@include meta.load-css("./functions/data-table/datatables.scss");
+@include meta.load-css("./functions/data-table/style.scss");
+@include meta.load-css("./functions/data-table/editing.scss");
+@include meta.load-css("./functions/data-table/column_filter.scss");

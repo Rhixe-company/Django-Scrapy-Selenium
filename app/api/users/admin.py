@@ -5,11 +5,7 @@ from django.contrib.auth import admin as auth_admin
 from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.translation import gettext_lazy as _
-from django_celery_beat.admin import ClockedScheduleAdmin as BaseClockedScheduleAdmin
-from django_celery_beat.admin import CrontabScheduleAdmin as BaseCrontabScheduleAdmin
 from django_celery_beat.admin import PeriodicTaskAdmin as BasePeriodicTaskAdmin
-from django_celery_beat.models import ClockedSchedule
-from django_celery_beat.models import CrontabSchedule
 from django_celery_beat.models import IntervalSchedule
 from django_celery_beat.models import PeriodicTask
 from django_celery_beat.models import SolarSchedule
@@ -136,9 +132,7 @@ class UserAdminClass(ModelAdmin, ImportExportModelAdmin, auth_admin.UserAdmin):
 
 admin.site.unregister(PeriodicTask)
 admin.site.unregister(IntervalSchedule)
-admin.site.unregister(CrontabSchedule)
 admin.site.unregister(SolarSchedule)
-admin.site.unregister(ClockedSchedule)
 
 
 @admin.register(PeriodicTask)
@@ -151,16 +145,6 @@ class IntervalScheduleAdmin(ModelAdmin):
     pass
 
 
-@admin.register(CrontabSchedule)
-class CrontabScheduleAdmin(BaseCrontabScheduleAdmin, ModelAdmin):
-    pass
-
-
 @admin.register(SolarSchedule)
 class SolarScheduleAdmin(ModelAdmin):
-    pass
-
-
-@admin.register(ClockedSchedule)
-class ClockedScheduleAdmin(BaseClockedScheduleAdmin, ModelAdmin):
     pass

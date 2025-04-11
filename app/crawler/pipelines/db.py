@@ -8,6 +8,7 @@ from api.libary.models import ChapterImage
 from api.libary.models import Comic
 from api.libary.models import ComicImage
 from api.libary.models import Genre
+from api.libary.models import Spidermodel
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.db.utils import IntegrityError
@@ -39,8 +40,6 @@ class DbPipeline:
                 description = item.get("description")
                 rating = item["rating"]
                 status = item["status"]
-                link = item["url"]
-                spider = item["spider"]
                 updated_at = item["updated_at"]
                 numchapters = item["numchapters"]
                 numimages = len(images)
@@ -53,52 +52,55 @@ class DbPipeline:
                     newauthor = Author.objects.update_or_create(name=author)[0]
                     newartist = Artist.objects.update_or_create(name=artist)[0]
                     newcategory = Category.objects.update_or_create(name=category)[0]
-                    comic = Comic.objects.get_search(  # type: ignore  # noqa: PGH003
-                        title,
-                        slug,
+                    oldspider = Spidermodel.objects.filter(
+                        Q(name__exact=item["spider"]) | Q(link__exact=item.get("url")),
+                    ).first()
+                    if not oldspider:
+                        oldspider = Spidermodel.objects.update_or_create(
+                            name=item["spider"],
+                            link=item.get("url"),
+                        )[0]
+                    comic = Comic.objects.filter(  # type: ignore  # noqa: PGH003
+                        Q(title__exact=title) | Q(slug__exact=slug),
                     )
                     if comic.exists():
-                        msg = f"{title} - {slug} Exists"
+                        msg = f"{slug} - {title} Exists"
                         raise DropItem(msg)
-                    else:  # noqa: RET506
-                        try:
-                            newcomic = Comic.objects.update_or_create(
-                                title=title,
-                                slug=slug,
-                                description=description,
-                                rating=rating,
-                                status=status,
-                                link=link,
-                                spider=spider,
-                                updated_at=updated_at,
-                                numchapters=numchapters,
-                                numimages=numimages,
-                                serialization=serialization,
-                                category=newcategory,
-                                author=newauthor,
-                                artist=newartist,
-                            )[0]
-                            msg = f"created {newcomic.title}"
-                            logger.info(
-                                msg,
-                            )
-                            if genres:
-                                for genre in genres:
-                                    newgenre = Genre.objects.update_or_create(
-                                        name=genre,
-                                    )[0]
-                                    newcomic.genres.add(newgenre)
-                                    newcomic.save()
-                            for image in images:
-                                ComicImage.objects.update_or_create(
-                                    link=image["url"],
-                                    image=image["path"],
-                                    status=image["status"],
-                                    comic=newcomic,
+                    try:
+                        newcomic = Comic.objects.update_or_create(
+                            title=title,
+                            slug=slug,
+                            description=description,
+                            rating=rating,
+                            status=status,
+                            spider=oldspider,
+                            updated_at=updated_at,
+                            numchapters=numchapters,
+                            numimages=numimages,
+                            serialization=serialization,
+                            category=newcategory,
+                            author=newauthor,
+                            artist=newartist,
+                        )[0]
+                        if genres:
+                            for genre in genres:
+                                newgenre = Genre.objects.update_or_create(
+                                    name=genre,
                                 )[0]
-                        except IntegrityError as e:
-                            msg = f"{slug} - {title} Exists , Error: {e}"
-                            raise DropItem(msg)  # noqa: B904
+
+                                newcomic.genres.add(newgenre)
+                                newcomic.save()
+                        for image in images:
+                            ComicImage.objects.update_or_create(
+                                link=image["url"],
+                                image=image["path"],
+                                status=image["status"],
+                                comic=newcomic,
+                            )[0]
+
+                    except IntegrityError:
+                        msg = f"{slug} - {title} Exists "
+                        raise DropItem(msg)  # noqa: B904, RUF100
                 return item
             if (
                 adapter.get("images")
@@ -111,56 +113,55 @@ class DbPipeline:
                 name = item["chaptername"]
                 title = item.get("chaptertitle", "")
                 slug = item["chapterslug"]
-                link = item["url"]
-                spider = item["spider"]
                 updated_at = item.get("updated_at")
                 numimages = len(images)
-                comic = Comic.objects.get_search(  # type: ignore  # noqa: PGH003
-                    comictitle,
-                    comicslug,
+                oldspider = Spidermodel.objects.filter(
+                    Q(name__exact=item["spider"]) | Q(link__exact=item.get("url")),
+                ).first()
+                if not oldspider:
+                    oldspider = Spidermodel.objects.update_or_create(
+                        name=item["spider"],
+                        link=item.get("url"),
+                    )[0]
+                comic = Comic.objects.filter(  # type: ignore  # noqa: PGH003
+                    Q(title__exact=comictitle) | Q(slug__exact=comicslug),
                 )
                 if (
                     comic.exists()  # type: ignore  # noqa: PGH003
                 ):
                     if images:
                         dbcomic = comic.first()
-                        chapter = Chapter.objects.get_search(  # type: ignore  # noqa: PGH003
-                            slug,
-                            comictitle,
+                        chapter = Chapter.objects.filter(  # type: ignore  # noqa: PGH003
+                            Q(slug__exact=slug),
                         )
                         if chapter.exists():
-                            msg = f"{chapter.first().chapter_id} - {chapter.first().slug} - {chapter.first().comic.title} Exists"  # noqa: E501
+                            msg = f"{slug} - {comictitle} Exists"
                             raise DropItem(
                                 msg,
                             )
-
-                        else:  # noqa: RET506
-                            try:
-                                newchapter = Chapter.objects.update_or_create(
-                                    title=title,
-                                    slug=slug,
-                                    name=name,
-                                    link=link,
-                                    spider=spider,
-                                    updated_at=updated_at,
-                                    numimages=numimages,
+                        try:
+                            newchapter = Chapter.objects.update_or_create(
+                                title=title,
+                                slug=slug,
+                                name=name,
+                                spider=oldspider,
+                                updated_at=updated_at,
+                                numimages=numimages,
+                                comic=dbcomic,
+                            )[0]
+                            for image in images:
+                                ChapterImage.objects.update_or_create(
+                                    link=image["url"],
+                                    image=image["path"],
+                                    status=image["status"],
+                                    chapter=newchapter,
                                     comic=dbcomic,
                                 )[0]
-                                msg2 = f"created {newchapter}"
-                                logger.info(
-                                    msg2,
-                                )
-                                for image in images:
-                                    ChapterImage.objects.update_or_create(
-                                        link=image["url"],
-                                        image=image["path"],
-                                        status=image["status"],
-                                        chapter=newchapter,
-                                        comic=dbcomic,
-                                    )[0]
-                            except IntegrityError as e:
-                                msg = f"{slug} - {name} Exists, Error: {e}"
-                                raise DropItem(msg)  # noqa: B904
+
+                        except IntegrityError:
+                            msg = f"{slug} - {name} Exists"
+                            raise DropItem(msg)  # noqa: B904, RUF100
+
                 else:
                     msg = f"{comictitle} Does Not Exists"
                     raise DropItem(

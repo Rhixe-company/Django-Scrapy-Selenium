@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
-const plugin = require('tailwindcss/plugin')
+const plugin = require("tailwindcss/plugin");
 module.exports = {
   content: [
-    "./api/templates/**/**/**/*.html",
-    "./src/**/**/**/*.{js,ts,jsx,tsx,mdx,scss}",
+    "./api/templates/**/**/**/**/**/**/*.html",
+    "./src/**/**/**/*.{js,ts,jsx,tsx,mdx,scss,css}",
     "./node_modules/flowbite/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   darkMode: "class",
@@ -11,6 +11,19 @@ module.exports = {
     extend: {
       colors: {
         themecolor: "#913fe2",
+        primary: {
+          50: "#eff6ff",
+          100: "#dbeafe",
+          200: "#bfdbfe",
+          300: "#93c5fd",
+          400: "#60a5fa",
+          500: "#3b82f6",
+          600: "#2563eb",
+          700: "#1d4ed8",
+          800: "#1e40af",
+          900: "#1e3a8a",
+          950: "#172554",
+        },
       },
       fontFamily: {
         sans: [
@@ -65,17 +78,16 @@ module.exports = {
     require("@tailwindcss/forms"),
     require("flowbite"),
     require("@tailwindcss/typography"),
-    plugin(function({ addUtilities, addComponents, e, config }) {
+    plugin(function ({ addUtilities, addComponents, e, config }) {
       // Add your custom styles here
-
     }),
 
-//     require('./plugin')({
-//       charts: false,
-//       forms: true,
-//       tooltips: true,
-//       datatables: true,
-//       wysiwyg: false,
-//   }),
+    //     require('./plugin')({
+    //       charts: false,
+    //       forms: true,
+    //       tooltips: true,
+    //       datatables: true,
+    //       wysiwyg: false,
+    //   }),
   ],
 };
