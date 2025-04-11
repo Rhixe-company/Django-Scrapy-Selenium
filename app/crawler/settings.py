@@ -138,7 +138,7 @@ FEEDS = {
         "fields": None,
         "indent": 4,
     },
-    "chapters.json": {
+    "chapters2.json": {
         "format": "json",
         "encoding": "utf8",
         "store_empty": False,
@@ -152,7 +152,8 @@ RETRY_ENABLED = True
 RETRY_HTTP_CODES = list(range(300, 501))
 
 DOWNLOAD_FAIL_ON_DATALOSS = True
-LOG_LEVEL = "INFO"
+# LOG_LEVEL = "DEBUG"
+LOG_LEVEL = "INFO"  # noqa: ERA001
 
 # AWS
 # IMAGES_STORE = "s3://bucket/images"  # noqa: ERA001
@@ -204,8 +205,8 @@ SELENIUM_DRIVER_EXECUTABLE_PATH = which("chromedriver")
 SELENIUM_BROWSER_EXECUTABLE_PATH = which("chrome")
 SELENIUM_DRIVER_ARGUMENTS = [
     "--headless",
-    "--no-sandbox",
+    # "--no-sandbox",
     # "--disable-gpu",
-    "--enable-javascript",
+    # "--enable-javascript",
     # "--disable-extensions",
 ]

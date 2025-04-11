@@ -20,7 +20,7 @@ from api.libary.models import Comic
 from api.libary.models import ComicImage
 from api.libary.models import Comment
 from api.libary.models import Genre
-from api.libary.models import UserItem
+from api.libary.models import Website
 from api.users.helpers import CustomDropdownFilter
 from api.users.helpers import CustomTextFilter
 
@@ -326,7 +326,7 @@ class ComicImageAdminClass(ModelAdmin, ImportExportModelAdmin):
     )
 
     list_display = (
-        "comic_image_id",
+        "pk",
         "link",
     )
     inlines = []
@@ -390,7 +390,7 @@ class ChapterImageAdminClass(ModelAdmin, ImportExportModelAdmin):
     )
 
     list_display = (
-        "chapter_image_id",
+        "pk",
         "link",
     )
     inlines = []
@@ -693,8 +693,8 @@ class CommentAdminClass(ModelAdmin, ImportExportModelAdmin):
     }
 
 
-@admin.register(UserItem)
-class UserItemAdminClass(ModelAdmin, ImportExportModelAdmin):
+@admin.register(Website)
+class WebsiteAdminClass(ModelAdmin, ImportExportModelAdmin):
     # Display fields in changeform in compressed mode
     compressed_fields = True  # Default: False
 
@@ -706,10 +706,10 @@ class UserItemAdminClass(ModelAdmin, ImportExportModelAdmin):
         "model_field_name": "html.unescape",
         "other_field_name": lambda content: content.strip(),
     }
-    model = UserItem  # type: ignore  # noqa: PGH003
+    model = Website  # type: ignore  # noqa: PGH003
     search_fields = (
-        "comic",
-        "user",
+        "name",
+        "link",
     )
     # Display submit button in filters
     list_filter_submit = True
@@ -717,13 +717,13 @@ class UserItemAdminClass(ModelAdmin, ImportExportModelAdmin):
     list_filter = (
         CustomTextFilter,
         CustomDropdownFilter,
-        "comic",
-        "user",
+        "name",
+        "link",
     )
 
     list_display = (
-        "comic",
-        "user",
+        "name",
+        "link",
     )
     inlines = []
 

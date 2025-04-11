@@ -38,10 +38,7 @@ class Command(BaseCommand):
                     or comictitle.lower() == "The Indomitable Martial King"
                 ):
                     chapter = Chapter.objects.get_search(  # type: ignore  # noqa: PGH003
-                        name,
                         slug,
-                        title,
-                        comictitle,
                     )
                     if chapter.exists():
                         msg3 = f"{chapter.first().chapter_id} - {chapter.first().slug} - {chapter.first().comic.title} Exists"  # type: ignore  # noqa: E501, PGH003

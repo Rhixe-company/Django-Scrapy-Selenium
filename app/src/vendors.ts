@@ -1,3 +1,3 @@
 import "@fortawesome/fontawesome-free/css/all.css";
 
-import "flowbite";
+import "flowbite/dist/flowbite.js";

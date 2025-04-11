@@ -53,20 +53,20 @@ class SeleniumMiddleware:
             driver_service = webdriver.ChromeService(
                 executable_path=driver_executable_path,
                 log_output="logs.txt",
-                service_args=["--log", "info"],
+                service_args=["--log", "debug"],
                 prefs={
                     "dom.ipc.processCount": 8,
-                    "javascript.options.showInConsole": False,
+                    "javascript.options.showInConsole": True,
                 },
             )
         if driver_name and driver_name.lower() == "firefox":
             driver_service = webdriver.FirefoxService(
                 executable_path=driver_executable_path,
                 log_output="logs.txt",
-                service_args=["--log", "info"],
+                service_args=["--log", "debug"],
                 prefs={
                     "dom.ipc.processCount": 8,
-                    "javascript.options.showInConsole": False,
+                    "javascript.options.showInConsole": True,
                 },
             )
 

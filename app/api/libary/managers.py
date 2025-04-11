@@ -8,19 +8,7 @@ class ComicQuerySet(models.QuerySet):
             return self.none()
         if slugquery is None or slugquery == "":
             return self.none()
-        lookups = Q(title__iexact=titlequery) | Q(slug__iexact=slugquery)
-        return self.filter(lookups)
-
-    def query_title(self, query: str | None):
-        if query is None or query == "":
-            return self.none()
-        lookups = Q(title__iexact=query)
-        return self.filter(lookups)
-
-    def query_rating(self, query: str | None):
-        if query is None or query == "":
-            return self.none()
-        lookups = Q(rating__gte=query) & Q(status="ongoing")
+        lookups = Q(title__exact=titlequery) | Q(slug__exact=slugquery)
         return self.filter(lookups)
 
     def query_updated_at(self, query: str | None):
@@ -40,44 +28,17 @@ class ComicManager(models.Manager):
             slugquery=slugquery,
         )
 
-    def get_title(self, query: str | None):
-        return self.get_queryset().query_title(query=query)
-
-    def get_rating(self, query: str | None):
-        return self.get_queryset().query_rating(query=query)
-
     def get_updated_at(self, query: str | None):
         return self.get_queryset().query_updated_at(query=query)
 
 
 class ChapterQuerySet(models.QuerySet):
-    def query_search(
-        self,
-        namequery: str | None,
-        slugquery: str | None,
-        titlequery: str | None,
-        comicquery: str | None,
-    ):
+    def query_search(self, namequery: str | None, slugquery: str | None):
         if namequery is None or namequery == "":
             return self.none()
         if slugquery is None or slugquery == "":
             return self.none()
-        if titlequery is None or titlequery == "":
-            return self.none()
-        if comicquery is None or comicquery == "":
-            return self.none()
-        lookups = (
-            Q(name__iexact=namequery)
-            | Q(slug__iexact=slugquery)
-            | Q(title__iexact=titlequery)
-            | Q(comic__title__iexact=comicquery)
-        )
-        return self.filter(lookups)
-
-    def query_name(self, query: str | None):
-        if query is None or query == "":
-            return self.none()
-        lookups = Q(name__iexact=query)
+        lookups = Q(name__exact=namequery) | Q(slug__exact=slugquery)
         return self.filter(lookups)
 
 
@@ -85,19 +46,8 @@ class ChapterManager(models.Manager):
     def get_queryset(self):
         return ChapterQuerySet(self.model, using=self._db)
 
-    def get_search(
-        self,
-        namequery: str | None,
-        slugquery: str | None,
-        titlequery: str | None,
-        comicquery: str | None,
-    ):
+    def get_search(self, namequery: str | None, slugquery: str | None):
         return self.get_queryset().query_search(
             namequery=namequery,
             slugquery=slugquery,
-            titlequery=titlequery,
-            comicquery=comicquery,
         )
-
-    def get_name(self, query: str | None):
-        return self.get_queryset().query_name(query=query)

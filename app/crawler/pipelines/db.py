@@ -8,7 +8,7 @@ from api.libary.models import ChapterImage
 from api.libary.models import Comic
 from api.libary.models import ComicImage
 from api.libary.models import Genre
-from api.libary.models import Spidermodel
+from api.libary.models import Website
 from django.contrib.auth import get_user_model
 from django.db.models import Q
 from django.db.utils import IntegrityError
@@ -52,28 +52,30 @@ class DbPipeline:
                     newauthor = Author.objects.update_or_create(name=author)[0]
                     newartist = Artist.objects.update_or_create(name=artist)[0]
                     newcategory = Category.objects.update_or_create(name=category)[0]
-                    oldspider = Spidermodel.objects.filter(
+                    oldwebsite = Website.objects.filter(
                         Q(name__exact=item["spider"]) | Q(link__exact=item.get("url")),
                     ).first()
-                    if not oldspider:
-                        oldspider = Spidermodel.objects.update_or_create(
+                    if not oldwebsite:
+                        oldwebsite = Website.objects.update_or_create(
                             name=item["spider"],
                             link=item.get("url"),
                         )[0]
-                    comic = Comic.objects.filter(  # type: ignore  # noqa: PGH003
-                        Q(title__exact=title) | Q(slug__exact=slug),
+                    comic = Comic.objects.get_search(  # type: ignore  # noqa: PGH003
+                        slug,
+                        title,
                     )
                     if comic.exists():
                         msg = f"{slug} - {title} Exists"
                         raise DropItem(msg)
                     try:
                         newcomic = Comic.objects.update_or_create(
+                            user=user,
                             title=title,
                             slug=slug,
                             description=description,
                             rating=rating,
                             status=status,
-                            spider=oldspider,
+                            website=oldwebsite,
                             updated_at=updated_at,
                             numchapters=numchapters,
                             numimages=numimages,
@@ -115,24 +117,26 @@ class DbPipeline:
                 slug = item["chapterslug"]
                 updated_at = item.get("updated_at")
                 numimages = len(images)
-                oldspider = Spidermodel.objects.filter(
+                oldwebsite = Website.objects.filter(
                     Q(name__exact=item["spider"]) | Q(link__exact=item.get("url")),
                 ).first()
-                if not oldspider:
-                    oldspider = Spidermodel.objects.update_or_create(
+                if not oldwebsite:
+                    oldwebsite = Website.objects.update_or_create(
                         name=item["spider"],
                         link=item.get("url"),
                     )[0]
-                comic = Comic.objects.filter(  # type: ignore  # noqa: PGH003
-                    Q(title__exact=comictitle) | Q(slug__exact=comicslug),
+                comic = Comic.objects.get_search(  # type: ignore  # noqa: PGH003
+                    comictitle,
+                    comicslug,
                 )
                 if (
                     comic.exists()  # type: ignore  # noqa: PGH003
                 ):
                     if images:
                         dbcomic = comic.first()
-                        chapter = Chapter.objects.filter(  # type: ignore  # noqa: PGH003
-                            Q(slug__exact=slug),
+                        chapter = Chapter.objects.get_search(  # type: ignore  # noqa: PGH003
+                            slug,
+                            title,
                         )
                         if chapter.exists():
                             msg = f"{slug} - {comictitle} Exists"
@@ -144,7 +148,7 @@ class DbPipeline:
                                 title=title,
                                 slug=slug,
                                 name=name,
-                                spider=oldspider,
+                                website=oldwebsite,
                                 updated_at=updated_at,
                                 numimages=numimages,
                                 comic=dbcomic,

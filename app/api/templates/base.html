@@ -10,8 +10,8 @@
     <meta name="author" content="Alexander E Iseghohi" />
     <title>
       {% block title %}
-        {% translate "Rhixescans" %}
-      {% endblock title %}
+        {% translate 'Rhixescans' %}
+      {% endblock %}
     </title>
     <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
     {% block meta %}
@@ -25,17 +25,18 @@
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Rhixe Scans" />
       <meta name="twitter:description" content="Read Comics" />
-    {% endblock meta %}
+    {% endblock %}
     {% block header %}
-    {% endblock header %}
+
+    {% endblock %}
     {% block css %}
       <!-- Your stuff: Third-party CSS libraries go here -->
       <!-- This file stores project-specific CSS -->
       {% render_bundle 'project' 'css' %}
       {% comment %} <link href="{% static 'select2/dist/css/select2.min.css' %}" rel="stylesheet" /> {% endcomment %}
-    {% endblock css %}
-    <!-- Le javascript
-    ================================================== -->
+    {% endblock %}
+    <!--     Le javascript
+    ==================================================     -->
     {# Placed at the top of the document so pages load faster with defer #}
     {% block javascript %}
       <!-- Vendor dependencies bundled as one file -->
@@ -43,20 +44,20 @@
       <!-- place project specific Javascript in this file -->
       {% render_bundle 'project' 'js' attrs='defer' %}
       {% comment %} <script src="{% static 'select2/dist/js/select2.min.js' %}"></script> {% endcomment %}
-    {% endblock javascript %}
+    {% endblock %}
+    <link href="{% static 'css/datatables.min.css' %}" rel="stylesheet" />
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/datatables.min.js' %}"></script>
   </head>
-  <body class="min-h-screen antialiased bg-secondarybackground __variable_5d1e58 clickup-chrome-ext_installed font-sans"
-        style="margin: 0 !important"
-        cz-shortcut-listen="true"
-        data-new-gr-c-s-check-loaded="14.1226.0"
-        data-gr-ext-installed="">
+  <body class="min-h-screen antialiased bg-secondarybackground __variable_5d1e58 clickup-chrome-ext_installed font-sans" style="margin: 0 !important" cz-shortcut-listen="true" data-new-gr-c-s-check-loaded="14.1226.0" data-gr-ext-installed="">
     {% block body %}
-      {% include "partials/base/header.html" %}
+      {% include 'partials/base/header.html' %}
       {% block main %}
         {% block content %}
-        {% endblock content %}
-      {% endblock main %}
-      {% include "partials/base/footer.html" %}
-    {% endblock body %}
+
+        {% endblock %}
+      {% endblock %}
+      {% include 'partials/base/footer.html' %}
+    {% endblock %}
   </body>
 </html>

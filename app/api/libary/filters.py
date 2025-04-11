@@ -9,7 +9,6 @@ from api.libary.models import Category
 from api.libary.models import Chapter
 from api.libary.models import Comic
 from api.libary.models import Genre
-from api.libary.models import UserItem
 from api.users.models import User
 
 
@@ -189,11 +188,3 @@ class SearchFilter(django_filters.FilterSet):
                 "class": "",
             },
         )
-
-
-class UserItemFilter(django_filters.FilterSet):
-    class Meta:
-        model = UserItem
-        fields = {
-            "order": ["exact", "lt", "gt", "range"],
-        }

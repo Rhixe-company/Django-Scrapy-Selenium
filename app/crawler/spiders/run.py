@@ -36,7 +36,7 @@ class RunSpider(Spider):
 
     def comicspage(self, response):
         urls = [
-            f"https://asuracomic.net/series?page={i}&order=update" for i in range(2, 19)
+            f"https://asuracomic.net/series?page={i}&order=update" for i in range(2, 9)
         ]
         links = response.xpath(
             "//div[@class='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-3 p-4']/a/@href",  # noqa: E501

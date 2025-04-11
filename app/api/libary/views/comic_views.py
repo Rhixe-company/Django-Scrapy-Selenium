@@ -11,10 +11,10 @@ def comic_list_view(request):
         Comic.objects.prefetch_related(
             "comicimages",
             "genres",
-            "followers",
+            "users",
             "comicchapters",
         )
-        .select_related("user", "author", "category", "artist", "spider")
+        .select_related("user", "author", "category", "artist", "website")
         .all()
     )
     table = ComicTable(qs)

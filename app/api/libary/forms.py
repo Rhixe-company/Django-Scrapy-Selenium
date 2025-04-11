@@ -48,7 +48,7 @@ class ComicForm(forms.ModelForm):
             "description",
             "rating",
             "status",
-            "spider",
+            "website",
             "serialization",
             "updated_at",
             "category",
@@ -101,7 +101,7 @@ class ComicForm(forms.ModelForm):
                 "class": "",
             },
         )
-        self.fields["spider"].widget.attrs.update(
+        self.fields["website"].widget.attrs.update(
             {
                 "class": "",
             },
@@ -180,7 +180,7 @@ class ChapterForm(forms.ModelForm):
             "name",
             "title",
             "slug",
-            "spider",
+            "website",
             "numimages",
             "updated_at",
             "comic",
@@ -224,7 +224,7 @@ class ChapterForm(forms.ModelForm):
                 "class": "",
             },
         )
-        self.fields["spider"].widget.attrs.update(
+        self.fields["website"].widget.attrs.update(
             {
                 "placeholder": _("Enter Spider"),
                 "class": "",

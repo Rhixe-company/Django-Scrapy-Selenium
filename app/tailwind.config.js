@@ -4,7 +4,7 @@ module.exports = {
   content: [
     "./api/templates/**/**/**/**/**/**/*.html",
     "./src/**/**/**/*.{js,ts,jsx,tsx,mdx,scss,css}",
-    "./node_modules/flowbite/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/flowbite/**/*.js",
   ],
   darkMode: "class",
   theme: {
@@ -76,8 +76,9 @@ module.exports = {
   variants: {},
   plugins: [
     require("@tailwindcss/forms"),
-    require("flowbite"),
+    // require("flowbite"),
     require("@tailwindcss/typography"),
+    require("flowbite/plugin"),
     plugin(function ({ addUtilities, addComponents, e, config }) {
       // Add your custom styles here
     }),

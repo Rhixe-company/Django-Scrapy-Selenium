@@ -14,6 +14,7 @@ from scrapy.item import Field
 from scrapy.item import Item
 from w3lib.html import remove_comments
 from w3lib.html import remove_tags
+from w3lib.html import replace_entities
 from w3lib.html import strip_html5_whitespace
 
 
@@ -29,10 +30,15 @@ def get_slug(value):
     return value.split("/")[-1].split("-")[-0]
 
 
+def remove_multiple_spaces(value):
+    # Replace HTML entities and then strip multiple spaces
+    value = replace_entities(value)
+    return " ".join(value.split())
+
+
 def clean_description(value):
-    obj = "".join(str(x) for x in value)
     return (
-        obj.replace("\n", "")
+        value.replace("\n", "")
         .replace("\\n", "")
         .replace("\r", "")
         .replace("\\r", "")
@@ -89,6 +95,7 @@ class ComicItem(Item):
             comments_html,
             strip_html_space,
             clean_description,
+            remove_multiple_spaces,
         ),
         output_processor=Join(),
     )

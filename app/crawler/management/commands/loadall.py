@@ -9,7 +9,7 @@ from api.libary.models import ChapterImage
 from api.libary.models import Comic
 from api.libary.models import ComicImage
 from api.libary.models import Genre
-from api.libary.models import Spidermodel
+from api.libary.models import Website
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
@@ -23,7 +23,7 @@ class Command(BaseCommand):
     help = "Generates comics for apps"
 
     def handle(self, *args, **options):  # noqa: C901, PLR0915
-        def save_comics(comics_data):  # noqa: C901, PLR0912, PLR0915
+        def save_comics(comics_data):  # noqa: C901
             comics = Comic.objects.all()
             comic_images = ComicImage.objects.select_related("comic").all()
             logger.info(
@@ -62,20 +62,18 @@ class Command(BaseCommand):
                     newauthor = Author.objects.update_or_create(name=author)[0]
                     newartist = Artist.objects.update_or_create(name=artist)[0]
                     newcategory = Category.objects.update_or_create(name=category)[0]
-                    oldspider = Spidermodel.objects.filter(
+                    dbwebsite = Website.objects.filter(
                         Q(name__exact=item["spider"]) | Q(link__exact=item.get("url")),
                     ).first()
-                    if not oldspider:
-                        oldspider = Spidermodel.objects.update_or_create(
+                    if not dbwebsite:
+                        dbwebsite = Website.objects.update_or_create(
                             name=item["spider"],
                             link=item.get("url"),
                         )[0]
-                    comic = Comic.objects.filter(  # type: ignore  # noqa: PGH003
-                        Q(title__exact=title) | Q(slug__exact=slug),
-                    )
+                    comic = Comic.objects.get_search(title, slug)
                     if comic.exists():
                         if comic.first().slug == slug:  # type: ignore  # noqa: PGH003
-                            msg = f"{comic.first().comic_id} - {comic.first().slug} - {comic.first().title} Saving Exists"  # type: ignore  # noqa: E501, PGH003
+                            msg = f"{comic.first().pk} - {comic.first().slug} - {comic.first().title} Saving Exists"  # type: ignore  # noqa: E501, PGH003
                             logger.info(msg)
                         else:
                             msg = f"{slug} - {title} Exists"
@@ -83,12 +81,13 @@ class Command(BaseCommand):
                     else:
                         try:
                             newcomic = Comic.objects.update_or_create(
+                                user=user,
                                 title=title,
                                 slug=slug,
                                 description=description,
                                 rating=rating,
                                 status=status,
-                                spider=oldspider,
+                                website=dbwebsite,
                                 updated_at=updated_at,
                                 numchapters=numchapters,
                                 numimages=numimages,
@@ -97,31 +96,26 @@ class Command(BaseCommand):
                                 author=newauthor,
                                 artist=newartist,
                             )[0]
-                        except IntegrityError:
-                            msg = f"{slug} - {title} Exists "
-                            logger.exception(msg)  # noqa: B904, RUF100
-                        if genres:
-                            for genre in genres:
-                                try:
+                            if genres:
+                                for genre in genres:
                                     newgenre = Genre.objects.update_or_create(
                                         name=genre,
                                     )[0]
-                                except IntegrityError:
-                                    msg = f"{genre} Exists "
-                                    logger.exception(msg)  # noqa: B904, RUF100
-                                newcomic.genres.add(newgenre)
-                                newcomic.save()
-                        for image in images:
-                            try:
+
+                                    newcomic.genres.add(newgenre)
+                                    newcomic.save()
+                            for image in images:
                                 ComicImage.objects.update_or_create(
                                     link=image["url"],
                                     image=image["path"],
                                     status=image["status"],
                                     comic=newcomic,
                                 )[0]
-                            except IntegrityError:
-                                msg = f"{image['path']} - {image['url']} Exists"
-                                logger.exception(msg)  # noqa: B904, RUF100
+
+                        except IntegrityError:
+                            msg = f"{slug} - {title} Exists "
+                            logger.exception(msg)  # noqa: B904, RUF100
+
             logger.info(
                 {
                     "Comics": comics[0:2],
@@ -152,28 +146,24 @@ class Command(BaseCommand):
                 slug = item["chapterslug"]
                 updated_at = item.get("updated_at")
                 numimages = len(images)
-                oldspider = Spidermodel.objects.filter(
+                dbwebsite = Website.objects.filter(
                     Q(name__exact=item["spider"]) | Q(link__exact=item.get("url")),
                 ).first()
-                if not oldspider:
-                    oldspider = Spidermodel.objects.update_or_create(
+                if not dbwebsite:
+                    dbwebsite = Website.objects.update_or_create(
                         name=item["spider"],
                         link=item.get("url"),
                     )[0]
-                comic = Comic.objects.filter(  # type: ignore  # noqa: PGH003
-                    Q(title__exact=comictitle) | Q(slug__exact=comicslug),
-                )
+                comic = Comic.objects.get_search(comictitle, comicslug)
                 if (
                     comic.exists()  # type: ignore  # noqa: PGH003
                 ):
                     if images:
                         dbcomic = comic.first()
-                        chapter = Chapter.objects.filter(  # type: ignore  # noqa: PGH003
-                            Q(slug__exact=slug),
-                        )
+                        chapter = Chapter.objects.get_search(slug, title)
                         if chapter.exists():
                             if chapter.first().slug == slug:  # type: ignore  # noqa: PGH003
-                                msg = f"{chapter.first().chapter_id} - {chapter.first().slug} - {chapter.first().comic.title} Saving"  # type: ignore  # noqa: E501, PGH003
+                                msg = f"{chapter.first().pk} - {chapter.first().slug} - {chapter.first().comic.title} Saving"  # type: ignore  # noqa: E501, PGH003
                                 logger.info(
                                     msg,
                                 )
@@ -188,16 +178,12 @@ class Command(BaseCommand):
                                     title=title,
                                     slug=slug,
                                     name=name,
-                                    spider=oldspider,
+                                    website=dbwebsite,
                                     updated_at=updated_at,
                                     numimages=numimages,
                                     comic=dbcomic,
                                 )[0]
-                            except IntegrityError:
-                                msg = f"{slug} - {name} Exists"
-                                logger.exception(msg)  # noqa: B904, RUF100
-                            for image in images:
-                                try:
+                                for image in images:
                                     ChapterImage.objects.update_or_create(
                                         link=image["url"],
                                         image=image["path"],
@@ -205,9 +191,10 @@ class Command(BaseCommand):
                                         chapter=newchapter,
                                         comic=dbcomic,
                                     )[0]
-                                except IntegrityError:
-                                    msg = f"{image['path']} - {image['url']} Exists"
-                                    logger.exception(msg)  # noqa: B904, RUF100
+
+                            except IntegrityError:
+                                msg = f"{slug} - {name} Exists"
+                                logger.exception(msg)  # noqa: B904, RUF100
                 else:
                     msg = f"{comictitle} Does Not Exists"
                     logger.error(

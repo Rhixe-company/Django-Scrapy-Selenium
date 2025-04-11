@@ -34,24 +34,17 @@ module.exports = {
     rules: [
       // we pass the output from babel loader to react-hot loader
       {
-        test: /\.js?x$/i,
+        test: /\.jsx?$/i,
         enforce: "pre",
         use: ["source-map-loader"],
       },
       {
-        test: /\.js?x$/i,
+        test: /\.jsx?$/i,
         loader: "babel-loader",
       },
       {
-        test: /\.ts?x$/i,
-        use: [
-          {
-            loader: "ts-loader",
-            options: {
-              transpileOnly: true,
-            },
-          },
-        ],
+        test: /\.tsx?$/,
+        loader: "ts-loader",
       },
       {
         test: /\.s?css$/i,
