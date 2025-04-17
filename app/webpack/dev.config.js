@@ -23,8 +23,8 @@ module.exports = merge(commonConfig, {
       directory: path.resolve(__dirname, "../", "dist", "webpack_bundles"),
     },
     // We need hot=false (Disable HMR) to set liveReload=true
-    hot: false,
-    liveReload: true,
-    open: false,
+    hot: true,
+    liveReload: false,
+    open: true,
   },
 });
