@@ -19,10 +19,10 @@ class Run1Spider(Spider):
     allowed_domains = ["gg.asuracomic.net", "asuracomic.net"]
     start_urls = [
         "https://asuracomic.net/series/solo-leveling-ragnarok-8250a620",
-        "https://asuracomic.net/series/a-dragonslayers-peerless-regression-517c9d3b",
-        "https://asuracomic.net/series/im-gonna-annihilate-this-land-7c6ce73d",
-        "https://asuracomic.net/series/killer-pietro-6fe8e840",
-        "https://asuracomic.net/series/i-regressed-as-the-duke-d0791d89",
+        # "https://asuracomic.net/series/a-dragonslayers-peerless-regression-517c9d3b",
+        # "https://asuracomic.net/series/im-gonna-annihilate-this-land-7c6ce73d",
+        # "https://asuracomic.net/series/killer-pietro-6fe8e840",
+        # "https://asuracomic.net/series/i-regressed-as-the-duke-d0791d89",
     ]
 
     def start_requests(self):
@@ -200,7 +200,7 @@ class Run1Spider(Spider):
         )
         if image_urls:
             images = []
-            for img in image_urls:
+            for img in image_urls[0:2]:
                 images.append(img.get_attribute("src"))  # noqa: PERF401
             loader.add_value("image_urls", images)
             msg = f"Total Images found: {len(images)}"

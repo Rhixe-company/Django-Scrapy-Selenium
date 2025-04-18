@@ -31,6 +31,23 @@ class MyRadioSelect(ChoiceWidget):
         return super().id_for_label(id_, index)
 
 
+class MyMulRadioSelect(forms.RadioSelect):
+    allow_multiple_selected = True
+    input_type = "checkbox"
+    template_name = "partials/widgets/radio.html"
+    option_template_name = "partials/widgets/radio_option.html"
+
+    def use_required_attribute(self, initial):
+        # Don't use the 'required' attribute because browser validation would
+        # require all checkboxes to be checked instead of at least one.
+        return False
+
+    def value_omitted_from_data(self, data, files, name):
+        # HTML checkboxes don't appear in POST data if not checked, so it's
+        # never known if the value is actually omitted.
+        return False
+
+
 class MyCustomImageWidget(forms.ClearableFileInput):
     clear_checkbox_label = _("Clear")  # type: ignore  # noqa: PGH003
     initial_text = _("Currently")  # type: ignore  # noqa: PGH003

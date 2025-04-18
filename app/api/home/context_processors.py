@@ -3,7 +3,7 @@ from datetime import timedelta
 from django.db.models import Q
 from django.utils.timezone import now
 
-from api.libary.filters import SearchFilter
+from api.libary.filters import SearchFilterSet
 from api.libary.models import Comic
 
 
@@ -21,7 +21,7 @@ def load(request):
     monthcomics = Comic.objects.filter(
         Q(rating__gte=9.9) & Q(updated_at__gt=month),
     )
-    myfilter = SearchFilter()
+    myfilter = SearchFilterSet()
 
     return {
         "monthlycomics": monthcomics[0:10],

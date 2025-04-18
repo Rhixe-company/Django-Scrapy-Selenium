@@ -1,45 +1,76 @@
-from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import filters
-from rest_framework import generics
-from rest_framework.permissions import AllowAny
-from rest_framework.permissions import IsAdminUser
+from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
 
-from project.libary.models import ComicImage
-from project.libary.serializers import ComicImageSerializer
-
-
-class ComicImageListAPIView(generics.ListCreateAPIView):
-    queryset = ComicImage.objects.select_related("comic").all()
-    serializer_class = ComicImageSerializer
-    filter_backends = [
-        DjangoFilterBackend,  # type: ignore  # noqa: PGH003
-        filters.SearchFilter,
-        filters.OrderingFilter,
-    ]
-
-    def get_queryset(self):
-        return super().get_queryset()
-
-    def get_permissions(self):
-        self.permission_classes = [AllowAny]
-        if self.request.method == "POST":
-            self.permission_classes = [IsAdminUser]
-        return super().get_permissions()
+from api.libary.decorators import admin_only
+from api.libary.decorators import user_only
+from api.libary.forms import ComicImageForm
+from api.libary.models import Comic
+from api.libary.models import ComicImage
 
 
-comic_image_list = ComicImageListAPIView.as_view()
+@admin_only
+@user_only
+def create_view(request, slug=None):
+    comic = get_object_or_404(Comic, slug=slug)
+    if request.method == "POST":
+        form = ComicImageForm(request.POST, request.FILES)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.comic = comic
+            obj.save()
+            form.save_m2m()
+            success_url = obj.get_update_url()
+            return HttpResponseRedirect(success_url)
+        context = {
+            "form": form,
+        }
+        return render(request, "libary/comicimages/create_form.html", context)
+    context = {
+        "form": ComicImageForm(),
+        "object": comic,
+    }
+    return render(request, "libary/comicimages/create_form.html", context)
 
 
-class ComicImageDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = ComicImage.objects.select_related("comic").all()
-    serializer_class = ComicImageSerializer
-    lookup_url_kwarg = "comic_image_id"
+@admin_only
+@user_only
+def update_view(request, slug=None, pk=None):
+    comicimage = get_object_or_404(ComicImage, pk=pk)
+    comic = get_object_or_404(Comic, slug=slug)
+    context = {
+        "form": ComicImageForm(instance=comicimage),
+        "object": comicimage,
+    }
+    if request.method == "POST":
+        form = ComicImageForm(request.POST, request.FILES, instance=comicimage)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.comic = comic
+            obj.save()
+            form.save_m2m()
+            success_url = obj.get_update_url()
+            return HttpResponseRedirect(success_url)
+        context = {
+            "form": form,
+            "object": comicimage,
+        }
+        return render(request, "libary/comicimages/update_form.html", context)
 
-    def get_permissions(self):
-        self.permission_classes = [AllowAny]
-        if self.request.method in ["PUT", "PATCH", "DELETE"]:
-            self.permission_classes = [IsAdminUser]
-        return super().get_permissions()
+    return render(request, "libary/comicimages/update_form.html", context)
 
 
-comic_image_detail = ComicImageDetailAPIView.as_view()
+@admin_only
+@user_only
+def delete_view(request, slug=None, pk=None):
+    comicimage = get_object_or_404(ComicImage, pk=pk)
+    comic = get_object_or_404(Comic, slug=slug)
+    context = {
+        "object": comicimage,
+    }
+    if request.method == "POST":
+        comicimage.delete()
+        success_url = comic.get_update_url()
+        return HttpResponseRedirect(success_url)
+
+    return render(request, "libary/comicimages/delete.html", context)

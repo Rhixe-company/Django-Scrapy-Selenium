@@ -7981,5 +7981,32 @@
       }
     ],
     "spider": "run"
+  },
+  {
+    "title": "The Hero Starts Over at the Academy",
+    "slug": "the-hero-starts-over-at-the-academy",
+    "serialization": "_",
+    "author": "_",
+    "artist": "_",
+    "rating": "9.6",
+    "status": "ongoing",
+    "category": "Mangatoon",
+    "genres": ["Action", "Adventure", "Fantasy", "Reincarnation", "Revenge"],
+    "updated_at": "2025-04-17",
+    "url": "https://asuracomic.net/series/the-hero-starts-over-at-the-academy-5fd34371",
+    "image_urls": [
+      "https://gg.asuracomic.net/storage/media/287989/conversions/01JS08KRNK477X0DMWAK0SHGWH-optimized.webp"
+    ],
+    "numchapters": 1,
+    "description": "Misato Kyoichiro, the leader of the strongest group of adventurers, the \"Golden Seekers,\" was betrayed by his comrades and left to die. \"I wont just die like this!!\" In his final moments, he activated a reincaation spell. Kyoichiro successfully reincaated twenty years later as a student named Asai Kyosuke, a wielder of the \"Void\" attribute. \"Void\" is an attribute mocked for being \"attributeless,\" but Kyoichiro knew the truth of this attribute, thanks to the \"Time\" attribute he had in his previous life. The \"Void\" attribute has the potential to surpass the \"Time\" attribute, which was seen as the strongest in his lifetime. Thus, rebo as Asai Kyosuke, he retus to the Adventurer Academy, determined to purge all evil from society; all to get revenge on his former comrades, who betrayed him out of greed. And... \"Asai Kyosuke, I wont let anyone look down on you ever again.\" ...to reach the peak of strength, something he could not achieve in his previous life.",
+    "images": [
+      {
+        "url": "https://gg.asuracomic.net/storage/media/287989/conversions/01JS08KRNK477X0DMWAK0SHGWH-optimized.webp",
+        "path": "the-hero-starts-over-at-the-academy/01JS08KRNK477X0DMWAK0SHGWH-optimized.webp",
+        "checksum": "1dec591dcd5134a920e1e84f6c5c1ce2",
+        "status": "downloaded"
+      }
+    ],
+    "spider": "run"
   }
 ]

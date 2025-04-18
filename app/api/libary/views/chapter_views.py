@@ -1,118 +1,117 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView
-from django.views.generic import DeleteView
-from django.views.generic import FormView
-from django.views.generic import UpdateView
-from django.views.generic.detail import DetailView
-from django_tables2 import SingleTableView
+from django_tables2 import RequestConfig
 
+from api.libary.decorators import admin_only
+from api.libary.decorators import user_only
+from api.libary.filters import ChapterFilterSet
 from api.libary.forms import ChapterForm
 from api.libary.forms import CommentForm
 from api.libary.models import Chapter
 from api.libary.tables import ChapterTable
 
 
-class ChapterListView(LoginRequiredMixin, SingleTableView):
-    """All chapters."""
+@admin_only
+@user_only
+def list_view(request):
+    f = ChapterFilterSet(
+        request.GET,
+        queryset=Chapter.objects.prefetch_related(
+            "chapterimages",
+        )
+        .select_related("comic", "website")
+        .all(),
+    )
+    table = ChapterTable(f.qs)
+    RequestConfig(request, paginate={"per_page": 30}).configure(table)  # type: ignore  # noqa: PGH003
+    context = {
+        "table": table,
+        "filter": f,
+    }
+    return render(request, "libary/chapters/list.html", context)
 
-    model = Chapter
-    table_class = ChapterTable
-    queryset = Chapter.objects.all()
-    template_name = "libary/chapters/list.html"
 
-
-list_view = ChapterListView.as_view()
-
-
-class ChapterDetailView(LoginRequiredMixin, SuccessMessageMixin, DetailView, FormView):
-    """Chapter detail view."""
-
-    model = Chapter
-    form_class = CommentForm
-    slug_field = "slug"
-    slug_url_kwarg = "slug"
-    success_message = _("Comment successfully created")
-    template_name = "libary/chapters/detail.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["form"] = CommentForm()
-        return context
-
-    def post(self, request, *args, **kwargs):
+@admin_only
+@user_only
+def detail_view(request, slug=None):
+    chapter = get_object_or_404(Chapter, slug=slug)
+    context = {
+        "object": chapter,
+        "form": CommentForm(),
+    }
+    if request.method == "POST":
         form = CommentForm(request.POST, request.FILES)
         if form.is_valid():
-            comment = form.save(commit=False)
-            comment.chapter = self.get_object()
-            comment.save()
-        success_url = reverse(
-            "chapters:detail",
-            kwargs={"slug": self.get_object().slug},
-        )
-        return HttpResponseRedirect(success_url)
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.chapter = chapter
+            obj.comic = chapter.comic
+            obj.save()
+            success_url = chapter.get_absolute_url()
+            return HttpResponseRedirect(success_url)
+        return render(request, "libary/chapters/detail.html", context)
+    return render(request, "libary/chapters/detail.html", context)
 
 
-detail_view = ChapterDetailView.as_view()
-
-
-class ChapterCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
-    """Chapter create view"""
-
-    model = Chapter
-    form_class = ChapterForm
-    template_name = "libary/chapters/create_form.html"
-    success_message = _("Information successfully created")
-
-    def get_success_url(self):
-        return reverse("chapters:list")
-
-
-create_view = ChapterCreateView.as_view()
-
-
-class ChapterUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView, FormView):
-    """Chapter update view."""
-
-    model = Chapter
-    form_class = ChapterForm
-    slug_field = "slug"
-    slug_url_kwarg = "slug"
-    template_name = "libary/chapters/update_form.html"
-    success_message = _("Information successfully updated")
-
-
-update_view = ChapterUpdateView.as_view()
-
-
-class ChapterDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView, FormView):
-    """Chapter delete view."""
-
-    model = Chapter
-    form_class = ChapterForm
-    slug_field = "slug"
-    slug_url_kwarg = "slug"
-    template_name = "libary/chapters/delete_form.html"
-    success_message = _("Information successfully deleted")
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["form"] = ChapterForm()
-        return context
-
-    def post(self, request, *args, **kwargs):
+@admin_only
+@user_only
+def create_view(request):
+    if request.method == "POST":
         form = ChapterForm(request.POST, request.FILES)
         if form.is_valid():
-            chapter = form.save(commit=False)
-            chapter.save()
-        success_url = reverse(
-            "chapters:delete",
-            kwargs={"slug": self.get_object().slug},
-        )
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.save()
+            form.save_m2m()
+            success_url = obj.get_update_url()
+            return HttpResponseRedirect(success_url)
+        context = {
+            "form": form,
+        }
+        return render(request, "libary/chapters/create_form.html", context)
+    context = {
+        "form": ChapterForm(),
+    }
+    return render(request, "libary/chapters/create_form.html", context)
+
+
+@admin_only
+@user_only
+def update_view(request, slug=None):
+    chapter = get_object_or_404(Chapter, slug=slug)
+    context = {
+        "form": ChapterForm(instance=chapter),
+        "object": chapter,
+    }
+    if request.method == "POST":
+        form = ChapterForm(request.POST, request.FILES, instance=chapter)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            form.save_m2m()
+            success_url = obj.get_update_url()
+            return HttpResponseRedirect(success_url)
+        context = {
+            "form": form,
+            "object": chapter,
+        }
+        return render(request, "libary/chapters/update_form.html", context)
+
+    return render(request, "libary/chapters/update_form.html", context)
+
+
+@admin_only
+@user_only
+def delete_view(request, slug=None):
+    chapter = get_object_or_404(Chapter, slug=slug)
+    context = {
+        "object": chapter,
+    }
+    if request.method == "POST":
+        chapter.delete()
+        success_url = reverse("chapters:list")
         return HttpResponseRedirect(success_url)
 
-
-delete_view = ChapterDeleteView.as_view()
+    return render(request, "libary/chapters/delete.html", context)

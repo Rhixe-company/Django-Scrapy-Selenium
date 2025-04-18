@@ -1,112 +1,119 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.messages.views import SuccessMessageMixin
 from django.http import HttpResponseRedirect
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render
 from django.urls import reverse
-from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView
-from django.views.generic import DeleteView
-from django.views.generic import FormView
-from django.views.generic import UpdateView
-from django.views.generic.detail import DetailView
-from django_tables2 import SingleTableView
+from django_tables2 import RequestConfig
 
+from api.libary.decorators import admin_only
+from api.libary.decorators import user_only
+from api.libary.filters import ComicFilterSet
 from api.libary.forms import ComicForm
 from api.libary.forms import CommentForm
 from api.libary.models import Comic
 from api.libary.tables import ComicTable
 
 
-class ComicListView(LoginRequiredMixin, SingleTableView):
-    """All comics."""
+@admin_only
+@user_only
+def list_view(request):
+    f = ComicFilterSet(
+        request.GET,
+        queryset=Comic.objects.prefetch_related(
+            "comicimages",
+            "genres",
+            "users",
+            "comicchapters",
+        )
+        .select_related("user", "author", "category", "artist", "website")
+        .all(),
+    )
+    table = ComicTable(f.qs)
+    RequestConfig(request, paginate={"per_page": 30}).configure(table)  # type: ignore  # noqa: PGH003
+    context = {
+        "table": table,
+        "filter": f,
+    }
+    return render(request, "libary/comics/list.html", context)
 
-    model = Comic
-    table_class = ComicTable
-    queryset = Comic.objects.all()
-    template_name = "libary/comics/list.html"
 
-
-list_view = ComicListView.as_view()
-
-
-class ComicDetailView(LoginRequiredMixin, SuccessMessageMixin, DetailView, FormView):
-    """Comic detail view."""
-
-    model = Comic
-    form_class = CommentForm
-    slug_field = "slug"
-    slug_url_kwarg = "slug"
-    success_message = _("Comment successfully created")
-    template_name = "libary/comics/detail.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["form"] = CommentForm()
-        return context
-
-    def post(self, request, *args, **kwargs):
+@admin_only
+@user_only
+def detail_view(request, slug=None):
+    comic = get_object_or_404(Comic, slug=slug)
+    context = {
+        "object": comic,
+        "form": CommentForm(),
+    }
+    if request.method == "POST":
         form = CommentForm(request.POST, request.FILES)
         if form.is_valid():
-            comment = form.save(commit=False)
-            comment.comic = self.get_object()
-            comment.save()
-        success_url = reverse("comics:detail", kwargs={"slug": self.get_object().slug})
-        return HttpResponseRedirect(success_url)
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.comic = comic
+            obj.save()
+            success_url = comic.get_absolute_url()
+            return HttpResponseRedirect(success_url)
+        return render(request, "libary/comics/detail.html", context)
+    return render(request, "libary/comics/detail.html", context)
 
 
-detail_view = ComicDetailView.as_view()
-
-
-class ComicCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
-    """Comic create view"""
-
-    model = Comic
-    form_class = ComicForm
-    template_name = "libary/comics/create_form.html"
-    success_message = _("Information successfully created")
-
-    def get_success_url(self):
-        return reverse("comics:list")
-
-
-create_view = ComicCreateView.as_view()
-
-
-class ComicUpdateView(LoginRequiredMixin, SuccessMessageMixin, UpdateView, FormView):
-    """Comic update view."""
-
-    model = Comic
-    form_class = ComicForm
-    slug_field = "slug"
-    slug_url_kwarg = "slug"
-    template_name = "libary/comics/update_form.html"
-    success_message = _("Information successfully updated")
-
-
-update_view = ComicUpdateView.as_view()
-
-
-class ComicDeleteView(LoginRequiredMixin, SuccessMessageMixin, DeleteView, FormView):
-    """Comic delete view."""
-
-    model = Comic
-    form_class = ComicForm
-    slug_field = "slug"
-    slug_url_kwarg = "slug"
-    template_name = "libary/comics/delete_form.html"
-    success_message = _("Information successfully deleted")
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["form"] = ComicForm()
-        return context
-
-    def post(self, request, *args, **kwargs):
+@admin_only
+@user_only
+def create_view(request):
+    if request.method == "POST":
         form = ComicForm(request.POST, request.FILES)
         if form.is_valid():
-            comic = form.save(commit=False)
-            comic.save()
-        success_url = reverse("comics:delete", kwargs={"slug": self.get_object().slug})
+            obj = form.save(commit=False)
+            obj.user = request.user
+            obj.save()
+            form.save_m2m()
+            success_url = obj.get_update_url()
+            return HttpResponseRedirect(success_url)
+        context = {
+            "form": form,
+        }
+        return render(request, "libary/comics/create_form.html", context)
+    context = {
+        "form": ComicForm(),
+    }
+    return render(request, "libary/comics/create_form.html", context)
+
+
+@admin_only
+@user_only
+def update_view(request, slug=None):
+    comic = get_object_or_404(Comic, slug=slug)
+    context = {
+        "form": ComicForm(instance=comic),
+        "object": comic,
+    }
+    if request.method == "POST":
+        form = ComicForm(request.POST, request.FILES, instance=comic)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.save()
+            form.save_m2m()
+            success_url = obj.get_update_url()
+            return HttpResponseRedirect(success_url)
+        context = {
+            "form": form,
+            "object": comic,
+        }
+        return render(request, "libary/comics/update_form.html", context)
+
+    return render(request, "libary/comics/update_form.html", context)
+
+
+@admin_only
+@user_only
+def delete_view(request, slug=None):
+    comic = get_object_or_404(Comic, slug=slug)
+    context = {
+        "object": comic,
+    }
+    if request.method == "POST":
+        comic.delete()
+        success_url = reverse("comics:list")
         return HttpResponseRedirect(success_url)
 
-
-delete_view = ComicDeleteView.as_view()
+    return render(request, "libary/comics/delete.html", context)

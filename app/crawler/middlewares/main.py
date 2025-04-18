@@ -7,8 +7,6 @@ from scrapy.exceptions import NotConfigured
 from scrapy.http.response.html import HtmlResponse
 from scrapy_selenium.http import SeleniumRequest
 from selenium import webdriver
-from selenium.common import ElementNotInteractableException
-from selenium.common import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 
 
@@ -53,21 +51,21 @@ class SeleniumMiddleware:
             driver_service = webdriver.ChromeService(
                 executable_path=driver_executable_path,
                 log_output="logs.txt",
-                service_args=["--log", "debug"],
-                prefs={
-                    "dom.ipc.processCount": 8,
-                    "javascript.options.showInConsole": True,
-                },
+                service_args=["--log", "info"],
+                # prefs={  # noqa: ERA001, RUF100
+                #     "dom.ipc.processCount": 8,
+                #     "javascript.options.showInConsole": True,
+                # },
             )
         if driver_name and driver_name.lower() == "firefox":
             driver_service = webdriver.FirefoxService(
                 executable_path=driver_executable_path,
                 log_output="logs.txt",
-                service_args=["--log", "debug"],
-                prefs={
-                    "dom.ipc.processCount": 8,
-                    "javascript.options.showInConsole": True,
-                },
+                service_args=["--log", "info"],
+                # prefs={  # noqa: ERA001, RUF100
+                #     "dom.ipc.processCount": 8,
+                #     "javascript.options.showInConsole": True,
+                # },
             )
 
         driver_kwargs = {
@@ -117,14 +115,9 @@ class SeleniumMiddleware:
             self.driver.add_cookie({"name": cookie_name, "value": cookie_value})
 
         if request.wait_until:
-            WebDriverWait(
-                self.driver,
-                request.wait_time,  # type: ignore  # noqa: PGH003
-                ignored_exceptions=[
-                    NoSuchElementException,
-                    ElementNotInteractableException,
-                ],
-            ).until(request.wait_until)  # type: ignore  # noqa: E501, PGH003, RUF100
+            WebDriverWait(self.driver, request.wait_time).until(  # type: ignore  # noqa: PGH003
+                request.wait_until,
+            )
 
         if request.screenshot:
             request.meta["screenshot"] = self.driver.get_screenshot_as_png()

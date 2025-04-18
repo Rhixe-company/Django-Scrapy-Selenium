@@ -332,6 +332,30 @@ class ComicImage(models.Model):
     def __str__(self):
         return f"{self.image}"
 
+    def get_update_url(self) -> str:
+        """Get URL for comicimage's update view.
+
+        Returns:
+            str: URL for comicimage update.
+
+        """
+        return reverse(
+            "comicimages:update",
+            kwargs={"slug": self.comic.slug, "pk": self.pk},
+        )
+
+    def get_delete_url(self) -> str:
+        """Get URL for comicimage's delete view.
+
+        Returns:
+            str: URL for comicimage delete.
+
+        """
+        return reverse(
+            "comicimages:delete",
+            kwargs={"slug": self.comic.slug, "pk": self.pk},
+        )
+
 
 class ChapterImage(models.Model):
     class ChapterImageStatus(models.TextChoices):
@@ -366,6 +390,30 @@ class ChapterImage(models.Model):
 
     def __str__(self):
         return f"{self.image}"
+
+    def get_update_url(self) -> str:
+        """Get URL for chapterimage's update view.
+
+        Returns:
+            str: URL for chapterimage update.
+
+        """
+        return reverse(
+            "chapterimages:update",
+            kwargs={"slug": self.chapter.slug, "pk": self.pk},
+        )
+
+    def get_delete_url(self) -> str:
+        """Get URL for chapterimage's delete view.
+
+        Returns:
+            str: URL for chapterimage delete.
+
+        """
+        return reverse(
+            "chapterimages:delete",
+            kwargs={"slug": self.chapter.slug, "pk": self.pk},
+        )
 
 
 class Comment(models.Model):

@@ -6,11 +6,9 @@
   {% translate 'View Chapter List' %}
 {% endblock %}
 {% block content %}
-  <div class="min[925px]:p-0 relative max-[882px]:p-4 max-[786px]:p-0 lg:my-0">
-    {% include 'partials/chapters/container.html' %}
-  </div>
+  {% include 'partials/chapters/container.html' %}
 {% endblock %}
-{% block injs %}
+{% comment %} {% block injs %}
   <script src="{% static 'js/jquery.min.js' %}"></script>
   <script src="{% static 'js/datatables.min.js' %}"></script>
   <script type="text/javascript">
@@ -19,4 +17,4 @@
 
     })
   </script>
-{% endblock %}
+{% endblock %} {% endcomment %}

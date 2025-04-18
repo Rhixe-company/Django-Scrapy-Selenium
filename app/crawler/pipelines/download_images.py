@@ -155,8 +155,7 @@ class MyImagesPipeline(ImagesPipeline):
                             "chapterslug": item.get("chapterslug"),
                         },
                     )
-                    for u in urls[0:2]
-                    # for u in urls
+                    for u in urls
                 ]
         msg = f"Missing field in MyImagesPipeline get_media_requests: {item!r}"
         raise DropItem(msg)

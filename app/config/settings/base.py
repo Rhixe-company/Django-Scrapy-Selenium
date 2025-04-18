@@ -30,7 +30,7 @@ DEBUG = env.bool("DJANGO_DEBUG", False)  # type: ignore  # noqa: PGH003
 # In Windows, this must be set to your system time zone.
 TIME_ZONE = "UTC"
 # https://docs.djangoproject.com/en/dev/ref/settings/#language-code
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "en"
 # https://docs.djangoproject.com/en/dev/ref/settings/#languages
 
 LANGUAGES = [
@@ -100,7 +100,7 @@ THIRD_PARTY_APPS = [
     "import_export",
     "dynamic_formsets",
     "template_partials",
-    # "django_dyn_dt",
+    "django_dyn_dt",
 ]
 
 LOCAL_APPS = [
@@ -183,6 +183,7 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [
     str(BASE_DIR / "dist"),
     str(APPS_DIR / "static"),
+    str(APPS_DIR / "static/src"),
     str(APPS_DIR / "static/images"),
     # os.path.join(DYN_DB_PKG_ROOT, "templates/static"),  # noqa: PTH118, RUF100
 ]
@@ -446,7 +447,7 @@ CKEDITOR_5_CONFIGS = {
         ],
     },
     "extends": {
-        "language": "ru",
+        "language": {"ui": "en", "content": "en"},
         "blockToolbar": [
             "paragraph",
             "heading1",
@@ -607,7 +608,16 @@ CKEDITOR_5_CONFIGS = {
 CKEDITOR_5_CUSTOM_CSS = "css/custom.css"
 CSRF_COOKIE_NAME = "new_csrf_cookie_name"
 CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"
-# DYNAMIC_DATATB = {
-#     # SLUG -> Import_PATH
-#     "comics": "api.libary.models.Comic",
-# }
+DYNAMIC_DATATB = {
+    # SLUG -> Import_PATH
+    "comics": "api.libary.models.Comic",
+    "chapters": "api.libary.models.Chapter",
+    "comicimages": "api.libary.models.ComicImage",
+    "chapterimages": "api.libary.models.ChapterImage",
+    "websites": "api.libary.models.Website",
+    "categorys": "api.libary.models.Category",
+    "genres": "api.libary.models.Genre",
+    "authors": "api.libary.models.Author",
+    "artists": "api.libary.models.Artist",
+    "users": "api.users.models.User",
+}

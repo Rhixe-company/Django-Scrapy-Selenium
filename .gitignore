@@ -1234,5 +1234,5 @@ FodyWeavers.xsd
 .envs/*
 !.envs/.local/
 wheels/
-data/
+docker_data/
 public/

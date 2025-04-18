@@ -72,8 +72,8 @@ services:
     image: rhixe/api:postgres
     container_name: postgres
     volumes:
-      - ./data/postgres:/var/lib/postgresql/data
-      - ./data/postgres_backups:/backups
+      - ./docker_data/postgres:/var/lib/postgresql/data
+      - ./docker_data/postgres_backups:/backups
     ports:
       - "5432:5432"
     env_file:
@@ -92,7 +92,7 @@ services:
     ports:
       - "6379:6379"
     volumes:
-      - ./data/redis:/data
+      - ./docker_data/redis:/data
     networks:
       app-network:
         ipv4_address: 192.169.0.5
@@ -106,7 +106,7 @@ services:
     ports:
       - "6380:6380"
     volumes:
-      - ./data/redis:/data
+      - ./docker_data/redis:/data
     depends_on:
       redis:
         condition: service_started

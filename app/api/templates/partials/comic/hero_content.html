@@ -516,9 +516,9 @@
       <div class="scrollbar-thumb-themecolor scrollbar-track-transparent scrollbar-thin mr-3 max-h-[20rem] space-y-2.5 overflow-y-auto pb-4 pl-4 pr-2">
         {% for chapter in object.get_chapters %}
           <div class="group relative w-full cursor-pointer rounded-md border border-[#A2A2A2]/20 py-2 pl-4 hover:bg-[#343434]">
-            <a href="{{ object.get_absolute_url }}/chapter/200">
+            <a href="{{ chapter.get_absolute_url }}">
               <div class="absolute left-0 top-0 block h-full w-[5px] rounded bg-[#8E3FDD]"></div>
-              <h3 class="` ${shouldHighlight(chapter.id) ? &#39;&#39; : &#39;text-themecolor&#39;} flex flex-row text-sm font-medium text-white">
+              <h3 class=" flex flex-row text-sm font-medium text-white">
                 {{ chapter.name }}
                 {% if chapter.title %}<span class="pl-1">{{ chapter.title }}</span>{% endif %}
                 <span class="pl-1"></span>

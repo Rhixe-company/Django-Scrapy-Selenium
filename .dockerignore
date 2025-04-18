@@ -11,5 +11,5 @@ venv
 .git
 .envs/
 wheels/
-data/
+docker_data/
 public/

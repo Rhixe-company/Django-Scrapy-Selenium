@@ -77,6 +77,7 @@ class ComicForm(forms.ModelForm):
     description = forms.CharField(
         widget=CKEditor5Widget(
             attrs={"class": "django_ckeditor_5 custom_textarea", "rows": "4"},
+            config_name="extends",
         ),
     )
     rating = forms.CharField(
@@ -183,14 +184,14 @@ class ComicImageForm(forms.ModelForm):
     image = forms.ImageField(
         widget=MyCustomImageWidget(
             attrs={
-                "class": "custom_char",
+                "class": "custom_file",
             },
         ),
     )
     link = forms.URLField(
         widget=forms.URLInput(
             attrs={
-                "placeholder": _("Enter Slug"),
+                "placeholder": _("Enter Link"),
                 "class": "custom_char",
             },
         ),
@@ -207,11 +208,12 @@ class ComicImageForm(forms.ModelForm):
 
     class Meta:
         model = ComicImage
-        fields = ("image", "link", "checksum", "comic")
+        fields = ("image", "status", "link", "checksum")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["comic"].widget.attrs.update(
+
+        self.fields["status"].widget.attrs.update(
             {
                 "class": "custom_select",
             },
@@ -324,16 +326,12 @@ class ChapterImageForm(forms.ModelForm):
 
     class Meta:
         model = ChapterImage
-        fields = ("image", "link", "checksum", "comic", "chapter")
+        fields = ("image", "status", "link", "checksum")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["comic"].widget.attrs.update(
-            {
-                "class": "custom_select",
-            },
-        )
-        self.fields["chapter"].widget.attrs.update(
+
+        self.fields["status"].widget.attrs.update(
             {
                 "class": "custom_select",
             },
@@ -356,6 +354,7 @@ class CommentForm(forms.ModelForm):
         widgets = {
             "text": CKEditor5Widget(
                 attrs={"class": "django_ckeditor_5 custom_textarea", "rows": "4"},
+                config_name="extends",
             ),
         }
 

@@ -205,8 +205,8 @@ SELENIUM_DRIVER_EXECUTABLE_PATH = which("chromedriver")
 SELENIUM_BROWSER_EXECUTABLE_PATH = which("chrome")
 SELENIUM_DRIVER_ARGUMENTS = [
     "--headless",
-    # "--no-sandbox",
-    # "--disable-gpu",
-    # "--enable-javascript",
-    # "--disable-extensions",
+    "--no-sandbox",
+    "--disable-gpu",
+    "--enable-javascript",
+    "--disable-extensions",
 ]
