@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 module.exports = {
   content: [
-    "./api/templates/**/*.html",
-    "./src/**/*.ts",
-    "./src/**/*.js",
+    "./api/templates/**/**/**/**/*.html",
+    "./src/**/**/**/*.ts",
+    "./src/**/**/**/*.js",
     "./node_modules/flowbite/**/*.js",
   ],
   darkMode: "class",

@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.db.models import Q
 from django.utils.timezone import now
 
 from api.libary.filters import SearchFilter
@@ -9,9 +10,17 @@ from api.libary.models import Comic
 def load(request):
     week = now() - timedelta(weeks=1)
     month = now() - timedelta(weeks=4)
-    comics = Comic.objects.all().order_by("-rating")
-    weekcomics = Comic.objects.get_updated_at(week).order_by("-updated_at")  # type: ignore  # noqa: PGH003
-    monthcomics = Comic.objects.get_updated_at(month).order_by("-created_at")  # type: ignore  # noqa: PGH003
+    comics = Comic.objects.filter(
+        Q(rating__gte=9.9)
+        | Q(status=Comic.ComicStatus.ONGOING)
+        | Q(status=Comic.ComicStatus.COMPLETED),
+    )
+    weekcomics = Comic.objects.filter(
+        Q(rating__gte=9.9) & Q(updated_at__gte=week),
+    )
+    monthcomics = Comic.objects.filter(
+        Q(rating__gte=9.9) & Q(updated_at__gt=month),
+    )
     myfilter = SearchFilter()
 
     return {

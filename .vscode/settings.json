@@ -13,8 +13,8 @@
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "files.associations": {
     // "**/*.html": "html",
-    "**/templates/*/*.html": "django-html",
-    "**/templates/*.html": "django-html",
+    "**/templates/*.html": "html",
+    "**/templates/**/*.html": "django-html",
     "**/templates/*": "django-txt",
     "**/requirements{/**,*}.{txt,in}": "pip-requirements"
   },
@@ -35,7 +35,8 @@
   },
   "editor.inlineSuggest.enabled": true,
   "[django-html]": {
-    "editor.defaultFormatter": "junstyle.vscode-django-support"
+    "editor.defaultFormatter": "monosans.djlint"
+    // "editor.defaultFormatter": "junstyle.vscode-django-support"
   },
   "terminal.integrated.shell.windows": "C:/'Program Files'/PowerShell/7-preview/pwsh.exe",
   "powershell.developer.featureFlags": ["PSReadLine"],
@@ -52,4 +53,5 @@
     "linting.mypyEnabled": true,
     "linting.mypyPath": "myvenv/Scripts/mypy"
   }
+  // "tailwindCSS.experimental.configFile": "../app/tailwind.config.js"
 }

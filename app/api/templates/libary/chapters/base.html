@@ -12,15 +12,8 @@
               margin: 0 auto;
               padding-bottom: 9rem">
     <div class="">
-      <div class="w-[100%]">
-        <div style="overflow: hidden;
-                    max-width: 1220px;
-                    margin: 0 auto;
-                    position: relative">
-          {% block content %}
-          {% endblock content %}
-        </div>
-      </div>
+      {% block content %}
+      {% endblock content %}
     </div>
   </div>
 {% endblock main %}

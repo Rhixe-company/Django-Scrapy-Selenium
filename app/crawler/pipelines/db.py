@@ -42,7 +42,7 @@ class DbPipeline:
                 status = item["status"]
                 updated_at = item["updated_at"]
                 numchapters = item["numchapters"]
-                numimages = len(images)
+                numimages = len(item.get("image_urls"))
                 serialization = item["serialization"]
                 category = item.get("category")
                 author = item.get("author")
@@ -97,6 +97,7 @@ class DbPipeline:
                                 link=image["url"],
                                 image=image["path"],
                                 status=image["status"],
+                                checksum=image["checksum"],
                                 comic=newcomic,
                             )[0]
 
@@ -116,7 +117,7 @@ class DbPipeline:
                 title = item.get("chaptertitle", "")
                 slug = item["chapterslug"]
                 updated_at = item.get("updated_at")
-                numimages = len(images)
+                numimages = len(item.get("image_urls"))
                 oldwebsite = Website.objects.filter(
                     Q(name__exact=item["spider"]) | Q(link__exact=item.get("url")),
                 ).first()
@@ -157,6 +158,7 @@ class DbPipeline:
                                     link=image["url"],
                                     image=image["path"],
                                     status=image["status"],
+                                    checksum=image["checksum"],
                                     chapter=newchapter,
                                     comic=dbcomic,
                                 )[0]

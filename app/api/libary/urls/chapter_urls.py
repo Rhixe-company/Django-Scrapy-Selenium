@@ -11,8 +11,23 @@ urlpatterns = [
         name="list",
     ),
     path(
-        "chapter/<str:slug>/",
+        "create/",
+        view=views.create_view,
+        name="create",
+    ),
+    path(
+        "<str:slug>/",
         view=views.detail_view,
         name="detail",
+    ),
+    path(
+        "<str:slug>/update/",
+        view=views.update_view,
+        name="update",
+    ),
+    path(
+        "<str:slug>/delete/",
+        view=views.delete_view,
+        name="delete",
     ),
 ]

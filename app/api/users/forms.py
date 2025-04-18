@@ -1,3 +1,5 @@
+from typing import Iterable  # noqa: UP035
+
 from allauth.account.forms import LoginForm
 from allauth.account.forms import SignupForm
 from allauth.socialaccount.forms import SignupForm as SocialSignupForm
@@ -7,6 +9,16 @@ from django.forms import EmailField
 from django.utils.translation import gettext_lazy as _
 
 from .models import User
+
+
+class CustomeBoundField(forms.BoundField):
+    custom_class = "custom"
+
+    def css_classes(self, extra_classes: str | Iterable[str] | None = None) -> str:
+        result = super().css_classes(extra_classes)
+        if self.custom_class not in result:
+            result += f" {self.custom_class}"
+        return result.strip()
 
 
 class UserAdminChangeForm(admin_forms.UserChangeForm):

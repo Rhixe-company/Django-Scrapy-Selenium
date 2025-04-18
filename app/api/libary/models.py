@@ -121,7 +121,7 @@ class Comic(models.Model):
 
     title = models.CharField(_("Title"), max_length=5000, unique=True)
     slug = models.SlugField(_("Slug"), max_length=5000, blank=True, unique=True)
-    description = models.TextField(_("Description"))
+    description = CKEditor5Field("Description", config_name="extends")
     status = models.CharField(_("Status"), max_length=15, choices=ComicStatus.choices)
     rating = models.DecimalField(_("Rating"), max_digits=10, decimal_places=1)
     updated_at = models.DateField()
@@ -182,7 +182,6 @@ class Comic(models.Model):
 
     class Meta:
         ordering = ["-updated_at"]
-        get_latest_by = "created_at"
 
     def __str__(self):
         return self.title
@@ -262,7 +261,6 @@ class Chapter(models.Model):
 
     class Meta:
         ordering = ["-updated_at"]
-        get_latest_by = "created_at"
 
     def __str__(self):
         return self.name
@@ -275,6 +273,24 @@ class Chapter(models.Model):
 
         """
         return reverse("chapters:detail", kwargs={"slug": self.slug})
+
+    def get_update_url(self) -> str:
+        """Get URL for chapter's update view.
+
+        Returns:
+            str: URL for chapter update.
+
+        """
+        return reverse("chapters:update", kwargs={"slug": self.slug})
+
+    def get_delete_url(self) -> str:
+        """Get URL for chapter's delete view.
+
+        Returns:
+            str: URL for chapter delete.
+
+        """
+        return reverse("chapters:delete", kwargs={"slug": self.slug})
 
     @property
     def has_images(self):
@@ -311,6 +327,7 @@ class ComicImage(models.Model):
         max_length=13,
         choices=ComicImageStatus.choices,
     )
+    checksum = models.CharField(max_length=500, blank=True)
 
     def __str__(self):
         return f"{self.image}"
@@ -345,6 +362,7 @@ class ChapterImage(models.Model):
         max_length=13,
         choices=ChapterImageStatus.choices,
     )
+    checksum = models.CharField(max_length=500, blank=True)
 
     def __str__(self):
         return f"{self.image}"
@@ -356,6 +374,8 @@ class Comment(models.Model):
         Chapter,
         on_delete=models.CASCADE,
         related_name="chaptercomments",
+        blank=True,
+        null=True,
     )
     comic = models.ForeignKey(
         Comic,
@@ -370,9 +390,6 @@ class Comment(models.Model):
         related_name="usercomments",
     )
     created_at = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        get_latest_by = "created_at"
 
     def __str__(self):
         return self.text

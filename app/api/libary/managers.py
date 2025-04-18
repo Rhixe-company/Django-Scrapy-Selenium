@@ -11,12 +11,6 @@ class ComicQuerySet(models.QuerySet):
         lookups = Q(title__exact=titlequery) | Q(slug__exact=slugquery)
         return self.filter(lookups)
 
-    def query_updated_at(self, query: str | None):
-        if query is None or query == "":
-            return self.none()
-        lookups = Q(updated_at__gt=query)
-        return self.filter(lookups)
-
 
 class ComicManager(models.Manager):
     def get_queryset(self):
@@ -27,9 +21,6 @@ class ComicManager(models.Manager):
             titlequery=titlequery,
             slugquery=slugquery,
         )
-
-    def get_updated_at(self, query: str | None):
-        return self.get_queryset().query_updated_at(query=query)
 
 
 class ChapterQuerySet(models.QuerySet):

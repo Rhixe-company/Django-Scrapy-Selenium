@@ -1,12 +1,12 @@
 # ruff: noqa: ERA001, E501
 """Base settings to build other settings files upon."""
 
-import inspect
-import os
+# import inspect
+# import os
 import ssl
 from pathlib import Path
 
-import django_dyn_dt
+# import django_dyn_dt
 import environ
 from django.utils.translation import gettext_lazy as _
 
@@ -100,7 +100,7 @@ THIRD_PARTY_APPS = [
     "import_export",
     "dynamic_formsets",
     "template_partials",
-    "django_dyn_dt",
+    # "django_dyn_dt",
 ]
 
 LOCAL_APPS = [
@@ -176,15 +176,15 @@ STATIC_ROOT = str(BASE_DIR / "staticfiles")
 # https://docs.djangoproject.com/en/dev/ref/settings/#static-url
 STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#std:setting-STATICFILES_DIRS
-DYN_DB_PKG_ROOT = os.path.dirname(  # noqa: PTH120
-    inspect.getfile(django_dyn_dt),
-)  # <-- NEW App
+# DYN_DB_PKG_ROOT = os.path.dirname(  # noqa: PTH120, RUF100
+#     inspect.getfile(django_dyn_dt),
+# )  # <-- NEW App
 
 STATICFILES_DIRS = [
     str(BASE_DIR / "dist"),
     str(APPS_DIR / "static"),
     str(APPS_DIR / "static/images"),
-    os.path.join(DYN_DB_PKG_ROOT, "templates/static"),  # noqa: PTH118
+    # os.path.join(DYN_DB_PKG_ROOT, "templates/static"),  # noqa: PTH118, RUF100
 ]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders
 STATICFILES_FINDERS = [
@@ -203,10 +203,10 @@ MEDIA_URL = "/media/"
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#templates
 
-TEMPLATE_DIR_DATATB = os.path.join(  # noqa: PTH118
-    BASE_DIR,
-    "django_dyn_dt/templates",
-)
+# TEMPLATE_DIR_DATATB = os.path.join(  # noqa: PTH118, RUF100
+#     BASE_DIR,
+#     "django_dyn_dt/templates",
+# )
 
 TEMPLATES = [
     {
@@ -607,7 +607,7 @@ CKEDITOR_5_CONFIGS = {
 CKEDITOR_5_CUSTOM_CSS = "css/custom.css"
 CSRF_COOKIE_NAME = "new_csrf_cookie_name"
 CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"
-DYNAMIC_DATATB = {
-    # SLUG -> Import_PATH
-    "comics": "api.libary.models.Comic",
-}
+# DYNAMIC_DATATB = {
+#     # SLUG -> Import_PATH
+#     "comics": "api.libary.models.Comic",
+# }

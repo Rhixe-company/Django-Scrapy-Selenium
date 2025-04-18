@@ -1,8 +1,30 @@
-export default () => ({
-  slides: [],
-  intervalTime: 0,
+interface CarouselData {
+  slides: any[];
+  intervalTime: number;
+}
+
+interface Carousel {
+  slides: any[];
+  autoplayIntervalTime: number;
+  currentSlideIndex: number;
+  isPaused: boolean;
+  autoplayInterval: NodeJS.Timeout | null;
+  previous: () => void;
+  next: () => void;
+  autoplay: () => void;
+  setAutoplayIntervalTime: (newIntervalTime: number) => void;
+}
+
+export default (
+  carouselData: CarouselData = {
+    slides: [],
+    intervalTime: 0,
+  },
+): Carousel => ({
+  slides: carouselData.slides,
+  autoplayIntervalTime: carouselData.intervalTime,
   currentSlideIndex: 1,
-  isPaused: false,
+  isPaused: true,
   autoplayInterval: null,
   previous() {
     if (this.currentSlideIndex > 1) {
@@ -28,8 +50,10 @@ export default () => ({
     }, this.autoplayIntervalTime);
   },
   // Updates interval time
-  setAutoplayIntervalTime(newIntervalTime) {
-    clearInterval(this.autoplayInterval);
+  setAutoplayIntervalTime(newIntervalTime: number) {
+    if (this.autoplayInterval) {
+      clearInterval(this.autoplayInterval);
+    }
     this.autoplayIntervalTime = newIntervalTime;
     this.autoplay();
   },

@@ -11,7 +11,7 @@
     <title>
       {% block title %}
         {% translate 'Rhixescans' %}
-      {% endblock %}
+      {% endblock title %}
     </title>
     <link rel="icon" href="{% static 'images/favicons/favicon.ico' %}" />
     {% block meta %}
@@ -25,16 +25,15 @@
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Rhixe Scans" />
       <meta name="twitter:description" content="Read Comics" />
-    {% endblock %}
+    {% endblock meta %}
     {% block header %}
-
-    {% endblock %}
+    {% endblock header %}
     {% block css %}
       <!-- Your stuff: Third-party CSS libraries go here -->
       <!-- This file stores project-specific CSS -->
       {% render_bundle 'project' 'css' %}
       <link href="{% static 'css/datatables.min.css' %}" rel="stylesheet" />
-    {% endblock %}
+    {% endblock css %}
     <!--                          Le javascript
     ==================================================                          -->
     {# Placed at the top of the document so pages load faster with defer #}
@@ -43,22 +42,23 @@
       {% render_bundle 'vendors' 'js' attrs='defer' %}
       <!-- place project specific Javascript in this file -->
       {% render_bundle 'project' 'js' attrs='defer' %}
-    {% endblock %}
+    {% endblock javascript %}
   </head>
-  <body class="min-h-screen antialiased bg-secondarybackground __variable_5d1e58 clickup-chrome-ext_installed font-sans" style="margin: 0 !important" cz-shortcut-listen="true" data-new-gr-c-s-check-loaded="14.1226.0" data-gr-ext-installed="">
+  <body class="min-h-screen antialiased bg-secondarybackground __variable_5d1e58 clickup-chrome-ext_installed font-sans"
+        style="margin: 0 !important"
+        cz-shortcut-listen="true"
+        data-new-gr-c-s-check-loaded="14.1226.0"
+        data-gr-ext-installed="">
     {% block body %}
       {% include 'partials/base/header.html' %}
       {% block main %}
         {% block content %}
-
-        {% endblock %}
-      {% endblock %}
+        {% endblock content %}
+      {% endblock main %}
       {% include 'partials/base/footer.html' %}
       {% include 'partials/base/mobile_menu.html' %}
-      {% include 'partials/base/menu_dropdown.html' %}
-    {% endblock %}
+    {% endblock body %}
   </body>
   {% block injs %}
-
-  {% endblock %}
+  {% endblock injs %}
 </html>

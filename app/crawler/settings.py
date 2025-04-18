@@ -130,7 +130,7 @@ FEED_EXPORT_ENCODING = "utf-8"
 #     "https": "scrapy_impersonate.ImpersonateDownloadHandler",  # noqa: ERA001
 # }  # noqa: ERA001, RUF100
 FEEDS = {
-    "comics.json": {
+    "comics2.json": {
         "format": "json",
         "encoding": "utf8",
         "store_empty": False,
@@ -152,8 +152,8 @@ RETRY_ENABLED = True
 RETRY_HTTP_CODES = list(range(300, 501))
 
 DOWNLOAD_FAIL_ON_DATALOSS = True
-# LOG_LEVEL = "DEBUG"
-LOG_LEVEL = "INFO"  # noqa: ERA001
+# LOG_LEVEL = "DEBUG"  # noqa: ERA001
+LOG_LEVEL = "INFO"  # noqa: ERA001, RUF100
 
 # AWS
 # IMAGES_STORE = "s3://bucket/images"  # noqa: ERA001

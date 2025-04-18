@@ -6914,5 +6914,21 @@ html {
 }
 
 .myblack {
-  background-image: url("../../api/static/images/black.webp");
+  background-image: url("../../api/static/images/files/black.webp");
 }
+
+.overflow-y-auto::-webkit-scrollbar {
+  width: 6px;
+}
+
+.overflow-y-auto::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+.overflow-y-auto::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
+
