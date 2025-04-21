@@ -143,12 +143,12 @@ class RunSpider(Spider):
             if new_des_tag:
                 loader.add_value(
                     "description",
-                    [str(des.text.strip().replace("\n", "")) for des in new_des_tag],  # type: ignore  # noqa: PGH003
+                    [str(des.text.strip()) for des in new_des_tag],  # type: ignore  # noqa: PGH003
                 )  # type: ignore  # noqa: E501, PGH003, RUF100
         if des_tag:
             loader.add_value(
                 "description",
-                [str(des.text.strip().replace("\n", "")) for des in des_tag],
+                [str(des.text.strip()) for des in des_tag],
             )  # type: ignore  # noqa: PGH003
         item = loader.load_item()
         yield item

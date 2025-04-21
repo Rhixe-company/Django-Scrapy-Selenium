@@ -92,10 +92,10 @@ class ComicItem(Item):
         input_processor=MapCompose(
             clean_unicode,
             strip_html,
-            comments_html,
-            strip_html_space,
-            clean_description,
-            remove_multiple_spaces,
+            # comments_html,
+            # strip_html_space,
+            # clean_description,
+            # remove_multiple_spaces,
         ),
         output_processor=Join(),
     )
