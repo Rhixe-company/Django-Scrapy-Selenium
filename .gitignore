@@ -1236,3 +1236,7 @@ FodyWeavers.xsd
 wheels/
 docker_data/
 public/
+app/comics.json
+app/comics2.json
+app/chapters.json
+app/chapters2.json
