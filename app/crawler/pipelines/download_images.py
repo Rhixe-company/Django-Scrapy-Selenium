@@ -21,8 +21,8 @@ class MyImagesPipeline(ImagesPipeline):
     def persist_gif(self, key, data, info):
         root, ext = os.path.splitext(key)  # noqa: PTH122
         key = key + ".gif"
-        absolute_path = self.store._get_filesystem_path(key)  # noqa: SLF001
-        self.store._mkdir(os.path.dirname(absolute_path), info)  # noqa: PTH120, SLF001
+        absolute_path = self.store._get_filesystem_path(key)  # type: ignore  # noqa: PGH003, SLF001
+        self.store._mkdir(os.path.dirname(absolute_path), info)  # type: ignore  # noqa: PGH003, PTH120, SLF001
         with open(absolute_path, "wb") as f:  # noqa: PTH123
             f.write(data)
 
@@ -155,7 +155,7 @@ class MyImagesPipeline(ImagesPipeline):
                             "chapterslug": item.get("chapterslug"),
                         },
                     )
-                    for u in urls[0:2]
+                    for u in urls[0:1]
                 ]
         msg = f"Missing field in MyImagesPipeline get_media_requests: {item!r}"
         raise DropItem(msg)
