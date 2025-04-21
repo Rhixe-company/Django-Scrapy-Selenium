@@ -8,8 +8,9 @@
   @apply border-input ring-offset-background placeholder:text-muted-foreground bg-secondarybackground flex h-10 w-full rounded-xl border p-6 pl-10 text-sm text-white placeholder-gray-400 file:border-0 file:bg-transparent file:text-sm file:font-medium focus:outline-none focus:ring-1 focus:ring-white focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50;
 }
 .custom_checkbox {
-  @apply ring-offset-background focus-visible:ring-ring bg-primary text-primary-foreground size-4 shrink-0 rounded border border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
+  @apply ring-offset-background focus-visible:ring-ring bg-primary text-primary-foreground size-4 shrink-0 rounded border border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring-2 focus:ring-indigo-200 focus:ring-opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
 }
+
 .custom_file {
   @apply block w-full cursor-pointer rounded-lg border border-gray-300 bg-gray-50 text-sm text-gray-900 focus:outline-none dark:border-gray-600 dark:bg-gray-700 dark:text-gray-400 dark:placeholder-gray-400;
 }
@@ -21,8 +22,8 @@
   @apply border-input ring-offset-background flex h-10 w-full rounded-md border-0 bg-purple-800/50 px-3 py-2 pl-9 text-sm text-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-white/70 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-purple-400 disabled:cursor-not-allowed disabled:opacity-50;
 }
 .custom_textarea {
-  @apply block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500;
+  @apply focus:border-primary focus:ring-primary dark:focus:border-primary dark:focus:ring-primary block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400;
 }
 .custom_select {
-  @apply block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-500 focus:ring-primary-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400 dark:focus:border-primary-500 dark:focus:ring-primary-500;
+  @apply focus:border-primary focus:ring-primary dark:focus:border-primary dark:focus:ring-primary block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400;
 }

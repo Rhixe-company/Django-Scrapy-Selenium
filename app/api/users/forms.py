@@ -112,7 +112,7 @@ class UserLoginForm(LoginForm):
         )
         self.fields["remember"].widget.attrs.update(
             {
-                "class": "peer custom_checkbox",
+                "class": "custom_checkbox",
             },
         )
 

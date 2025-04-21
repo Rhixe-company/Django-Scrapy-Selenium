@@ -5,6 +5,7 @@
 @tailwind components;
 @tailwind utilities;
 
+@include meta.load-css("./functions/custom_fonts.scss");
 @include meta.load-css("./functions/style.scss");
 @include meta.load-css("./functions/carousel.scss");
 @include meta.load-css("./functions/scroll.scss");

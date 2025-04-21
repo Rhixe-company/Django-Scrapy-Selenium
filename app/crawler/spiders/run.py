@@ -106,10 +106,10 @@ class RunSpider(Spider):
 
         chapters = response.xpath(
             '//div[contains(@class, "pl-4 py-2 border rounded-md group w-full hover:bg-[#343434] cursor-pointer border-[#A2A2A2]/20 relative")]/a/@href',  # noqa: E501
-        ).getall()[0:1]
+        ).getall()[0:3]
         chapters_time = response.xpath(
             '//div[contains(@class, "pl-4 py-2 border rounded-md group w-full hover:bg-[#343434] cursor-pointer border-[#A2A2A2]/20 relative")]/a/h3[contains(@class, "text-xs text-[#A2A2A2]")]/text()',  # noqa: E501
-        ).getall()[0:1]
+        ).getall()[0:3]
         comic_time = response.xpath(
             '//div[contains(@class, "pl-4 py-2 border rounded-md group w-full hover:bg-[#343434] cursor-pointer border-[#A2A2A2]/20 relative")]/a/h3[contains(@class, "text-xs text-[#A2A2A2]")]/text()',  # noqa: E501
         ).get()
