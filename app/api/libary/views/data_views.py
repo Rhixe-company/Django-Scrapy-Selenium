@@ -10,8 +10,8 @@ from django.shortcuts import render
 
 # Create your views here.
 from django.views.decorators.csrf import csrf_exempt
-from django_dyn_dt.helpers import Utils
 
+from api.libary.data_helper import Utils
 from api.libary.data_helper import _get_headings
 from api.libary.data_helper import get_csv
 from api.libary.data_helper import get_excel
@@ -30,14 +30,14 @@ def data_table_view(request, **kwargs):
     try:
         model_class = Utils.get_class(DYNAMIC_DATATB, kwargs.get("model_name"))  # type: ignore  # noqa: PGH003
     except KeyError:
-        return render(request, "datatable/404.html", status=404)
+        return render(request, "data_table/404.html", status=404)
     headings = _get_headings(model_class)
     page_number = int(request.GET.get("page", 1))
     search_key = request.GET.get("search", "")
     entries = int(request.GET.get("entries", 10))
 
     if page_number < 1:
-        return render(request, "datatable/404.html", status=404)
+        return render(request, "data_table/404.html", status=404)
 
     filter_options = Q()
     for field in headings:
@@ -47,10 +47,10 @@ def data_table_view(request, **kwargs):
     if all_data.count() != 0 and not 1 <= page_number <= math.ceil(
         all_data.count() / entries,
     ):
-        return render(request, "datatable/404.html", status=404)
+        return render(request, "data_table/404.html", status=404)
     return render(
         request,
-        "datatable/index.html",
+        "data_table/index.html",
         context={
             "model_name": kwargs.get("model_name"),
             "headings": headings,
@@ -167,7 +167,7 @@ def export(request, **kwargs):
     try:
         model_class = Utils.get_class(DYNAMIC_DATATB, kwargs.get("model_name"))  # type: ignore  # noqa: PGH003
     except KeyError:
-        return render(request, "datatable/404.html", status=404)
+        return render(request, "data_table/404.html", status=404)
     request_body = json.loads(request.body.decode("utf-8"))
     search_key = request_body.get("search", "")
     hidden = request_body.get("hidden_cols", [])  # noqa: F841

@@ -4,8 +4,10 @@ from importlib import import_module
 
 from scrapy import signals
 from scrapy.exceptions import NotConfigured
-from scrapy.http.response.html import HtmlResponse
-from scrapy_selenium.http import SeleniumRequest
+
+# from scrapy.http.response.html import HtmlResponse  # noqa: ERA001
+from scrapy_headless.http import SeleniumRequest
+from scrapy_headless.http import SeleniumResponse
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 
@@ -35,7 +37,7 @@ class SeleniumMiddleware:
         """
 
         webdriver_base_path = f"selenium.webdriver.{driver_name}"
-
+        self.driver_name = driver_name
         driver_klass_module = import_module(f"{webdriver_base_path}.webdriver")
         driver_klass = getattr(driver_klass_module, "WebDriver")  # noqa: B009
 
@@ -50,6 +52,9 @@ class SeleniumMiddleware:
             driver_options = ChromeOptions()
             if browser_executable_path:
                 driver_options.binary_location = browser_executable_path
+            if "--block-ads" in driver_arguments:
+                self._block_ads = True
+                driver_arguments.remove("--block-ads")
             for argument in driver_arguments:
                 driver_options.add_argument(argument)
             driver_service = webdriver.ChromeService(
@@ -67,6 +72,9 @@ class SeleniumMiddleware:
             driver_options = FirefoxOptions()
             if browser_executable_path:
                 driver_options.binary_location = browser_executable_path
+            if "--block-ads" in driver_arguments:
+                self._block_ads = True
+                driver_arguments.remove("--block-ads")
             for argument in driver_arguments:
                 driver_options.add_argument(argument)
             driver_service = webdriver.FirefoxService(
@@ -141,7 +149,7 @@ class SeleniumMiddleware:
         # Expose the driver via the "meta" attribute
         request.meta.update({"driver": self.driver})
 
-        return HtmlResponse(
+        return SeleniumResponse(
             self.driver.current_url,
             body=body,
             encoding="utf-8",

@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from scrapy.http.request import Request
 from scrapy.loader import ItemLoader
 from scrapy.spiders import Spider
-from scrapy_selenium import SeleniumRequest
+from scrapy_headless import SeleniumRequest
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 
@@ -18,7 +18,7 @@ class RunSpider(Spider):
     name = "run"
     allowed_domains = ["gg.asuracomic.net", "asuracomic.net"]
     start_urls = [
-        "https://asuracomic.net/series?page=2&order=update",
+        "https://asuracomic.net/series?page=1&order=update",
     ]
 
     def start_requests(self):
@@ -36,7 +36,7 @@ class RunSpider(Spider):
 
     def comicspage(self, response):
         urls = [
-            f"https://asuracomic.net/series?page={i}&order=update" for i in range(3, 19)
+            f"https://asuracomic.net/series?page={i}&order=update" for i in range(2, 19)
         ]
         links = response.xpath(
             "//div[@class='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-3 p-4']/a/@href",  # noqa: E501
@@ -49,17 +49,17 @@ class RunSpider(Spider):
                 )
                 msg = f"A New Page found at: {response.urljoin(link)}"
                 logger.info(msg)
-        # if urls:
-        #     for url in urls:
-        #         msg = f"Page: {url}"
-        #         logger.info(msg)
-        #         yield Request(
-        #             url=url,
-        #             meta={
-        #                 "impersonate": "chrome124",
-        #             },
-        #             callback=self.comicspage,
-        #         )
+        if urls:
+            for url in urls:
+                msg = f"Page: {url}"
+                logger.info(msg)
+                yield Request(
+                    url=url,
+                    meta={
+                        "impersonate": "chrome124",
+                    },
+                    callback=self.comicspage,
+                )
 
     def comicpage(self, response):
         loader = ItemLoader(item=ComicItem(), selector=response)
@@ -221,7 +221,7 @@ class RunSpider(Spider):
         if image_urls:
             images = []
 
-            for img in image_urls[0:2]:
+            for img in image_urls:
                 images.append(img.get_attribute("src"))  # noqa: PERF401
 
             loader.add_value("image_urls", images)

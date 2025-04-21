@@ -2,20 +2,20 @@
   // "files.autoSave": "afterDelay",
   // "editor.suggestSelection": "first",
   // "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
-  "editor.minimap.enabled": true,
-  "editor.largeFileOptimizations": false,
-  "html.format.indentInnerHtml": true,
-  "html.format.indentHandlebars": true,
+  // "editor.minimap.enabled": true,
+  // "editor.largeFileOptimizations": false,
+  // "html.format.indentInnerHtml": true,
+  // "html.format.indentHandlebars": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  "editor.formatOnSave": true,
+  "editor.formatOnSave": false,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "files.associations": {
     // "**/*.html": "html",
     "**/templates/*.html": "html",
     "**/templates/**/*.html": "django-html",
-    "**/templates/*": "django-txt",
+    "**/templates/**/*.{txt,in}": "django-txt",
     "**/requirements{/**,*}.{txt,in}": "pip-requirements"
   },
   "emmet.includeLanguages": {

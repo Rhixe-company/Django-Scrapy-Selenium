@@ -12,6 +12,7 @@ module.exports = {
   entry: {
     project: path.resolve(__dirname, "../", "src", "project"),
     vendors: path.resolve(__dirname, "../", "src", "vendors"),
+    // data_table: path.resolve(__dirname, "../", "src", "data_table"),
   },
   output: {
     path: path.resolve(__dirname, "../", "dist", "webpack_bundles"),

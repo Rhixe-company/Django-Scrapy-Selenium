@@ -69,19 +69,20 @@ CONCURRENT_REQUESTS_PER_IP = 64
 
 # Enable or disable spider middlewares
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
-# SPIDER_MIDDLEWARES = {  # noqa: ERA001, RUF100
-#    "crawler.middlewares.CrawlerSpiderMiddleware": 543,
-# }  # noqa: ERA001, RUF100
-
+SPIDER_MIDDLEWARES = {
+    "crawler.middlewares.default.CrawlerSpiderMiddleware": 543,
+    "crawler.middlewares.main.SeleniumMiddleware": 800,
+}
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 DOWNLOADER_MIDDLEWARES = {
     "scrapy.downloadermiddlewares.useragent.UserAgentMiddleware": None,
     "crawler.middlewares.rotate.RotateUserAgentMiddleware": 540,
-    # "crawler.middlewares.retry.TooManyRequestsRetryMiddleware": 541,
-    # "crawler.middlewares.default.CrawlerDownloaderMiddleware": 543,
+    "crawler.middlewares.retry.TooManyRequestsRetryMiddleware": 541,
+    "crawler.middlewares.default.CrawlerDownloaderMiddleware": 543,
     "crawler.middlewares.main.SeleniumMiddleware": 800,
 }
+
 
 # Enable or disable extensions
 # See https://docs.scrapy.org/en/latest/topics/extensions.html
@@ -204,9 +205,11 @@ SELENIUM_DRIVER_NAME = "chrome"
 SELENIUM_DRIVER_EXECUTABLE_PATH = which("chromedriver")
 SELENIUM_BROWSER_EXECUTABLE_PATH = which("chrome")
 SELENIUM_DRIVER_ARGUMENTS = [
-    "--headless",
+ "--headless",
     "--no-sandbox",
     "--disable-gpu",
-    # "--enable-javascript",
+    "--enable-javascript",
     "--disable-extensions",
+    "--block-ads",
+    "--enable-unsafe-swiftshader",
 ]

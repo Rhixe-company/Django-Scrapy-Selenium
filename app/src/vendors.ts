@@ -2,4 +2,3 @@ import "@fortawesome/fontawesome-free/css/all.css";
 
 import "flowbite/dist/flowbite.js";
 import "@popperjs/core";
-import "bootstrap";

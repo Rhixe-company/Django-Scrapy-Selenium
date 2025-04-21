@@ -1,5 +1,5 @@
 
-import {myData} from '../../data/index.js'
+import {myData} from '../data/index.js'
 
 export const formTypes = {
     ADD: 'add',
@@ -12,9 +12,9 @@ export const formConstructor = (formType,item) => {
     const form = document.getElementById('form')
     form.className = 'd-flex flex-column gap-1 p-3'
     form.innerHTML = ''
-    
+
     myData.headings.forEach((d,i) => {
-        
+
         const label = document.createElement('label')
         label.setAttribute('htmlFor',i)
         label.innerHTML = d;
@@ -43,7 +43,7 @@ export const formConstructor = (formType,item) => {
     if (formType === formTypes.ADD) {
         document.querySelector('.modal-title').innerHTML = 'add Item'
         document.querySelector('.modal-btn').value = 'add'
-    
+
     } else if (formType === formTypes.EDIT) {
         document.querySelector('.modal-title').innerHTML = 'edit Item'
         document.querySelector('.modal-btn').value = 'edit'

@@ -1,4 +1,4 @@
-import {modelName, myData} from "../../data/index.js";
+import {modelName, myData} from "../data/index.js";
 import {formConstructor, formTypes} from "../form/index.js";
 
 const editBtn   = `<i class="btn-outline-primary edit bi bi-pencil-square" data-bs-toggle="modal" data-bs-target="#exampleModal"></i>`
@@ -62,7 +62,7 @@ export const search = () => {
     const searchContainer     = document.createElement('div')
     searchContainer.className = 'd-flex'
     searchContainer.id        = 'search-container'
-    
+
     const searchInput         = document.createElement('input')
     searchInput.className     = 'form-control mx-1'
     searchInput.setAttribute('placeholder', 'search...')
@@ -83,7 +83,7 @@ export const search = () => {
     document.querySelector('#search').addEventListener("keypress", function(event) {
         if (event.key === "Enter") {
             search_action();
-        }    
+        }
     })
 
     // Trigger Search on Button Click
@@ -92,7 +92,7 @@ export const search = () => {
     })
 }
 
-// Unused 
+// Unused
 export const middleContainer = (dataTable) => {
 
     const middleContainer     = document.createElement('div')
@@ -211,7 +211,7 @@ export const exportController = (dataTable) => {
 export const exportData = (dataTable, type) => {
 
     const searchParam = new URLSearchParams(window.location.search).get('search') || ''
-    
+
     const hiddenColumns = myData.headings.filter((d,i) => !dataTable.columns().visible(i))
 
     fetch (`/datatb/${modelName}/export/`,

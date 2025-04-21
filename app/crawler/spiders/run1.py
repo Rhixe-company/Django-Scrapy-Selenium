@@ -4,7 +4,7 @@ from bs4 import BeautifulSoup
 from scrapy.http.request import Request
 from scrapy.loader import ItemLoader
 from scrapy.spiders import Spider
-from scrapy_selenium import SeleniumRequest
+from scrapy_headless import SeleniumRequest
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as ec
 
@@ -194,14 +194,18 @@ class Run1Spider(Spider):
             loader.add_value("chaptertitle", chaptertitle)
         loader.add_value("chaptername", chaptername)
         loader.add_value("chapterslug", chapterslug)
-        image_urls = response.request.meta["driver"].find_elements(
+        # image_urls = response.xpath(  # noqa: ERA001, RUF100
+        #     "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]/@src",  # noqa: E501, ERA001
+        # ).getall()
+        image_urls = response.request.meta["driver"].find_elements(  # noqa: E501, ERA001, RUF100
             By.XPATH,
             "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501
-        )
+        )  # noqa: ERA001, RUF100
         if image_urls:
             images = []
-            for img in image_urls[0:2]:
-                images.append(img.get_attribute("src"))  # noqa: PERF401
+            for img in image_urls:
+                images.append(img.get_attribute("src"))  # noqa: E501, ERA001, PERF401, RUF100
+                # images.append(response.urljoin(img))  # noqa: ERA001, PERF401, RUF100
             loader.add_value("image_urls", images)
             msg = f"Total Images found: {len(images)}"
             logger.info(msg)

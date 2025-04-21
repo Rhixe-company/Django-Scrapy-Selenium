@@ -1,7 +1,7 @@
 import logging
 
 from django.core.management.base import BaseCommand
-from scrapy.crawler import CrawlerRunner
+from scrapy.crawler import CrawlerRunner as Crawler
 from scrapy.utils.log import configure_logging
 from scrapy.utils.project import get_project_settings
 from twisted.internet import defer
@@ -19,7 +19,7 @@ class Command(BaseCommand):
         crawlsettings = get_project_settings()
         configure_logging(crawlsettings)
         logger.info("starting spider")
-        runner = CrawlerRunner(settings=crawlsettings)
+        runner = Crawler(settings=crawlsettings)
 
         @defer.inlineCallbacks
         def run():
