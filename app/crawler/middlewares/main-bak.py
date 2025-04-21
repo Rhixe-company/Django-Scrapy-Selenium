@@ -39,19 +39,15 @@ class SeleniumMiddleware:
         driver_klass_module = import_module(f"{webdriver_base_path}.webdriver")
         driver_klass = getattr(driver_klass_module, "WebDriver")  # noqa: B009
 
-        # driver_options_module = import_module(f"{webdriver_base_path}.options")  # noqa: E501, ERA001
-        # driver_options_klass = getattr(driver_options_module, "Options")  # noqa: B009, E501, ERA001, RUF100
+        driver_options_module = import_module(f"{webdriver_base_path}.options")
+        driver_options_klass = getattr(driver_options_module, "Options")  # noqa: B009
 
-        # driver_options = driver_options_klass()  # noqa: ERA001
-
+        driver_options = driver_options_klass()
+        if browser_executable_path:
+            driver_options.binary_location = browser_executable_path
+        for argument in driver_arguments:
+            driver_options.add_argument(argument)
         if driver_name and driver_name.lower() == "chrome":
-            from selenium.webdriver.chrome.options import Options as ChromeOptions
-
-            driver_options = ChromeOptions()
-            if browser_executable_path:
-                driver_options.binary_location = browser_executable_path
-            for argument in driver_arguments:
-                driver_options.add_argument(argument)
             driver_service = webdriver.ChromeService(
                 executable_path=driver_executable_path,
                 log_output="logs.txt",
@@ -62,13 +58,6 @@ class SeleniumMiddleware:
                 # },
             )
         if driver_name and driver_name.lower() == "firefox":
-            from selenium.webdriver.firefox.options import Options as FirefoxOptions
-
-            driver_options = FirefoxOptions()
-            if browser_executable_path:
-                driver_options.binary_location = browser_executable_path
-            for argument in driver_arguments:
-                driver_options.add_argument(argument)
             driver_service = webdriver.FirefoxService(
                 executable_path=driver_executable_path,
                 log_output="logs.txt",

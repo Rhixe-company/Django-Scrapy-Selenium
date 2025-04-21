@@ -207,6 +207,6 @@ SELENIUM_DRIVER_ARGUMENTS = [
     "--headless",
     "--no-sandbox",
     "--disable-gpu",
-    "--enable-javascript",
+    # "--enable-javascript",
     "--disable-extensions",
 ]
