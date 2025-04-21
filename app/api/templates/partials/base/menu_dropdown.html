@@ -1,6 +1,8 @@
 {% load static %}
 
-<div id="notification-menu" x-show="notificationopen">
+<div id="notification-menu"
+     x-show="notificationopen"
+     x-bind:class="notificationopen ? '' : 'hidden'">
   <div data-headlessui-portal="">
     <div class="right-32 z-50 mt-4 h-auto w-[100vw] border-[#222222] bg-black shadow-lg ring-1 ring-black/5 focus:outline-none sm:w-96"
          tabindex="0"
@@ -55,7 +57,8 @@
 <div data-radix-popper-content-wrapper=""
      dir="ltr"
      id="user-menu"
-     x-show="useropen">
+     x-show="useropen"
+     x-bind:class="useropen ? '' : 'hidden'">
   <div data-side="bottom"
        data-align="end"
        role="menu"
@@ -121,6 +124,34 @@
           Log out
         </a>
       </div>
+      {% if request.user.is_superuser %}
+        <div role="menuitem"
+             class="relative flex cursor-default select-none items-center gap-2.5 rounded-md px-2.5 py-2 text-sm outline-none transition-colors focus:bg-purple-500/20 focus:text-white data-[disabled]:pointer-events-none data-[disabled]:opacity-50 border-t"
+             tabindex="-1"
+             data-orientation="vertical"
+             data-radix-collection-item="">
+          <button @click="admintoggle" type="button" class="inline-flex gap-2.5">
+            <svg class="lucide h-4 w-4"
+                 fill="currentColor"
+                 viewBox="0 0 20 20"
+                 xmlns="http://www.w3.org/2000/svg"
+                 aria-hidden="true">
+              <path clip-rule="evenodd" fill-rule="evenodd" d="M.99 5.24A2.25 2.25 0 013.25 3h13.5A2.25 2.25 0 0119 5.25l.01 9.5A2.25 2.25 0 0116.76 17H3.26A2.267 2.267 0 011 14.74l-.01-9.5zm8.26 9.52v-.625a.75.75 0 00-.75-.75H3.25a.75.75 0 00-.75.75v.615c0 .414.336.75.75.75h5.373a.75.75 0 00.627-.74zm1.5 0a.75.75 0 00.627.74h5.373a.75.75 0 00.75-.75v-.615a.75.75 0 00-.75-.75H11.5a.75.75 0 00-.75.75v.625zm6.75-3.63v-.625a.75.75 0 00-.75-.75H11.5a.75.75 0 00-.75.75v.625c0 .414.336.75.75.75h5.25a.75.75 0 00.75-.75zm-8.25 0v-.625a.75.75 0 00-.75-.75H3.25a.75.75 0 00-.75.75v.625c0 .414.336.75.75.75H8.5a.75.75 0 00.75-.75zM17.5 7.5v-.625a.75.75 0 00-.75-.75H11.5a.75.75 0 00-.75.75V7.5c0 .414.336.75.75.75h5.25a.75.75 0 00.75-.75zm-8.25 0v-.625a.75.75 0 00-.75-.75H3.25a.75.75 0 00-.75.75V7.5c0 .414.336.75.75.75H8.5a.75.75 0 00.75-.75z">
+              </path>
+            </svg>
+            Admin
+          </button>
+        </div>
+        <div x-show="adminopen"
+             x-bind:class="adminopen ? 'flex-col flex' : 'hidden'">
+          <div class="relative flex cursor-default select-none items-center gap-2.5 rounded-md px-2.5 py-2 text-sm outline-none transition-colors focus:bg-purple-500/20 focus:text-white data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+            <a class="inline-flex gap-2.5" href="{% url 'comics:list' %}">Comics</a>
+          </div>
+          <div class="relative flex cursor-default select-none items-center gap-2.5 rounded-md px-2.5 py-2 text-sm outline-none transition-colors focus:bg-purple-500/20 focus:text-white data-[disabled]:pointer-events-none data-[disabled]:opacity-50">
+            <a class="inline-flex gap-2.5" href="{% url 'chapters:list' %}">Chapters</a>
+          </div>
+        </div>
+      {% endif %}
     </div>
   </div>
 </div>

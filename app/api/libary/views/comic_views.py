@@ -10,6 +10,7 @@ from api.libary.filters import ComicFilterSet
 from api.libary.forms import ComicForm
 from api.libary.forms import CommentForm
 from api.libary.models import Comic
+from api.libary.models import UserComic
 from api.libary.tables import ComicTable
 
 
@@ -40,7 +41,11 @@ def list_view(request):
 @user_only
 def detail_view(request, slug=None):
     comic = get_object_or_404(Comic, slug=slug)
+    fav = False
+    if UserComic.objects.filter(comic=comic, user=request.user).exists():
+        fav = True
     context = {
+        "fav": fav,
         "object": comic,
         "form": CommentForm(),
     }
@@ -117,3 +122,42 @@ def delete_view(request, slug=None):
         return HttpResponseRedirect(success_url)
 
     return render(request, "libary/comics/delete.html", context)
+
+
+def add_bookmark(request, slug=None):
+    fav = False
+    # add comic
+    comic = get_object_or_404(Comic, slug=slug)
+
+    if not UserComic.objects.filter(comic=comic, user=request.user).exists():
+        UserComic.objects.create(
+            comic=comic,
+            user=request.user,
+        )
+        fav = True
+
+    context = {
+        "object": comic,
+        "fav": fav,
+    }
+    return render(request, "partials/comic/bookmark.html", context)
+
+
+def delete_bookmark(request, slug=None):
+    fav = True
+    # remove the comic from the user's list
+    comic = get_object_or_404(Comic, slug=slug)
+    if UserComic.objects.filter(comic=comic, user=request.user).exists():
+        obj = UserComic.objects.get(
+            comic=comic,
+            user=request.user,
+        )
+        obj.delete()
+        fav = False
+
+    context = {
+        "object": comic,
+        "fav": fav,
+    }
+
+    return render(request, "partials/comic/bookmark.html", context)

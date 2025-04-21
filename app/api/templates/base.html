@@ -47,7 +47,8 @@
       {% render_bundle 'project' 'js' attrs='defer' %}
     {% endblock javascript %}
   </head>
-  <body class="min-h-screen antialiased bg-secondarybackground"
+  <body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'
+        class="min-h-screen antialiased bg-secondarybackground"
         style="margin: 0 !important">
     {% block body %}
       {% include 'partials/base/header.html' %}

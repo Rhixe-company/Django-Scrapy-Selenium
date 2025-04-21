@@ -30,4 +30,14 @@ urlpatterns = [
         view=views.delete_view,
         name="delete",
     ),
+    path(
+        "<str:slug>/add_bookmark/",
+        view=views.add_bookmark,
+        name="add_bookmark",
+    ),
+    path(
+        "<str:slug>/delete_bookmark/",
+        view=views.delete_bookmark,
+        name="delete_bookmark",
+    ),
 ]

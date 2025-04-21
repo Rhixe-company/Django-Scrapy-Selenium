@@ -1,18 +1,57 @@
+from django.core.paginator import EmptyPage
+from django.core.paginator import PageNotAnInteger
+from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render
 
+from api.libary.filters import SearchFilterSet
 from api.libary.models import Comic
+from api.libary.models import UserComic
 
 
 def index(request):
+    qs = (
+        Comic.objects.prefetch_related(
+            "comicimages",
+            "genres",
+            "users",
+            "comicchapters",
+        )
+        .select_related("user", "author", "category", "artist", "website")
+        .all()
+    )
+    paginator = Paginator(qs, 20)
+    page_number = request.GET.get("page")
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+    page_obj = paginator.get_page(page_number)
     context = {
-        "comics": Comic.objects.all()[0:16],
-        "topcomics": Comic.objects.filter(
+        "objects": page_obj,
+        "topcomics": Comic.objects.prefetch_related(
+            "comicimages",
+            "genres",
+            "users",
+            "comicchapters",
+        )
+        .select_related("user", "author", "category", "artist", "website")
+        .filter(
             Q(numimages__gt=1)
             & Q(status=Comic.ComicStatus.ONGOING)
             & Q(rating__gte=9.9),
         )[0:10],
-        "featuredcomics": Comic.objects.filter(
+        "featuredcomics": Comic.objects.prefetch_related(
+            "comicimages",
+            "genres",
+            "users",
+            "comicchapters",
+        )
+        .select_related("user", "author", "category", "artist", "website")
+        .filter(
             Q(status=Comic.ComicStatus.ONGOING) | Q(status=Comic.ComicStatus.COMPLETED),
         )[0:5],
     }
@@ -20,12 +59,48 @@ def index(request):
 
 
 def series(request):
-    context = {}
+    f = SearchFilterSet(
+        request.GET,
+        queryset=Comic.objects.prefetch_related(
+            "comicimages",
+            "genres",
+            "users",
+            "comicchapters",
+        )
+        .select_related("user", "author", "category", "artist", "website")
+        .all(),
+    )
+    paginator = Paginator(f.qs, 20)
+    page_number = request.GET.get("page")
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+    page_obj = paginator.get_page(page_number)
+    context = {
+        "objects": page_obj,
+    }
     return render(request, "home/series.html", context)
 
 
 def bookmarks(request):
-    context = {}
+    qs = UserComic.objects.all()
+    paginator = Paginator(qs, 20)
+    page_number = request.GET.get("page")
+    try:
+        page_obj = paginator.page(page_number)
+    except PageNotAnInteger:
+        page_obj = paginator.page(1)
+
+    except EmptyPage:
+        page_obj = paginator.page(paginator.num_pages)
+    page_obj = paginator.get_page(page_number)
+    context = {
+        "objects": page_obj,
+    }
     return render(request, "home/bookmarks.html", context)
 
 

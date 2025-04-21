@@ -81,5 +81,5 @@ class User(AbstractUser):
         """
         return reverse("users:detail", kwargs={"pk": self.pk})
 
-    def get_comics_children(self):
+    def get_comics(self):
         return self.usercomics.all()  # type: ignore  # noqa: PGH003

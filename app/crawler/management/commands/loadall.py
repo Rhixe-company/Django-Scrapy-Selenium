@@ -203,11 +203,11 @@ class Command(BaseCommand):
 
         def load():
             base = settings.BASE_DIR
-            comics_file = str(base / "comics.json")
+            comics_file = str(base / "comicsdata.json")
             with open(comics_file, encoding="utf-8") as comic_file:  # noqa: PTH123
                 comics_data = json.load(comic_file)
                 save_comics(comics_data=comics_data)
-            chapters_file = str(base / "chapters.json")
+            chapters_file = str(base / "chaptersdata.json")
             with open(chapters_file, encoding="utf-8") as chapter_file:  # noqa: PTH123
                 chapters_data = json.load(chapter_file)
                 save_chapters(chapters_data=chapters_data)

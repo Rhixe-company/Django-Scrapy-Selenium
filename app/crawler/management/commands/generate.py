@@ -55,10 +55,10 @@ class Command(BaseCommand):
 
         def load():
             base = settings.BASE_DIR
-            comics_file = str(base / "comics2.json")
-            chapters_file = str(base / "chapters2.json")
-            new_comics_file = str(base / "comics.json")
-            new_chapters_file = str(base / "chapters.json")
+            comics_file = str(base / "comicsdata1.json")
+            chapters_file = str(base / "chaptersdata1.json")
+            new_comics_file = str(base / "comicsdata.json")
+            new_chapters_file = str(base / "chaptersdata.json")
             with open(comics_file, encoding="utf-8") as comic_file:  # noqa: PTH123
                 comics_data = json.load(comic_file)
                 comics = save_comics(comics_data=comics_data)

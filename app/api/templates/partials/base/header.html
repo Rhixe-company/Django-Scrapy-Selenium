@@ -22,7 +22,7 @@
     </div>
     <div class="flex w-full">
       <div id="mobile-search-menu" class="hidden w-full items-center space-x-2">
-        <div class="flex-1">
+        <form class="flex-1" action="{% url 'series' %}">
           <div class="relative">
             <svg xmlns="http://www.w3.org/2000/svg"
                  width="24"
@@ -39,7 +39,7 @@
             </svg>
             {{ myfilter.form.search1|add_classes:'custom_search1' }}
           </div>
-        </div>
+        </form>
         <button id="mobile-search-btn-close"
                 class="ring-offset-background focus-visible:ring-ring hover:text-accent-foreground inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium text-white transition-colors hover:bg-purple-800/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
           <svg xmlns="http://www.w3.org/2000/svg"
@@ -59,7 +59,8 @@
       </div>
       <div id="default-search-menu" class="w-full flex-row items-center gap-3.5">
         <div class="hidden w-full flex-row items-center gap-3.5 md:flex">
-          <div class="hidden w-full items-center justify-end md:flex">
+          <form class="hidden w-full items-center justify-end md:flex"
+                action="{% url 'series' %}">
             {{ myfilter.form.search|add_classes:'custom_search' }}
             <svg class="absolute h-8 w-8 cursor-not-allowed pt-1 text-white"
                  viewBox="0 0 20 20"
@@ -68,24 +69,15 @@
               <path d="M10 6.5C10 8.433 8.433 10 6.5 10C4.567 10 3 8.433 3 6.5C3 4.567 4.567 3 6.5 3C8.433 3 10 4.567 10 6.5ZM9.30884 10.0159C8.53901 10.6318 7.56251 11 6.5 11C4.01472 11 2 8.98528 2 6.5C2 4.01472 4.01472 2 6.5 2C8.98528 2 11 4.01472 11 6.5C11 7.56251 10.6318 8.53901 10.0159 9.30884L12.8536 12.1464C13.0488 12.3417 13.0488 12.6583 12.8536 12.8536C12.6583 13.0488 12.3417 13.0488 12.1464 12.8536L9.30884 10.0159Z" fill="currentColor" fill-rule="evenodd" clip-rule="evenodd">
               </path>
             </svg>
-          </div>
+          </form>
           {% if request.user.is_authenticated %}
             <div style="opacity: 1">
               <div x-data="dropdown"
                    class="hidden flex-row items-center gap-3.5 md:flex">
-                <div style="width: auto; opacity: 1; transform: none">
+                {% comment %} <div style="width: auto; opacity: 1; transform: none">
                   <div class="flex items-center justify-between">
                     <button class="ring-offset-background focus-visible:ring-ring ml-1 flex h-10 items-center justify-center gap-0.5 whitespace-nowrap rounded-md bg-[#6F2598] px-2 py-2 text-sm font-medium text-white transition-colors hover:bg-[#5a1f78] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
-                      <svg xmlns="http://www.w3.org/2000/svg"
-                           width="24"
-                           height="24"
-                           viewBox="0 0 24 24"
-                           fill="none"
-                           stroke="currentColor"
-                           stroke-width="2"
-                           stroke-linecap="round"
-                           stroke-linejoin="round"
-                           class="lucide lucide-circle-arrow-up h-3.5 w-3.5">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-arrow-up h-3.5 w-3.5">
                         <circle cx="12" cy="12" r="10"></circle>
                         <path d="m16 12-4-4-4 4"></path>
                         <path d="M12 16V8"></path>
@@ -93,7 +85,7 @@
                       <p>Upgrade</p>
                     </button>
                   </div>
-                </div>
+                </div> {% endcomment %}
                 <div>
                   <div class="relative" data-headlessui-state="">
                     <button class="flex w-full items-center justify-center"
@@ -177,19 +169,10 @@
         <div class="gap3.5 flex flex-row items-center md:hidden">
           <div class="flex flex-grow flex-row items-center justify-end space-x-1">
             {% if request.user.is_authenticated %}
-              <div style="width: auto; opacity: 1; transform: none">
+              {% comment %} <div style="width: auto; opacity: 1; transform: none">
                 <div class="flex items-center justify-between">
                   <button class="ring-offset-background focus-visible:ring-ring ml-1 flex h-10 items-center justify-center gap-0.5 whitespace-nowrap rounded-md bg-[#6F2598] px-2 py-2 text-sm font-medium text-white transition-colors hover:bg-[#5a1f78] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
-                    <svg xmlns="http://www.w3.org/2000/svg"
-                         width="24"
-                         height="24"
-                         viewBox="0 0 24 24"
-                         fill="none"
-                         stroke="currentColor"
-                         stroke-width="2"
-                         stroke-linecap="round"
-                         stroke-linejoin="round"
-                         class="lucide lucide-circle-arrow-up h-3.5 w-3.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-arrow-up h-3.5 w-3.5">
                       <circle cx="12" cy="12" r="10"></circle>
                       <path d="m16 12-4-4-4 4"></path>
                       <path d="M12 16V8"></path>
@@ -197,7 +180,7 @@
                     <p>Upgrade</p>
                   </button>
                 </div>
-              </div>
+              </div> {% endcomment %}
               <button id="mobile-search-btn"
                       class="ring-offset-background focus-visible:ring-ring hover:text-accent-foreground inline-flex h-10 w-10 items-center justify-center whitespace-nowrap rounded-md text-sm font-medium text-white transition-colors hover:bg-purple-800/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50">
                 <svg xmlns="http://www.w3.org/2000/svg"

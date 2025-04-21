@@ -131,7 +131,7 @@ FEED_EXPORT_ENCODING = "utf-8"
 #     "https": "scrapy_impersonate.ImpersonateDownloadHandler",  # noqa: ERA001
 # }  # noqa: ERA001, RUF100
 FEEDS = {
-    "comics2.json": {
+    "comicsdata1.json": {
         "format": "json",
         "encoding": "utf8",
         "store_empty": False,
@@ -139,7 +139,7 @@ FEEDS = {
         "fields": None,
         "indent": 4,
     },
-    "chapters2.json": {
+    "chaptersdata1.json": {
         "format": "json",
         "encoding": "utf8",
         "store_empty": False,
@@ -205,7 +205,7 @@ SELENIUM_DRIVER_NAME = "chrome"
 SELENIUM_DRIVER_EXECUTABLE_PATH = which("chromedriver")
 SELENIUM_BROWSER_EXECUTABLE_PATH = which("chrome")
 SELENIUM_DRIVER_ARGUMENTS = [
- "--headless",
+    "--headless",
     "--no-sandbox",
     "--disable-gpu",
     "--enable-javascript",

@@ -57,6 +57,10 @@ def comic_image_location(instance, filename):
 class Genre(models.Model):
     name = models.CharField(max_length=200, unique=True)
 
+    class Meta:
+        verbose_name_plural = "Genres"
+        verbose_name = "Genre"
+
     def __str__(self):
         return self.name
 
@@ -66,6 +70,10 @@ class Genre(models.Model):
 
 class Author(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True, unique=True)
+
+    class Meta:
+        verbose_name_plural = "Authors"
+        verbose_name = "Author"
 
     def __str__(self):
         return self.name
@@ -77,6 +85,10 @@ class Author(models.Model):
 class Artist(models.Model):
     name = models.CharField(max_length=200, blank=True, null=True, unique=True)
 
+    class Meta:
+        verbose_name_plural = "Artists"
+        verbose_name = "Artist"
+
     def __str__(self):
         return self.name
 
@@ -86,6 +98,10 @@ class Artist(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=200, unique=True)
+
+    class Meta:
+        verbose_name_plural = "Categories"
+        verbose_name = "Category"
 
     def __str__(self):
         return self.name
@@ -99,6 +115,10 @@ class Website(models.Model):
     link = models.URLField(
         default="",
     )
+
+    class Meta:
+        verbose_name_plural = "Websites"
+        verbose_name = "Website"
 
     def __str__(self):
         return self.name
@@ -166,6 +186,7 @@ class Comic(models.Model):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
+        related_name="usercomic",
     )
     genres = models.ManyToManyField(
         Genre,
@@ -174,13 +195,15 @@ class Comic(models.Model):
     )
     users = models.ManyToManyField(
         User,
+        through="UserComic",
         blank=True,
-        related_name="usercomics",
     )
 
     objects: ClassVar[ComicManager] = ComicManager()
 
     class Meta:
+        verbose_name_plural = "Comics"
+        verbose_name = "Comic"
         ordering = ["-updated_at"]
 
     def __str__(self):
@@ -230,6 +253,9 @@ class Comic(models.Model):
     def get_comments(self):
         return self.comiccomments.all()  # type: ignore  # noqa: PGH003
 
+    def get_users(self):
+        return self.comicusers.all()  # type: ignore  # noqa: PGH003
+
 
 class Chapter(models.Model):
     website = models.ForeignKey(
@@ -260,6 +286,8 @@ class Chapter(models.Model):
     objects: ClassVar[ChapterManager] = ChapterManager()
 
     class Meta:
+        verbose_name_plural = "Chapters"
+        verbose_name = "Chapter"
         ordering = ["-updated_at"]
 
     def __str__(self):
@@ -303,6 +331,22 @@ class Chapter(models.Model):
         return self.chaptercomments.all()  # type: ignore  # noqa: PGH003
 
 
+class UserComic(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="usercomics")
+    comic = models.ForeignKey(
+        Comic,
+        on_delete=models.CASCADE,
+        related_name="comicusers",
+    )
+
+    class Meta:
+        verbose_name_plural = "UserComics"
+        verbose_name = "UserComic"
+
+    def __str__(self):
+        return f"{self.user.email} - {self.comic.title}"
+
+
 class ComicImage(models.Model):
     class ComicImageStatus(models.TextChoices):
         DOWNLOADED = "downloaded"
@@ -328,6 +372,10 @@ class ComicImage(models.Model):
         choices=ComicImageStatus.choices,
     )
     checksum = models.CharField(max_length=500, blank=True)
+
+    class Meta:
+        verbose_name_plural = "ComicImages"
+        verbose_name = "ComicImage"
 
     def __str__(self):
         return f"{self.image}"
@@ -388,6 +436,10 @@ class ChapterImage(models.Model):
     )
     checksum = models.CharField(max_length=500, blank=True)
 
+    class Meta:
+        verbose_name_plural = "ChapterImages"
+        verbose_name = "ChapterImage"
+
     def __str__(self):
         return f"{self.image}"
 
@@ -438,6 +490,12 @@ class Comment(models.Model):
         related_name="usercomments",
     )
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name_plural = "Comments"
+        verbose_name = "Comment"
+        ordering = ["-updated_at"]
 
     def __str__(self):
         return self.text
