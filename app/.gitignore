@@ -269,3 +269,7 @@ dist/webpack-stats.json
 .pytest_cache/
 .ipython/
 .env
+comics.json
+comics2.json
+chapters.json
+chapters2.json
