@@ -268,13 +268,15 @@ EMAIL_BACKEND = env(
     default="django.core.mail.backends.smtp.EmailBackend",  # type: ignore  # noqa: PGH003
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-timeout
+EMAIL_TIMEOUT = 5
+
+# Other email settings
 EMAIL_HOST = env("DJANGO_EMAIL_HOST", default=None)  # type: ignore  # noqa: PGH003
 EMAIL_PORT = env("DJANGO_EMAIL_PORT", default=None)  # type: ignore  # noqa: PGH003
 EMAIL_HOST_USER = env("DJANGO_EMAIL_HOST_USER", default=None)  # type: ignore  # noqa: PGH003
 EMAIL_HOST_PASSWORD = env("DJANGO_EMAIL_HOST_PASSWORD", default=None)  # type: ignore  # noqa: PGH003
 EMAIL_USE_TLS = False
 EMAIL_USE_SSL = True
-EMAIL_TIMEOUT = 5
 
 # ADMIN
 # ------------------------------------------------------------------------------
