@@ -8,8 +8,11 @@
 .readthedocs.yml
 .travis.yml
 venv
+myvenv
 .git
 .envs/
+.env
 wheels/
 docker_data/
 public/
+app/api/media/
