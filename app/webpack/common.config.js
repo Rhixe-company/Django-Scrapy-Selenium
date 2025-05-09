@@ -12,7 +12,6 @@ module.exports = {
   entry: {
     project: path.resolve(__dirname, "../", "src", "project"),
     vendors: path.resolve(__dirname, "../", "src", "vendors"),
-    // data_table: path.resolve(__dirname, "../", "src", "data_table"),
   },
   output: {
     path: path.resolve(__dirname, "../", "dist", "webpack_bundles"),
@@ -20,6 +19,7 @@ module.exports = {
     filename: "js/[name]-[fullhash].js",
     chunkFilename: "js/[name]-[hash].js",
     clean: true,
+    assetModuleFilename: "[name][ext]",
   },
   plugins: [
     new BundleTracker({
@@ -35,17 +35,30 @@ module.exports = {
     rules: [
       // we pass the output from babel loader to react-hot loader
       {
-        test: /\.jsx?$/i,
+        test: /\.ts$/,
+        use: [
+          {
+            loader: "ts-loader",
+            options: {
+              transpileOnly: true,
+            },
+          },
+        ],
+      },
+      {
+        test: /\.js$/,
         enforce: "pre",
         use: ["source-map-loader"],
       },
       {
-        test: /\.jsx?$/i,
-        loader: "babel-loader",
-      },
-      {
-        test: /\.tsx?$/,
-        loader: "ts-loader",
+        test: /\.js$/,
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-env", "@babel/preset-react"],
+          },
+        },
       },
       {
         test: /\.s?css$/i,
@@ -58,6 +71,7 @@ module.exports = {
               postcssOptions: {
                 plugins: [
                   postcssCascadeLayers,
+                  "postcss-calc",
                   "postcss-preset-env",
                   "autoprefixer",
                   "pixrem",
@@ -65,8 +79,6 @@ module.exports = {
               },
             },
           },
-          // // Compiles Sass to CSS
-          // "resolve-url-loader",
           {
             loader: "sass-loader",
             options: {
@@ -81,25 +93,16 @@ module.exports = {
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
-        use: [
-          {
-            loader: "file-loader",
-            options: {
-              name: "/assets/[name].[ext]",
-              publicPath: "/assets",
-            },
-          },
-        ],
+        loader: "file-loader",
+        options: {
+          outputPath: "images/",
+        },
       },
       {
         test: /\.(ttf|eot|svg|gif|woff|woff2)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
         use: [
           {
             loader: "file-loader",
-            options: {
-              name: "/assets/[name].[ext]",
-              publicPath: "/assets",
-            },
           },
         ],
       },

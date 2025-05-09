@@ -13,18 +13,21 @@ module.exports = merge(commonConfig, {
       },
     ],
     client: {
+      progress: true,
       overlay: {
         errors: true,
-        warnings: false,
+        warnings: true,
         runtimeErrors: true,
       },
     },
     static: {
-      directory: path.resolve(__dirname, "../", "dist", "webpack_bundles"),
+      directory: path.join(__dirname, "../", "api", "templates"),
     },
     // We need hot=false (Disable HMR) to set liveReload=true
     hot: false,
     liveReload: true,
     open: true,
+    compress: true,
+    historyApiFallback: true,
   },
 });

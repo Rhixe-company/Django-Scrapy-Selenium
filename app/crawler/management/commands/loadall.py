@@ -96,21 +96,7 @@ class Command(BaseCommand):
 
                             newcomic.genres.add(newgenre)
                             newcomic.save()
-                    if image_urls and not images:
-                        for img_link in image_urls:
-                            ComicImage.objects.update_or_create(
-                                link=img_link,
-                                comic=newcomic,
-                            )[0]
-                    if images and not image_urls:
-                        for img in images:
-                            ComicImage.objects.update_or_create(
-                                link=img["url"],
-                                image=img["path"],
-                                status=img["status"],
-                                checksum=img["checksum"],
-                                comic=newcomic,
-                            )[0]
+
                     if image_urls and images:
                         for img_link, img in zip(image_urls, images, strict=False):
                             imgs = ComicImage.objects.filter(
@@ -119,15 +105,30 @@ class Command(BaseCommand):
                             if imgs.exists():
                                 pass
                             else:
-                                msg = f"saving {img['path']}"
-                                logger.info(msg)
-                                ComicImage.objects.update_or_create(
+                                im = ComicImage.objects.update_or_create(
                                     link=img["url"],
                                     image=img["path"],
                                     status=img["status"],
                                     checksum=img["checksum"],
                                     comic=newcomic,
                                 )[0]
+                                msg = f"saving {im.image.url}"
+                                logger.info(msg)
+                    elif image_urls and not images:
+                        for img_link in image_urls:
+                            ComicImage.objects.get_or_create(
+                                link=img_link,
+                                comic=newcomic,
+                            )[0]
+                    elif images and not image_urls:
+                        for img in images:
+                            ComicImage.objects.get_or_create(
+                                link=img["url"],
+                                image=img["path"],
+                                status=img["status"],
+                                checksum=img["checksum"],
+                                comic=newcomic,
+                            )[0]
 
                 except IntegrityError:
                     msg = f"{slug} - {title} Exists "
@@ -179,23 +180,7 @@ class Command(BaseCommand):
                             numimages=numimages,
                             comic=dbcomic,
                         )[0]
-                        if image_urls and not images:
-                            for img_link in image_urls:
-                                ChapterImage.objects.update_or_create(
-                                    link=img_link,
-                                    chapter=newchapter,
-                                    comic=dbcomic,
-                                )[0]
-                        if images and not image_urls:
-                            for img in images:
-                                ChapterImage.objects.update_or_create(
-                                    link=img["url"],
-                                    image=img["path"],
-                                    status=img["status"],
-                                    checksum=img["checksum"],
-                                    chapter=newchapter,
-                                    comic=dbcomic,
-                                )[0]
+
                         if image_urls and images:
                             for img_link, img in zip(image_urls, images, strict=False):
                                 imgs = ChapterImage.objects.filter(
@@ -204,9 +189,7 @@ class Command(BaseCommand):
                                 if imgs.exists():
                                     pass
                                 else:
-                                    msg = f"saving {img['path']}"
-                                    logger.info(msg)
-                                    ChapterImage.objects.update_or_create(
+                                    im = ChapterImage.objects.update_or_create(
                                         link=img["url"],
                                         image=img["path"],
                                         status=img["status"],
@@ -214,6 +197,25 @@ class Command(BaseCommand):
                                         chapter=newchapter,
                                         comic=dbcomic,
                                     )[0]
+                                    msg = f"saving {im.image.url}"
+                                    logger.info(msg)
+                        elif image_urls and not images:
+                            for img_link in image_urls:
+                                ChapterImage.objects.get_or_create(
+                                    link=img_link,
+                                    chapter=newchapter,
+                                    comic=dbcomic,
+                                )[0]
+                        elif images and not image_urls:
+                            for img in images:
+                                ChapterImage.objects.get_or_create(
+                                    link=img["url"],
+                                    image=img["path"],
+                                    status=img["status"],
+                                    checksum=img["checksum"],
+                                    chapter=newchapter,
+                                    comic=dbcomic,
+                                )[0]
 
                     except IntegrityError:
                         msg = f"{slug} - {name} Exists"
@@ -242,11 +244,11 @@ class Command(BaseCommand):
                 },
             )
             base = settings.BASE_DIR
-            comics_file = str(base / "comicsdata.json")
+            comics_file = str(base / "comicsdata1.json")
             with open(comics_file, encoding="utf-8") as comic_file:  # noqa: PTH123
                 comics_data = json.load(comic_file)
                 save_comics(comics_data=comics_data)
-            chapters_file = str(base / "chaptersdata.json")
+            chapters_file = str(base / "chaptersdata1.json")
             with open(chapters_file, encoding="utf-8") as chapter_file:  # noqa: PTH123
                 chapters_data = json.load(chapter_file)
                 save_chapters(chapters_data=chapters_data)

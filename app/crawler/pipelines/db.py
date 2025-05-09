@@ -94,21 +94,6 @@ class DbPipeline:
 
                             newcomic.genres.add(newgenre)
                             newcomic.save()
-                    if image_urls and not images:
-                        for img_link in image_urls:
-                            ComicImage.objects.update_or_create(
-                                link=img_link,
-                                comic=newcomic,
-                            )[0]
-                    if images and not image_urls:
-                        for img in images:
-                            ComicImage.objects.update_or_create(
-                                link=img["url"],
-                                image=img["path"],
-                                status=img["status"],
-                                checksum=img["checksum"],
-                                comic=newcomic,
-                            )[0]
                     if image_urls and images:
                         for img_link, img in zip(image_urls, images, strict=False):
                             imgs = ComicImage.objects.filter(
@@ -117,15 +102,30 @@ class DbPipeline:
                             if imgs.exists():
                                 pass
                             else:
-                                msg = f"saving {img['path']}"
-                                logger.info(msg)
-                                ComicImage.objects.update_or_create(
+                                im = ComicImage.objects.update_or_create(
                                     link=img["url"],
                                     image=img["path"],
                                     status=img["status"],
                                     checksum=img["checksum"],
                                     comic=newcomic,
                                 )[0]
+                                msg = f"saving {im.image.url}"
+                                logger.info(msg)
+                    elif image_urls and not images:
+                        for img_link in image_urls:
+                            ComicImage.objects.get_or_create(
+                                link=img_link,
+                                comic=newcomic,
+                            )[0]
+                    elif images and not image_urls:
+                        for img in images:
+                            ComicImage.objects.get_or_create(
+                                link=img["url"],
+                                image=img["path"],
+                                status=img["status"],
+                                checksum=img["checksum"],
+                                comic=newcomic,
+                            )[0]
 
                 except IntegrityError:
                     msg = f"{slug} - {title} Exists "
@@ -180,23 +180,6 @@ class DbPipeline:
                             numimages=numimages,
                             comic=dbcomic,
                         )[0]
-                        if image_urls and not images:
-                            for img_link in image_urls:
-                                ChapterImage.objects.update_or_create(
-                                    link=img_link,
-                                    chapter=newchapter,
-                                    comic=dbcomic,
-                                )[0]
-                        if images and not image_urls:
-                            for img in images:
-                                ChapterImage.objects.update_or_create(
-                                    link=img["url"],
-                                    image=img["path"],
-                                    status=img["status"],
-                                    checksum=img["checksum"],
-                                    chapter=newchapter,
-                                    comic=dbcomic,
-                                )[0]
                         if image_urls and images:
                             for img_link, img in zip(image_urls, images, strict=False):
                                 imgs = ChapterImage.objects.filter(
@@ -205,9 +188,7 @@ class DbPipeline:
                                 if imgs.exists():
                                     pass
                                 else:
-                                    msg = f"saving {img['path']}"
-                                    logger.info(msg)
-                                    ChapterImage.objects.update_or_create(
+                                    im = ChapterImage.objects.update_or_create(
                                         link=img["url"],
                                         image=img["path"],
                                         status=img["status"],
@@ -215,6 +196,25 @@ class DbPipeline:
                                         chapter=newchapter,
                                         comic=dbcomic,
                                     )[0]
+                                    msg = f"saving {im.image.url}"
+                                    logger.info(msg)
+                        elif image_urls and not images:
+                            for img_link in image_urls:
+                                ChapterImage.objects.get_or_create(
+                                    link=img_link,
+                                    chapter=newchapter,
+                                    comic=dbcomic,
+                                )[0]
+                        elif images and not image_urls:
+                            for img in images:
+                                ChapterImage.objects.get_or_create(
+                                    link=img["url"],
+                                    image=img["path"],
+                                    status=img["status"],
+                                    checksum=img["checksum"],
+                                    chapter=newchapter,
+                                    comic=dbcomic,
+                                )[0]
 
                     except IntegrityError:
                         msg = f"{slug} - {name} Exists"

@@ -4,6 +4,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import render
 
+from api.libary.constants import ComicStatus
 from api.libary.filters import SearchFilterSet
 from api.libary.models import Comic
 from api.libary.models import UserComic
@@ -40,9 +41,7 @@ def index(request):
         )
         .select_related("user", "author", "category", "artist", "website")
         .filter(
-            Q(numimages__gt=1)
-            & Q(status=Comic.ComicStatus.ONGOING)
-            & Q(rating__gte=9.9),
+            Q(numimages__gt=1) & Q(status=ComicStatus.ONGOING) & Q(rating__gte=9.9),
         )[0:10],
         "featuredcomics": Comic.objects.prefetch_related(
             "comicimages",
@@ -52,7 +51,7 @@ def index(request):
         )
         .select_related("user", "author", "category", "artist", "website")
         .filter(
-            Q(status=Comic.ComicStatus.ONGOING) | Q(status=Comic.ComicStatus.COMPLETED),
+            Q(status=ComicStatus.ONGOING) | Q(status=ComicStatus.COMPLETED),
         )[0:5],
     }
     return render(request, "home/index.html", context)

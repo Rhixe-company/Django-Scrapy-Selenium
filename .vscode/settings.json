@@ -1,48 +1,36 @@
 {
-  // "files.autoSave": "afterDelay",
-  // "editor.suggestSelection": "first",
-  // "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
-  "editor.minimap.enabled": true,
-  "editor.largeFileOptimizations": false,
-  "html.format.indentInnerHtml": true,
-  "html.format.indentHandlebars": true,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
-  "files.associations": {
-    // "**/*.html": "html",
-    "**/templates/*.html": "html",
-    "**/templates/**/*.html": "django-html",
-    "**/templates/**/*.{txt,in}": "django-txt",
-    "**/requirements{/**,*}.{txt,in}": "pip-requirements"
-  },
-  "emmet.includeLanguages": {
-    "django-html": "html"
-  },
-  "css.validate": false,
-  "tailwindCSS.includeLanguages": {
-    "django-html": "html",
-    "html": "html",
-    "javascript": "javascript",
-    "typescript": "typescript",
-    "css": "css",
-    "scss": "scss"
-  },
   "editor.quickSuggestions": {
     "strings": true
   },
   "editor.inlineSuggest.enabled": true,
-  "[django-html]": {
-    "editor.defaultFormatter": "monosans.djlint"
-    // "editor.defaultFormatter": "junstyle.vscode-django-support"
+  "files.associations": {
+    "../app/api/templates/*.html": "html",
+    "../app/api/templates/**/*.html": "django-html",
+    "../app/api/templates/**/*.{txt,in}": "django-txt",
+    "../requirements/**/*.{txt,in}": "pip-requirements",
+    "*.css": "tailwindcss",
+    "*.scss": "scss"
   },
+  "tailwindCSS.includeLanguages": {
+    "django-html": "html",
+    "plaintext": "html",
+    "css": "css",
+    "scss": "scss",
+    "javascript": "js",
+    "typescript": "ts"
+  },
+  "tailwindCSS.emmetCompletions": true,
+  "tailwindCSS.experimental.configFile": "../app/tailwind.config.js",
   "terminal.integrated.shell.windows": "C:/'Program Files'/PowerShell/7-preview/pwsh.exe",
   "powershell.developer.featureFlags": ["PSReadLine"],
   "python.analysis.autoImportCompletions": true,
   "python.analysis.typeCheckingMode": "basic",
-  // "python.defaultInterpreterPath": "myvenv/Scripts/python",
+  "python.defaultInterpreterPath": "../myvenv/Scripts/python.exe",
   "python.languageServer": "Pylance",
   "[python]": {
     "editor.codeActionsOnSave": {
@@ -51,10 +39,15 @@
     "editor.defaultFormatter": "charliermarsh.ruff",
     "linting.enabled": true,
     "linting.mypyEnabled": true,
-    "linting.mypyPath": "myvenv/Scripts/mypy"
+    "linting.mypyPath": "../myvenv/Scripts/mypy.exe"
+  },
+  "[scss]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
+  },
+  "[django-html]": {
+    "editor.defaultFormatter": "monosans.djlint"
   },
   "[ignore]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
   }
-  // "tailwindCSS.experimental.configFile": "../app/tailwind.config.js"
 }

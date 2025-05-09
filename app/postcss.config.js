@@ -5,6 +5,7 @@ module.exports = {
     tailwindcss: {},
     autoprefixer: {},
     "postcss-import": {},
+    "postcss-calc": {},
     "postcss-simple-vars": {},
     "postcss-nested": {},
     "postcss-preset-env": {},

@@ -1,2 +1,6 @@
 import "./sass/project.scss";
-import "./components/index";
+
+import "@fortawesome/fontawesome-free/css/all.css";
+
+import "flowbite/dist/flowbite.js";
+import "@popperjs/core";

@@ -3,6 +3,7 @@ from datetime import timedelta
 from django.db.models import Q
 from django.utils.timezone import now
 
+from api.libary.constants import ComicStatus
 from api.libary.filters import SearchFilterSet
 from api.libary.models import Comic
 
@@ -12,8 +13,8 @@ def load(request):
     month = now() - timedelta(weeks=4)
     comics = Comic.objects.filter(
         Q(rating__gte=9.9)
-        | Q(status=Comic.ComicStatus.ONGOING)
-        | Q(status=Comic.ComicStatus.COMPLETED),
+        | Q(status=ComicStatus.ONGOING)
+        | Q(status=ComicStatus.COMPLETED),
     )
     weekcomics = Comic.objects.filter(
         Q(rating__gte=9.9) & Q(updated_at__gte=week),
