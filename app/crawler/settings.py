@@ -93,7 +93,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "crawler.pipelines.download_images.MyImagesPipeline": 1,
+    # "crawler.pipelines.download_images.MyImagesPipeline": 1,
     "crawler.pipelines.default.CrawlerDefaultPipeline": 200,
     "crawler.pipelines.db.DbPipeline": 300,
     # "crawler.pipelines.redis.red.CrawlerRedisPipeline": 400,
