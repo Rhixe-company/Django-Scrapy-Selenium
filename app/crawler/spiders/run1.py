@@ -1,6 +1,8 @@
 import logging
 
+from api.libary.models import Chapter
 from bs4 import BeautifulSoup
+from django.db.models import Q
 from scrapy.http.request import Request
 from scrapy.loader import ItemLoader
 from scrapy.spiders import Spider
@@ -19,10 +21,10 @@ class Run1Spider(Spider):
     allowed_domains = ["gg.asuracomic.net", "asuracomic.net"]
     start_urls = [
         "https://asuracomic.net/series/solo-leveling-ragnarok-8250a620",
-        # "https://asuracomic.net/series/a-dragonslayers-peerless-regression-517c9d3b",
-        # "https://asuracomic.net/series/im-gonna-annihilate-this-land-7c6ce73d",
-        # "https://asuracomic.net/series/killer-pietro-6fe8e840",
-        # "https://asuracomic.net/series/i-regressed-as-the-duke-d0791d89",
+        "https://asuracomic.net/series/a-dragonslayers-peerless-regression-517c9d3b",
+        "https://asuracomic.net/series/im-gonna-annihilate-this-land-7c6ce73d",
+        "https://asuracomic.net/series/killer-pietro-6fe8e840",
+        "https://asuracomic.net/series/i-regressed-as-the-duke-d0791d89",
     ]
 
     def start_requests(self):
@@ -63,7 +65,7 @@ class Run1Spider(Spider):
         )
         loader.add_xpath(
             "rating",
-            '//span[contains(@class, "ml-1 text-white text-xs")]/text()',
+            '//span[contains(@class, "ml-1 text-xs")]/text()',
         )
         loader.add_xpath(
             "status",
@@ -135,19 +137,28 @@ class Run1Spider(Spider):
         if chapters:
             msg = f"Total Chapters found: {len(chapters)}"
             logger.info(msg)
-            for x, y in zip(chapters, chapters_time, strict=False):
-                yield SeleniumRequest(
-                    url=response.urljoin(x),
-                    wait_time=2,
-                    wait_until=ec.presence_of_element_located(
-                        (
-                            By.XPATH,
-                            "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501
+            chapters_links = []
+            for x in chapters:
+                chapters_links.append(response.urljoin(x))  # noqa: PERF401
+            chaps = Chapter.objects.filter(Q(link__in=chapters_links))
+            if chaps.exists():
+                msg = f"{chaps} already exists"
+                logger.error(msg)
+            else:
+                for x, y in zip(chapters_links, chapters_time, strict=False):
+                    yield SeleniumRequest(
+                        url=x,
+                        wait_time=10,
+                        wait_until=ec.presence_of_element_located(
+                            (
+                                By.XPATH,
+                                "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501
+                            ),
                         ),
-                    ),
-                    callback=self.parse,
-                    cb_kwargs={"chaptertime": y},
-                )
+                        callback=self.parse,
+                        cb_kwargs={"chaptertime": y},
+                    )
+
         else:
             msg = f"No Chapters found at: {response.url}"
             logger.error(msg)

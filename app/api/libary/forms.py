@@ -3,8 +3,8 @@ from django.forms import BoundField
 from django.utils.translation import gettext_lazy as _
 from django_ckeditor_5.widgets import CKEditor5Widget
 
-from api.libary.helpers import MyCustomImageWidget
-from api.libary.helpers import MyDateInput
+from api.libary.forms_helpers import MyCustomImageWidget
+from api.libary.forms_helpers import MyDateInput
 from api.libary.models import Artist
 from api.libary.models import Author
 from api.libary.models import Category
@@ -208,7 +208,7 @@ class ComicImageForm(forms.ModelForm):
 
     class Meta:
         model = ComicImage
-        fields = ("image", "status", "link", "checksum")
+        fields = ("link", "image", "status", "checksum")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -326,7 +326,7 @@ class ChapterImageForm(forms.ModelForm):
 
     class Meta:
         model = ChapterImage
-        fields = ("image", "status", "link", "checksum")
+        fields = ("link", "image", "status", "checksum")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -11,6 +11,7 @@ from unfold.contrib.filters.admin import RangeDateTimeFilter
 from unfold.contrib.forms.widgets import ArrayWidget
 from unfold.contrib.forms.widgets import WysiwygWidget
 
+from api.libary.constants import ComicStatus
 from api.libary.models import Artist
 from api.libary.models import Author
 from api.libary.models import Category
@@ -22,8 +23,8 @@ from api.libary.models import Comment
 from api.libary.models import Genre
 from api.libary.models import UserComic
 from api.libary.models import Website
-from api.users.helpers import CustomDropdownFilter
-from api.users.helpers import CustomTextFilter
+from api.users.admin_helpers import CustomDropdownFilter
+from api.users.admin_helpers import CustomTextFilter
 
 
 class CommentInline(TabularInline):
@@ -119,10 +120,10 @@ class ComicAdminClass(ModelAdmin, ImportExportModelAdmin):
 
     @admin.action(description="Mark selected Comic as completed")
     def comic_completed_action(self, request, queryset):
-        comics_to_comp = queryset.exclude(status=Comic.ComicStatus.COMPLETED)
+        comics_to_comp = queryset.exclude(status=ComicStatus.COMPLETED)
         comics = list(comics_to_comp)
 
-        comics_to_comp.update(status=Comic.ComicStatus.COMPLETED)
+        comics_to_comp.update(status=ComicStatus.COMPLETED)
 
         for comic in comics:
             user = comic.user
@@ -139,10 +140,10 @@ class ComicAdminClass(ModelAdmin, ImportExportModelAdmin):
 
     @admin.action(description="Mark selected Comic as ongoing")
     def comic_ongoing_action(self, request, queryset):
-        comics_to_comp = queryset.exclude(status=Comic.ComicStatus.ONGOING)
+        comics_to_comp = queryset.exclude(status=ComicStatus.ONGOING)
         comics = list(comics_to_comp)
 
-        comics_to_comp.update(status=Comic.ComicStatus.ONGOING)
+        comics_to_comp.update(status=ComicStatus.ONGOING)
 
         for comic in comics:
             user = comic.user
@@ -159,10 +160,10 @@ class ComicAdminClass(ModelAdmin, ImportExportModelAdmin):
 
     @admin.action(description="Mark selected Comic as hiatus")
     def comic_hiatus_action(self, request, queryset):
-        comics_to_comp = queryset.exclude(status=Comic.ComicStatus.HIATUS)
+        comics_to_comp = queryset.exclude(status=ComicStatus.HIATUS)
         comics = list(comics_to_comp)
 
-        comics_to_comp.update(status=Comic.ComicStatus.HIATUS)
+        comics_to_comp.update(status=ComicStatus.HIATUS)
 
         for comic in comics:
             user = comic.user
@@ -179,10 +180,10 @@ class ComicAdminClass(ModelAdmin, ImportExportModelAdmin):
 
     @admin.action(description="Mark selected Comic as dropped")
     def comic_dropped_action(self, request, queryset):
-        comics_to_comp = queryset.exclude(status=Comic.ComicStatus.DROPPED)
+        comics_to_comp = queryset.exclude(status=ComicStatus.DROPPED)
         comics = list(comics_to_comp)
 
-        comics_to_comp.update(status=Comic.ComicStatus.DROPPED)
+        comics_to_comp.update(status=ComicStatus.DROPPED)
 
         for comic in comics:
             user = comic.user
@@ -199,10 +200,10 @@ class ComicAdminClass(ModelAdmin, ImportExportModelAdmin):
 
     @admin.action(description="Mark selected Comic as Season End")
     def comic_season_end_action(self, request, queryset):
-        comics_to_comp = queryset.exclude(status=Comic.ComicStatus.SEASON_END)
+        comics_to_comp = queryset.exclude(status=ComicStatus.SEASON_END)
         comics = list(comics_to_comp)
 
-        comics_to_comp.update(status=Comic.ComicStatus.SEASON_END)
+        comics_to_comp.update(status=ComicStatus.SEASON_END)
 
         for comic in comics:
             user = comic.user
@@ -219,10 +220,10 @@ class ComicAdminClass(ModelAdmin, ImportExportModelAdmin):
 
     @admin.action(description="Mark selected Comic as Coming Soon")
     def comic_coming_soon_action(self, request, queryset):
-        comics_to_comp = queryset.exclude(status=Comic.ComicStatus.COMING_SOON)
+        comics_to_comp = queryset.exclude(status=ComicStatus.COMING_SOON)
         comics = list(comics_to_comp)
 
-        comics_to_comp.update(status=Comic.ComicStatus.COMING_SOON)
+        comics_to_comp.update(status=ComicStatus.COMING_SOON)
 
         for comic in comics:
             user = comic.user
@@ -314,7 +315,7 @@ class ComicImageAdminClass(ModelAdmin, ImportExportModelAdmin):
     model = ComicImage  # type: ignore  # noqa: PGH003
     search_fields = (
         "link",
-        "image",
+        # "image",
     )
     # Display submit button in filters
     list_filter_submit = True
@@ -323,7 +324,7 @@ class ComicImageAdminClass(ModelAdmin, ImportExportModelAdmin):
         CustomTextFilter,
         CustomDropdownFilter,
         "link",
-        "image",
+        # "image",
     )
 
     list_display = (
@@ -375,7 +376,7 @@ class ChapterImageAdminClass(ModelAdmin, ImportExportModelAdmin):
     model = ChapterImage  # type: ignore  # noqa: PGH003
     search_fields = (
         "link",
-        "image",
+        # "image",
         "chapter__slug",
         "chapter__name",
         "comic__title",
@@ -387,7 +388,7 @@ class ChapterImageAdminClass(ModelAdmin, ImportExportModelAdmin):
         CustomTextFilter,
         CustomDropdownFilter,
         "link",
-        "image",
+        # "image",
     )
 
     list_display = (
@@ -708,10 +709,7 @@ class WebsiteAdminClass(ModelAdmin, ImportExportModelAdmin):
         "other_field_name": lambda content: content.strip(),
     }
     model = Website  # type: ignore  # noqa: PGH003
-    search_fields = (
-        "name",
-        "link",
-    )
+    search_fields = ("name",)
     # Display submit button in filters
     list_filter_submit = True
 
@@ -719,13 +717,9 @@ class WebsiteAdminClass(ModelAdmin, ImportExportModelAdmin):
         CustomTextFilter,
         CustomDropdownFilter,
         "name",
-        "link",
     )
 
-    list_display = (
-        "name",
-        "link",
-    )
+    list_display = ("name",)
     inlines = []
 
     # Display changelist in fullwidth

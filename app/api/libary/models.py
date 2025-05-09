@@ -8,8 +8,10 @@ from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django_ckeditor_5.fields import CKEditor5Field
 
-from api.libary.managers import ChapterManager
-from api.libary.managers import ComicManager
+from api.libary.constants import ComicStatus
+from api.libary.constants import ImageStatus
+from api.libary.managers import ActiveManager
+from api.libary.managers import StandardMetadata
 from api.users.models import User
 
 ext_validator = FileExtensionValidator(
@@ -112,9 +114,6 @@ class Category(models.Model):
 
 class Website(models.Model):
     name = models.CharField(max_length=200)
-    link = models.URLField(
-        default="",
-    )
 
     class Meta:
         verbose_name_plural = "Websites"
@@ -130,34 +129,33 @@ class Website(models.Model):
         return self.websitechapters.all()  # type: ignore  # noqa: PGH003
 
 
-class Comic(models.Model):
-    class ComicStatus(models.TextChoices):
-        COMPLETED = "completed", "Completed"
-        ONGOING = "ongoing", "Ongoing"
-        HIATUS = "hiatus", "Hiatus"
-        DROPPED = "dropped", "Dropped"
-        SEASON_END = "season end", "Season End"
-        COMING_SOON = "coming soon", "Coming Soon"
-
+class Comic(StandardMetadata):
     title = models.CharField(_("Title"), max_length=5000, unique=True)
     slug = models.SlugField(_("Slug"), max_length=5000, blank=True, unique=True)
     description = CKEditor5Field("Description", config_name="extends")
     status = models.CharField(_("Status"), max_length=15, choices=ComicStatus.choices)
     rating = models.DecimalField(_("Rating"), max_digits=10, decimal_places=1)
-    updated_at = models.DateField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateField(
+        _("Updated At"),
+    )
+    link = models.URLField(
+        default="",
+    )
     numchapters = models.PositiveSmallIntegerField(
+        _("Total Chapters"),
         null=True,
         blank=True,
     )
     numimages = models.PositiveSmallIntegerField(
+        _("Total Images"),
         null=True,
         blank=True,
     )
-    serialization = models.CharField(
+    serialization = models.CharField(  # noqa: DJ001
         _("Serialization"),
         max_length=5000,
         blank=True,
+        null=True,
     )
     website = models.ForeignKey(
         Website,
@@ -199,12 +197,12 @@ class Comic(models.Model):
         blank=True,
     )
 
-    objects: ClassVar[ComicManager] = ComicManager()
+    objects: ClassVar[ActiveManager] = ActiveManager()
 
     class Meta:
         verbose_name_plural = "Comics"
         verbose_name = "Comic"
-        ordering = ["-updated_at"]
+        ordering = ["updated_at"]
 
     def __str__(self):
         return self.title
@@ -257,7 +255,7 @@ class Comic(models.Model):
         return self.comicusers.all()  # type: ignore  # noqa: PGH003
 
 
-class Chapter(models.Model):
+class Chapter(StandardMetadata):
     website = models.ForeignKey(
         Website,
         on_delete=models.CASCADE,
@@ -268,7 +266,7 @@ class Chapter(models.Model):
         on_delete=models.CASCADE,
         related_name="comicchapters",
     )
-    name = models.CharField(max_length=500)
+    name = models.CharField(_("Name"), max_length=500)
     slug = models.SlugField(
         _("Slug"),
         max_length=5000,
@@ -276,19 +274,24 @@ class Chapter(models.Model):
         blank=True,
     )
     title = models.CharField(_("Title"), max_length=5000, blank=True)
-    updated_at = models.DateField()
-    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateField(
+        _("Updated At"),
+    )
+    link = models.URLField(
+        default="",
+    )
     numimages = models.PositiveSmallIntegerField(
+        _("Total Images"),
         null=True,
         blank=True,
     )
 
-    objects: ClassVar[ChapterManager] = ChapterManager()
+    objects: ClassVar[ActiveManager] = ActiveManager()
 
     class Meta:
         verbose_name_plural = "Chapters"
         verbose_name = "Chapter"
-        ordering = ["-updated_at"]
+        ordering = ["updated_at"]
 
     def __str__(self):
         return self.name
@@ -347,12 +350,7 @@ class UserComic(models.Model):
         return f"{self.user.email} - {self.comic.title}"
 
 
-class ComicImage(models.Model):
-    class ComicImageStatus(models.TextChoices):
-        DOWNLOADED = "downloaded"
-        UPTODATE = "uptodate"
-        CACHED = "cached"
-
+class ComicImage(StandardMetadata):
     link = models.URLField(
         default="",
     )
@@ -366,19 +364,24 @@ class ComicImage(models.Model):
         validators=[
             ext_validator,
         ],
+        blank=True,
+        null=True,
     )
-    status = models.CharField(
+    status = models.CharField(  # noqa: DJ001
         max_length=13,
-        choices=ComicImageStatus.choices,
+        choices=ImageStatus.choices,
+        blank=True,
+        null=True,
     )
-    checksum = models.CharField(max_length=500, blank=True)
+    checksum = models.CharField(max_length=500, blank=True, null=True)  # noqa: DJ001
+    objects: ClassVar[ActiveManager] = ActiveManager()
 
     class Meta:
         verbose_name_plural = "ComicImages"
         verbose_name = "ComicImage"
 
     def __str__(self):
-        return f"{self.image}"
+        return f"{self.link}"
 
     def get_update_url(self) -> str:
         """Get URL for comicimage's update view.
@@ -405,12 +408,7 @@ class ComicImage(models.Model):
         )
 
 
-class ChapterImage(models.Model):
-    class ChapterImageStatus(models.TextChoices):
-        DOWNLOADED = "downloaded"
-        UPTODATE = "uptodate"
-        CACHED = "cached"
-
+class ChapterImage(StandardMetadata):
     link = models.URLField(
         default="",
     )
@@ -429,19 +427,24 @@ class ChapterImage(models.Model):
         validators=[
             ext_validator,
         ],
+        blank=True,
+        null=True,
     )
-    status = models.CharField(
+    status = models.CharField(  # noqa: DJ001
         max_length=13,
-        choices=ChapterImageStatus.choices,
+        choices=ImageStatus.choices,
+        blank=True,
+        null=True,
     )
-    checksum = models.CharField(max_length=500, blank=True)
+    checksum = models.CharField(max_length=500, blank=True, null=True)  # noqa: DJ001
+    objects: ClassVar[ActiveManager] = ActiveManager()
 
     class Meta:
         verbose_name_plural = "ChapterImages"
         verbose_name = "ChapterImage"
 
     def __str__(self):
-        return f"{self.image}"
+        return f"{self.link}"
 
     def get_update_url(self) -> str:
         """Get URL for chapterimage's update view.
@@ -468,7 +471,7 @@ class ChapterImage(models.Model):
         )
 
 
-class Comment(models.Model):
+class Comment(StandardMetadata):
     text = CKEditor5Field("Text", config_name="extends")
     chapter = models.ForeignKey(
         Chapter,
@@ -489,13 +492,11 @@ class Comment(models.Model):
         on_delete=models.CASCADE,
         related_name="usercomments",
     )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    objects: ClassVar[ActiveManager] = ActiveManager()
 
     class Meta:
         verbose_name_plural = "Comments"
         verbose_name = "Comment"
-        ordering = ["-updated_at"]
 
     def __str__(self):
         return self.text

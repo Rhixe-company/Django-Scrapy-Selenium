@@ -1,6 +1,8 @@
 import logging
 
+from api.libary.models import Chapter
 from bs4 import BeautifulSoup
+from django.db.models import Q
 from scrapy.http.request import Request
 from scrapy.loader import ItemLoader
 from scrapy.spiders import Spider
@@ -18,7 +20,7 @@ class RunSpider(Spider):
     name = "run"
     allowed_domains = ["gg.asuracomic.net", "asuracomic.net"]
     start_urls = [
-        "https://asuracomic.net/series?page=1&order=update",
+        f"https://asuracomic.net/series?page={i}&order=update" for i in range(1, 19)
     ]
 
     def start_requests(self):
@@ -32,12 +34,10 @@ class RunSpider(Spider):
                     "impersonate": "chrome124",
                 },
                 callback=self.comicspage,
+                dont_filter=False,
             )
 
     def comicspage(self, response):
-        urls = [
-            f"https://asuracomic.net/series?page={i}&order=update" for i in range(2, 19)
-        ]
         links = response.xpath(
             "//div[@class='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-3 p-4']/a/@href",  # noqa: E501
         ).getall()
@@ -46,20 +46,10 @@ class RunSpider(Spider):
                 yield response.follow(
                     response.urljoin(link),
                     callback=self.comicpage,
+                    dont_filter=False,
                 )
                 msg = f"A New Page found at: {response.urljoin(link)}"
                 logger.info(msg)
-        if urls:
-            for url in urls:
-                msg = f"Page: {url}"
-                logger.info(msg)
-                yield Request(
-                    url=url,
-                    meta={
-                        "impersonate": "chrome124",
-                    },
-                    callback=self.comicspage,
-                )
 
     def comicpage(self, response):
         loader = ItemLoader(item=ComicItem(), selector=response)
@@ -83,7 +73,7 @@ class RunSpider(Spider):
         )
         loader.add_xpath(
             "rating",
-            '//span[contains(@class, "ml-1 text-white text-xs")]/text()',
+            '//span[contains(@class, "ml-1 text-xs")]/text()',
         )
         loader.add_xpath(
             "status",
@@ -106,10 +96,10 @@ class RunSpider(Spider):
 
         chapters = response.xpath(
             '//div[contains(@class, "pl-4 py-2 border rounded-md group w-full hover:bg-[#343434] cursor-pointer border-[#A2A2A2]/20 relative")]/a/@href',  # noqa: E501
-        ).getall()[0:3]
+        ).getall()[0:5]
         chapters_time = response.xpath(
             '//div[contains(@class, "pl-4 py-2 border rounded-md group w-full hover:bg-[#343434] cursor-pointer border-[#A2A2A2]/20 relative")]/a/h3[contains(@class, "text-xs text-[#A2A2A2]")]/text()',  # noqa: E501
-        ).getall()[0:3]
+        ).getall()[0:5]
         comic_time = response.xpath(
             '//div[contains(@class, "pl-4 py-2 border rounded-md group w-full hover:bg-[#343434] cursor-pointer border-[#A2A2A2]/20 relative")]/a/h3[contains(@class, "text-xs text-[#A2A2A2]")]/text()',  # noqa: E501
         ).get()
@@ -117,6 +107,7 @@ class RunSpider(Spider):
         loader.add_value("url", response.url)
         images = []
         images.append(response.urljoin(image))
+
         if image2:
             images.append(response.urljoin(image2))
         loader.add_value("image_urls", images)
@@ -155,19 +146,28 @@ class RunSpider(Spider):
         if chapters:
             msg = f"Total Chapters found: {len(chapters)}"
             logger.info(msg)
-            for x, y in zip(chapters, chapters_time, strict=False):
-                yield SeleniumRequest(
-                    url=response.urljoin(x),
-                    wait_time=10,
-                    wait_until=ec.presence_of_element_located(
-                        (
-                            By.XPATH,
-                            "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501
+            chapters_links = []
+            for x in chapters:
+                chapters_links.append(response.urljoin(x))  # noqa: PERF401
+            chaps = Chapter.objects.filter(Q(link__in=chapters_links))
+            if chaps.exists():
+                msg = f"{chaps} already exists"
+                logger.error(msg)
+            else:
+                for x, y in zip(chapters_links, chapters_time, strict=False):
+                    yield SeleniumRequest(
+                        url=x,
+                        wait_time=10,
+                        wait_until=ec.presence_of_element_located(
+                            (
+                                By.XPATH,
+                                "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501
+                            ),
                         ),
-                    ),
-                    callback=self.parse,
-                    cb_kwargs={"chaptertime": y},
-                )
+                        callback=self.parse,
+                        cb_kwargs={"chaptertime": y},
+                    )
+
         else:
             msg = f"No Chapters found at: {response.url}"
             logger.error(msg)

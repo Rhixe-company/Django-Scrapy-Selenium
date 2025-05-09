@@ -5,12 +5,12 @@ from scrapy.exceptions import DropItem
 class CrawlerDefaultPipeline:
     def process_item(self, item, spider):
         adapter = ItemAdapter(item)
-        if adapter.get("images"):
-            if adapter.get("images") and adapter.get("slug"):
+        if adapter.get("image_urls"):
+            if adapter.get("image_urls") and adapter.get("slug"):
                 item["spider"] = spider.name
                 return item
             if (
-                adapter.get("images")
+                adapter.get("image_urls")
                 and adapter.get("comicslug")
                 and adapter.get("chapterslug")
             ):

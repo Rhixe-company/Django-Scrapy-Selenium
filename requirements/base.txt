@@ -60,4 +60,4 @@ lxml
 twisted-iocpsupport
 wheel
 django-dynamic-datatb
-scrapy-headless-selenium
+webdriver-manager

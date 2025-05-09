@@ -79,7 +79,7 @@ class Run2Spider(Spider):
         )
         loader.add_xpath(
             "rating",
-            '//span[contains(@class, "ml-1 text-white text-xs")]/text()',
+            '//span[contains(@class, "ml-1 text-xs")]/text()',
         )
         loader.add_xpath(
             "status",

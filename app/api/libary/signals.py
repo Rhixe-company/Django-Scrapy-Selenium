@@ -1,6 +1,6 @@
 # from django.core.cache import cache  # noqa: ERA001
 # from django.db.models.signals import post_delete  # noqa: ERA001
-import logging
+# import logging  # noqa: ERA001
 
 from django.db.models.signals import post_save
 from django.db.models.signals import pre_delete
@@ -11,11 +11,11 @@ from api.libary.models import Chapter
 from api.libary.models import ChapterImage
 from api.libary.models import Comic
 from api.libary.models import ComicImage
-from app.api.libary.helpers import delete_instance_image
-from app.api.libary.helpers import slugify_instance_name
-from app.api.libary.helpers import slugify_instance_title
+from app.api.libary.signals_helpers import delete_instance_image
+from app.api.libary.signals_helpers import slugify_instance_name
+from app.api.libary.signals_helpers import slugify_instance_title
 
-logger = logging.getLogger(__name__)
+# logger = logging.getLogger(__name__)  # noqa: ERA001
 
 # @receiver([post_save, post_delete], sender=Comic)
 # def invalidate_comic_cache(sender, instance, **kwargs):
@@ -66,7 +66,7 @@ def comic_pre_save(sender, instance, *args, **kwargs):
         slugify_instance_title(instance, save=False)
 
 
-pre_save.connect(comic_pre_save, sender=Comic)
+pre_save.connect(comic_pre_save, sender=Comic, dispatch_uid="comic_pre_save")
 
 
 def comic_post_save(sender, instance, created, *args, **kwargs):
@@ -74,7 +74,7 @@ def comic_post_save(sender, instance, created, *args, **kwargs):
         slugify_instance_title(instance, save=True)
 
 
-post_save.connect(comic_post_save, sender=Comic)
+post_save.connect(comic_post_save, sender=Comic, dispatch_uid="comic_post_save")
 
 
 def comic_image_pre_delete(sender, instance, *args, **kwargs):
@@ -82,7 +82,11 @@ def comic_image_pre_delete(sender, instance, *args, **kwargs):
         delete_instance_image(instance)
 
 
-pre_delete.connect(comic_image_pre_delete, sender=ComicImage)
+pre_delete.connect(
+    comic_image_pre_delete,
+    sender=ComicImage,
+    dispatch_uid="comic_image_pre_save",
+)
 
 
 def chapter_pre_save(sender, instance, *args, **kwargs):
@@ -90,7 +94,7 @@ def chapter_pre_save(sender, instance, *args, **kwargs):
         slugify_instance_name(instance, save=False)
 
 
-pre_save.connect(chapter_pre_save, sender=Chapter)
+pre_save.connect(chapter_pre_save, sender=Chapter, dispatch_uid="chapter_pre_save")
 
 
 def chapter_post_save(sender, instance, created, *args, **kwargs):
@@ -98,7 +102,7 @@ def chapter_post_save(sender, instance, created, *args, **kwargs):
         slugify_instance_name(instance, save=True)
 
 
-post_save.connect(chapter_post_save, sender=Chapter)
+post_save.connect(chapter_post_save, sender=Chapter, dispatch_uid="chapter_post_save")
 
 
 def chapter_image_pre_delete(sender, instance, *args, **kwargs):
@@ -106,4 +110,8 @@ def chapter_image_pre_delete(sender, instance, *args, **kwargs):
         delete_instance_image(instance)
 
 
-pre_delete.connect(chapter_image_pre_delete, sender=ChapterImage)
+pre_delete.connect(
+    chapter_image_pre_delete,
+    sender=ChapterImage,
+    dispatch_uid="chapter_image_pre_save",
+)

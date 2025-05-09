@@ -9,8 +9,8 @@
 import os
 import sys
 from pathlib import Path
-from shutil import which
 
+# from shutil import which  # noqa: ERA001
 import django
 from django.conf import settings
 from scrapy.utils.reactor import install_reactor
@@ -126,10 +126,10 @@ TWISTED_REACTOR = install_reactor(
     "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
 )
 FEED_EXPORT_ENCODING = "utf-8"
-# DOWNLOAD_HANDLERS = {  # noqa: ERA001, RUF100
-#     "http": "scrapy_impersonate.ImpersonateDownloadHandler",  # noqa: ERA001
-#     "https": "scrapy_impersonate.ImpersonateDownloadHandler",  # noqa: ERA001
-# }  # noqa: ERA001, RUF100
+DOWNLOAD_HANDLERS = {  # noqa: ERA001, RUF100
+    "http": "scrapy_impersonate.ImpersonateDownloadHandler",
+    "https": "scrapy_impersonate.ImpersonateDownloadHandler",
+}  # noqa: ERA001, RUF100
 FEEDS = {
     "comicsdata1.json": {
         "format": "json",
@@ -202,14 +202,13 @@ MEDIA_ALLOW_REDIRECTS = True
 # SELENIUM_DRIVER_EXECUTABLE_PATH = which("geckodriver")  # noqa: ERA001
 # SELENIUM_BROWSER_EXECUTABLE_PATH = which("firefox")  # noqa: ERA001
 SELENIUM_DRIVER_NAME = "chrome"
-SELENIUM_DRIVER_EXECUTABLE_PATH = which("chromedriver")
-SELENIUM_BROWSER_EXECUTABLE_PATH = which("chrome")
+SELENIUM_DRIVER_EXECUTABLE_PATH = None  # webdriver-manager will manage it by itself
 SELENIUM_DRIVER_ARGUMENTS = [
     "--headless",
-    "--no-sandbox",
-    "--disable-gpu",
-    "--enable-javascript",
-    "--disable-extensions",
-    "--block-ads",
+    # "--no-sandbox",
+    # "--disable-gpu",
+    # "--enable-javascript",
+    # "--disable-extensions",
+    # "--block-ads",
     "--enable-unsafe-swiftshader",
-]
+]  # change it to ['-headless'] to run in headless mode

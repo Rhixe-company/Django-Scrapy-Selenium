@@ -17,11 +17,11 @@ from unfold.contrib.forms.widgets import ArrayWidget
 from unfold.contrib.forms.widgets import WysiwygWidget
 from unfold.forms import AdminPasswordChangeForm
 
+from api.users.admin_helpers import CustomDropdownFilter
+from api.users.admin_helpers import CustomTextFilter
+from api.users.admin_helpers import UnfoldPeriodicTaskForm
 from api.users.forms import UserAdminChangeForm
 from api.users.forms import UserAdminCreationForm
-from api.users.helpers import CustomDropdownFilter
-from api.users.helpers import CustomTextFilter
-from api.users.helpers import UnfoldPeriodicTaskForm
 from api.users.models import User
 
 admin.site.index_title = "Welcome to the Rhixescans admin area"

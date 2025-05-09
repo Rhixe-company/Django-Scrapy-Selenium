@@ -2,7 +2,8 @@ import django_filters
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from api.libary.helpers import MyMulRadioSelect
+from api.libary.constants import ComicStatus
+from api.libary.forms_helpers import MyMulRadioSelect
 from api.libary.models import Chapter
 from api.libary.models import Comic
 
@@ -20,7 +21,7 @@ class ComicFilterSet(django_filters.FilterSet):
     )
     comic_status = django_filters.MultipleChoiceFilter(
         field_name="status",
-        choices=Comic.ComicStatus.choices,
+        choices=ComicStatus.choices,
         widget=MyMulRadioSelect(
             attrs={
                 "multiple": "true",
