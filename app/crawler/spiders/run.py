@@ -146,27 +146,25 @@ class RunSpider(Spider):
         if chapters:
             msg = f"Total Chapters found: {len(chapters)}"
             logger.info(msg)
-            chapters_links = []
             for x in chapters:
-                chapters_links.append(response.urljoin(x))  # noqa: PERF401
-            chaps = Chapter.objects.filter(Q(link__in=chapters_links))
-            if chaps.exists():
-                msg = f"{chaps} already exists"
-                logger.error(msg)
-            else:
-                for x, y in zip(chapters_links, chapters_time, strict=False):
-                    yield SeleniumRequest(
-                        url=x,
-                        wait_time=10,
-                        wait_until=ec.presence_of_element_located(
-                            (
-                                By.XPATH,
-                                "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501
+                chaps = Chapter.objects.filter(Q(link__in=response.urljoin(x)))
+                if chaps.exists():
+                    msg = f"{chaps} already exists"
+                    logger.error(msg)
+                else:
+                    for nx, y in zip(chapters, chapters_time, strict=False):
+                        yield SeleniumRequest(
+                            url=response.urljoin(nx),
+                            wait_time=10,
+                            wait_until=ec.presence_of_element_located(
+                                (
+                                    By.XPATH,
+                                    "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501
+                                ),
                             ),
-                        ),
-                        callback=self.parse,
-                        cb_kwargs={"chaptertime": y},
-                    )
+                            callback=self.parse,
+                            cb_kwargs={"chaptertime": y},
+                        )
 
         else:
             msg = f"No Chapters found at: {response.url}"
