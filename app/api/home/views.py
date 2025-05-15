@@ -41,8 +41,8 @@ def index(request):
         )
         .select_related("user", "author", "category", "artist", "website")
         .filter(
-            Q(numimages__gt=1) & Q(status=ComicStatus.ONGOING) & Q(rating__gte=9.9),
-        )[0:10],
+            Q(status=ComicStatus.ONGOING) & Q(rating__gte=9.8),
+        )[0:13],
         "featuredcomics": Comic.objects.prefetch_related(
             "comicimages",
             "genres",
@@ -51,7 +51,7 @@ def index(request):
         )
         .select_related("user", "author", "category", "artist", "website")
         .filter(
-            Q(status=ComicStatus.ONGOING) | Q(status=ComicStatus.COMPLETED),
+            Q(status=ComicStatus.ONGOING),
         )[0:5],
     }
     return render(request, "home/index.html", context)

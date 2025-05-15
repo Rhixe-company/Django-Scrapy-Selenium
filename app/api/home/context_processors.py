@@ -12,15 +12,13 @@ def load(request):
     week = now() - timedelta(weeks=1)
     month = now() - timedelta(weeks=4)
     comics = Comic.objects.filter(
-        Q(rating__gte=9.9)
-        | Q(status=ComicStatus.ONGOING)
-        | Q(status=ComicStatus.COMPLETED),
+        Q(rating__gte=9.5) & Q(status=ComicStatus.ONGOING),
     )
     weekcomics = Comic.objects.filter(
-        Q(rating__gte=9.9) & Q(updated_at__gte=week),
+        Q(rating__gte=9.5) & Q(updated_at__gte=week),
     )
     monthcomics = Comic.objects.filter(
-        Q(rating__gte=9.9) & Q(updated_at__gt=month),
+        Q(rating__gte=9.5) & Q(updated_at__gt=month),
     )
     myfilter = SearchFilterSet()
 

@@ -1,5 +1,7 @@
 {% load static i18n format_json %}
+{% load render_bundle from webpack_loader %}
 
+{% render_bundle 'carousel' 'js' attrs='defer' %}
 <div class="loop owl-carousel full owl-loaded">
   <div>
     <div class="carousel-root">

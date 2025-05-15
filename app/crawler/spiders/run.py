@@ -146,25 +146,25 @@ class RunSpider(Spider):
         if chapters:
             msg = f"Total Chapters found: {len(chapters)}"
             logger.info(msg)
-            for x in chapters:
-                chaps = Chapter.objects.filter(Q(link__in=response.urljoin(x)))
+            for x, y in zip(chapters, chapters_time, strict=False):
+                clink = response.urljoin(x)
+                chaps = Chapter.objects.filter(Q(link__in=clink))
                 if chaps.exists():
                     msg = f"{chaps} already exists"
                     logger.error(msg)
                 else:
-                    for nx, y in zip(chapters, chapters_time, strict=False):
-                        yield SeleniumRequest(
-                            url=response.urljoin(nx),
-                            wait_time=10,
-                            wait_until=ec.presence_of_element_located(
-                                (
-                                    By.XPATH,
-                                    "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501
-                                ),
+                    yield SeleniumRequest(
+                        url=clink,
+                        wait_time=10,
+                        wait_until=ec.presence_of_element_located(
+                            (
+                                By.XPATH,
+                                "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501
                             ),
-                            callback=self.parse,
-                            cb_kwargs={"chaptertime": y},
-                        )
+                        ),
+                        callback=self.parse,
+                        cb_kwargs={"chaptertime": y},
+                    )
 
         else:
             msg = f"No Chapters found at: {response.url}"

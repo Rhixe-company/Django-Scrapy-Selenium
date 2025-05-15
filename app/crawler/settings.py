@@ -71,7 +71,7 @@ CONCURRENT_REQUESTS_PER_IP = 64
 # See https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 SPIDER_MIDDLEWARES = {
     "crawler.middlewares.default.CrawlerSpiderMiddleware": 543,
-    "crawler.middlewares.main.SeleniumMiddleware": 800,
+    # "crawler.middlewares.main.SeleniumMiddleware": 800,
 }
 # Enable or disable downloader middlewares
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
@@ -80,7 +80,7 @@ DOWNLOADER_MIDDLEWARES = {
     "crawler.middlewares.rotate.RotateUserAgentMiddleware": 540,
     "crawler.middlewares.retry.TooManyRequestsRetryMiddleware": 541,
     "crawler.middlewares.default.CrawlerDownloaderMiddleware": 543,
-    "crawler.middlewares.main.SeleniumMiddleware": 800,
+    # "crawler.middlewares.main.SeleniumMiddleware": 800,
 }
 
 
@@ -94,8 +94,8 @@ DOWNLOADER_MIDDLEWARES = {
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
     # "crawler.pipelines.download_images.MyImagesPipeline": 1,
-    "crawler.pipelines.default.CrawlerDefaultPipeline": 200,
-    "crawler.pipelines.db.DbPipeline": 300,
+    # "crawler.pipelines.default.CrawlerDefaultPipeline": 200,
+    # "crawler.pipelines.db.DbPipeline": 300,
     # "crawler.pipelines.redis.red.CrawlerRedisPipeline": 400,
 }
 
@@ -131,23 +131,31 @@ DOWNLOAD_HANDLERS = {  # noqa: ERA001, RUF100
     "https": "scrapy_impersonate.ImpersonateDownloadHandler",
 }  # noqa: ERA001, RUF100
 FEEDS = {
-    "comicsdata1.json": {
-        "format": "json",
+    "data1.jsonl": {
+        "format": "jsonlines",
         "encoding": "utf8",
         "store_empty": False,
-        "item_classes": ["crawler.items.ComicItem"],
-        "fields": None,
-        "indent": 4,
-    },
-    "chaptersdata1.json": {
-        "format": "json",
-        "encoding": "utf8",
-        "store_empty": False,
-        "item_classes": ["crawler.items.ChapterItem"],
-        "fields": None,
         "indent": 4,
     },
 }
+# FEEDS = {
+#     "comicsdata1.json": {
+#         "format": "json",
+#         "encoding": "utf8",
+#         "store_empty": False,
+#         "item_classes": ["crawler.items.ComicItem"],
+#         "fields": None,
+#         "indent": 4,
+#     },
+#     "chaptersdata1.json": {
+#         "format": "json",
+#         "encoding": "utf8",
+#         "store_empty": False,
+#         "item_classes": ["crawler.items.ChapterItem"],
+#         "fields": None,
+#         "indent": 4,
+#     },
+# }
 RETRY_TIMES = 2
 RETRY_ENABLED = True
 RETRY_HTTP_CODES = list(range(300, 501))
@@ -201,14 +209,14 @@ MEDIA_ALLOW_REDIRECTS = True
 # SELENIUM_DRIVER_NAME = "firefox"  # noqa: ERA001
 # SELENIUM_DRIVER_EXECUTABLE_PATH = which("geckodriver")  # noqa: ERA001
 # SELENIUM_BROWSER_EXECUTABLE_PATH = which("firefox")  # noqa: ERA001
-SELENIUM_DRIVER_NAME = "chrome"
-SELENIUM_DRIVER_EXECUTABLE_PATH = None  # webdriver-manager will manage it by itself
-SELENIUM_DRIVER_ARGUMENTS = [
-    "--headless",
-    # "--no-sandbox",
-    # "--disable-gpu",
-    # "--enable-javascript",
-    # "--disable-extensions",
-    # "--block-ads",
-    "--enable-unsafe-swiftshader",
-]  # change it to ['-headless'] to run in headless mode
+# SELENIUM_DRIVER_NAME = "chrome"
+# SELENIUM_DRIVER_EXECUTABLE_PATH = None  # webdriver-manager will manage it by itself
+# SELENIUM_DRIVER_ARGUMENTS = [
+#     "--headless",
+#     # "--no-sandbox",
+#     # "--disable-gpu",
+#     # "--enable-javascript",
+#     # "--disable-extensions",
+#     # "--block-ads",
+#     "--enable-unsafe-swiftshader",
+# ]  # change it to ['-headless'] to run in headless mode

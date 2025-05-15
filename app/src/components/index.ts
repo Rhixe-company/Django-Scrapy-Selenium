@@ -6,4 +6,3 @@ import "./functions/backtotop";
 import "./functions/navbar";
 import "./functions/searchbar";
 import "./functions/myaccordian";
-import "./functions/carousel";

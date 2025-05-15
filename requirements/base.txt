@@ -61,3 +61,4 @@ twisted-iocpsupport
 wheel
 django-dynamic-datatb
 webdriver-manager
+extruct

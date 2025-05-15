@@ -34,34 +34,13 @@ function changeDot() {
     if (myelement.classList.value == "dot selected") {
       myelement.classList.remove("selected");
     }
-    console.log(myelement.classList.value);
   }
   dot[idx].classList.add("selected");
 }
-// function addDot() {
-//   for (let myindex = 0; myindex < dot.length; myindex++) {
-//     const myelement = dot[myindex];
-//     if (myelement.classList.value == "dot selected") {
-//       myelement.classList.remove("selected");
-//     }
-//     console.log(myelement.classList.value);
-//   }
-//   dot[idx].classList.add("selected");
-// }
-// function removeDot() {
-//   for (let myindex = 0; myindex < dot.length; myindex++) {
-//     const myelement = dot[myindex];
-//     if (myelement.classList.value == "dot selected") {
-//       myelement.classList.remove("selected");
-//     }
-//     console.log(myelement.classList.value);
-//   }
-//   dot[idx].classList.add("selected");
-// }
 
 function resetInterval() {
   clearInterval(interval);
-  interval = setInterval(run, 2000);
+  interval = setInterval(run, 9000);
 }
 
 rightBtn.addEventListener("click", () => {

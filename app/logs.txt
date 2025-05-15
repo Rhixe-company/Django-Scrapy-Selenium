@@ -1,7 +1,7 @@
-[1746832843.858][INFO]: Starting ChromeDriver 136.0.7103.92 (cb81a4cc5087a8303a6c8827ee2b80b71d26e334-refs/branch-heads/7103@{#1840}) on port 65443
-[1746832843.858][INFO]: Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
-[1746832843.878][INFO]: ChromeDriver was started successfully on port 65443
-[1746832844.294][INFO]: [3399578bdeea09b3ca07323ee6d73cbb] COMMAND InitSession {
+[1747302749.198][INFO]: Starting ChromeDriver 136.0.7103.94 (fa0be0b33debeb378a8e6ad9c599be34e2dc3b37-refs/branch-heads/7103@{#1842}) on port 53245
+[1747302749.198][INFO]: Please see https://chromedriver.chromium.org/security-considerations for suggestions on keeping ChromeDriver safe.
+[1747302749.218][INFO]: ChromeDriver was started successfully on port 53245
+[1747302749.618][INFO]: [b4a3dbd273e7596a9844d41085dee4b9] COMMAND InitSession {
    "capabilities": {
       "alwaysMatch": {
          "browserName": "chrome",
@@ -15,15 +15,15 @@
       } ]
    }
 }
-[1746832844.295][INFO]: Browser search. Trying... C:\Users\Alexa\.wdm\drivers\chromedriver\win64\136.0.7103.92\chromedriver-win32\chrome.exe
-[1746832844.295][INFO]: Browser search. Trying... C:\Users\Alexa\.wdm\drivers\chromedriver\win64\136.0.7103.92\chromedriver-win32\chrome.exe
-[1746832844.295][INFO]: Browser search. Trying... C:\Users\Alexa\.wdm\drivers\chromedriver\win64\136.0.7103.92\chromedriver-win32\chromium.exe
-[1746832844.346][INFO]: Browser search. Trying... C:\Users\Alexa\AppData\Local\Google\Chrome\Application\chrome.exe
-[1746832844.347][INFO]: Browser search. Trying... C:\Program Files (x86)\Google\Chrome\Application\chrome.exe
-[1746832844.347][INFO]: Browser search. Trying... C:\Program Files (x86)\Google\Chrome\Application\chrome.exe
-[1746832844.347][INFO]: Browser search. Trying... C:\Program Files\Google\Chrome\Application\chrome.exe
-[1746832844.348][INFO]: Browser search. Found at  C:\Program Files\Google\Chrome\Application\chrome.exe
-[1746832844.353][INFO]: Populating Preferences file: {
+[1747302749.619][INFO]: Browser search. Trying... C:\Users\Alexa\.wdm\drivers\chromedriver\win64\136.0.7103.94\chromedriver-win32\chrome.exe
+[1747302749.619][INFO]: Browser search. Trying... C:\Users\Alexa\.wdm\drivers\chromedriver\win64\136.0.7103.94\chromedriver-win32\chrome.exe
+[1747302749.619][INFO]: Browser search. Trying... C:\Users\Alexa\.wdm\drivers\chromedriver\win64\136.0.7103.94\chromedriver-win32\chromium.exe
+[1747302749.624][INFO]: Browser search. Trying... C:\Users\Alexa\AppData\Local\Google\Chrome\Application\chrome.exe
+[1747302749.624][INFO]: Browser search. Trying... C:\Program Files (x86)\Google\Chrome\Application\chrome.exe
+[1747302749.624][INFO]: Browser search. Trying... C:\Program Files (x86)\Google\Chrome\Application\chrome.exe
+[1747302749.624][INFO]: Browser search. Trying... C:\Program Files\Google\Chrome\Application\chrome.exe
+[1747302749.624][INFO]: Browser search. Found at  C:\Program Files\Google\Chrome\Application\chrome.exe
+[1747302749.626][INFO]: Populating Preferences file: {
    "alternate_error_pages": {
       "enabled": false
    },
@@ -76,7 +76,7 @@
       "enabled": false
    }
 }
-[1746832844.355][INFO]: Populating Local State file: {
+[1747302749.629][INFO]: Populating Local State file: {
    "background_mode": {
       "enabled": false
    },
@@ -86,22 +86,22 @@
       }
    }
 }
-[1746832844.360][INFO]: ChromeDriver supports communication with Chrome via pipes. This is more reliable and more secure.
-[1746832844.360][INFO]: Use the --remote-debugging-pipe Chrome switch instead of the default --remote-debugging-port to enable this communication mode.
-[1746832844.367][INFO]: Launching chrome: "C:\Program Files\Google\Chrome\Application\chrome.exe" --allow-pre-commit-input --disable-background-networking --disable-backgrounding-occluded-windows --disable-client-side-phishing-detection --disable-default-apps --disable-hang-monitor --disable-popup-blocking --disable-prompt-on-repost --disable-sync --enable-automation --enable-logging --enable-unsafe-swiftshader --headless --log-level=0 --no-first-run --no-service-autorun --password-store=basic --remote-debugging-port=0 --test-type=webdriver --use-mock-keychain --user-data-dir="C:\Users\Alexa\AppData\Local\Temp\scoped_dir14152_963599141" data:,
-[1746832845.291][INFO]: resolved localhost to ["::1","127.0.0.1"]
-[1746832845.305][INFO]: [3399578bdeea09b3ca07323ee6d73cbb] RESPONSE InitSession {
+[1747302749.632][INFO]: ChromeDriver supports communication with Chrome via pipes. This is more reliable and more secure.
+[1747302749.632][INFO]: Use the --remote-debugging-pipe Chrome switch instead of the default --remote-debugging-port to enable this communication mode.
+[1747302749.635][INFO]: Launching chrome: "C:\Program Files\Google\Chrome\Application\chrome.exe" --allow-pre-commit-input --disable-background-networking --disable-backgrounding-occluded-windows --disable-client-side-phishing-detection --disable-default-apps --disable-hang-monitor --disable-popup-blocking --disable-prompt-on-repost --disable-sync --enable-automation --enable-logging --enable-unsafe-swiftshader --headless --log-level=0 --no-first-run --no-service-autorun --password-store=basic --remote-debugging-port=0 --test-type=webdriver --use-mock-keychain --user-data-dir="C:\Users\Alexa\AppData\Local\Temp\scoped_dir16708_1368359220" data:,
+[1747302750.476][INFO]: resolved localhost to ["::1","127.0.0.1"]
+[1747302750.508][INFO]: [b4a3dbd273e7596a9844d41085dee4b9] RESPONSE InitSession {
    "capabilities": {
       "acceptInsecureCerts": false,
       "browserName": "chrome",
       "browserVersion": "136.0.7103.93",
       "chrome": {
-         "chromedriverVersion": "136.0.7103.92 (cb81a4cc5087a8303a6c8827ee2b80b71d26e334-refs/branch-heads/7103@{#1840})",
-         "userDataDir": "C:\\Users\\Alexa\\AppData\\Local\\Temp\\scoped_dir14152_963599141"
+         "chromedriverVersion": "136.0.7103.94 (fa0be0b33debeb378a8e6ad9c599be34e2dc3b37-refs/branch-heads/7103@{#1842})",
+         "userDataDir": "C:\\Users\\Alexa\\AppData\\Local\\Temp\\scoped_dir16708_1368359220"
       },
       "fedcm:accounts": true,
       "goog:chromeOptions": {
-         "debuggerAddress": "localhost:65446"
+         "debuggerAddress": "localhost:53249"
       },
       "networkConnectionEnabled": false,
       "pageLoadStrategy": "normal",
@@ -122,8 +122,6 @@
       "webauthn:extension:prf": true,
       "webauthn:virtualAuthenticators": true
    },
-   "sessionId": "3399578bdeea09b3ca07323ee6d73cbb"
+   "sessionId": "b4a3dbd273e7596a9844d41085dee4b9"[174[1747302753.915][INFO]: [b4a3dbd273e7596a9844d41085dee4b9] COMMAND Quit {
 }
-[1746832989.226][INFO]: [3399578bdeea09b3ca07323ee6d73cbb] COMMAND Quit {
-}
-[1746832989.319][INFO]: [3399578bdeea09b3ca07323ee6d73cbb] RESPONSE Quit
+[1747302754.032][INFO]: [b4a3dbd273e7596a9844d41085dee4b9] RESPONSE Quit
