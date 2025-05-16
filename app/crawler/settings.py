@@ -9,8 +9,8 @@
 import os
 import sys
 from pathlib import Path
+from shutil import which
 
-# from shutil import which  # noqa: ERA001
 import django
 from django.conf import settings
 from scrapy.utils.reactor import install_reactor
@@ -28,16 +28,20 @@ NEWSPIDER_MODULE = "crawler.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"  # noqa: E501
+USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36"  # noqa: E501
 
 USER_AGENT_LIST = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",  # noqa: E501
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",  # noqa: E501
-    "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/118.0",
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",  # noqa: E501
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",  # noqa: E501
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0",  # noqa: E501
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",  # noqa: E501
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.105 Safari/537.36",  # noqa: E501
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv.0) Gecko/20100101 Firefox/97.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1.2 Safari/605.1.15",  # noqa: E501
+    "Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1",  # noqa: E501
+    " Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36 Edg/91.0.864.59",  # noqa: E501
+    "Mozilla/5.0 (Linux; Android 5.0.2; SAMSUNG SM-T550 Build/LRX22G) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/3.3 Chrome/38.0.2125.102 Safari/537.36",  # noqa: E501
+    "Mozilla/5.0 (PlayStation 4 3.11) AppleWebKit/537.73 (KHTML, like Gecko) PlayStation Vita Mozilla/5.0 (PlayStation Vita 3.61) AppleWebKit/537.73 (KHTML, like Gecko) Silk/3.2",  # noqa: E501
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; Xbox; Xbox Series X) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/48.0.2564.82 Safari/537.36 Edge/20.02",  # noqa: E501
+    "Mozilla/5.0 (Nintendo Switch; WifiWebAuthApplet) AppleWebKit/601.6 (KHTML, like Gecko) NF/4.0.0.5.10 NintendoBrowser/5.1.0.13343",  # noqa: E501
+    "Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)",
+    "Mozilla/5.0 (compatible; YandexAccessibilityBot/3.0; +http://yandex.com/bots",
 ]
 
 
@@ -50,7 +54,7 @@ CONCURRENT_REQUESTS = 128
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 0
+DOWNLOAD_DELAY = 5
 # The download delay setting will honor only one of:
 CONCURRENT_REQUESTS_PER_DOMAIN = 64
 CONCURRENT_REQUESTS_PER_IP = 64
@@ -80,7 +84,7 @@ DOWNLOADER_MIDDLEWARES = {
     "crawler.middlewares.rotate.RotateUserAgentMiddleware": 540,
     "crawler.middlewares.retry.TooManyRequestsRetryMiddleware": 541,
     "crawler.middlewares.default.CrawlerDownloaderMiddleware": 543,
-    # "crawler.middlewares.main.SeleniumMiddleware": 800,
+    # "crawler.middlewares.main1.SeleniumMiddleware": 800,
 }
 
 
@@ -127,11 +131,11 @@ TWISTED_REACTOR = install_reactor(
 )
 FEED_EXPORT_ENCODING = "utf-8"
 DOWNLOAD_HANDLERS = {  # noqa: ERA001, RUF100
-    "http": "scrapy_impersonate.ImpersonateDownloadHandler",
-    "https": "scrapy_impersonate.ImpersonateDownloadHandler",
+    # "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+    "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
 }  # noqa: ERA001, RUF100
 FEEDS = {
-    "data1.jsonl": {
+    "comics.jsonl": {
         "format": "jsonlines",
         "encoding": "utf8",
         "store_empty": False,
@@ -206,17 +210,22 @@ MEDIA_ALLOW_REDIRECTS = True
 # SCHEDULER = "scrapy_redis.scheduler.Scheduler"  # noqa: ERA001
 # SCHEDULER_PERSIST = False  # noqa: ERA001
 
-# SELENIUM_DRIVER_NAME = "firefox"  # noqa: ERA001
-# SELENIUM_DRIVER_EXECUTABLE_PATH = which("geckodriver")  # noqa: ERA001
-# SELENIUM_BROWSER_EXECUTABLE_PATH = which("firefox")  # noqa: ERA001
+# # SELENIUM_DRIVER_NAME = "firefox"  # noqa: ERA001
+# # SELENIUM_DRIVER_EXECUTABLE_PATH = which("geckodriver")  # noqa: ERA001
+# # SELENIUM_BROWSER_EXECUTABLE_PATH = which("firefox")  # noqa: ERA001
 # SELENIUM_DRIVER_NAME = "chrome"
-# SELENIUM_DRIVER_EXECUTABLE_PATH = None  # webdriver-manager will manage it by itself
+# SELENIUM_DRIVER_EXECUTABLE_PATH = None
+# # SELENIUM_DRIVER_EXECUTABLE_PATH = which("chromedriver")
+# # SELENIUM_BROWSER_EXECUTABLE_PATH = which("chrome")
+
 # SELENIUM_DRIVER_ARGUMENTS = [
-#     "--headless",
-#     # "--no-sandbox",
-#     # "--disable-gpu",
-#     # "--enable-javascript",
-#     # "--disable-extensions",
-#     # "--block-ads",
+#     # "--headless",
+#     "--disable-blink-features=AutomationControlled",
+#     "--no-sandbox",
+#     "--disable-gpu",
+#     "--enable-javascript",
+#     "--disable-extensions",
+#     "--block-ads",
 #     "--enable-unsafe-swiftshader",
 # ]  # change it to ['-headless'] to run in headless mode
+PLAYWRIGHT_PROCESS_REQUEST_HEADERS = None

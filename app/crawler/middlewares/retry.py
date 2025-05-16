@@ -19,8 +19,8 @@ class TooManyRequestsRetryMiddleware(RetryMiddleware):
     Modifies RetryMiddleware to delay retries on status 429.
     """
 
-    DEFAULT_DELAY = 2  # Delay in seconds.
-    MAX_DELAY = 4  # Sometimes, RETRY-AFTER has absurd values
+    DEFAULT_DELAY = 4  # Delay in seconds.
+    MAX_DELAY = 8  # Sometimes, RETRY-AFTER has absurd values
 
     async def process_response(self, request, response, spider):
         """

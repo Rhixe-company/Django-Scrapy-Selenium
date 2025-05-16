@@ -1,10 +1,10 @@
 from importlib import import_module
 
-from scrapy import signals
 from scrapy.exceptions import NotConfigured
 from scrapy_headless.http import SeleniumRequest
 from scrapy_headless.http import SeleniumResponse
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium_stealth import stealth
 
 
 class SeleniumMiddleware:
@@ -53,16 +53,39 @@ class SeleniumMiddleware:
         # webdriver-manager
         else:
             # selenium4+ & webdriver-manager
-            from selenium_driverless import webdriver  # type: ignore  # noqa: PGH003
+            from selenium import webdriver  # type: ignore  # noqa: PGH003
 
             if driver_name and driver_name.lower() == "chrome":
-                from selenium_driverless.webdriver import ChromeOptions
+                from selenium.webdriver.chrome.service import Service as ChromeService
+                from webdriver_manager.chrome import ChromeDriverManager
 
-                new_options = ChromeOptions()
-                for argument in driver_arguments:
-                    new_options.add_argument(argument)
                 self.driver = webdriver.Chrome(
-                    options=new_options,
+                    options=driver_options,
+                    service=ChromeService(
+                        ChromeDriverManager().install(),
+                        log_output="logs.txt",
+                        service_args=["--log", "info"],
+                        prefs={  # noqa: ERA001, RUF100
+                            "dom.ipc.processCount": 8,
+                            "javascript.options.showInConsole": True,
+                        },
+                    ),
+                )
+            if driver_name and driver_name.lower() == "firefox":
+                from selenium.webdriver.firefox.service import Service as FirefoxService
+                from webdriver_manager.firefox import GeckoDriverManager
+
+                self.driver = webdriver.Firefox(
+                    options=driver_options,
+                    service=FirefoxService(
+                        GeckoDriverManager().install(),
+                        log_output="logs.txt",
+                        service_args=["--log", "info"],
+                        prefs={  # noqa: ERA001, RUF100
+                            "dom.ipc.processCount": 8,
+                            "javascript.options.showInConsole": True,
+                        },
+                    ),
                 )
 
     @classmethod
@@ -93,7 +116,7 @@ class SeleniumMiddleware:
                 msg,
             )
 
-        middleware = cls(
+        return cls(
             driver_name=driver_name,
             driver_executable_path=driver_executable_path,
             browser_executable_path=browser_executable_path,
@@ -101,17 +124,17 @@ class SeleniumMiddleware:
             driver_arguments=driver_arguments,
         )
 
-        crawler.signals.connect(middleware.spider_closed, signals.spider_closed)  # type: ignore  # noqa: PGH003
-
-        return middleware
-
     def process_request(self, request, spider):
         """Process a request using the selenium driver if applicable"""
 
         if not isinstance(request, SeleniumRequest):
             return None
-
         self.driver.get(request.url)
+        # Selenium Stealth settings
+        stealth(
+            self.driver,  # type: ignore  # noqa: PGH003
+            languages=["en-US", "en"],
+        )
 
         for cookie_name, cookie_value in request.cookies.items():  # type: ignore  # noqa: PGH003
             self.driver.add_cookie({"name": cookie_name, "value": cookie_value})
@@ -137,7 +160,7 @@ class SeleniumMiddleware:
             request=request,
         )
 
-    def spider_closed(self):
-        """Shutdown the driver when spider is closed"""
-
-        self.driver.quit()
+    def process_spider_output(self, response, result, spider):
+        """Shutdown the driver when spider is finished processing the response"""
+        response.interact.quit()
+        return result

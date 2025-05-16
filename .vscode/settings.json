@@ -36,7 +36,7 @@
     "editor.codeActionsOnSave": {
       "source.organizeImports": "always"
     },
-    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.defaultFormatter": "ms-python.black-formatter",
     "linting.enabled": true,
     "linting.mypyEnabled": true,
     "linting.mypyPath": "../myvenv/Scripts/mypy.exe"

@@ -47,6 +47,7 @@ django-template-partials==24.4
 Scrapy==2.11.1
 scrapy-headless-selenium==0.1.2
 selenium==4.28.1
+
 # typing==3.7.4.3
 # typing_extensions==4.12.2
 # webdriver-manager
@@ -62,3 +63,11 @@ wheel
 django-dynamic-datatb
 webdriver-manager
 extruct
+pydantic
+typing
+selenium-wire
+blinker==1.7.0
+selenium-stealth
+selenium-driverless
+asynciolimiter
+scrapy-playwright
