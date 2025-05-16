@@ -13,7 +13,7 @@
     "../app/api/templates/**/*.html": "django-html",
     "../app/api/templates/**/*.{txt,in}": "django-txt",
     "../requirements/**/*.{txt,in}": "pip-requirements",
-    "*.css": "tailwindcss",
+    "*.css": "css",
     "*.scss": "scss"
   },
   "tailwindCSS.includeLanguages": {
@@ -21,11 +21,11 @@
     "plaintext": "html",
     "css": "css",
     "scss": "scss",
-    "javascript": "js",
-    "typescript": "ts"
+    "javascript": "jsx",
+    "typescript": "tsx"
   },
   "tailwindCSS.emmetCompletions": true,
-  "tailwindCSS.experimental.configFile": "../app/tailwind.config.js",
+
   "terminal.integrated.shell.windows": "C:/'Program Files'/PowerShell/7-preview/pwsh.exe",
   "powershell.developer.featureFlags": ["PSReadLine"],
   "python.analysis.autoImportCompletions": true,
