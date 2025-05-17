@@ -202,7 +202,7 @@ class Comic(StandardMetadata):
     class Meta:
         verbose_name_plural = "Comics"
         verbose_name = "Comic"
-        ordering = ["updated_at"]
+        ordering = ["-updated_at"]
 
     def __str__(self):
         return self.title
@@ -291,7 +291,7 @@ class Chapter(StandardMetadata):
     class Meta:
         verbose_name_plural = "Chapters"
         verbose_name = "Chapter"
-        ordering = ["updated_at"]
+        ordering = ["-updated_at"]
 
     def __str__(self):
         return self.name

@@ -91,6 +91,7 @@ THIRD_PARTY_APPS = [
     "django_celery_results",
     "rest_framework",
     "rest_framework.authtoken",
+    "rest_framework_simplejwt",
     "corsheaders",
     "drf_spectacular",
     "webpack_loader",
@@ -404,9 +405,8 @@ SOCIALACCOUNT_PROVIDERS = {
 # django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
         "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.BasicAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
     # "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),

@@ -4,8 +4,8 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAdminUser
 
-from project.libary.models import Comment
-from project.libary.serializers import CommentSerializer
+from api.libary.models import Comment
+from api.libary.serializers import CommentSerializer
 
 
 class CommentListAPIView(generics.ListCreateAPIView):

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "npm-check-updates": "18.0.1",
@@ -18,8 +18,8 @@
     "@reduxjs/toolkit": "^2.8.2",
     "framer-motion": "^12.12.1",
     "next": "15.3.2",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
     "react-redux": "^9.2.0",
     "redux": "^5.0.1",
     "redux-thunk": "^3.1.0"
@@ -29,7 +29,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "clean": "shx rm -rf .next && shx rm -rf staticfiles",
+    "clean": "rm -rf .next && rm -rf staticfiles",
     "check-updates": "npm-check-updates --deep -i"
   }
 }

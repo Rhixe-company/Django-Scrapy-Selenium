@@ -4,8 +4,8 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAdminUser
 
-from project.libary.models import Genre
-from project.libary.serializers import GenreSerializer
+from api.libary.models import Genre
+from api.libary.serializers import GenreSerializer
 
 
 class GenreListAPIView(generics.ListCreateAPIView):

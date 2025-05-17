@@ -3,11 +3,9 @@ from rest_framework import filters
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAdminUser
-from rest_framework_simplejwt.views import TokenObtainPairView
 
-from project.libary.serializers import UserObtainPairSerializer
-from project.libary.serializers import UserSerializer
-from project.users.models import User
+from api.users.models import User
+from api.users.serializers import UserSerializer
 
 
 class UserListAPIView(generics.ListCreateAPIView):
@@ -51,10 +49,3 @@ class UserDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 
 user_detail = UserDetailAPIView.as_view()
-
-
-class UserTokenAPIView(TokenObtainPairView):
-    serializer_class = UserObtainPairSerializer
-
-
-user_token = UserTokenAPIView.as_view()

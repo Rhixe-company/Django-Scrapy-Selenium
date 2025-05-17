@@ -76,4 +76,4 @@ selenium-stealth
 selenium-driverless
 asynciolimiter
 scrapy-playwright
-djangorestframework-jwt
+djangorestframework-simplejwt[crypto]

@@ -4,8 +4,8 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAdminUser
 
-from project.libary.models import Category
-from project.libary.serializers import CategorySerializer
+from api.libary.models import Category
+from api.libary.serializers import CategorySerializer
 
 
 class CategoryListAPIView(generics.ListCreateAPIView):

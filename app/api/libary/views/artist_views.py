@@ -4,8 +4,8 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAdminUser
 
-from project.libary.models import Artist
-from project.libary.serializers import ArtistSerializer
+from api.libary.models import Artist
+from api.libary.serializers import ArtistSerializer
 
 
 class ArtistListAPIView(generics.ListCreateAPIView):
