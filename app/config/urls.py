@@ -22,7 +22,17 @@ urlpatterns = [
 # API URLS
 urlpatterns += [
     # API base url
-    path("api/", include("config.api_router")),
+    path("api/users/", include("libary.urls.user_urls", namespace="users")),
+    path("api/comics/", include("libary.urls.comic_urls", namespace="comics")),
+    path("api/chapters/", include("libary.urls.chapter_urls", namespace="chapters")),
+    path(
+        "api/comicimages/",
+        include("libary.urls.comic_image_urls", namespace="comicimages"),
+    ),
+    path(
+        "api/chapterimages/",
+        include("libary.urls.chapter_image_urls", namespace="chapterimages"),
+    ),
     # DRF auth token
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),

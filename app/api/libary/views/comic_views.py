@@ -10,9 +10,16 @@ from api.libary.serializers import ComicsInfoSerializer
 
 
 class ComicListAPIView(generics.ListCreateAPIView):
-    queryset = Comic.objects.prefetch_related(
-        "comiccomic",
-    ).all()
+    queryset = (
+        Comic.objects.prefetch_related(
+            "comicimages",
+            "genres",
+            "users",
+            "comicchapters",
+        )
+        .select_related("user", "author", "category", "artist", "website")
+        .all()
+    )
     serializer_class = ComicsInfoSerializer
     filter_backends = [
         DjangoFilterBackend,  # type: ignore  # noqa: PGH003
@@ -34,11 +41,19 @@ comic_list = ComicListAPIView.as_view()
 
 
 class ComicDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Comic.objects.prefetch_related(
-        "comiccomic",
-    ).all()
+    queryset = (
+        Comic.objects.prefetch_related(
+            "comicimages",
+            "genres",
+            "users",
+            "comicchapters",
+        )
+        .select_related("user", "author", "category", "artist", "website")
+        .all()
+    )
     serializer_class = ComicInfoSerializer
-    lookup_url_kwarg = "id"
+    lookup_url_kwarg = "slug"
+    lookup_field = "slug"
 
     def get_permissions(self):
         self.permission_classes = [AllowAny]

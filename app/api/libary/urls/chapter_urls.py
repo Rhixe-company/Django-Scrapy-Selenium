@@ -7,27 +7,12 @@ app_name = "chapters"
 urlpatterns = [
     path(
         "",
-        view=views.list_view,
+        view=views.chapter_list,
         name="list",
     ),
     path(
-        "create/",
-        view=views.create_view,
-        name="create",
-    ),
-    path(
         "<str:slug>/",
-        view=views.detail_view,
+        view=views.chapter_detail,
         name="detail",
-    ),
-    path(
-        "<str:slug>/update/",
-        view=views.update_view,
-        name="update",
-    ),
-    path(
-        "<str:slug>/delete/",
-        view=views.delete_view,
-        name="delete",
     ),
 ]

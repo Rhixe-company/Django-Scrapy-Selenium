@@ -4,20 +4,16 @@ from api.libary.views import chapter_image_views as views
 
 app_name = "chapterimages"
 
+
 urlpatterns = [
     path(
-        "<str:slug>/image/create/",
-        view=views.create_view,
-        name="create",
+        "",
+        view=views.chapter_image_list,
+        name="list",
     ),
     path(
-        "<str:slug>/image/<int:pk>/update/",
-        view=views.update_view,
-        name="update",
-    ),
-    path(
-        "<str:slug>/image/<int:pk>/delete/",
-        view=views.delete_view,
-        name="delete",
+        "<int:id>/",
+        view=views.chapter_image_detail,
+        name="detail",
     ),
 ]

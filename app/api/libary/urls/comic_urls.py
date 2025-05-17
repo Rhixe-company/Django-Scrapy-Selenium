@@ -7,37 +7,12 @@ app_name = "comics"
 urlpatterns = [
     path(
         "",
-        view=views.list_view,
+        view=views.comic_list,
         name="list",
     ),
     path(
-        "create/",
-        view=views.create_view,
-        name="create",
-    ),
-    path(
         "<str:slug>/",
-        view=views.detail_view,
+        view=views.comic_detail,
         name="detail",
-    ),
-    path(
-        "<str:slug>/update/",
-        view=views.update_view,
-        name="update",
-    ),
-    path(
-        "<str:slug>/delete/",
-        view=views.delete_view,
-        name="delete",
-    ),
-    path(
-        "<str:slug>/add_bookmark/",
-        view=views.add_bookmark,
-        name="add_bookmark",
-    ),
-    path(
-        "<str:slug>/delete_bookmark/",
-        view=views.delete_bookmark,
-        name="delete_bookmark",
     ),
 ]

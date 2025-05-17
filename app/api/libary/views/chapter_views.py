@@ -10,9 +10,13 @@ from api.libary.serializers import ChaptersInfoSerializer
 
 
 class ChapterListAPIView(generics.ListCreateAPIView):
-    queryset = Chapter.objects.prefetch_related(
-        "chapterchapter",
-    ).all()
+    queryset = (
+        Chapter.objects.prefetch_related(
+            "chapterimages",
+        )
+        .select_related("comic", "website")
+        .all()
+    )
     serializer_class = ChaptersInfoSerializer
     filter_backends = [
         DjangoFilterBackend,  # type: ignore  # noqa: PGH003
@@ -34,11 +38,16 @@ chapter_list = ChapterListAPIView.as_view()
 
 
 class ChapterDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Chapter.objects.prefetch_related(
-        "chapterchapter",
-    ).all()
+    queryset = (
+        Chapter.objects.prefetch_related(
+            "chapterimages",
+        )
+        .select_related("comic", "website")
+        .all()
+    )
     serializer_class = ChapterInfoSerializer
-    lookup_url_kwarg = "id"
+    lookup_url_kwarg = "slug"
+    lookup_field = "slug"
 
     def get_permissions(self):
         self.permission_classes = [AllowAny]

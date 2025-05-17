@@ -216,24 +216,6 @@ class Comic(StandardMetadata):
         """
         return reverse("comics:detail", kwargs={"slug": self.slug})
 
-    def get_update_url(self) -> str:
-        """Get URL for comic's update view.
-
-        Returns:
-            str: URL for comic update.
-
-        """
-        return reverse("comics:update", kwargs={"slug": self.slug})
-
-    def get_delete_url(self) -> str:
-        """Get URL for comic's delete view.
-
-        Returns:
-            str: URL for comic delete.
-
-        """
-        return reverse("comics:delete", kwargs={"slug": self.slug})
-
     @property
     def has_chapters(self):
         return self.numchapters > 0
@@ -305,24 +287,6 @@ class Chapter(StandardMetadata):
         """
         return reverse("chapters:detail", kwargs={"slug": self.slug})
 
-    def get_update_url(self) -> str:
-        """Get URL for chapter's update view.
-
-        Returns:
-            str: URL for chapter update.
-
-        """
-        return reverse("chapters:update", kwargs={"slug": self.slug})
-
-    def get_delete_url(self) -> str:
-        """Get URL for chapter's delete view.
-
-        Returns:
-            str: URL for chapter delete.
-
-        """
-        return reverse("chapters:delete", kwargs={"slug": self.slug})
-
     @property
     def has_images(self):
         return self.numimages > 0
@@ -383,29 +347,14 @@ class ComicImage(StandardMetadata):
     def __str__(self):
         return f"{self.link}"
 
-    def get_update_url(self) -> str:
-        """Get URL for comicimage's update view.
+    def get_absolute_url(self) -> str:
+        """Get URL for comicimage's detail view.
 
         Returns:
-            str: URL for comicimage update.
+            str: URL for comicimage detail.
 
         """
-        return reverse(
-            "comicimages:update",
-            kwargs={"slug": self.comic.slug, "pk": self.pk},
-        )
-
-    def get_delete_url(self) -> str:
-        """Get URL for comicimage's delete view.
-
-        Returns:
-            str: URL for comicimage delete.
-
-        """
-        return reverse(
-            "comicimages:delete",
-            kwargs={"slug": self.comic.slug, "pk": self.pk},
-        )
+        return reverse("comicimages:detail", kwargs={"id": self.pk})
 
 
 class ChapterImage(StandardMetadata):
@@ -446,29 +395,14 @@ class ChapterImage(StandardMetadata):
     def __str__(self):
         return f"{self.link}"
 
-    def get_update_url(self) -> str:
-        """Get URL for chapterimage's update view.
+    def get_absolute_url(self) -> str:
+        """Get URL for chapterimage's detail view.
 
         Returns:
-            str: URL for chapterimage update.
+            str: URL for chapterimage detail.
 
         """
-        return reverse(
-            "chapterimages:update",
-            kwargs={"slug": self.chapter.slug, "pk": self.pk},
-        )
-
-    def get_delete_url(self) -> str:
-        """Get URL for chapterimage's delete view.
-
-        Returns:
-            str: URL for chapterimage delete.
-
-        """
-        return reverse(
-            "chapterimages:delete",
-            kwargs={"slug": self.chapter.slug, "pk": self.pk},
-        )
+        return reverse("chapterimages:detail", kwargs={"id": self.pk})
 
 
 class Comment(StandardMetadata):

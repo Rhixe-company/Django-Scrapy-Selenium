@@ -9,8 +9,9 @@ from api.libary.serializers import ChapterImageSerializer
 
 
 class ChapterImageListAPIView(generics.ListCreateAPIView):
-    queryset = ChapterImage.objects.prefetch_related(
-        "chapterImagechapterImage",
+    queryset = ChapterImage.objects.select_related(
+        "chapter",
+        "comic",
     ).all()
     serializer_class = ChapterImageSerializer
     filter_backends = [
@@ -33,8 +34,9 @@ chapter_image_list = ChapterImageListAPIView.as_view()
 
 
 class ChapterImageDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = ChapterImage.objects.prefetch_related(
-        "chapterImagechapterImage",
+    queryset = ChapterImage.objects.select_related(
+        "chapter",
+        "comic",
     ).all()
     serializer_class = ChapterImageSerializer
     lookup_url_kwarg = "id"

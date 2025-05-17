@@ -9,8 +9,8 @@ from api.libary.serializers import ComicImageSerializer
 
 
 class ComicImageListAPIView(generics.ListCreateAPIView):
-    queryset = ComicImage.objects.prefetch_related(
-        "comicImagecomicImage",
+    queryset = ComicImage.objects.select_related(
+        "comic",
     ).all()
     serializer_class = ComicImageSerializer
     filter_backends = [
@@ -33,8 +33,8 @@ comic_image_list = ComicImageListAPIView.as_view()
 
 
 class ComicImageDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = ComicImage.objects.prefetch_related(
-        "comicImagecomicImage",
+    queryset = ComicImage.objects.select_related(
+        "comic",
     ).all()
     serializer_class = ComicImageSerializer
     lookup_url_kwarg = "id"
