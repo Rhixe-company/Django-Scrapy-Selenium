@@ -89,23 +89,20 @@ THIRD_PARTY_APPS = [
     "allauth.socialaccount.providers.google",
     "django_celery_beat",
     "django_celery_results",
+    "rest_framework",
+    "rest_framework.authtoken",
+    "corsheaders",
+    "drf_spectacular",
     "webpack_loader",
-    "django_htmx",
-    "widget_tweaks",
-    "captcha",
-    "django_tables2",
     "django_filters",
     "celery_progress",
     "django_ckeditor_5",
     "import_export",
     "dynamic_formsets",
-    "template_partials",
-    "django_dyn_dt",
 ]
 
 LOCAL_APPS = [
     "api.users.apps.UsersConfig",
-    "api.home.apps.HomeConfig",
     "api.libary.apps.LibaryConfig",
     # Your stuff: custom apps go here
     "crawler",
@@ -128,9 +125,9 @@ AUTHENTICATION_BACKENDS = [
 # https://docs.djangoproject.com/en/dev/ref/settings/#auth-user-model
 AUTH_USER_MODEL = "users.User"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
-LOGIN_REDIRECT_URL = "users:redirect"
-# https://docs.djangoproject.com/en/dev/ref/settings/#login-url
-LOGIN_URL = "account_login"
+# LOGIN_REDIRECT_URL = "users:redirect"
+# # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
+# LOGIN_URL = "account_login"
 
 # PASSWORDS
 # ------------------------------------------------------------------------------
@@ -156,6 +153,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#middleware
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -166,7 +164,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
-    "django_htmx.middleware.HtmxMiddleware",
+    # "django_htmx.middleware.HtmxMiddleware",
 ]
 
 # STATIC
@@ -181,7 +179,7 @@ STATIC_URL = "/static/"
 # )  # <-- NEW App
 
 STATICFILES_DIRS = [
-    str(BASE_DIR / "dist"),
+    str(BASE_DIR / ".next"),
     str(APPS_DIR / "static"),
     str(APPS_DIR / "static/src"),
     str(APPS_DIR / "static/images"),
@@ -231,9 +229,9 @@ TEMPLATES = [
                 "django.template.context_processors.static",
                 "django.template.context_processors.tz",
                 "django.contrib.messages.context_processors.messages",
-                "api.users.context_processors.allauth_settings",
-                "api.users.context_processors.avatar",
-                "api.home.context_processors.load",
+                # "api.users.context_processors.allauth_settings",
+                # "api.users.context_processors.avatar",
+                # "api.home.context_processors.load",
             ],
         },
     },
@@ -398,6 +396,34 @@ SOCIALACCOUNT_PROVIDERS = {
             "access_type": "online",
         },
     },
+}
+
+
+# django-rest-framework
+# -------------------------------------------------------------------------------
+# django-rest-framework - https://www.django-rest-framework.org/api-guide/settings/
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_jwt.authentication.JSONWebTokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.AllowAny",),
+    # "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+# django-cors-headers - https://github.com/adamchainz/django-cors-headers#setup
+# CORS_URLS_REGEX = r"^/api/.*$"
+CORS_ORIGIN_ALLOW_ALL = True  # Set to True to allow all origins
+# By Default swagger ui is available only to admin user(s). You can change permission classes to change that
+# See more configuration options at https://drf-spectacular.readthedocs.io/en/latest/settings.html#settings
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Rhixescans API",
+    "DESCRIPTION": "Documentation of API endpoints of Rhixescans",
+    "VERSION": "1.0.0",
+    "SERVE_PERMISSIONS": ["rest_framework.permissions.IsAdminUser"],
+    "SCHEMA_PATH_PREFIX": "/api/",
 }
 
 # django-webpack-loader
@@ -610,16 +636,16 @@ CKEDITOR_5_CONFIGS = {
 CKEDITOR_5_CUSTOM_CSS = "css/custom.css"
 CSRF_COOKIE_NAME = "new_csrf_cookie_name"
 CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"
-DYNAMIC_DATATB = {
-    # SLUG -> Import_PATH
-    "comics": "api.libary.models.Comic",
-    "chapters": "api.libary.models.Chapter",
-    "comicimages": "api.libary.models.ComicImage",
-    "chapterimages": "api.libary.models.ChapterImage",
-    "websites": "api.libary.models.Website",
-    "categorys": "api.libary.models.Category",
-    "genres": "api.libary.models.Genre",
-    "authors": "api.libary.models.Author",
-    "artists": "api.libary.models.Artist",
-    "users": "api.users.models.User",
-}
+# DYNAMIC_DATATB = {
+#     # SLUG -> Import_PATH
+#     "comics": "api.libary.models.Comic",
+#     "chapters": "api.libary.models.Chapter",
+#     "comicimages": "api.libary.models.ComicImage",
+#     "chapterimages": "api.libary.models.ChapterImage",
+#     "websites": "api.libary.models.Website",
+#     "categorys": "api.libary.models.Category",
+#     "genres": "api.libary.models.Genre",
+#     "authors": "api.libary.models.Author",
+#     "artists": "api.libary.models.Artist",
+#     "users": "api.users.models.User",
+# }

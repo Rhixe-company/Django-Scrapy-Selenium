@@ -76,3 +76,4 @@ selenium-stealth
 selenium-driverless
 asynciolimiter
 scrapy-playwright
+djangorestframework-jwt

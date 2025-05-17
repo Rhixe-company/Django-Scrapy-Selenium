@@ -4,34 +4,34 @@ from django.contrib import admin
 from django.urls import include
 from django.urls import path
 from django.views import defaults as default_views
+from drf_spectacular.views import SpectacularAPIView
+from drf_spectacular.views import SpectacularSwaggerView
+from rest_framework_jwt.views import obtain_jwt_token
 
 urlpatterns = [
-    path("", include("api.home.urls")),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
-    # User management
-    path("users/", include("api.users.urls", namespace="users")),
-    # Comic management
-    path("comics/", include("api.libary.urls.comic_urls", namespace="comics")),
-    # Comic Images management
-    path(
-        "comicimages/",
-        include("api.libary.urls.comic_image_urls", namespace="comicimages"),
-    ),
-    # Chapter management
-    path("chapters/", include("api.libary.urls.chapter_urls", namespace="chapters")),
-    # Chapter Images management
-    path(
-        "chapterimages/",
-        include("api.libary.urls.chapter_image_urls", namespace="chapterimages"),
-    ),
-    # Data Table management
-    path("table/", include("api.libary.urls.data_urls")),
     path("accounts/", include("allauth.urls")),
     path("ckeditor5/", include("django_ckeditor_5.urls")),
     # Your stuff: custom urls includes go here
     # ...
 ]
+
+# API URLS
+urlpatterns += [
+    # API base url
+    path("api/", include("config.api_router")),
+    # DRF auth token
+    path("api/token-auth/", obtain_jwt_token),
+    path("api/auth/", include("rest_framework.urls")),
+    path("api/schema/", SpectacularAPIView.as_view(), name="api-schema"),
+    path(
+        "api/docs/",
+        SpectacularSwaggerView.as_view(url_name="api-schema"),
+        name="api-docs",
+    ),
+]
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
