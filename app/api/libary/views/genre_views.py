@@ -5,6 +5,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAdminUser
 
 from api.libary.models import Genre
+from api.libary.pagination import StandardResultsSetPagination
 from api.libary.serializers import GenreSerializer
 
 
@@ -18,6 +19,7 @@ class GenreListAPIView(generics.ListCreateAPIView):
         filters.SearchFilter,
         filters.OrderingFilter,
     ]
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         return super().get_queryset()

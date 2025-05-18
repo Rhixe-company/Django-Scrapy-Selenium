@@ -30,7 +30,7 @@ class UserSerializer(serializers.ModelSerializer[User]):
 
 
 class UserSerializerWithToken(UserSerializer):
-    token = serializers.SerializerMethodField(read_only=True)
+    refreshedtoken = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = User
@@ -43,12 +43,12 @@ class UserSerializerWithToken(UserSerializer):
             "full_name",
             "image",
             "is_admin",
-            "token",
+            "refreshedtoken",
         ]
 
-    def get_token(self, obj):
-        token = RefreshToken.for_user(obj)
-        return str(token.access_token)
+    def get_refreshedtoken(self, obj):
+        refreshedtoken = RefreshToken.for_user(obj)
+        return str(refreshedtoken.access_token)
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):

@@ -16,8 +16,8 @@ from crawler.items import ComicItem
 logger = logging.getLogger(__name__)
 
 
-class RunSpider(Spider):
-    name = "run"
+class AsuracomicSpider(Spider):
+    name = "asuracomic"
     allowed_domains = ["gg.asuracomic.net", "asuracomic.net"]
     start_urls = [
         f"https://asuracomic.net/series?page={i}&order=update" for i in range(1, 19)
@@ -125,12 +125,12 @@ class RunSpider(Spider):
             .select("p")  # type: ignore  # noqa: PGH003
         )
         if not des_tag:
-            new_des_tag = (
-                soup.find(class_=["col-span-12", "sm:col-span-9"]).find(  # type: ignore  # noqa: PGH003
-                    "span",
-                    class_=["font-medium", "text-sm", "text-[#A2A2A2]"],  # type: ignore  # noqa: PGH003
-                )  # type: ignore  # noqa: PGH003
-            )
+            new_des_tag = soup.find(
+                class_=["col-span-12", "sm:col-span-9"],
+            ).find(  # type: ignore  # noqa: PGH003
+                "span",
+                class_=["font-medium", "text-sm", "text-[#A2A2A2]"],  # type: ignore  # noqa: PGH003
+            )  # type: ignore  # noqa: PGH003
             if new_des_tag:
                 loader.add_value(
                     "description",

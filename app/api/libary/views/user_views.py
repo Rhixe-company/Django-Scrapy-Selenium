@@ -5,6 +5,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAdminUser
 from rest_framework_simplejwt.views import TokenObtainPairView
 
+from api.libary.pagination import StandardResultsSetPagination
 from api.users.models import User
 from api.users.serializers import MyTokenObtainPairSerializer
 from api.users.serializers import UserSerializer
@@ -21,6 +22,7 @@ class UserListAPIView(generics.ListCreateAPIView):
         filters.SearchFilter,
         filters.OrderingFilter,
     ]
+    pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
         return super().get_queryset()

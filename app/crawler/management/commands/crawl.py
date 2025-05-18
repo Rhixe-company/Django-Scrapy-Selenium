@@ -1,32 +1,27 @@
 import logging
 
 from django.core.management.base import BaseCommand
-from scrapy.crawler import CrawlerRunner as Crawler
+from scrapy.crawler import CrawlerProcess
 from scrapy.utils.log import configure_logging
 from scrapy.utils.project import get_project_settings
-from twisted.internet import defer
-from twisted.internet import reactor
+from scrapy.utils.reactor import install_reactor
 
-from crawler.spiders.run import RunSpider
+from crawler.spiders.asuracomic1 import Asuracomic1Spider
 
 logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = "A  Custom command to  run RunSpider"
+    help = "A  Custom command to  asuracomic1 Asuracomic1Spider"
 
     def handle(self, *args, **options):
+
+        install_reactor("twisted.internet.asyncioreactor.AsyncioSelectorReactor")
         crawlsettings = get_project_settings()
         configure_logging(crawlsettings)
+        process = CrawlerProcess(settings=crawlsettings)
         logger.info("starting spider")
-        runner = Crawler(settings=crawlsettings)
+        process.crawl(Asuracomic1Spider)
+        process.start()  # type: ignore  # noqa: PGH003
 
-        @defer.inlineCallbacks
-        def run():
-            yield runner.crawl(RunSpider)
-
-            reactor.stop()  # type: ignore  # noqa: PGH003
-
-        run()
-        reactor.run()  # type: ignore  # noqa: PGH003
         logger.info("ending spider")

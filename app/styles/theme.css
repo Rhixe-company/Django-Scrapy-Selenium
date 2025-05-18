@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+:root {
+  --background: #e2e0e0;
+  --foreground: #2e0e26;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-fira-sans);
+  --font-mono: var(--font-fira-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #2e0e26;
+    --foreground: #e2e0e0;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  /* @apply h-full font-[family-name:var(--font-fira-sans)]; */
+  @apply min-h-full bg-[var(--foreground)] dark:bg-[var(--background)];
+}
+
+.content {
+  max-width: 960px;
+  margin: 0 auto;
+}

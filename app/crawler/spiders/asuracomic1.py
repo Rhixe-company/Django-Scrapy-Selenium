@@ -6,9 +6,6 @@ from django.db.models import Q
 from scrapy.http.request import Request
 from scrapy.loader import ItemLoader
 from scrapy.spiders import Spider
-from scrapy_headless import SeleniumRequest
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as ec
 
 from crawler.items import ChapterItem
 from crawler.items import ComicItem
@@ -16,32 +13,23 @@ from crawler.items import ComicItem
 logger = logging.getLogger(__name__)
 
 
-class Run1Spider(Spider):
-    name = "run1"
+class Asuracomic1Spider(Spider):
+    name = "asuracomic1"
     allowed_domains = ["gg.asuracomic.net", "asuracomic.net"]
     start_urls = [
-        "https://asuracomic.net/series/solo-leveling-ragnarok-8250a620",
-        "https://asuracomic.net/series/a-dragonslayers-peerless-regression-517c9d3b",
-        "https://asuracomic.net/series/im-gonna-annihilate-this-land-7c6ce73d",
         "https://asuracomic.net/series/killer-pietro-6fe8e840",
-        "https://asuracomic.net/series/i-regressed-as-the-duke-d0791d89",
     ]
 
     def start_requests(self):
         # Custom start URLs
 
         for url in self.start_urls:
-            msg = f"Page: {url}"
-            logger.info(msg)
             yield Request(
                 url=url,
-                meta={
-                    "impersonate": "chrome124",
-                },
                 callback=self.comicpage,
             )
-            msg = f"A New Page found at: {url}"
-            logger.info(msg)
+        msg = f"Pages: {self.start_urls}"
+        logger.info(msg)
 
     def comicpage(self, response):
         loader = ItemLoader(item=ComicItem(), selector=response)
@@ -116,12 +104,12 @@ class Run1Spider(Spider):
             .select("p")  # type: ignore  # noqa: PGH003
         )
         if not des_tag:
-            new_des_tag = (
-                soup.find(class_=["col-span-12", "sm:col-span-9"]).find(  # type: ignore  # noqa: PGH003
-                    "span",
-                    class_=["font-medium", "text-sm", "text-[#A2A2A2]"],  # type: ignore  # noqa: PGH003
-                )  # type: ignore  # noqa: PGH003
-            )
+            new_des_tag = soup.find(
+                class_=["col-span-12", "sm:col-span-9"],
+            ).find(  # type: ignore  # noqa: PGH003
+                "span",
+                class_=["font-medium", "text-sm", "text-[#A2A2A2]"],  # type: ignore  # noqa: PGH003
+            )  # type: ignore  # noqa: PGH003
             if new_des_tag:
                 loader.add_value(
                     "description",
@@ -144,17 +132,14 @@ class Run1Spider(Spider):
                     logger.error(msg)
                 else:
                     for nx, y in zip(chapters, chapters_time, strict=False):
-                        yield SeleniumRequest(
+                        yield Request(
                             url=response.urljoin(nx),
-                            wait_time=10,
-                            wait_until=ec.presence_of_element_located(
-                                (
-                                    By.XPATH,
-                                    "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501
-                                ),
-                            ),
-                            callback=self.parse,
+                            callback=self.chapterpage,
                             cb_kwargs={"chaptertime": y},
+                            dont_filter=False,
+                            meta={
+                                "playwright": True,
+                            },
                         )
 
         else:
@@ -163,7 +148,7 @@ class Run1Spider(Spider):
         msg = f"A New Comic found at: {response.url}"
         logger.info(msg)
 
-    def parse(self, response, chaptertime):
+    async def chapterpage(self, response, chaptertime, **kwargs):
         comictitle = response.xpath(
             "//div[@class='flex flex-col items-center space-y-2 pt-6 px-5 text-center']/p/a/span/text()",  # noqa: E501
         ).get()
@@ -203,18 +188,14 @@ class Run1Spider(Spider):
             loader.add_value("chaptertitle", chaptertitle)
         loader.add_value("chaptername", chaptername)
         loader.add_value("chapterslug", chapterslug)
-        # image_urls = response.xpath(  # noqa: ERA001, RUF100
-        #     "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]/@src",  # noqa: E501, ERA001
-        # ).getall()
-        image_urls = response.request.meta["driver"].find_elements(  # noqa: E501, ERA001, RUF100
-            By.XPATH,
-            "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501
-        )  # noqa: ERA001, RUF100
+        image_urls = response.xpath(
+            "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]/@src",  # noqa: E501
+        ).getall()
+
         if image_urls:
             images = []
             for img in image_urls:
-                images.append(img.get_attribute("src"))  # noqa: E501, ERA001, PERF401, RUF100
-                # images.append(response.urljoin(img))  # noqa: ERA001, PERF401, RUF100
+                images.append(response.urljoin(img))  # noqa: ERA001, PERF401, RUF100
             loader.add_value("image_urls", images)
             msg = f"Total Images found: {len(images)}"
             logger.info(msg)

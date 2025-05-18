@@ -1,16 +1,19 @@
 import json
 import logging
+from typing import TYPE_CHECKING
 
 from extruct.jsonld import JsonLdExtractor
-from playwright.async_api import Page
 from scrapy.http.request import Request
 from scrapy.spiders import Spider
+
+if TYPE_CHECKING:
+    from playwright.async_api import Page
 
 logger = logging.getLogger(__name__)
 
 
-class Run3Spider(Spider):
-    name = "run3"
+class ComickSpider(Spider):
+    name = "comick"
 
     def start_requests(self):
         # Custom start URLs

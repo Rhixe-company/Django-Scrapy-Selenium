@@ -14,12 +14,12 @@ logger = logging.getLogger(__name__)
 
 async def scroll_page(page: Page) -> str:
     await page.wait_for_selector(selector="script#__NEXT_DATA__")
-    # await page.evaluate("window.scrollBy(0, document.body.scrollHeight)")
+    # await page.evaluate("window.scrollBy(0, document.body.scrollHeight)")  # noqa: E501, ERA001
     return page.url
 
 
-class Run4Spider(Spider):
-    name = "run4"
+class Comick1Spider(Spider):
+    name = "comick1"
     allowed_domains = ["comick.io"]
     start_urls = [
         "https://comick.io/home2/",

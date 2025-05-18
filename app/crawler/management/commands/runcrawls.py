@@ -12,13 +12,13 @@ from twisted.internet import defer
 from twisted.internet import reactor
 
 from crawler.pipelines.redis import connection
-from crawler.spiders.run import RunSpider
+from crawler.spiders.asuracomic import AsuracomicSpider
 
 logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = "A  Custom command to  run Runpider"
+    help = "A  Custom command to  run AsuracomicSpider"
 
     def handle(self, *args, **options):
         crawlsettings = get_project_settings()
@@ -32,7 +32,7 @@ class Command(BaseCommand):
 
         @defer.inlineCallbacks
         def run():
-            yield runner.crawl(RunSpider)
+            yield runner.crawl(AsuracomicSpider)
 
             reactor.stop()  # type: ignore  # noqa: PGH003
 

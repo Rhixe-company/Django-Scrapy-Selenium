@@ -9,11 +9,9 @@
 import os
 import sys
 from pathlib import Path
-from shutil import which
 
 import django
 from django.conf import settings
-from scrapy.utils.reactor import install_reactor
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 sys.path.append(os.path.join(BASE_DIR, "config"))  # noqa: PTH118
@@ -54,7 +52,7 @@ CONCURRENT_REQUESTS = 128
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 5
+DOWNLOAD_DELAY = 10
 # The download delay setting will honor only one of:
 CONCURRENT_REQUESTS_PER_DOMAIN = 64
 CONCURRENT_REQUESTS_PER_IP = 64
@@ -118,55 +116,54 @@ ITEM_PIPELINES = {
 
 # Enable and configure HTTP caching (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
-HTTPCACHE_ENABLED = True
+HTTPCACHE_ENABLED = False
 HTTPCACHE_EXPIRATION_SECS = 86400
 HTTPCACHE_DIR = "cache"
 HTTPCACHE_IGNORE_HTTP_CODES = list(range(300, 501))
 HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"
-HTTPCACHE_GZIP = True
+HTTPCACHE_GZIP = False
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 # Set settings whose default value is deprecated to a future-proof value
-TWISTED_REACTOR = install_reactor(
-    "twisted.internet.asyncioreactor.AsyncioSelectorReactor",
-)
+TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
+
 FEED_EXPORT_ENCODING = "utf-8"
 DOWNLOAD_HANDLERS = {  # noqa: ERA001, RUF100
-    # "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+    "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
     "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
 }  # noqa: ERA001, RUF100
+# FEEDS = {  # noqa: ERA001, RUF100
+#     "comics.json": {
+#         "format": "json",  # noqa: ERA001
+#         "encoding": "utf8",  # noqa: ERA001
+#         "store_empty": False,  # noqa: ERA001
+#         "indent": 4,  # noqa: ERA001
+#     },
+# }  # noqa: ERA001, RUF100
 FEEDS = {
-    "comics.jsonl": {
+    "comicsdata.jsonl": {
         "format": "jsonlines",
         "encoding": "utf8",
         "store_empty": False,
+        "item_classes": ["crawler.items.ComicItem"],
+        "fields": None,
+        "indent": 4,
+    },
+    "chaptersdata.jsonl": {
+        "format": "jsonlines",
+        "encoding": "utf8",
+        "store_empty": False,
+        "item_classes": ["crawler.items.ChapterItem"],
+        "fields": None,
         "indent": 4,
     },
 }
-# FEEDS = {
-#     "comicsdata1.json": {
-#         "format": "json",
-#         "encoding": "utf8",
-#         "store_empty": False,
-#         "item_classes": ["crawler.items.ComicItem"],
-#         "fields": None,
-#         "indent": 4,
-#     },
-#     "chaptersdata1.json": {
-#         "format": "json",
-#         "encoding": "utf8",
-#         "store_empty": False,
-#         "item_classes": ["crawler.items.ChapterItem"],
-#         "fields": None,
-#         "indent": 4,
-#     },
-# }
 RETRY_TIMES = 2
 RETRY_ENABLED = True
 RETRY_HTTP_CODES = list(range(300, 501))
 
 DOWNLOAD_FAIL_ON_DATALOSS = True
-# LOG_LEVEL = "DEBUG"  # noqa: ERA001
-LOG_LEVEL = "INFO"  # noqa: ERA001, RUF100
+LOG_LEVEL = "DEBUG"
+# LOG_LEVEL = "INFO"  # noqa: ERA001, RUF100
 
 # AWS
 # IMAGES_STORE = "s3://bucket/images"  # noqa: ERA001
@@ -213,14 +210,14 @@ MEDIA_ALLOW_REDIRECTS = True
 # # SELENIUM_DRIVER_NAME = "firefox"  # noqa: ERA001
 # # SELENIUM_DRIVER_EXECUTABLE_PATH = which("geckodriver")  # noqa: ERA001
 # # SELENIUM_BROWSER_EXECUTABLE_PATH = which("firefox")  # noqa: ERA001
-# SELENIUM_DRIVER_NAME = "chrome"
-# SELENIUM_DRIVER_EXECUTABLE_PATH = None
-# # SELENIUM_DRIVER_EXECUTABLE_PATH = which("chromedriver")
-# # SELENIUM_BROWSER_EXECUTABLE_PATH = which("chrome")
+# SELENIUM_DRIVER_NAME = "chrome"  # noqa: ERA001
+# SELENIUM_DRIVER_EXECUTABLE_PATH = None  # noqa: ERA001
+# # SELENIUM_DRIVER_EXECUTABLE_PATH = which("chromedriver")  # noqa: ERA001
+# # SELENIUM_BROWSER_EXECUTABLE_PATH = which("chrome")  # noqa: ERA001
 
-# SELENIUM_DRIVER_ARGUMENTS = [
+# SELENIUM_DRIVER_ARGUMENTS = [  # noqa: ERA001, RUF100
 #     # "--headless",
-#     "--disable-blink-features=AutomationControlled",
+#     "--disable-blink-features=AutomationControlled",  # noqa: ERA001
 #     "--no-sandbox",
 #     "--disable-gpu",
 #     "--enable-javascript",
