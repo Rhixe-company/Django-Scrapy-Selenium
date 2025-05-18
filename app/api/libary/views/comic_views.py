@@ -1,4 +1,3 @@
-from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
@@ -22,11 +21,8 @@ class ComicListAPIView(generics.ListCreateAPIView):
         .all()
     )
     serializer_class = ComicsInfoSerializer
-    filter_backends = [
-        DjangoFilterBackend,  # type: ignore  # noqa: PGH003
-        filters.SearchFilter,
-        filters.OrderingFilter,
-    ]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["title", "category__name", "author__name", "artist__name"]
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):
