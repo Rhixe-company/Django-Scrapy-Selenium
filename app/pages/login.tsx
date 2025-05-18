@@ -15,12 +15,13 @@ import { useRouter } from "next/router";
 
 export default function Login() {
   const dispatch = useDispatch();
-  const { register, handleSubmit } = useForm();
+  const { register, errors, handleSubmit } = useForm();
   const history = useRouter();
 
   const { isFetching, isSuccess, isError, errorMessage } =
     useSelector(userSelector);
   const onSubmit = (data: any) => {
+    console.log(data);
     dispatch(loginUser(data));
   };
 
@@ -31,14 +32,13 @@ export default function Login() {
   }, []);
 
   useEffect(() => {
-    if (isSuccess) {
-      dispatch(clearState());
-      history.push("/");
-    }
-
     if (isError) {
       toast.error(errorMessage);
       dispatch(clearState());
+    }
+    if (isSuccess) {
+      dispatch(clearState());
+      history.push("/");
     }
   }, [isSuccess, isError]);
   return (
@@ -79,6 +79,9 @@ export default function Login() {
                   name="email"
                   type="email"
                   required
+                  ref={register({
+                    pattern: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/i,
+                  })}
                   autoComplete="email"
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 />
@@ -107,6 +110,7 @@ export default function Login() {
                   id="password"
                   name="password"
                   type="password"
+                  ref={register({ required: true })}
                   required
                   autoComplete="current-password"
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -119,6 +123,28 @@ export default function Login() {
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
+                {isFetching ? (
+                  <svg
+                    className="mr-3 -ml-1 h-5 w-5 animate-spin text-white"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                  >
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                    ></path>
+                  </svg>
+                ) : null}
                 Login
               </button>
             </div>

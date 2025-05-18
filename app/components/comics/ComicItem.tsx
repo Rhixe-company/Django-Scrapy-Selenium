@@ -1,13 +1,30 @@
 "use client";
-import { useGetComicQuery } from "@/lib/features/comics/comicsApiSlice";
-import { Fragment } from "react";
+import {
+  fetchComic,
+  comicSelector,
+  clearState,
+} from "@/lib/features/comics/comicSlice";
+import { useState, Fragment, useEffect } from "react";
 import Spinner from "@/components/Spinner";
 import MyError from "@/components/MyError";
+import { useSelector, useDispatch } from "react-redux";
+import toast from "react-hot-toast";
 
 export const ComicItem = () => {
-  const { data, isError, isLoading, isSuccess } = useGetComicQuery(
-    "a-villains-will-to-survive",
-  );
+  const dispatch = useDispatch();
+  const { isError, isLoading, isSuccess, errorMessage } =
+    useSelector(comicSelector);
+  useEffect(() => {
+    dispatch(fetchComic({ slug: "a-villains-will-to-survive" }));
+  }, []);
+  const { item } = useSelector(comicSelector);
+
+  useEffect(() => {
+    if (isError) {
+      toast.error(errorMessage);
+      dispatch(clearState());
+    }
+  }, [isError]);
 
   if (isError) {
     return <MyError />;
@@ -22,10 +39,10 @@ export const ComicItem = () => {
       <Fragment>
         <div className="mb-4 flex items-center justify-between">
           <h5 className="text-xl leading-none font-bold text-gray-900 dark:text-white">
-            {data.title}
+            {item.title}
           </h5>
-          <p>{data.description}</p>
-          <span>{data.status}</span>
+          <p>{item.description}</p>
+          <span>{item.status}</span>
         </div>
       </Fragment>
     );

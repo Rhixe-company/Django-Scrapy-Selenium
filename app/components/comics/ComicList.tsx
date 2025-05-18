@@ -1,22 +1,36 @@
 "use client";
-import { useGetComicsQuery } from "@/lib/features/comics/comicsApiSlice";
-import { useState, Fragment } from "react";
+import {
+  fetchComics,
+  comicSelector,
+  clearState,
+} from "@/lib/features/comics/comicSlice";
+import { useState, Fragment, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Comic } from "@/lib/features/comics/data";
 import Spinner from "@/components/Spinner";
 import MyError from "@/components/MyError";
 import CustomPagination from "@/components/comics/CustomPagination";
+import { useSelector, useDispatch } from "react-redux";
+import toast from "react-hot-toast";
 
 export const ComicList = () => {
-  const [keyword, setKeyword] = useState();
+  const [keyword, setKeyword] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
-  // Using a query hook automatically fetches data and returns query values
-  const { data, isError, isLoading, isSuccess } = useGetComicsQuery(
-    pageNumber,
-    keyword,
-  );
+  const dispatch = useDispatch();
+  const { isError, isLoading, isSuccess, errorMessage } =
+    useSelector(comicSelector);
+  useEffect(() => {
+    dispatch(fetchComics({ pagenumber: pageNumber, keyword: keyword }));
+  }, []);
+  const { items } = useSelector(comicSelector);
 
+  useEffect(() => {
+    if (isError) {
+      toast.error(errorMessage);
+      dispatch(clearState());
+    }
+  }, [isError]);
   if (isError) {
     return <MyError />;
   }
@@ -33,7 +47,7 @@ export const ComicList = () => {
             role="list"
             className="divide-y divide-gray-200 dark:divide-gray-700"
           >
-            {data.results.map((item: Comic) => (
+            {items.results.map((item: Comic) => (
               <li className="py-3 sm:py-4" key={item.slug}>
                 <div className="flex items-center">
                   <div className="shrink-0">
@@ -75,9 +89,9 @@ export const ComicList = () => {
           </ul>
         </div>
         <CustomPagination
-          numpages={data.numpages}
-          links={data.links}
-          count={data.count}
+          numpages={items.numpages}
+          links={items.links}
+          count={items.count}
           setpagenumber={setPageNumber}
           pagenumber={pageNumber}
         />
