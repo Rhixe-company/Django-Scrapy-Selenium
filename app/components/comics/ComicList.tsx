@@ -1,41 +1,35 @@
 "use client";
-import {
-  fetchComics,
-  comicSelector,
-  clearState,
-} from "@/lib/features/comics/comicSlice";
+import { fetchComics } from "@/store/comics/actions";
+import { clearState } from "@/store/comics/comicSlice";
 import { useState, Fragment, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Comic } from "@/lib/features/comics/data";
+import { Comic } from "@/store/comics/myinterface";
 import Spinner from "@/components/Spinner";
 import MyError from "@/components/MyError";
 import CustomPagination from "@/components/comics/CustomPagination";
-import { useSelector, useDispatch } from "react-redux";
-import toast from "react-hot-toast";
-
+import { useAppDispatch } from "@/store";
+import { useAppSelector } from "@/store";
 export const ComicList = () => {
   const [keyword, setKeyword] = useState("");
   const [pageNumber, setPageNumber] = useState(1);
-  const dispatch = useDispatch();
-  const { isError, isLoading, isSuccess, errorMessage } =
-    useSelector(comicSelector);
-  useEffect(() => {
-    dispatch(fetchComics({ pagenumber: pageNumber, keyword: keyword }));
-  }, []);
-  const { items } = useSelector(comicSelector);
+  const dispatch = useAppDispatch();
+  const { isError, isFetching, isSuccess, errorMessage, items }: any =
+    useAppSelector((state) => state.comic);
 
   useEffect(() => {
+    dispatch(fetchComics({ pagenumber: pageNumber, keyword: keyword }));
     if (isError) {
-      toast.error(errorMessage);
+      console.log(errorMessage);
       dispatch(clearState());
     }
   }, [isError]);
+
   if (isError) {
     return <MyError />;
   }
 
-  if (isLoading) {
+  if (isFetching) {
     return <Spinner />;
   }
 

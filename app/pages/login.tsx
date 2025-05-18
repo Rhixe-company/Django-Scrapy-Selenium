@@ -1,44 +1,40 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import "@/styles/Login.module.css";
-import { useForm } from "react-hook-form";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  loginUser,
-  userSelector,
-  clearState,
-} from "@/lib/features/users/userSlice";
-import toast from "react-hot-toast";
+
+import { useAppDispatch } from "@/store";
+import { useAppSelector } from "@/store";
+import { loginUser } from "@/store/users/actions";
+
 import { useRouter } from "next/router";
 // import styles from "@/styles/Login.module.css";
 
 export default function Login() {
-  const dispatch = useDispatch();
-  const { register, errors, handleSubmit } = useForm();
-  const history = useRouter();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const { isFetching, isSuccess, isError, errorMessage } =
-    useSelector(userSelector);
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const { isFetching, isSuccess, isError, errorMessage } = useAppSelector(
+    (state: any) => state.user
+  );
+  const handleSubmit = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    let data = {
+      email: email,
+      password: password,
+    };
+
     dispatch(loginUser(data));
   };
 
   useEffect(() => {
-    return () => {
-      dispatch(clearState());
-    };
-  }, []);
-
-  useEffect(() => {
     if (isError) {
-      toast.error(errorMessage);
-      dispatch(clearState());
+      console.log(errorMessage);
     }
     if (isSuccess) {
-      dispatch(clearState());
-      history.push("/");
+      router.push("/profile");
     }
   }, [isSuccess, isError]);
   return (
@@ -61,11 +57,7 @@ export default function Login() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            method="POST"
-            className="space-y-6"
-          >
+          <form onSubmit={handleSubmit} method="POST" className="space-y-6">
             <div>
               <label
                 htmlFor="email"
@@ -77,11 +69,11 @@ export default function Login() {
                 <input
                   id="email"
                   name="email"
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
                   type="email"
                   required
-                  ref={register({
-                    pattern: /^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/i,
-                  })}
                   autoComplete="email"
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
                 />
@@ -110,7 +102,9 @@ export default function Login() {
                   id="password"
                   name="password"
                   type="password"
-                  ref={register({ required: true })}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
                   required
                   autoComplete="current-password"
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"

@@ -2,6 +2,7 @@ import React, { Fragment } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import "@/styles/Index.module.css";
+
 // import styles from "@/styles/Index.module.css";
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 

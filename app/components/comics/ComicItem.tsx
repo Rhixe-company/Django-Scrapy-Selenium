@@ -1,27 +1,25 @@
 "use client";
-import {
-  fetchComic,
-  comicSelector,
-  clearState,
-} from "@/lib/features/comics/comicSlice";
+import { fetchComic } from "@/store/comics/actions";
+import { clearState } from "@/store/comics/comicSlice";
 import { useState, Fragment, useEffect } from "react";
 import Spinner from "@/components/Spinner";
 import MyError from "@/components/MyError";
-import { useSelector, useDispatch } from "react-redux";
-import toast from "react-hot-toast";
-
+import { useAppDispatch } from "@/store";
+import { useAppSelector } from "@/store";
 export const ComicItem = () => {
-  const dispatch = useDispatch();
-  const { isError, isLoading, isSuccess, errorMessage } =
-    useSelector(comicSelector);
+  const dispatch = useAppDispatch();
+  const useritem: any = useAppSelector((state) => state.user.item);
+  const { isError, isFetching, isSuccess, errorMessage, item }: any =
+    useAppSelector((state) => state.comic);
   useEffect(() => {
-    dispatch(fetchComic({ slug: "a-villains-will-to-survive" }));
-  }, []);
-  const { item } = useSelector(comicSelector);
-
-  useEffect(() => {
+    dispatch(
+      fetchComic({
+        slug: "a-villains-will-to-survive",
+        token: useritem.access,
+      })
+    );
     if (isError) {
-      toast.error(errorMessage);
+      console.log(errorMessage);
       dispatch(clearState());
     }
   }, [isError]);
@@ -30,7 +28,7 @@ export const ComicItem = () => {
     return <MyError />;
   }
 
-  if (isLoading) {
+  if (isFetching) {
     return <Spinner />;
   }
 

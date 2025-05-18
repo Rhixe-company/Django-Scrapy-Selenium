@@ -13,6 +13,11 @@ import {
 } from "@headlessui/react";
 import { Bars3Icon, BellIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { AnimatePresence, motion } from "framer-motion";
+import { useAppDispatch } from "@/store";
+import { useAppSelector } from "@/store";
+
+import { logoutAction } from "@/store/users/userSlice";
+import { useRouter } from "next/router";
 const user = {
   name: "Tom Cook",
   email: "tom@example.com",
@@ -23,13 +28,14 @@ const navigation = [
   { name: "Index", href: "/", current: true },
   { name: "Home", href: "/home", current: false },
   { name: "About", href: "/about", current: false },
+];
+const authNavigation = [
   { name: "Login", href: "/login", current: false },
   { name: "Register", href: "/register", current: false },
 ];
 const userNavigation = [
   { name: "Your Profile", href: "/profile" },
   { name: "Bookmarks", href: "/bookmarks" },
-  { name: "Sign out", href: "/logout" },
 ];
 
 const MyLink: any = forwardRef((props, ref) => {
@@ -46,6 +52,18 @@ function classNames(...classNamees: string[]) {
 }
 
 const Navbar = () => {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const item = useAppSelector((state) => state.user.item);
+
+  function logoutHander() {
+    dispatch(logoutAction());
+    setTimeout(() => {
+      // router.go(-1)
+      router.push("/login");
+    }, 3000);
+  }
+
   return (
     <Fragment>
       <Disclosure
@@ -77,63 +95,96 @@ const Navbar = () => {
                         item.current
                           ? "bg-gray-900 text-white"
                           : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                        "rounded-md px-3 py-2 text-sm font-medium",
+                        "rounded-md px-3 py-2 text-sm font-medium"
                       )}
                     >
                       {item.name}
                     </MyLink>
                   ))}
+
+                  {!item && (
+                    <>
+                      {authNavigation.map((item) => (
+                        <MyLink
+                          key={item.name}
+                          href={item.href}
+                          aria-current={item.current ? "page" : undefined}
+                          className={classNames(
+                            item.current
+                              ? "bg-gray-900 text-white"
+                              : "text-gray-300 hover:bg-gray-700 hover:text-white",
+                            "rounded-md px-3 py-2 text-sm font-medium"
+                          )}
+                        >
+                          {item.name}
+                        </MyLink>
+                      ))}
+                    </>
+                  )}
                 </div>
               </div>
             </div>
-            <div className="hidden md:block">
-              <div className="ml-4 flex items-center md:ml-6">
-                <button
-                  type="button"
-                  className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"
-                >
-                  <span className="absolute -inset-1.5" />
-                  <span className="sr-only">View notifications</span>
-                  <BellIcon aria-hidden="true" className="size-6" />
-                </button>
-
-                {/* Profile dropdown */}
-                <Menu as="div" className="relative ml-3">
-                  <div>
-                    <MenuButton className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
-                      <span className="absolute -inset-1.5" />
-                      <span className="sr-only">Open user menu</span>
-                      <img
-                        alt=""
-                        src={user.imageUrl}
-                        className="size-8 rounded-full"
-                      />
-                    </MenuButton>
-                  </div>
-                  <AnimatePresence>
-                    <MenuItems
-                      as={motion.div}
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.95 }}
-                      transition
-                      className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+            {item && (
+              <>
+                <div className="hidden md:block">
+                  <div className="ml-4 flex items-center md:ml-6">
+                    <button
+                      type="button"
+                      className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden"
                     >
-                      {userNavigation.map((item) => (
-                        <MenuItem key={item.name}>
-                          <MyLink
-                            href={item.href}
-                            className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
-                          >
-                            {item.name}
-                          </MyLink>
-                        </MenuItem>
-                      ))}
-                    </MenuItems>
-                  </AnimatePresence>
-                </Menu>
-              </div>
-            </div>
+                      <span className="absolute -inset-1.5" />
+                      <span className="sr-only">View notifications</span>
+                      <BellIcon aria-hidden="true" className="size-6" />
+                    </button>
+
+                    {/* Profile dropdown */}
+                    <Menu as="div" className="relative ml-3">
+                      <div>
+                        <MenuButton className="relative flex max-w-xs items-center rounded-full bg-gray-800 text-sm focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
+                          <span className="absolute -inset-1.5" />
+                          <span className="sr-only">Open user menu</span>
+                          <img
+                            alt=""
+                            src={user.imageUrl}
+                            className="size-8 rounded-full"
+                          />
+                        </MenuButton>
+                      </div>
+                      <AnimatePresence>
+                        <MenuItems
+                          as={motion.div}
+                          initial={{ opacity: 0, scale: 0.95 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          exit={{ opacity: 0, scale: 0.95 }}
+                          transition
+                          className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black/5 transition focus:outline-hidden data-closed:scale-95 data-closed:transform data-closed:opacity-0 data-enter:duration-100 data-enter:ease-out data-leave:duration-75 data-leave:ease-in"
+                        >
+                          {userNavigation.map((item) => (
+                            <MenuItem key={item.name}>
+                              <MyLink
+                                href={item.href}
+                                className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                              >
+                                {item.name}
+                              </MyLink>
+                            </MenuItem>
+                          ))}
+                          <MenuItem>
+                            <button
+                              onClick={logoutHander}
+                              className="block px-4 py-2 text-sm text-gray-700 data-focus:bg-gray-100 data-focus:outline-hidden"
+                            >
+                              Logout
+                            </button>
+                          </MenuItem>
+                        </MenuItems>
+                      </AnimatePresence>
+                    </Menu>
+                  </div>
+                </div>
+              </>
+            )}
+
             <div className="-mr-2 flex md:hidden">
               {/* Mobile menu button */}
               <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md bg-gray-800 p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800 focus:outline-hidden">
@@ -164,7 +215,7 @@ const Navbar = () => {
                   item.current
                     ? "bg-gray-900 text-white"
                     : "text-gray-300 hover:bg-gray-700 hover:text-white",
-                  "block rounded-md px-3 py-2 text-base font-medium",
+                  "block rounded-md px-3 py-2 text-base font-medium"
                 )}
               >
                 {item.name}

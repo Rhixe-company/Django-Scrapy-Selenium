@@ -1,44 +1,38 @@
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import "@/styles/Register.module.css";
-import { useForm } from "react-hook-form";
+
 import { useSelector, useDispatch } from "react-redux";
-import {
-  signupUser,
-  userSelector,
-  clearState,
-} from "@/lib/features/users/userSlice";
-import toast from "react-hot-toast";
+import { registerUser } from "@/lib/features/users/actions";
 import { useRouter } from "next/router";
 // import styles from "@/styles/Register.module.css";
 
 export default function Register() {
   const dispatch = useDispatch();
-  const { register, handleSubmit } = useForm();
-  const history = useRouter();
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const { isFetching, isSuccess, isError, errorMessage } =
-    useSelector(userSelector);
-  const onSubmit = (data: any) => {
-    dispatch(signupUser(data));
+  const { isFetching, isSuccess, isError, errorMessage } = useSelector(
+    (state: any) => state.users,
+  );
+  const handleSubmit = (event: { preventDefault: () => void }) => {
+    event.preventDefault();
+    let data = {
+      email: email,
+      password: password,
+    };
+
+    dispatch(registerUser(data));
   };
 
   useEffect(() => {
-    return () => {
-      dispatch(clearState());
-    };
-  }, []);
-
-  useEffect(() => {
-    if (isSuccess) {
-      dispatch(clearState());
-      history.push("/");
-    }
-
     if (isError) {
-      toast.error(errorMessage);
-      dispatch(clearState());
+      console.log(errorMessage);
+    }
+    if (isSuccess) {
+      router.push("/profile");
     }
   }, [isSuccess, isError]);
   return (
@@ -61,11 +55,7 @@ export default function Register() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form
-            onSubmit={handleSubmit(onSubmit)}
-            method="POST"
-            className="space-y-6"
-          >
+          <form onSubmit={handleSubmit} method="POST" className="space-y-6">
             <div>
               <label
                 htmlFor="email"
@@ -77,6 +67,9 @@ export default function Register() {
                 <input
                   id="email"
                   name="email"
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
                   type="email"
                   required
                   autoComplete="email"
@@ -107,6 +100,9 @@ export default function Register() {
                   id="password"
                   name="password"
                   type="password"
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
                   required
                   autoComplete="current-password"
                   className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
@@ -132,7 +128,7 @@ export default function Register() {
                       cy="12"
                       r="10"
                       stroke="currentColor"
-                      stroke-width="4"
+                      strokeWidth="4"
                     ></circle>
                     <path
                       className="opacity-75"
@@ -149,7 +145,7 @@ export default function Register() {
           <p className="mt-10 text-center text-sm/6 text-gray-500">
             Already a member?
             <Link
-              href="/login"
+              href="/register"
               className="font-semibold text-indigo-600 hover:text-indigo-500"
             >
               Sign in

@@ -4,8 +4,20 @@ import "@/styles/Profile.module.css";
 // import styles from "@/styles/Profile.module.css";
 import { PhotoIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
+import { useEffect } from "react";
+import { useRouter } from "next/router";
+import { useAppSelector } from "@/store";
 
 export default function Profile() {
+  const router = useRouter();
+  const item = useAppSelector((state) => state.user.item);
+
+  useEffect(() => {
+    if (item) {
+    } else {
+      router.push("/login");
+    }
+  }, []);
   return (
     <Fragment>
       <Head>

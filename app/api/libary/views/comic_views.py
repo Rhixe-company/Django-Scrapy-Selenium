@@ -2,6 +2,7 @@ from rest_framework import filters
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 
 from api.libary.models import Comic
 from api.libary.pagination import StandardResultsSetPagination
@@ -54,7 +55,7 @@ class ComicDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = "slug"
 
     def get_permissions(self):
-        self.permission_classes = [AllowAny]
+        self.permission_classes = [IsAuthenticated]
         if self.request.method in ["PUT", "PATCH", "DELETE"]:
             self.permission_classes = [IsAdminUser]
         return super().get_permissions()
