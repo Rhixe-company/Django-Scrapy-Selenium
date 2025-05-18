@@ -1,10 +1,46 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import "@/styles/Register.module.css";
+import { useForm } from "react-hook-form";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  signupUser,
+  userSelector,
+  clearState,
+} from "@/lib/features/users/userSlice";
+import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 // import styles from "@/styles/Register.module.css";
 
 export default function Register() {
+  const dispatch = useDispatch();
+  const { register, handleSubmit } = useForm();
+  const history = useRouter();
+
+  const { isFetching, isSuccess, isError, errorMessage } =
+    useSelector(userSelector);
+  const onSubmit = (data: any) => {
+    dispatch(signupUser(data));
+  };
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearState());
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(clearState());
+      history.push("/");
+    }
+
+    if (isError) {
+      toast.error(errorMessage);
+      dispatch(clearState());
+    }
+  }, [isSuccess, isError]);
   return (
     <Fragment>
       <Head>
@@ -25,7 +61,11 @@ export default function Register() {
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" method="POST" className="space-y-6">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            method="POST"
+            className="space-y-6"
+          >
             <div>
               <label
                 htmlFor="email"

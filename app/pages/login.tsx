@@ -1,10 +1,46 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
 import Head from "next/head";
 import Link from "next/link";
 import "@/styles/Login.module.css";
+import { useForm } from "react-hook-form";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  loginUser,
+  userSelector,
+  clearState,
+} from "@/lib/features/users/userSlice";
+import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 // import styles from "@/styles/Login.module.css";
 
 export default function Login() {
+  const dispatch = useDispatch();
+  const { register, handleSubmit } = useForm();
+  const history = useRouter();
+
+  const { isFetching, isSuccess, isError, errorMessage } =
+    useSelector(userSelector);
+  const onSubmit = (data: any) => {
+    dispatch(loginUser(data));
+  };
+
+  useEffect(() => {
+    return () => {
+      dispatch(clearState());
+    };
+  }, []);
+
+  useEffect(() => {
+    if (isSuccess) {
+      dispatch(clearState());
+      history.push("/");
+    }
+
+    if (isError) {
+      toast.error(errorMessage);
+      dispatch(clearState());
+    }
+  }, [isSuccess, isError]);
   return (
     <Fragment>
       <Head>
@@ -20,12 +56,16 @@ export default function Login() {
             className="mx-auto h-10 w-auto"
           />
           <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-            Sign in to your account
+            Sign up for a new account
           </h2>
         </div>
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-          <form action="#" method="POST" className="space-y-6">
+          <form
+            onSubmit={handleSubmit(onSubmit)}
+            method="POST"
+            className="space-y-6"
+          >
             <div>
               <label
                 htmlFor="email"
@@ -79,18 +119,18 @@ export default function Login() {
                 type="submit"
                 className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
-                Sign in
+                Login
               </button>
             </div>
           </form>
 
           <p className="mt-10 text-center text-sm/6 text-gray-500">
-            Not a member?
+            Already a member?
             <Link
-              href="/register"
+              href="/login"
               className="font-semibold text-indigo-600 hover:text-indigo-500"
             >
-              Start a 14 day free trial
+              Sign in
             </Link>
           </p>
         </div>
