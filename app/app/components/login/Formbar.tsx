@@ -43,7 +43,7 @@ export default function Formbar() {
       // dispatch(clearState());
       router.push("/profile");
     }
-  }, [isError, isSuccess]);
+  }, [isError, isSuccess, errorMessage, router]);
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-4 relative">

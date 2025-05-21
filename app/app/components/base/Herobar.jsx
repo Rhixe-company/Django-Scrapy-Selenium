@@ -1,5 +1,6 @@
 import React from "react";
-
+import Image from "next/image";
+import Link from "next/link";
 export default function Herobar() {
   return (
     <div className="text-white pt-2">
@@ -10,14 +11,14 @@ export default function Herobar() {
       </div>
       <div className="flex flex-wrap bg-[#222222] p-[10px] md:hidden">
         <div className="w-1/2 xs:w-1/2 sm:w-1/4 p-1.5 hover:cursor-pointer group hover:text-themecolor">
-          <a href="/series/star-embracing-swordmaster-ecf00b93">
+          <Link href="/series/star-embracing-swordmaster-ecf00b93">
             <div>
               <div className="flex h-[250px] md:h-[200px] overflow-hidden relative hover:opacity-60">
-                <img
+                <Image
                   alt=""
                   loading="lazy"
-                  width="0"
-                  height="0"
+                  width={100}
+                  height={100}
                   decoding="async"
                   data-nimg="1"
                   className="rounded-md"
@@ -128,17 +129,17 @@ export default function Herobar() {
                 </span>
               </div>
             </div>
-          </a>
+          </Link>
         </div>
         <div className="w-1/2 xs:w-1/2 sm:w-1/4 p-1.5 hover:cursor-pointer group hover:text-themecolor">
-          <a href="/series/infinite-mage-da1c6d63">
+          <Link href="/series/infinite-mage-da1c6d63">
             <div>
               <div className="flex h-[250px] md:h-[200px] overflow-hidden relative hover:opacity-60">
-                <img
+                <Image
                   alt=""
                   loading="lazy"
-                  width="0"
-                  height="0"
+                  width={100}
+                  height={100}
                   decoding="async"
                   data-nimg="1"
                   className="rounded-md"
@@ -249,19 +250,19 @@ export default function Herobar() {
                 </span>
               </div>
             </div>
-          </a>
+          </Link>
         </div>
       </div>
       <div className="flex-wrap hidden md:flex bg-[#222222] p-[10px]">
         <div className="w-1/2 xs:w-1/3 sm:w-1/5 p-1.5 hover:cursor-pointer group hover:text-themecolor">
-          <a href="/series/star-embracing-swordmaster-ecf00b93">
+          <Link href="/series/star-embracing-swordmaster-ecf00b93">
             <div>
               <div className="flex h-[250px] md:h-[200px] overflow-hidden relative hover:opacity-60">
-                <img
+                <Image
                   alt=""
                   loading="lazy"
-                  width="0"
-                  height="0"
+                  width={100}
+                  height={100}
                   decoding="async"
                   data-nimg="1"
                   className="rounded-md"
@@ -387,17 +388,17 @@ export default function Herobar() {
                 </span>
               </div>
             </div>
-          </a>
+          </Link>
         </div>
         <div className="w-1/2 xs:w-1/3 sm:w-1/5 p-1.5 hover:cursor-pointer group hover:text-themecolor">
-          <a href="/series/infinite-mage-da1c6d63">
+          <Link href="/series/infinite-mage-da1c6d63">
             <div>
               <div className="flex h-[250px] md:h-[200px] overflow-hidden relative hover:opacity-60">
-                <img
+                <Image
                   alt=""
                   loading="lazy"
-                  width="0"
-                  height="0"
+                  width={100}
+                  height={100}
                   decoding="async"
                   data-nimg="1"
                   className="rounded-md"
@@ -523,7 +524,7 @@ export default function Herobar() {
                 </span>
               </div>
             </div>
-          </a>
+          </Link>
         </div>
       </div>
     </div>
