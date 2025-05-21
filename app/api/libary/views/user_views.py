@@ -1,8 +1,12 @@
+from django.contrib.auth.hashers import make_password
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import filters
 from rest_framework import generics
+from rest_framework import status
+from rest_framework.decorators import api_view
 from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAdminUser
+from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from api.libary.pagination import StandardResultsSetPagination
@@ -60,3 +64,20 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 
 user_obtain_token = MyTokenObtainPairView.as_view()
+
+
+@api_view(["POST"])
+def registeruser(request):
+    data = request.data
+    try:
+        user = User.objects.create(
+            username=data["username"],
+            email=data["email"],
+            password=make_password(data["password"]),
+        )
+
+        serializer = MyTokenObtainPairSerializer(user, many=False)
+        return Response(serializer.data)
+    except:  # noqa: E722
+        message = {"detail": "User with this email already exists"}
+        return Response(message, status=status.HTTP_400_BAD_REQUEST)

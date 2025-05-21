@@ -20,4 +20,5 @@ urlpatterns = [
         view=views.user_obtain_token,
         name="login",
     ),
+    path("register/", views.registeruser, name="register"),
 ]

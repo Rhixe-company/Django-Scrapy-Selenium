@@ -221,10 +221,16 @@ class ComicsInfoSerializer(serializers.ModelSerializer[Comic]):
     last_chapter = serializers.SerializerMethodField(read_only=True)
     has_images = serializers.SerializerMethodField(read_only=True)
     has_chapters = serializers.SerializerMethodField(read_only=True)
+    chapters = serializers.SerializerMethodField(read_only=True)
 
     def get_images(self, obj):
         items = obj.get_images()
         serializer = ComicImageSerializer(items, many=True)
+        return serializer.data
+
+    def get_chapters(self, obj):
+        items = obj.get_chapters()[0:3]
+        serializer = ChapterSerializer(items, many=True)
         return serializer.data
 
     def get_has_images(self, obj):
@@ -261,6 +267,7 @@ class ComicsInfoSerializer(serializers.ModelSerializer[Comic]):
             "artist",
             "genres",
             "images",
+            "chapters",
             "first_chapter",
             "last_chapter",
             "has_images",
