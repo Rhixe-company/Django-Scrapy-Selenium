@@ -1,25 +1,25 @@
 "use client";
 import React from "react";
 import { useGetComicsQuery } from "@/app/services/ComicService";
+import { ComicType } from "@/app/services/types/ComicType";
 import { useState } from "react";
 
 import Link from "next/link";
-import Spinner from "@/app/components/Spinner";
-import MyError from "@/app/components/MyError";
+import Spinner from "@/app/components/base/Spinner";
+import MyError from "@/app/components/base/MyError";
 import Image from "next/image";
 export default function Gridbar() {
   const [page, setPage] = useState(1);
   const {
     data,
-    error,
     isLoading: isComicsLoading,
     isSuccess: isComicsQueried,
     // isFetching: isComicsFetching,
     isError: isComicsError,
-  } = useGetComicsQuery({ page });
+  }: any = useGetComicsQuery({ page });
 
   if (isComicsError) {
-    return <MyError error={error} />;
+    return <MyError />;
   }
 
   if (isComicsLoading) {
@@ -43,7 +43,7 @@ export default function Gridbar() {
           </Link>
         </div>
         <div className="grid grid-rows-1 grid-cols-1 sm:grid-cols-2 bg-[#222222] p-3 pb-0">
-          {data?.results.map((item) => (
+          {data?.results.map((item: ComicType) => (
             <div
               className="w-full p-1 pt-1 pb-3 border-b-[1px] border-b-[#312f40]"
               key={item.slug}
@@ -98,7 +98,7 @@ export default function Gridbar() {
                     <Link href={`/series/${item.slug}`}>{item.title}</Link>
                   </span>
                   <div className="flex flex-col gap-y-1.5 list-disc">
-                    {item.chapters?.map((chapteritem) => (
+                    {item.chapters?.map((chapteritem): any => (
                       <span
                         key={chapteritem.slug}
                         className="flex-1 inline-block mt-1"
@@ -147,7 +147,7 @@ export default function Gridbar() {
               onClick={() => {
                 setPage(Number(previousstr));
               }}
-              className="flex items-center bg-themecolor text-white px-8 py-1.5 rounded-[2px] text-[13px] w-[110px] text-center"
+              className="flex items-center bg-themecolor text-white px-5 py-1.5 rounded-[2px] text-[13px] w-[110px] text-center cursor-pointer mr-1"
               style={{ pointerEvents: "auto" }}
             >
               <svg
@@ -220,7 +220,7 @@ export default function Gridbar() {
             </button>
           ) : (
             <button
-              className="flex items-center bg-slate-500 opacity-60 text-white px-5 py-1.5 rounded-[2px] text-[13px] w-[110px] text-center cursor-pointer mr-1"
+              className="flex items-center bg-slate-500 opacity-60 text-white px-8 py-1.5 rounded-[2px] text-[13px] w-[110px] text-center"
               style={{ pointerEvents: "none" }}
             >
               Next

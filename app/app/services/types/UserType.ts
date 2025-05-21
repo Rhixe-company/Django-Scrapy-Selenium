@@ -8,3 +8,15 @@ export interface UserType {
   image?: any;
   is_admin: boolean;
 }
+
+interface Link {
+  next?: string;
+  previous?: string;
+}
+
+export interface UsersType {
+  results: UserType[];
+  links: Link;
+  count: number;
+  numpages: number;
+}

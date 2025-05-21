@@ -9,7 +9,7 @@ export default function Accordianbar() {
           role="tablist"
           aria-orientation="horizontal"
           className="items-center p-1 text-muted-foreground grid w-[100%] px-1.5 grid-cols-3 h-8 rounded-[2px] justify-center bg-[#333]"
-          tabIndex="0"
+          tabIndex={0}
           data-orientation="horizontal"
           style={{ outline: "none" }}
         >
@@ -21,7 +21,7 @@ export default function Accordianbar() {
             data-state="active"
             id="trigger-weekly"
             className="inline-flex items-center justify-center whitespace-nowrap rounded-sm py-1.5 ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm data-[state=active]:hover:text-white hover:text-themecolor text-white text-[12px] data-[state=active]:bg-themecolor data-[state=active]:text-white h-[22px] px-8 font-normal"
-            tabIndex="-1"
+            tabIndex={-1}
             data-orientation="horizontal"
             data-radix-collection-item=""
           >
@@ -35,7 +35,7 @@ export default function Accordianbar() {
             data-state="inactive"
             id="trigger-monthly"
             className="inline-flex items-center justify-center whitespace-nowrap rounded-sm py-1.5 ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm data-[state=active]:hover:text-white hover:text-themecolor text-white text-[12px] data-[state=active]:bg-themecolor data-[state=active]:text-white h-[22px] px-8 font-normal"
-            tabIndex="-1"
+            tabIndex={-1}
             data-orientation="horizontal"
             data-radix-collection-item=""
           >
@@ -49,7 +49,7 @@ export default function Accordianbar() {
             data-state="inactive"
             id="trigger-all"
             className="inline-flex items-center justify-center whitespace-nowrap rounded-sm py-1.5 ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:shadow-sm data-[state=active]:hover:text-white hover:text-themecolor text-white text-[12px] data-[state=active]:bg-themecolor data-[state=active]:text-white h-[22px] px-8 font-normal"
-            tabIndex="-1"
+            tabIndex={-1}
             data-orientation="horizontal"
             data-radix-collection-item=""
           >
@@ -64,7 +64,7 @@ export default function Accordianbar() {
           role="tabpanel"
           aria-labelledby="trigger-weekly"
           id="content-weekly"
-          tabIndex="0"
+          tabIndex={0}
           className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
           style={{ animationDuration: "0s" }}
         >
@@ -270,9 +270,9 @@ export default function Accordianbar() {
           data-orientation="horizontal"
           role="tabpanel"
           aria-labelledby="trigger-monthly"
-          hidden=""
+          hidden
           id="content-monthly"
-          tabIndex="0"
+          tabIndex={0}
           className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         ></div>
       </div>
@@ -282,9 +282,9 @@ export default function Accordianbar() {
           data-orientation="horizontal"
           role="tabpanel"
           aria-labelledby="trigger-all"
-          hidden=""
+          hidden
           id="content-all"
-          tabIndex="0"
+          tabIndex={0}
           className="mt-2 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
         ></div>
       </div>

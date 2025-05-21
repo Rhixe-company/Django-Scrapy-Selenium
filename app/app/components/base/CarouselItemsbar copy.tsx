@@ -12,14 +12,14 @@ export default function CarouselItemsbar() {
                 className="dot selected"
                 value="0"
                 role="button"
-                tabIndex="0"
+                tabIndex={0}
                 aria-label="slide item 1"
               ></li>
               <li
                 className="dot"
                 value="0"
                 role="button"
-                tabIndex="0"
+                tabIndex={0}
                 aria-label="slide item 1"
               ></li>
             </ul>

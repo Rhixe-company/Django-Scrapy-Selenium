@@ -8,7 +8,7 @@ export default function Login() {
         <div className="flex justify-center mb-1">
           <Image
             alt="Rhixe Scans"
-            priority="high"
+            priority={true}
             width={96}
             height={96}
             decoding="async"
@@ -42,7 +42,7 @@ export default function Login() {
               <div className="flex items-center justify-center w-96 h-10 rounded-full">
                 <Image
                   alt="Google"
-                  priority="high"
+                  priority={true}
                   width={24}
                   height={24}
                   decoding="async"

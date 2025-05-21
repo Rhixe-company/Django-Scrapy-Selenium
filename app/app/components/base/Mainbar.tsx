@@ -2,8 +2,8 @@ import Navbar from "@/app/components/base/Navbar";
 import Scrollbar from "@/app/components/base/Scrollbar";
 import Footerbar from "@/app/components/base/Footerbar";
 
-import { Fragment } from "react";
-export default function Mainbar({ children }) {
+import { Fragment, ReactNode } from "react";
+export default function Mainbar({ children }: { children: ReactNode }) {
   return (
     <Fragment>
       <Navbar />

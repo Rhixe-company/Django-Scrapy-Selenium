@@ -10,8 +10,8 @@ export interface ComicType {
   status: string;
   link: string;
   category: Category;
-  author?: Category;
-  artist?: Category;
+  author?: Author;
+  artist?: Artist;
   genres?: Genres;
   images: ComicImage[];
   chapters?: ComicChapter[];
@@ -46,4 +46,24 @@ interface Genres {
 interface Category {
   name: string;
   id: number;
+}
+
+interface Author {
+  name: string;
+  id: number;
+}
+interface Artist {
+  name: string;
+  id: number;
+}
+interface Link {
+  next?: string;
+  previous?: string;
+}
+
+export interface ComicsType {
+  results: ComicType[];
+  links: Link;
+  count: number;
+  numpages: number;
 }

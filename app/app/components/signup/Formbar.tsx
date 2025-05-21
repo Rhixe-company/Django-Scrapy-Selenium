@@ -1,24 +1,49 @@
 "use client";
-import React, { useState } from "react";
-import { useFormStatus } from "react-dom";
+import React, { useState, useEffect } from "react";
+
+import {
+  signupUser,
+  userSelector,
+  clearState,
+} from "@/app/services/slices/UserSlice";
+import { useAppDispatch, useAppSelector } from "@/app/services/hooks";
+import { useRouter } from "next/navigation";
 export default function Formbar() {
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [password1, setPassword1] = useState("");
+  const [password, setPassword] = useState("");
   const [password2, setPassword2] = useState("");
 
-  const { pending } = useFormStatus();
-
-  function handleSubmit(event) {
+  const { isFetching, isSuccess, isError, errorMessage } =
+    useAppSelector(userSelector);
+  function handleSubmit(event: { preventDefault: () => void }) {
     event.preventDefault();
+    if (password == password2) {
+      let data = {
+        email: email,
+        username: username,
+        password: password,
+      };
 
-    const formData = new FormData();
-    formData.append("email", email);
-    formData.append("username", username);
-    formData.append("password1", password1);
-    formData.append("password2", password2);
-    console.log(formData);
+      dispatch(signupUser(data));
+    } else {
+      console.log(password);
+      console.log(password2);
+    }
   }
+  useEffect(() => {
+    if (isError) {
+      console.log(errorMessage);
+      dispatch(clearState());
+    }
+
+    if (isSuccess) {
+      dispatch(clearState());
+      router.push("/profile");
+    }
+  }, [isError, isSuccess, errorMessage, router]);
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-4 relative">
@@ -93,7 +118,7 @@ export default function Formbar() {
             placeholder="Password"
             required
             onChange={(e) => {
-              setPassword1(e.target.value);
+              setPassword(e.target.value);
             }}
             type="password"
             name="password"
@@ -158,7 +183,7 @@ export default function Formbar() {
         type="submit"
         className="w-full py-2 bg-purple-600 text-white rounded-lg font-semibold text-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600"
       >
-        {pending ? "Submitting..." : "Register"}
+        {isFetching ? "Submitting..." : "Register"}
       </button>
     </form>
   );

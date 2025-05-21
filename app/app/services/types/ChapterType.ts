@@ -32,3 +32,15 @@ interface Comic {
   status: string;
   link: string;
 }
+
+interface Link {
+  next?: string;
+  previous?: string;
+}
+
+export interface ChaptersType {
+  results: ChapterType[];
+  links: Link;
+  count: number;
+  numpages: number;
+}

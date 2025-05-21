@@ -27,20 +27,15 @@ export default function Formbar() {
 
     dispatch(loginUser(data));
   }
-  // useEffect(() => {
-  //   return () => {
-  //     dispatch(clearState());
-  //   };
-  // }, []);
 
   useEffect(() => {
     if (isError) {
-      alert(errorMessage);
-      // dispatch(clearState());
+      console.log(errorMessage);
+      dispatch(clearState());
     }
 
     if (isSuccess) {
-      // dispatch(clearState());
+      dispatch(clearState());
       router.push("/profile");
     }
   }, [isError, isSuccess, errorMessage, router]);

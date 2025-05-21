@@ -1,12 +1,13 @@
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/20/solid";
+
 const CustomPagination = ({
   numpages,
   links,
   count,
   setpagenumber,
   pagenumber,
-}) => {
-  function range(start, end) {
+}: any) => {
+  function range(start: number, end: any): any {
     if (start === end) return [start];
     return [start, ...range(start + 1, end)];
   }
@@ -66,7 +67,7 @@ const CustomPagination = ({
             )}
 
             {/* Current: "z-10 bg-indigo-600 text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600", Default: "text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0" */}
-            {numbers.map((num, index) => (
+            {numbers.map((num: any, index: any) => (
               <button
                 key={index}
                 onClick={() => {

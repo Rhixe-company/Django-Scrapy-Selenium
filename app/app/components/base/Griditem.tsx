@@ -3,7 +3,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 
-export default function Griditem({ item }) {
+export default function Griditem({ item }: any) {
   return (
     <div className="grid grid-rows-1 grid-cols-12 m-2">
       <div className="col-span-3">
@@ -55,7 +55,7 @@ export default function Griditem({ item }) {
           <Link href={`/series/${item.slug}`}>{item.title}</Link>
         </span>
         <div className="flex flex-col gap-y-1.5 list-disc">
-          {item.chapters?.map((chapteritem) => (
+          {item.chapters?.map((chapteritem: any) => (
             <span key={chapteritem.slug} className="flex-1 inline-block mt-1">
               <div className="flex flex-row justify-between rounded-sm">
                 <div className="flex text-sm text-[#999] font-medium hover:text-white">
