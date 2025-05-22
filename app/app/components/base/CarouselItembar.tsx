@@ -7,13 +7,12 @@ export default function CarouselItembar() {
       <div className="relative cursor-pointer h-[280px] ml-2.5">
         <Link href="#">
           <Image
-            alt="Trending Crown"
-            fetchPriority="high"
-            loading="eager"
-            width={100}
-            height={100}
             decoding="async"
-            data-nimg="1"
+            loading="eager"
+            alt="Trending Crown"
+            width={70}
+            height={70}
+            quality={100}
             style={{
               color: "transparent",
               top: "10px",
@@ -39,8 +38,7 @@ export default function CarouselItembar() {
             <div
               className="h-full w-full bg-center bg-cover"
               style={{
-                backgroundImage:
-                  "url(/01J7TV2G7719CVSTSW9T9M6F31-thumb-small.webp)",
+                backgroundImage: "url(/carousel2-thumb-small.webp)",
                 backgroundSize: "cover",
               }}
             ></div>

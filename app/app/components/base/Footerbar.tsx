@@ -1,6 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import Logo from "@/app/components/logo.webp";
 export default function Footerbar() {
   return (
     <div
@@ -34,15 +35,15 @@ export default function Footerbar() {
         <div className="flex justify-center items-center border-gray-200 h-24 bg-[#222222]">
           <span className="mr-0 h-10 w-10 sm:h-12 sm:w-12">
             <Link href="/">
-              <Image
-                className="object-cover logoimage"
-                src="/logo.webp"
+              <Image decoding="async"
+                loading="eager"
+                className="object-cover"
+                src={Logo}
                 alt="Rhixe logo"
-                width={100}
-                height={100}
-                loading="lazy"
-                decoding="async"
-                data-nimg="1"
+                width={70}
+                quality={100}
+                height={70}
+                placeholder="blur"
                 style={{
                   color: "transparent",
                   width: "100%",

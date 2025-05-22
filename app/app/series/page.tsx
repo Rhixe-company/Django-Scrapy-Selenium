@@ -1,7 +1,15 @@
+import Rightbar from "@/app/components/base/Rightbar";
+import Leftbar from "@/app/components/series/Leftbar";
+import Loading from "./loading";
+import { Suspense } from "react";
 export default function Series() {
   return (
-    <main className="bg-purple-500 ">
-      <h2 className="text-red-700">Series</h2>
-    </main>
+    <div className="lg:my-0 relative max-[786px]:p-0 max-[882px]:p-4 min[925px]:p-0">
+      <Suspense fallback={<Loading />}>
+        <Leftbar />
+      </Suspense>
+
+      <Rightbar />
+    </div>
   );
 }

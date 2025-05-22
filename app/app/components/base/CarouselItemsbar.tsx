@@ -41,14 +41,13 @@ export default function CarouselItemsbar() {
                     <div className="h-[280px] relative select-none">
                       <div>
                         <Image
-                          alt="poster"
-                          fetchPriority="high"
-                          loading="eager"
                           decoding="async"
-                          data-nimg="fill"
+                          loading="eager"
+                          alt="poster"
                           className="blur-lg brightness-[0.2]"
-                          width={100}
-                          height={100}
+                          width={70}
+                          height={70}
+                          quality={100}
                           style={{
                             position: "absolute",
                             height: "100%",
@@ -60,7 +59,7 @@ export default function CarouselItemsbar() {
                             objectFit: "cover",
                             color: "transparent",
                           }}
-                          src="/01J6AR9XJKAQHET3AJYG9YPZ57-thumb-small.webp"
+                          src="/carousel-thumb-small.webp"
                         />
                       </div>
                       <div className="relative grid grid-cols-12 slide-content">
@@ -183,12 +182,12 @@ export default function CarouselItemsbar() {
                           <Link href="/series/childhood-friend-of-the-zenith-4539df71">
                             <div className="hidden sm:flex poster relative">
                               <Image
-                                alt="poster"
-                                loading="lazy"
-                                width={100}
-                                height={100}
                                 decoding="async"
-                                data-nimg="1"
+                                loading="eager"
+                                alt="poster"
+                                width={70}
+                                height={70}
+                                quality={100}
                                 className="rounded-[4px]"
                                 style={{
                                   color: "transparent",
@@ -197,17 +196,17 @@ export default function CarouselItemsbar() {
                                   objectFit: "contain",
                                   objectPosition: "100% 15%",
                                 }}
-                                src="/01J6AR9XJKAQHET3AJYG9YPZ57-thumb-small.webp"
+                                src="/carousel-thumb-small.webp"
                               />
                             </div>
                             <div className="sm:hidden relative">
                               <Image
-                                alt="poster"
-                                loading="lazy"
-                                width={100}
-                                height={100}
                                 decoding="async"
-                                data-nimg="1"
+                                loading="eager"
+                                alt="poster"
+                                width={70}
+                                height={70}
+                                quality={100}
                                 className="rounded-[4px]"
                                 style={{
                                   color: "transparent",
@@ -216,7 +215,7 @@ export default function CarouselItemsbar() {
                                   objectFit: "cover",
                                   objectPosition: "100% 15%",
                                 }}
-                                src="/01J6AR9XJKAQHET3AJYG9YPZ57-thumb-small.webp"
+                                src="/carousel-thumb-small.webp"
                               />
                             </div>
                           </Link>
@@ -230,14 +229,13 @@ export default function CarouselItemsbar() {
                     <div className="h-[280px] relative select-none">
                       <div>
                         <Image
-                          alt="poster"
-                          fetchPriority="high"
-                          loading="eager"
                           decoding="async"
-                          data-nimg="fill"
+                          loading="eager"
+                          alt="poster"
                           className="blur-lg brightness-[0.2]"
-                          width={100}
-                          height={100}
+                          width={70}
+                          height={70}
+                          quality={100}
                           style={{
                             position: "absolute",
                             height: "100%",
@@ -249,7 +247,7 @@ export default function CarouselItemsbar() {
                             objectFit: "cover",
                             color: "transparent",
                           }}
-                          src="/01JKEJ2C9APTHCEM3MV31MZM98-thumb-small.webp"
+                          src="/carousel1-thumb-small.webp"
                         />
                       </div>
                       <div className="relative grid grid-cols-12 slide-content">
@@ -372,12 +370,12 @@ export default function CarouselItemsbar() {
                           <Link href="/series/childhood-friend-of-the-zenith-4539df71">
                             <div className="hidden sm:flex poster relative">
                               <Image
-                                alt="poster"
-                                loading="lazy"
-                                width={100}
-                                height={100}
                                 decoding="async"
-                                data-nimg="1"
+                                loading="eager"
+                                alt="poster"
+                                width={70}
+                                height={70}
+                                quality={100}
                                 className="rounded-[4px]"
                                 style={{
                                   color: "transparent",
@@ -386,17 +384,17 @@ export default function CarouselItemsbar() {
                                   objectFit: "contain",
                                   objectPosition: "100% 15%",
                                 }}
-                                src="/01JKEJ2C9APTHCEM3MV31MZM98-thumb-small.webp"
+                                src="/carousel1-thumb-small.webp"
                               />
                             </div>
                             <div className="sm:hidden relative">
                               <Image
-                                alt="poster"
-                                loading="lazy"
-                                width={100}
-                                height={100}
                                 decoding="async"
-                                data-nimg="1"
+                                loading="eager"
+                                alt="poster"
+                                width={70}
+                                height={70}
+                                quality={100}
                                 className="rounded-[4px]"
                                 style={{
                                   color: "transparent",
@@ -405,7 +403,7 @@ export default function CarouselItemsbar() {
                                   objectFit: "cover",
                                   objectPosition: "100% 15%",
                                 }}
-                                src="/01JKEJ2C9APTHCEM3MV31MZM98-thumb-small.webp"
+                                src="/carousel1-thumb-small.webp"
                               />
                             </div>
                           </Link>

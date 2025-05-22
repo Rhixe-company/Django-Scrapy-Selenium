@@ -1,7 +1,7 @@
-"use client";
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Chapter } from "@/app/components/comic/ComicList";
 
 export default function Griditem({ item }: any) {
   return (
@@ -11,14 +11,13 @@ export default function Griditem({ item }: any) {
           <Link href={`/series/${item.slug}`}>
             {item.images[0].image ? (
               <Image
-                unoptimized
+                decoding="async"
+                loading="eager"
                 src={`http://127.0.0.1:8000${item.images[0].image}`}
                 alt={item.title}
-                loading="lazy"
-                width={100}
-                height={100}
-                decoding="async"
-                data-nimg="1"
+                width={70}
+                height={70}
+                quality={100}
                 className="rounded-md object-cover"
                 style={{
                   color: "transparent",
@@ -30,13 +29,13 @@ export default function Griditem({ item }: any) {
               />
             ) : (
               <Image
+                decoding="async"
+                loading="eager"
                 src={`${item.images[0].link}`}
                 alt={item.title}
-                loading="lazy"
-                width={100}
-                height={100}
-                decoding="async"
-                data-nimg="1"
+                width={70}
+                height={70}
+                quality={100}
                 className="rounded-md object-cover"
                 style={{
                   color: "transparent",
@@ -55,7 +54,7 @@ export default function Griditem({ item }: any) {
           <Link href={`/series/${item.slug}`}>{item.title}</Link>
         </span>
         <div className="flex flex-col gap-y-1.5 list-disc">
-          {item.chapters?.map((chapteritem: any) => (
+          {item.chapters?.map((chapteritem: Chapter) => (
             <span key={chapteritem.slug} className="flex-1 inline-block mt-1">
               <div className="flex flex-row justify-between rounded-sm">
                 <div className="flex text-sm text-[#999] font-medium hover:text-white">

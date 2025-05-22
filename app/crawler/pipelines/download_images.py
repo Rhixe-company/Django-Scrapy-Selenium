@@ -134,7 +134,7 @@ class MyImagesPipeline(ImagesPipeline):
                         u,
                         callback=NO_CALLBACK,
                         meta={
-                            "impersonate": "chrome124",
+                            # "impersonate": "chrome124",
                             "comicslug": item.get("slug"),
                         },
                     )
@@ -150,7 +150,7 @@ class MyImagesPipeline(ImagesPipeline):
                         u,
                         callback=NO_CALLBACK,
                         meta={
-                            "impersonate": "chrome124",
+                            # "impersonate": "chrome124",
                             "comicslug": item.get("comicslug"),
                             "chapterslug": item.get("chapterslug"),
                         },

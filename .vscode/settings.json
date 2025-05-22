@@ -26,7 +26,7 @@
   },
   "tailwindCSS.emmetCompletions": true,
 
-  "terminal.integrated.shell.windows": "C:/'Program Files'/PowerShell/7-preview/pwsh.exe",
+  // "terminal.integrated.shell.windows": "C:/'Program Files'/PowerShell/7-preview/pwsh.exe ",
   "powershell.developer.featureFlags": ["PSReadLine"],
   "python.analysis.autoImportCompletions": true,
   "python.analysis.typeCheckingMode": "basic",
@@ -49,5 +49,8 @@
   },
   "[ignore]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
+  "[css]": {
+    "editor.defaultFormatter": "vscode.css-language-features"
   }
 }

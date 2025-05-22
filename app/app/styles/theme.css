@@ -3,7 +3,7 @@
 @import "./carousel.css";
 @import "./scroll.css";
 
-@media (prefers-reduced-motion: no-preference) {
+/* @media (prefers-reduced-motion: no-preference) {
   .logoimage {
     animation: logo-float infinite 3s ease-in-out;
   }
@@ -21,4 +21,4 @@
   100% {
     transform: translateY(0px);
   }
-}
+} */

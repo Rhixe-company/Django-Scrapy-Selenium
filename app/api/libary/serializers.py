@@ -135,17 +135,23 @@ class ChapterSerializer(serializers.ModelSerializer[Chapter]):
 
 class ComicInfoSerializer(serializers.ModelSerializer[Comic]):
     category = CategorySerializer()
-    genres = GenreSerializer()
+
     author = AuthorSerializer()
     artist = ArtistSerializer()
     images = serializers.SerializerMethodField(read_only=True)
     chapters = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
     users = serializers.SerializerMethodField(read_only=True)
+    genres = serializers.SerializerMethodField(read_only=True)
     first_chapter = serializers.SerializerMethodField(read_only=True)
     last_chapter = serializers.SerializerMethodField(read_only=True)
     has_images = serializers.SerializerMethodField(read_only=True)
     has_chapters = serializers.SerializerMethodField(read_only=True)
+
+    def get_genres(self, obj):
+        items = obj.genres.all()
+        serializer = GenreSerializer(items, many=True)
+        return serializer.data
 
     def get_images(self, obj):
         items = obj.get_images()
@@ -174,12 +180,12 @@ class ComicInfoSerializer(serializers.ModelSerializer[Comic]):
         return obj.has_chapters
 
     def get_first_chapter(self, obj):
-        items = obj.get_chapters().first()
+        items = obj.get_chapters().last()
         serializer = ChapterSerializer(items, many=False)
         return serializer.data
 
     def get_last_chapter(self, obj):
-        items = obj.get_chapters().last()
+        items = obj.get_chapters().first()
         serializer = ChapterSerializer(items, many=False)
         return serializer.data
 
@@ -213,10 +219,10 @@ class ComicInfoSerializer(serializers.ModelSerializer[Comic]):
 
 class ComicsInfoSerializer(serializers.ModelSerializer[Comic]):
     category = CategorySerializer()
-    genres = GenreSerializer()
     author = AuthorSerializer()
     artist = ArtistSerializer()
     images = serializers.SerializerMethodField(read_only=True)
+    genres = serializers.SerializerMethodField(read_only=True)
     first_chapter = serializers.SerializerMethodField(read_only=True)
     last_chapter = serializers.SerializerMethodField(read_only=True)
     has_images = serializers.SerializerMethodField(read_only=True)
@@ -226,6 +232,11 @@ class ComicsInfoSerializer(serializers.ModelSerializer[Comic]):
     def get_images(self, obj):
         items = obj.get_images()
         serializer = ComicImageSerializer(items, many=True)
+        return serializer.data
+
+    def get_genres(self, obj):
+        items = obj.genres.all()
+        serializer = GenreSerializer(items, many=True)
         return serializer.data
 
     def get_chapters(self, obj):
@@ -240,12 +251,12 @@ class ComicsInfoSerializer(serializers.ModelSerializer[Comic]):
         return obj.has_chapters
 
     def get_first_chapter(self, obj):
-        items = obj.get_chapters().first()
+        items = obj.get_chapters().last()
         serializer = ChapterSerializer(items, many=False)
         return serializer.data
 
     def get_last_chapter(self, obj):
-        items = obj.get_chapters().last()
+        items = obj.get_chapters().first()
         serializer = ChapterSerializer(items, many=False)
         return serializer.data
 
@@ -279,7 +290,7 @@ class ChapterInfoSerializer(serializers.ModelSerializer[Chapter]):
     images = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
     has_images = serializers.SerializerMethodField(read_only=True)
-    comic = ComicSerializer()
+    comic = ComicsInfoSerializer()
 
     def get_images(self, obj):
         items = obj.get_images()

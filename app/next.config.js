@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
-const withImages = require("next-images");
+// const withImages = require("next-images");
 const nextConfig = {
+  // output: "standalone",
+  output: "export",
   images: {
     remotePatterns: [
       {
@@ -19,6 +21,9 @@ const nextConfig = {
   },
   reactStrictMode: true,
   // inlineImageLimit: false,
+  // experimental: {
+  //   serverActions: true,
+  // },
 };
-
-module.exports = withImages(nextConfig);
+module.exports = nextConfig;
+// module.exports = withImages(nextConfig);

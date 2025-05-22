@@ -52,7 +52,7 @@ CONCURRENT_REQUESTS = 128
 # Configure a delay for requests for the same website (default: 0)
 # See https://docs.scrapy.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 10
+DOWNLOAD_DELAY = 0
 # The download delay setting will honor only one of:
 CONCURRENT_REQUESTS_PER_DOMAIN = 64
 CONCURRENT_REQUESTS_PER_IP = 64
@@ -95,9 +95,9 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    # "crawler.pipelines.download_images.MyImagesPipeline": 1,
-    # "crawler.pipelines.default.CrawlerDefaultPipeline": 200,
-    # "crawler.pipelines.db.DbPipeline": 300,
+    "crawler.pipelines.download_images.MyImagesPipeline": 1,
+    "crawler.pipelines.default.CrawlerDefaultPipeline": 200,
+    "crawler.pipelines.db.DbPipeline": 300,
     # "crawler.pipelines.redis.red.CrawlerRedisPipeline": 400,
 }
 
@@ -140,16 +140,16 @@ DOWNLOAD_HANDLERS = {  # noqa: ERA001, RUF100
 #     },
 # }  # noqa: ERA001, RUF100
 FEEDS = {
-    "comicsdata.jsonl": {
-        "format": "jsonlines",
+    "comicsdata.json": {
+        "format": "json",
         "encoding": "utf8",
         "store_empty": False,
         "item_classes": ["crawler.items.ComicItem"],
         "fields": None,
         "indent": 4,
     },
-    "chaptersdata.jsonl": {
-        "format": "jsonlines",
+    "chaptersdata.json": {
+        "format": "json",
         "encoding": "utf8",
         "store_empty": False,
         "item_classes": ["crawler.items.ChapterItem"],

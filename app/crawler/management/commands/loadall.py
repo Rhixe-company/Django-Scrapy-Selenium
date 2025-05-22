@@ -157,9 +157,7 @@ class Command(BaseCommand):
                     comictitle,
                     comicslug,
                 )
-                if (
-                    comic.exists()  # type: ignore  # noqa: PGH003
-                ):
+                if comic.exists():  # type: ignore  # noqa: PGH003
                     dbcomic = comic.first()
                     chapter = Chapter.objects.get_chapter_search(  # type: ignore  # noqa: PGH003
                         slug,
@@ -244,10 +242,10 @@ class Command(BaseCommand):
                 },
             )
             base = settings.BASE_DIR
-            comics_file = str(base / "comicsdata1.json")
-            with open(comics_file, encoding="utf-8") as comic_file:  # noqa: PTH123
-                comics_data = json.load(comic_file)
-                save_comics(comics_data=comics_data)
+            # comics_file = str(base / "comicsdata.json")
+            # with open(comics_file, encoding="utf-8") as comic_file:  # noqa: PTH123
+            #     comics_data = json.load(comic_file)
+            #     save_comics(comics_data=comics_data)
             chapters_file = str(base / "chaptersdata.json")
             with open(chapters_file, encoding="utf-8") as chapter_file:  # noqa: PTH123
                 chapters_data = json.load(chapter_file)

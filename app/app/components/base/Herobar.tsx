@@ -15,12 +15,12 @@ export default function Herobar() {
             <div>
               <div className="flex h-[250px] md:h-[200px] overflow-hidden relative hover:opacity-60">
                 <Image
-                  alt=""
-                  loading="lazy"
-                  width={100}
-                  height={100}
                   decoding="async"
-                  data-nimg="1"
+                  loading="eager"
+                  alt=""
+                  width={70}
+                  height={70}
+                  quality={100}
                   className="rounded-md"
                   style={{
                     color: "transparent",
@@ -29,7 +29,7 @@ export default function Herobar() {
                     objectFit: "cover",
                     objectPosition: "top",
                   }}
-                  src="/e43c72fb-thumb-small.webp"
+                  src="/hero-thumb-small.webp"
                 />
                 <div className="absolute bottom-[0px] flex justify-center left-[5px] mb-[5px] rounded-[3px] text-white bg-[#a12e24]">
                   <span className="text-[10px] font-bold py-[2px] px-[7px]">
@@ -136,12 +136,12 @@ export default function Herobar() {
             <div>
               <div className="flex h-[250px] md:h-[200px] overflow-hidden relative hover:opacity-60">
                 <Image
-                  alt=""
-                  loading="lazy"
-                  width={100}
-                  height={100}
                   decoding="async"
-                  data-nimg="1"
+                  loading="eager"
+                  alt=""
+                  width={70}
+                  height={70}
+                  quality={100}
                   className="rounded-md"
                   style={{
                     color: "transparent",
@@ -150,7 +150,7 @@ export default function Herobar() {
                     objectFit: "cover",
                     objectPosition: "top",
                   }}
-                  src="/9ab6b724-thumb-small.webp"
+                  src="/hero1-thumb-small.webp"
                 />
                 <div className="absolute bottom-[0px] flex justify-center left-[5px] mb-[5px] rounded-[3px] text-white bg-[#a12e24]">
                   <span className="text-[10px] font-bold py-[2px] px-[7px]">
@@ -259,12 +259,12 @@ export default function Herobar() {
             <div>
               <div className="flex h-[250px] md:h-[200px] overflow-hidden relative hover:opacity-60">
                 <Image
-                  alt=""
-                  loading="lazy"
-                  width={100}
-                  height={100}
                   decoding="async"
-                  data-nimg="1"
+                  loading="eager"
+                  alt=""
+                  width={70}
+                  height={70}
+                  quality={100}
                   className="rounded-md"
                   style={{
                     color: "transparent",
@@ -273,7 +273,7 @@ export default function Herobar() {
                     objectFit: "cover",
                     objectPosition: "top",
                   }}
-                  src="/e43c72fb-thumb-small.webp"
+                  src="/hero-thumb-small.webp"
                 />
                 <div className="absolute bottom-[0px] flex justify-center left-[5px] mb-[5px] rounded-[3px] text-white bg-[#a12e24]">
                   <span className="text-[10px] font-bold py-[2px] px-[7px]">
@@ -395,12 +395,12 @@ export default function Herobar() {
             <div>
               <div className="flex h-[250px] md:h-[200px] overflow-hidden relative hover:opacity-60">
                 <Image
-                  alt=""
-                  loading="lazy"
-                  width={100}
-                  height={100}
                   decoding="async"
-                  data-nimg="1"
+                  loading="eager"
+                  alt=""
+                  width={70}
+                  height={70}
+                  quality={100}
                   className="rounded-md"
                   style={{
                     color: "transparent",
@@ -409,7 +409,7 @@ export default function Herobar() {
                     objectFit: "cover",
                     objectPosition: "top",
                   }}
-                  src="/9ab6b724-thumb-small.webp"
+                  src="/hero1-thumb-small.webp"
                 />
                 <div className="absolute bottom-[0px] flex justify-center left-[5px] mb-[5px] rounded-[3px] text-white bg-[#a12e24]">
                   <span className="text-[10px] font-bold py-[2px] px-[7px]">

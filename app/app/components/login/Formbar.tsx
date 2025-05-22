@@ -1,21 +1,11 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Link from "next/link";
-import {
-  loginUser,
-  userSelector,
-  clearState,
-} from "@/app/services/slices/UserSlice";
-import { useAppDispatch, useAppSelector } from "@/app/services/hooks";
-import { useRouter } from "next/navigation";
+
 export default function Formbar() {
-  const dispatch = useAppDispatch();
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [remember, setRemember] = useState(false);
-  const { isFetching, isSuccess, isError, errorMessage } =
-    useAppSelector(userSelector);
 
   function handleSubmit(event: { preventDefault: () => void }) {
     event.preventDefault();
@@ -25,20 +15,9 @@ export default function Formbar() {
       password: password,
     };
 
-    dispatch(loginUser(data));
+    console.log(data);
   }
 
-  useEffect(() => {
-    if (isError) {
-      console.log(errorMessage);
-      dispatch(clearState());
-    }
-
-    if (isSuccess) {
-      dispatch(clearState());
-      router.push("/profile");
-    }
-  }, [isError, isSuccess, errorMessage, router]);
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-4 relative">
@@ -182,7 +161,7 @@ export default function Formbar() {
         type="submit"
         className="w-full py-2 bg-purple-600 text-white rounded-lg font-semibold hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-600 text-md"
       >
-        {isFetching ? "Submitting..." : "Login"}
+        Login
       </button>
     </form>
   );

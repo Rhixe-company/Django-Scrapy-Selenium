@@ -77,16 +77,16 @@ export default function Accordianbar() {
               </div>
               <div className="flex overflow-hidden mt-0.5 mb-2.5 ml-[37px] mr-2 float-left max-w-[55px] h-[72px] max-h-[80px] rounded-[3px]">
                 <Link
-                  href="/series/the-illegitimate-who-devours-weapons-f494b0a1"
+                  href="/series/the-illegitimate-who-devours-weapons"
                   className="text-[13px] font-[500] text-[#fff] decoration-none overflow-hidden"
                 >
                   <Image
-                    alt="poster"
-                    fetchPriority="high"
-                    width={100}
-                    height={100}
                     decoding="async"
-                    data-nimg="1"
+                    loading="eager"
+                    alt="poster"
+                    width={70}
+                    height={70}
+                    quality={100}
                     className="w-full cursor-pointer"
                     style={{
                       color: "transparent",
@@ -94,14 +94,14 @@ export default function Accordianbar() {
                       height: "auto",
                       maxHeight: "110px",
                     }}
-                    src="/01JNNWSXB61RT2X0EV083T1MFE-thumb-small.webp"
+                    src="/accord-thumb-small.webp"
                   />
                 </Link>
               </div>
               <div className="w-full p-0 overflow-hidden">
                 <span className="block">
                   <Link
-                    href="/series/the-illegitimate-who-devours-weapons-f494b0a1"
+                    href="/series/the-illegitimate-who-devours-weapons"
                     className="overflow-hidden block leading-[1.2] text-[13px] md:text-[12px] xl:text-[13px] font-[500] text-[#fff] cursor-pointer hover:text-themecolor"
                   >
                     The Illegitimate Who Devours W...

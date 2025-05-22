@@ -55,7 +55,7 @@ class ComicDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     lookup_field = "slug"
 
     def get_permissions(self):
-        self.permission_classes = [IsAuthenticated]
+        self.permission_classes = [AllowAny]
         if self.request.method in ["PUT", "PATCH", "DELETE"]:
             self.permission_classes = [IsAdminUser]
         return super().get_permissions()
