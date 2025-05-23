@@ -1,6 +1,6 @@
 import React from "react";
 import Accordianbar from "@/app/components/base/Accordianbar";
-import fetchSelectedComics from "@/lib/fetchSelectedComics";
+import fetchSelectedComics from "@/lib/comic/fetchSelectedComics";
 import type { ComicsSelect } from "@/models/comics";
 export default async function Rightbar() {
   const url = "http:localhost:8000/api/comics/selected/";

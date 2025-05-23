@@ -4,7 +4,7 @@ import Footerbar from "@/app/components/base/Footerbar";
 import Rightbar from "@/app/components/base/Rightbar";
 import Image from "next/image";
 import Link from "next/link";
-import fetchComic from "@/lib/fetchComic";
+import fetchComic from "@/lib/comic/fetchComic";
 import type { Comic } from "@/models/comics";
 import { Fragment } from "react";
 

@@ -4,8 +4,12 @@ import Footerbar from "@/app/components/base/Footerbar";
 import Image from "next/image";
 import Link from "next/link";
 import { Fragment } from "react";
-import fetchChapter from "@/lib/fetchChapter";
+import fetchChapter from "@/lib/chapter/fetchChapter";
 import type { Chapter } from "@/models/chapters";
+
+interface Props {
+  slug: string;
+}
 
 export const dynamicParams = true; // default val = true
 
@@ -275,17 +279,19 @@ export default async function Home(props: {
                   </div>
                 </div>
                 <div className="py-8 -mx-5 md:mx-0 flex flex-col items-center justify-center">
-                  <div className="w-full relative sm:max-w-60"></div>
+                  <div className="w-full relative  sm:max-w-60"></div>
                   {chapter.images.map(
                     (myimg, index: React.Key | null | undefined) => (
                       <div key={index}>
-                        <div className="w-full mx-auto center">
+                        <div className="w-full mx-auto center  overflow-hidden ">
                           {myimg.image ? (
                             <Image
-                              height={500}
                               width={500}
+                              height={500}
+                              // fill={true}
+                              // sizes="(max-width:768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                               src={`http://127.0.0.1:8000${myimg.image}`}
-                              className="object-cover mx-auto"
+                              className="object-co mx-auto"
                               alt={`chapter page ${index}`}
                               decoding="async"
                               fetchPriority="high"
@@ -293,6 +299,8 @@ export default async function Home(props: {
                             />
                           ) : (
                             <Image
+                              fill={true}
+                              sizes="(max-width:768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                               height={500}
                               width={500}
                               src={myimg.link}
@@ -663,7 +671,7 @@ export async function generateStaticParams() {
   // Fetch or define your chapters (e.g., from an API or database)
   const res = await fetch("http://localhost:8000/api/chapters/");
   const chapters = await res.json();
-  return chapters.results.map((chapter: Chapter) => ({
+  return chapters.results.map((chapter: Props) => ({
     chapterslug: chapter.slug,
   }));
 }

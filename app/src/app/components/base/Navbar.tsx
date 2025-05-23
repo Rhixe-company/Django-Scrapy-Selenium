@@ -13,10 +13,18 @@ import {
   // MenuItems,
 } from "@headlessui/react";
 // import { AnimatePresence, motion } from "framer-motion";
-import { useEffect } from "react";
+import { useEffect, useState, FormEvent } from "react";
+import { useRouter } from "next/navigation";
 import Logo from "@/app/components/logo.webp";
 
 export default function Navbar() {
+  const [search, setSearch] = useState("");
+  const router = useRouter();
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    router.push(`/results/${search}`);
+    setSearch("");
+  };
   useEffect(() => {
     const searchForm = document.getElementById("searchform") as HTMLBodyElement;
 
@@ -32,6 +40,7 @@ export default function Navbar() {
         searchButton1.classList.remove("hidden");
         searchButton1.classList.add("inline-flex");
         searchForm.classList.remove("hidden");
+        setSearch("");
       });
     }
     if (searchButton1) {
@@ -40,6 +49,7 @@ export default function Navbar() {
         searchButton1.classList.add("hidden");
         searchButton1.classList.remove("inline-flex");
         searchForm.classList.add("hidden");
+        setSearch("");
       });
     }
   }, []);
@@ -88,9 +98,14 @@ export default function Navbar() {
         <div className="flex w-full">
           <div className="flex-row w-full gap-3.5 items-center">
             <div className="hidden md:flex flex-row w-full gap-3.5 items-center">
-              <div className="hidden md:flex justify-end items-center w-full">
+              <form
+                onSubmit={handleSubmit}
+                className="hidden md:flex justify-end items-center w-full"
+              >
                 <input
                   type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
                   className="relative w-[95%] sm:w-[55%] md:w-[55%] lg:w-[40%] text-white px-4 py-1 sm:py-2 rounded-lg border-[1px] bg-[#16151D] border-black outline-none"
                   placeholder="Search"
                 />
@@ -107,7 +122,7 @@ export default function Navbar() {
                     clipRule="evenodd"
                   ></path>
                 </svg>
-              </div>
+              </form>
 
               <div style={{ width: "auto" }}>
                 <Link
@@ -139,7 +154,7 @@ export default function Navbar() {
             <div className="flex md:hidden flex-row gap3.5 items-center">
               <div className="flex flex-row flex-grow items-center justify-end space-x-1">
                 <div id="searchform" className="flex-1 hidden">
-                  <div className="relative">
+                  <form onSubmit={handleSubmit} className="relative">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="24"
@@ -156,10 +171,13 @@ export default function Navbar() {
                       <path d="m21 21-4.3-4.3"></path>
                     </svg>
                     <input
+                      type="text"
+                      value={search}
+                      onChange={(e) => setSearch(e.target.value)}
                       className="flex h-10 rounded-md border-input px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 w-full border-0 bg-purple-800/50 pl-9 text-white placeholder:text-white/70 focus-visible:ring-1 focus-visible:ring-purple-400"
                       placeholder="Search comics..."
                     />
-                  </div>
+                  </form>
                 </div>
                 <button
                   id="searchbutton1"

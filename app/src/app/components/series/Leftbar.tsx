@@ -4,8 +4,13 @@ import Gridbar from "@/app/components/series/Gridbar";
 import Loading from "@/app/(dashboard)/loading";
 import { Suspense } from "react";
 import Herobar from "@/app/components/series/Herobar";
+type Props = {
+  params: {
+    search: string;
+  };
+};
 
-export default async function Leftbar() {
+export default async function Leftbar({ params: { search } }: Props) {
   return (
     <div className="w-[100%] float-left min-[882px]:w-[68.5%] min-[1030px]:w-[70%] max-[600px]:w-[100%] relative z-0">
       <div className="w-full min-[768px]:w-[100%] bg-[#222222] min-[880px]:w-[98%] min-[912px]:w-[98%] lg:w-[100%] mb-2">
@@ -17,7 +22,7 @@ export default async function Leftbar() {
 
         <Suspense fallback={<Loading />}>
           <Herobar />
-          <Gridbar />
+          <Gridbar search={search} />
         </Suspense>
       </div>
     </div>

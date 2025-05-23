@@ -20,6 +20,7 @@
     "framer-motion": "^12.12.1",
     "next": "15.3.2",
     "next-images": "^1.8.5",
+    "plaiceholder": "^3.0.0",
     "postcss": "8.5.3",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

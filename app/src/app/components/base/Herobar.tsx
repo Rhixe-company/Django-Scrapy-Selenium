@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 import CustomRating from "@/app/components/base/CustomRating";
-import fetchFeaturedComics from "@/lib/fetchTopComics";
+import fetchFeaturedComics from "@/lib/comic/fetchTopComics";
 import type { Comics } from "@/models/comics";
 
 export default async function Herobar() {

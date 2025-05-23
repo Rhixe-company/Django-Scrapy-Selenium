@@ -4,7 +4,7 @@ import CarouselItems from "@/app/components/base/CarouselItems";
 
 import Image from "next/image";
 import Link from "next/link";
-import fetchTopComics from "@/lib/fetchTopComics";
+import fetchTopComics from "@/lib/comic/fetchTopComics";
 import type { Comics } from "@/models/comics";
 
 export default async function Carouselsbar() {

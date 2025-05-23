@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
 
-import fetchComics from "@/lib/fetchComics";
+import fetchComics from "@/lib/comic/fetchComics";
 import type { ComicsResults } from "@/models/comics";
 import CustomRating from "@/app/components/base/CustomRating";
 import Link from "next/link";

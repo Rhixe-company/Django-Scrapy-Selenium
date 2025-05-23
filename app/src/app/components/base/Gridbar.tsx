@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-import fetchComics from "@/lib/fetchComics";
+import fetchComics from "@/lib/comic/fetchComics";
 import type { ComicsResults } from "@/models/comics";
 
 import Image from "next/image";
