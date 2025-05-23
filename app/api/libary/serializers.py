@@ -78,6 +78,8 @@ class CommentSerializer(serializers.ModelSerializer[Comment]):
 
 
 class ComicImageSerializer(serializers.ModelSerializer[ComicImage]):
+    image = serializers.ImageField(use_url=True)
+
     class Meta:
         model = ComicImage
         fields = [
@@ -85,10 +87,13 @@ class ComicImageSerializer(serializers.ModelSerializer[ComicImage]):
             "image",
             "status",
             "checksum",
+            "comic",
         ]
 
 
 class ChapterImageSerializer(serializers.ModelSerializer[ChapterImage]):
+    image = serializers.ImageField(use_url=True)
+
     class Meta:
         model = ChapterImage
         fields = [
@@ -102,6 +107,9 @@ class ChapterImageSerializer(serializers.ModelSerializer[ChapterImage]):
 
 
 class ComicSerializer(serializers.ModelSerializer[Comic]):
+    updated_at = serializers.DateField(format="%d %B, %Y")
+    rating = serializers.DecimalField(max_digits=10, decimal_places=1)
+    # updated_at = serializers.DateField(format="%Y-%m-%dT%H:%M:%S")  # noqa: ERA001
 
     class Meta:
         model = Comic
@@ -120,6 +128,7 @@ class ComicSerializer(serializers.ModelSerializer[Comic]):
 
 
 class ChapterSerializer(serializers.ModelSerializer[Chapter]):
+    updated_at = serializers.DateField(format="%d %B, %Y")
 
     class Meta:
         model = Chapter
@@ -134,6 +143,7 @@ class ChapterSerializer(serializers.ModelSerializer[Chapter]):
 
 
 class ComicInfoSerializer(serializers.ModelSerializer[Comic]):
+    updated_at = serializers.DateField(format="%d %B, %Y")
     category = CategorySerializer()
 
     author = AuthorSerializer()
@@ -217,10 +227,10 @@ class ComicInfoSerializer(serializers.ModelSerializer[Comic]):
         ]
 
 
-class ComicsInfoSerializer(serializers.ModelSerializer[Comic]):
-    category = CategorySerializer()
-    author = AuthorSerializer()
-    artist = ArtistSerializer()
+class ComicsInfoSerializer(ComicSerializer):
+    category = CategorySerializer(read_only=True)
+    author = AuthorSerializer(required=False, read_only=True)
+    artist = ArtistSerializer(required=False, read_only=True)
     images = serializers.SerializerMethodField(read_only=True)
     genres = serializers.SerializerMethodField(read_only=True)
     first_chapter = serializers.SerializerMethodField(read_only=True)
@@ -287,6 +297,7 @@ class ComicsInfoSerializer(serializers.ModelSerializer[Comic]):
 
 
 class ChapterInfoSerializer(serializers.ModelSerializer[Chapter]):
+    updated_at = serializers.DateField(format="%d %B, %Y")
     images = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
     has_images = serializers.SerializerMethodField(read_only=True)
@@ -322,6 +333,7 @@ class ChapterInfoSerializer(serializers.ModelSerializer[Chapter]):
 
 
 class ChaptersInfoSerializer(serializers.ModelSerializer[Chapter]):
+    updated_at = serializers.DateField(format="%d %B, %Y")
     comic = ComicSerializer()
 
     class Meta:

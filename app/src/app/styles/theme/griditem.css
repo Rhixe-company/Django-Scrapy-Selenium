@@ -1,0 +1,66 @@
+.grid_item_image {
+  color: transparent;
+  width: 100px;
+  max-height: 130px;
+  object-fit: cover;
+  object-position: 100% 25%;
+}
+
+.series_grid_item_image {
+  color: transparent;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.series_grid_item_info {
+  font-size: 13.3px;
+  margin: 8px 0;
+  margin-bottom: 5px;
+  font-weight: 500;
+  line-height: 19px;
+  text-align: left;
+  overflow: hidden;
+}
+
+.series_grid_item_pill {
+  @apply absolute bottom-[0px] flex justify-center left-[5px] mb-[5px] rounded-[3px] text-white;
+}
+
+.series_grid_item_pill.Manhwa {
+  @apply bg-[#a12e24];
+}
+
+.series_grid_item_pill.Manhua {
+  @apply bg-[#009688];
+}
+
+.series_grid_item_pill.Manga {
+  @apply bg-[#410096];
+}
+
+
+.status.ongoing {
+  @apply bg-blue-700;
+}
+
+.status.completed {
+  @apply bg-green-700;
+}
+
+.status.hiatus {
+  @apply bg-orange-700;
+}
+
+.status.dropped {
+  @apply bg-red-700;
+}
+
+.status.coming_soon {
+  @apply bg-violet-700;
+}
+
+.status.season_end {
+  @apply bg-indigo-700;
+}

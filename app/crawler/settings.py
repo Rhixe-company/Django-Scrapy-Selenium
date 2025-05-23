@@ -95,9 +95,9 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    "crawler.pipelines.download_images.MyImagesPipeline": 1,
-    "crawler.pipelines.default.CrawlerDefaultPipeline": 200,
-    "crawler.pipelines.db.DbPipeline": 300,
+    # "crawler.pipelines.download_images.MyImagesPipeline": 1,
+    # "crawler.pipelines.default.CrawlerDefaultPipeline": 200,
+    # "crawler.pipelines.db.DbPipeline": 300,
     # "crawler.pipelines.redis.red.CrawlerRedisPipeline": 400,
 }
 
@@ -127,10 +127,10 @@ REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
 TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 
 FEED_EXPORT_ENCODING = "utf-8"
-DOWNLOAD_HANDLERS = {  # noqa: ERA001, RUF100
-    "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
-    "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
-}  # noqa: ERA001, RUF100
+# DOWNLOAD_HANDLERS = {  # noqa: ERA001, RUF100
+#     "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+#     "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+# }  # noqa: ERA001, RUF100
 # FEEDS = {  # noqa: ERA001, RUF100
 #     "comics.json": {
 #         "format": "json",  # noqa: ERA001
@@ -139,24 +139,24 @@ DOWNLOAD_HANDLERS = {  # noqa: ERA001, RUF100
 #         "indent": 4,  # noqa: ERA001
 #     },
 # }  # noqa: ERA001, RUF100
-FEEDS = {
-    "comicsdata.json": {
-        "format": "json",
-        "encoding": "utf8",
-        "store_empty": False,
-        "item_classes": ["crawler.items.ComicItem"],
-        "fields": None,
-        "indent": 4,
-    },
-    "chaptersdata.json": {
-        "format": "json",
-        "encoding": "utf8",
-        "store_empty": False,
-        "item_classes": ["crawler.items.ChapterItem"],
-        "fields": None,
-        "indent": 4,
-    },
-}
+# FEEDS = {
+#     "comicsdata.json": {
+#         "format": "json",
+#         "encoding": "utf8",
+#         "store_empty": False,
+#         "item_classes": ["crawler.items.ComicItem"],
+#         "fields": None,
+#         "indent": 4,
+#     },
+#     "chaptersdata.json": {
+#         "format": "json",
+#         "encoding": "utf8",
+#         "store_empty": False,
+#         "item_classes": ["crawler.items.ChapterItem"],
+#         "fields": None,
+#         "indent": 4,
+#     },
+# }
 RETRY_TIMES = 2
 RETRY_ENABLED = True
 RETRY_HTTP_CODES = list(range(300, 501))
@@ -225,4 +225,8 @@ MEDIA_ALLOW_REDIRECTS = True
 #     "--block-ads",
 #     "--enable-unsafe-swiftshader",
 # ]  # change it to ['-headless'] to run in headless mode
-PLAYWRIGHT_PROCESS_REQUEST_HEADERS = None
+# PLAYWRIGHT_PROCESS_REQUEST_HEADERS = None
+# settings.py
+DOWNLOAD_HANDLERS = {
+    "http": "crawler.handler.MyCustomHTTPHandler",
+}

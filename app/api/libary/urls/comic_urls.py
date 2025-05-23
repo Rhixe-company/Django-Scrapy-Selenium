@@ -11,6 +11,21 @@ urlpatterns = [
         name="list",
     ),
     path(
+        "top/",
+        view=views.topcomics,
+        name="top",
+    ),
+    path(
+        "featured/",
+        view=views.featuredcomics,
+        name="featured",
+    ),
+    path(
+        "selected/",
+        view=views.selectedcomics,
+        name="selected",
+    ),
+    path(
         "<str:slug>/",
         view=views.comic_detail,
         name="detail",

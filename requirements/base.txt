@@ -77,4 +77,6 @@ selenium-driverless
 asynciolimiter
 scrapy-playwright
 djangorestframework-simplejwt[crypto]
-nodriver
+# nodriver
+dj-rest-auth[with_social]
+scrapy-nodriver

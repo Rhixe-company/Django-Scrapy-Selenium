@@ -8,7 +8,7 @@ import nodriver as uc
 async def scraper():
 
     # start a new Chrome instance
-    driver = await uc.start()
+    driver = await uc.start(headless=False)
 
     # visit the target website
     page = await driver.get("https://www.scrapingcourse.com/ecommerce/")

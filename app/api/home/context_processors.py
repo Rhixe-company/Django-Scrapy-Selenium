@@ -11,14 +11,41 @@ from api.libary.models import Comic
 def load(request):
     week = now() - timedelta(weeks=1)
     month = now() - timedelta(weeks=4)
-    comics = Comic.objects.filter(
-        Q(rating__gte=9.5) & Q(status=ComicStatus.ONGOING),
+    comics = (
+        Comic.objects.prefetch_related(
+            "comicimages",
+            "genres",
+            "users",
+            "comicchapters",
+        )
+        .select_related("user", "author", "category", "artist", "website")
+        .filter(
+            Q(rating__gte=9.5) & Q(status=ComicStatus.ONGOING),
+        )
     )
-    weekcomics = Comic.objects.filter(
-        Q(rating__gte=9.5) & Q(updated_at__gte=week),
+    weekcomics = (
+        Comic.objects.prefetch_related(
+            "comicimages",
+            "genres",
+            "users",
+            "comicchapters",
+        )
+        .select_related("user", "author", "category", "artist", "website")
+        .filter(
+            Q(rating__gte=9.5) & Q(updated_at__gte=week),
+        )
     )
-    monthcomics = Comic.objects.filter(
-        Q(rating__gte=9.5) & Q(updated_at__gt=month),
+    monthcomics = (
+        Comic.objects.prefetch_related(
+            "comicimages",
+            "genres",
+            "users",
+            "comicchapters",
+        )
+        .select_related("user", "author", "category", "artist", "website")
+        .filter(
+            Q(rating__gte=9.5) & Q(updated_at__gt=month),
+        )
     )
     myfilter = SearchFilterSet()
 
