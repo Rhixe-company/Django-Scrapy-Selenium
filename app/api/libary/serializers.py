@@ -1,3 +1,4 @@
+from django.db.models import Q
 from rest_framework import serializers
 
 from api.libary.models import Artist
@@ -109,7 +110,25 @@ class ChapterImageSerializer(serializers.ModelSerializer[ChapterImage]):
 class ComicSerializer(serializers.ModelSerializer[Comic]):
     updated_at = serializers.DateField(format="%d %B, %Y")
     rating = serializers.DecimalField(max_digits=10, decimal_places=1)
+    images = serializers.SerializerMethodField(read_only=True)
+    first_chapter = serializers.SerializerMethodField(read_only=True)
+    last_chapter = serializers.SerializerMethodField(read_only=True)
     # updated_at = serializers.DateField(format="%Y-%m-%dT%H:%M:%S")  # noqa: ERA001
+
+    def get_images(self, obj):
+        items = obj.get_images()
+        serializer = ComicImageSerializer(items, many=True)
+        return serializer.data
+
+    def get_first_chapter(self, obj):
+        items = obj.get_chapters().last()
+        serializer = ChapterSerializer(items, many=False)
+        return serializer.data
+
+    def get_last_chapter(self, obj):
+        items = obj.get_chapters().first()
+        serializer = ChapterSerializer(items, many=False)
+        return serializer.data
 
     class Meta:
         model = Comic
@@ -124,6 +143,9 @@ class ComicSerializer(serializers.ModelSerializer[Comic]):
             "serialization",
             "status",
             "link",
+            "images",
+            "first_chapter",
+            "last_chapter",
         ]
 
 
@@ -149,6 +171,7 @@ class ComicInfoSerializer(serializers.ModelSerializer[Comic]):
     author = AuthorSerializer()
     artist = ArtistSerializer()
     images = serializers.SerializerMethodField(read_only=True)
+    related_series = serializers.SerializerMethodField(read_only=True)
     chapters = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
     users = serializers.SerializerMethodField(read_only=True)
@@ -157,6 +180,7 @@ class ComicInfoSerializer(serializers.ModelSerializer[Comic]):
     last_chapter = serializers.SerializerMethodField(read_only=True)
     has_images = serializers.SerializerMethodField(read_only=True)
     has_chapters = serializers.SerializerMethodField(read_only=True)
+    rating = serializers.DecimalField(max_digits=10, decimal_places=1)
 
     def get_genres(self, obj):
         items = obj.genres.all()
@@ -166,6 +190,27 @@ class ComicInfoSerializer(serializers.ModelSerializer[Comic]):
     def get_images(self, obj):
         items = obj.get_images()
         serializer = ComicImageSerializer(items, many=True)
+        return serializer.data
+
+    def get_related_series(self, obj):
+        category = obj.category.name
+        author = obj.author.name
+        artist = obj.artist.name
+        items = (
+            Comic.objects.prefetch_related(
+                "comicimages",
+                "genres",
+                "users",
+                "comicchapters",
+            )
+            .select_related("user", "author", "category", "artist", "website")
+            .filter(
+                Q(category__name__iexact=category)
+                | Q(author__name__icontains=author)
+                | Q(artist__name__icontains=artist),
+            )[0:5]
+        )
+        serializer = ComicSerializer(items, many=True)
         return serializer.data
 
     def get_chapters(self, obj):
@@ -220,6 +265,7 @@ class ComicInfoSerializer(serializers.ModelSerializer[Comic]):
             "chapters",
             "comments",
             "users",
+            "related_series",
             "first_chapter",
             "last_chapter",
             "has_images",
@@ -232,16 +278,39 @@ class ComicsInfoSerializer(ComicSerializer):
     author = AuthorSerializer(required=False, read_only=True)
     artist = ArtistSerializer(required=False, read_only=True)
     images = serializers.SerializerMethodField(read_only=True)
+    related_series = serializers.SerializerMethodField(read_only=True)
     genres = serializers.SerializerMethodField(read_only=True)
     first_chapter = serializers.SerializerMethodField(read_only=True)
     last_chapter = serializers.SerializerMethodField(read_only=True)
     has_images = serializers.SerializerMethodField(read_only=True)
     has_chapters = serializers.SerializerMethodField(read_only=True)
     chapters = serializers.SerializerMethodField(read_only=True)
+    rating = serializers.DecimalField(max_digits=10, decimal_places=1)
 
     def get_images(self, obj):
         items = obj.get_images()
         serializer = ComicImageSerializer(items, many=True)
+        return serializer.data
+
+    def get_related_series(self, obj):
+        category = obj.category.name
+        author = obj.author.name
+        artist = obj.artist.name
+        items = (
+            Comic.objects.prefetch_related(
+                "comicimages",
+                "genres",
+                "users",
+                "comicchapters",
+            )
+            .select_related("user", "author", "category", "artist", "website")
+            .filter(
+                Q(category__name__iexact=category)
+                | Q(author__name__icontains=author)
+                | Q(artist__name__icontains=artist),
+            )[0:5]
+        )
+        serializer = ComicSerializer(items, many=True)
         return serializer.data
 
     def get_genres(self, obj):
@@ -288,6 +357,7 @@ class ComicsInfoSerializer(ComicSerializer):
             "artist",
             "genres",
             "images",
+            "related_series",
             "chapters",
             "first_chapter",
             "last_chapter",
@@ -299,6 +369,7 @@ class ComicsInfoSerializer(ComicSerializer):
 class ChapterInfoSerializer(serializers.ModelSerializer[Chapter]):
     updated_at = serializers.DateField(format="%d %B, %Y")
     images = serializers.SerializerMethodField(read_only=True)
+    related_series = serializers.SerializerMethodField(read_only=True)
     comments = serializers.SerializerMethodField(read_only=True)
     has_images = serializers.SerializerMethodField(read_only=True)
     comic = ComicsInfoSerializer()
@@ -306,6 +377,27 @@ class ChapterInfoSerializer(serializers.ModelSerializer[Chapter]):
     def get_images(self, obj):
         items = obj.get_images()
         serializer = ChapterImageSerializer(items, many=True)
+        return serializer.data
+
+    def get_related_series(self, obj):
+        category = obj.comic.category.name
+        author = obj.comic.author.name
+        artist = obj.comic.artist.name
+        items = (
+            Comic.objects.prefetch_related(
+                "comicimages",
+                "genres",
+                "users",
+                "comicchapters",
+            )
+            .select_related("user", "author", "category", "artist", "website")
+            .filter(
+                Q(category__name__iexact=category)
+                | Q(author__name__icontains=author)
+                | Q(artist__name__icontains=artist),
+            )
+        )
+        serializer = ComicSerializer(items, many=True)
         return serializer.data
 
     def get_comments(self, obj):
@@ -327,6 +419,7 @@ class ChapterInfoSerializer(serializers.ModelSerializer[Chapter]):
             "updated_at",
             "comic",
             "images",
+            "related_series",
             "comments",
             "has_images",
         ]
@@ -335,6 +428,28 @@ class ChapterInfoSerializer(serializers.ModelSerializer[Chapter]):
 class ChaptersInfoSerializer(serializers.ModelSerializer[Chapter]):
     updated_at = serializers.DateField(format="%d %B, %Y")
     comic = ComicSerializer()
+    related_series = serializers.SerializerMethodField(read_only=True)
+
+    def get_related_series(self, obj):
+        category = obj.comic.category.name
+        author = obj.comic.author.name
+        artist = obj.comic.artist.name
+        items = (
+            Comic.objects.prefetch_related(
+                "comicimages",
+                "genres",
+                "users",
+                "comicchapters",
+            )
+            .select_related("user", "author", "category", "artist", "website")
+            .filter(
+                Q(category__name__iexact=category)
+                | Q(author__name__icontains=author)
+                | Q(artist__name__icontains=artist),
+            )
+        )
+        serializer = ComicSerializer(items, many=True)
+        return serializer.data
 
     class Meta:
         model = Chapter
@@ -344,6 +459,7 @@ class ChaptersInfoSerializer(serializers.ModelSerializer[Chapter]):
             "slug",
             "link",
             "numimages",
+            "related_series",
             "updated_at",
             "comic",
         ]

@@ -1,22 +1,21 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, FormEvent } from "react";
 import Link from "next/link";
 
 interface PageProps {
   handleSubmit: (
-    e: React.FormEvent<HTMLFormElement>,
+    e: FormEvent<HTMLFormElement>,
     email: string,
-    password: string,
-    remember: boolean
+    password: string
   ) => void;
 }
 
 const Formbar: React.FC<PageProps> = ({ handleSubmit }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [remember, setRemember] = useState(false);
+
   return (
-    <form onSubmit={(e) => handleSubmit(e, email, password, remember)}>
+    <form onSubmit={(e) => handleSubmit(e, email, password)}>
       <div className="mb-4 relative">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -83,61 +82,12 @@ const Formbar: React.FC<PageProps> = ({ handleSubmit }) => {
       <div className="flex items-center justify-between mb-4">
         <div>
           <div className="flex items-center">
-            {remember ? (
-              <button
-                type="button"
-                role="checkbox"
-                aria-checked="true"
-                data-state="checked"
-                onClick={() => setRemember(false)}
-                className="peer shrink-0 border ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground rounded border-gray-300 text-indigo-600 shadow-sm size-4 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              >
-                <span
-                  data-state="checked"
-                  className="flex items-center justify-center text-current"
-                  style={{ pointerEvents: "none" }}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="lucide lucide-check h-4 w-4"
-                  >
-                    <path d="M20 6 9 17l-5-5"></path>
-                  </svg>
-                </span>
-              </button>
-            ) : (
-              <button
-                type="button"
-                role="checkbox"
-                aria-checked="false"
-                data-state="unchecked"
-                onClick={() => setRemember(true)}
-                className="peer shrink-0 border ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground rounded border-gray-300 text-indigo-600 shadow-sm size-4 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              ></button>
-            )}
-
             <input
               type="checkbox"
               name="remember"
               aria-hidden="true"
               tabIndex={-1}
-              style={{
-                transform: "translateX(-100%)",
-                position: "absolute",
-                pointerEvents: "none",
-                opacity: "0",
-                margin: "0px",
-                width: "16px",
-                height: "16px",
-              }}
+              className="peer shrink-0 border ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 checked:bg-primary checked:text-primary-foreground rounded border-gray-300 text-indigo-600 shadow-sm size-4 focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             />
             <span className="ml-2 text-xs font-semibold pt-[-300px]">
               Remember me

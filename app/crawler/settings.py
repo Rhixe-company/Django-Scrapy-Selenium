@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 import django
-from django.conf import settings
+from django.conf import settings  # noqa: ERA001
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
 sys.path.append(os.path.join(BASE_DIR, "config"))  # noqa: PTH118
@@ -82,7 +82,7 @@ DOWNLOADER_MIDDLEWARES = {
     "crawler.middlewares.rotate.RotateUserAgentMiddleware": 540,
     "crawler.middlewares.retry.TooManyRequestsRetryMiddleware": 541,
     "crawler.middlewares.default.CrawlerDownloaderMiddleware": 543,
-    # "crawler.middlewares.main1.SeleniumMiddleware": 800,
+    # "crawler.middlewares.mymain.MyCustomMiddleware": 800,
 }
 
 
@@ -95,9 +95,9 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-    # "crawler.pipelines.download_images.MyImagesPipeline": 1,
-    # "crawler.pipelines.default.CrawlerDefaultPipeline": 200,
-    # "crawler.pipelines.db.DbPipeline": 300,
+    "crawler.pipelines.download_images.MyImagesPipeline": 1,
+    "crawler.pipelines.default.CrawlerDefaultPipeline": 200,
+    "crawler.pipelines.db.DbPipeline": 300,
     # "crawler.pipelines.redis.red.CrawlerRedisPipeline": 400,
 }
 
@@ -128,8 +128,8 @@ TWISTED_REACTOR = "twisted.internet.asyncioreactor.AsyncioSelectorReactor"
 
 FEED_EXPORT_ENCODING = "utf-8"
 # DOWNLOAD_HANDLERS = {  # noqa: ERA001, RUF100
-#     "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
-#     "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",
+#     "http": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",  # noqa: E501, ERA001
+#     "https": "scrapy_playwright.handler.ScrapyPlaywrightDownloadHandler",  # noqa: E501, ERA001
 # }  # noqa: ERA001, RUF100
 # FEEDS = {  # noqa: ERA001, RUF100
 #     "comics.json": {
@@ -139,24 +139,24 @@ FEED_EXPORT_ENCODING = "utf-8"
 #         "indent": 4,  # noqa: ERA001
 #     },
 # }  # noqa: ERA001, RUF100
-# FEEDS = {
-#     "comicsdata.json": {
-#         "format": "json",
-#         "encoding": "utf8",
-#         "store_empty": False,
-#         "item_classes": ["crawler.items.ComicItem"],
-#         "fields": None,
-#         "indent": 4,
-#     },
-#     "chaptersdata.json": {
-#         "format": "json",
-#         "encoding": "utf8",
-#         "store_empty": False,
-#         "item_classes": ["crawler.items.ChapterItem"],
-#         "fields": None,
-#         "indent": 4,
-#     },
-# }
+FEEDS = {
+    "comicsdata.json": {
+        "format": "json",
+        "encoding": "utf8",
+        "store_empty": False,
+        "item_classes": ["crawler.items.ComicItem"],
+        "fields": None,
+        "indent": 4,
+    },
+    "chaptersdata.json": {
+        "format": "json",
+        "encoding": "utf8",
+        "store_empty": False,
+        "item_classes": ["crawler.items.ChapterItem"],
+        "fields": None,
+        "indent": 4,
+    },
+}
 RETRY_TIMES = 2
 RETRY_ENABLED = True
 RETRY_HTTP_CODES = list(range(300, 501))
@@ -177,9 +177,23 @@ LOG_LEVEL = "DEBUG"
 # GCS_PROJECT_ID = "project_id"  # noqa: ERA001
 # IMAGES_STORE_GCS_ACL = "publicRead"  # noqa: ERA001
 
+# Aws
+AWS_ACCESS_KEY_ID = "ae187701acd22a77779ce3ebfa32e101"
+AWS_SECRET_ACCESS_KEY = "c92576a34dd08fbd5932efe0a32cf363f5a17c5af1da5ec4c390da815dab6962"  # noqa: E501, S105
+AWS_REGION_NAME =  "us-east-2"
+AWS_ENDPOINT_URL = "https://fowvdrdkbqhmevigbkyb.supabase.co/storage/v1/s3"
+IMAGES_STORE_S3_ACL = "bucket-owner-full-control"
+# IMAGES_STORE_S3_ACL = "public-read"
+# AWS_USE_SSL = False  # noqa: ERA001
+# AWS_VERIFY = False  # noqa: ERA001
+AWS_USE_SSL = True
+AWS_VERIFY = True
+IMAGES_STORE = "s3://mystore/media/"
 
-# LOCAL
-IMAGES_STORE = settings.MEDIA_ROOT
+
+
+# # LOCAL
+# IMAGES_STORE = settings.MEDIA_ROOT  # noqa: ERA001
 
 IMAGES_URLS_FIELD = "image_urls"
 IMAGES_RESULT_FIELD = "images"
@@ -225,7 +239,7 @@ MEDIA_ALLOW_REDIRECTS = True
 #     "--block-ads",
 #     "--enable-unsafe-swiftshader",
 # ]  # change it to ['-headless'] to run in headless mode
-# PLAYWRIGHT_PROCESS_REQUEST_HEADERS = None
+# PLAYWRIGHT_PROCESS_REQUEST_HEADERS = None  # noqa: ERA001
 # settings.py
 DOWNLOAD_HANDLERS = {
     "http": "crawler.handler.MyCustomHTTPHandler",

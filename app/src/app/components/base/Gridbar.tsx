@@ -33,7 +33,7 @@ export default async function Gridbar() {
             <div className="grid grid-rows-1 grid-cols-12 m-2">
               <div className="col-span-3">
                 <div className="w-[100%] h-32 relative">
-                  <Link href={`/series/${item.slug}`}>
+                  <Link href={`/comic/${item.slug}`}>
                     {item.images[0].image ? (
                       <Image
                         decoding="async"
@@ -60,7 +60,7 @@ export default async function Gridbar() {
               </div>
               <div className="col-span-9 space-y-1.5 overflow-hidden pl-[9px]">
                 <span className="text-[15px] font-medium hover:text-themecolor hover:cursor-pointer">
-                  <Link href={`/series/${item.slug}`}>{item.title}</Link>
+                  <Link href={`/comic/${item.slug}`}>{item.title}</Link>
                 </span>
                 <div className="flex flex-col gap-y-1.5 list-disc">
                   {item.chapters?.map((chapteritem) => (
@@ -71,7 +71,7 @@ export default async function Gridbar() {
                       <div className="flex flex-row justify-between rounded-sm">
                         <div className="flex text-sm text-[#999] font-medium hover:text-white">
                           <Link
-                            href={`/series/${item.slug}/chapter/${chapteritem.slug}`}
+                            href={`/comic/${item.slug}/chapter/${chapteritem.slug}`}
                             className=""
                           >
                             <span className="flex">

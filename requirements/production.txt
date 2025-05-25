@@ -12,3 +12,4 @@ psycopg[binary]
 django-storages[s3]==1.14.6  # https://github.com/jschneier/django-storages
 django-storages[google]==1.14.6  # https://github.com/jschneier/django-storages
 django-anymail==13.0  # https://github.com/anymail/django-anymail
+botocore >= 1.4.87

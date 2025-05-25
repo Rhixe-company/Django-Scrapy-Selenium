@@ -164,7 +164,7 @@ const CarouselItems = ({ comics }: { comics: Comics }) => {
                               <div className="ellipsis">
                                 <span>
                                   <Link
-                                    href={`/series/${comic.slug}`}
+                                    href={`/comic/${comic.slug}`}
                                     className="hover:text-[#f3d872]"
                                   >
                                     {comic.title}
@@ -180,7 +180,7 @@ const CarouselItems = ({ comics }: { comics: Comics }) => {
                               {comic.genres.slice(0, 4).map((genre) => (
                                 <Link
                                   key={genre.id}
-                                  href={`/series/page=1&genres=${genre.id}`}
+                                  href={`/series/${genre.name}`}
                                   className="text-white hover:text-themecolor cursor-pointer"
                                   style={{ marginBottom: "-10px" }}
                                 >
@@ -200,7 +200,7 @@ const CarouselItems = ({ comics }: { comics: Comics }) => {
                               {comic.genres.slice(0, 4).map((genre) => (
                                 <Link
                                   key={genre.id}
-                                  href={`/series/page=1&genres=${genre.id}`}
+                                  href={`/series/${genre.name}`}
                                   className="text-white hover:text-themecolor cursor-pointer"
                                   style={{ marginBottom: "-10px" }}
                                 >
@@ -223,7 +223,7 @@ const CarouselItems = ({ comics }: { comics: Comics }) => {
                             </span>
                           </div>
                           <div className="col-span-3">
-                            <Link href={`/series/${comic.slug}`}>
+                            <Link href={`/comic/${comic.slug}`}>
                               <div className="hidden sm:flex poster relative">
                                 {comic.images[0].image ? (
                                   <Image

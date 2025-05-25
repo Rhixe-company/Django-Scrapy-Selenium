@@ -16,7 +16,7 @@ export default async function Gridbar() {
         {/* <Griditem comics={comics} /> */}
         {comics?.results.map((comic) => (
           <Fragment key={comic.slug}>
-            <Link href={`/series/${comic.slug}`}>
+            <Link href={`/comic/${comic.slug}`}>
               <div className="w-full block sm:block hover:cursor-pointer group hover:text-themecolor">
                 <div>
                   <div className="flex h-[250px] md:h-[200px] overflow-hidden relative hover:opacity-60">

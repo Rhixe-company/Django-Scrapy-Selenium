@@ -24,15 +24,15 @@ class Asuracomic2Spider(Spider):
             logger.info(msg)
             yield Request(
                 url=url,
-                meta={
-                    "impersonate": "chrome124",
-                },
+                # meta={
+                #     "impersonate": "chrome124",
+                # },
                 callback=self.comicspage,
             )
 
     def comicspage(self, response):
         urls = [
-            f"https://asuracomic.net/series?page={i}&order=update" for i in range(2, 19)
+            f"https://asuracomic.net/series?page={i}&order=update" for i in range(2, 3)
         ]
         links = response.xpath(
             "//div[@class='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-3 p-4']/a/@href",  # noqa: E501
@@ -45,17 +45,17 @@ class Asuracomic2Spider(Spider):
                 )
                 msg = f"A New Page found at: {response.urljoin(link)}"
                 logger.info(msg)
-        if urls:
-            for url in urls:
-                msg = f"Page: {url}"
-                logger.info(msg)
-                yield Request(
-                    url=url,
-                    meta={
-                        "impersonate": "chrome124",
-                    },
-                    callback=self.comicspage,
-                )
+        # if urls:
+        #     for url in urls:
+        #         msg = f"Page: {url}"
+        #         logger.info(msg)
+        #         yield Request(
+        #             url=url,
+        #             # meta={
+        #             #     "impersonate": "chrome124",
+        #             # },
+        #             callback=self.comicspage,
+        #         )
 
     def comicpage(self, response):
         loader = ItemLoader(item=ComicItem(), selector=response)

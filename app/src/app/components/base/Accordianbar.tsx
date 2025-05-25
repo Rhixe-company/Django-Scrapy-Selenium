@@ -90,7 +90,7 @@ const Accordianbar = ({ comics }: { comics: ComicsSelect }) => {
                     </div>
                     <div className="flex overflow-hidden mt-0.5 mb-2.5 ml-[37px] mr-2 float-left max-w-[55px] h-[72px] max-h-[80px] rounded-[3px]">
                       <Link
-                        href={`/series/${item.slug}`}
+                        href={`/comic/${item.slug}`}
                         className="text-[13px] font-[500] text-[#fff] decoration-none overflow-hidden"
                       >
                         {item.images[0].image ? (
@@ -135,7 +135,7 @@ const Accordianbar = ({ comics }: { comics: ComicsSelect }) => {
                     <div className="w-full p-0 overflow-hidden">
                       <span className="block">
                         <Link
-                          href={`/series/${item.slug}`}
+                          href={`/comic/${item.slug}`}
                           className="overflow-hidden block leading-[1.2] text-[13px] md:text-[12px] xl:text-[13px] font-[500] text-[#fff] cursor-pointer hover:text-themecolor"
                         >
                           {item.title}
@@ -147,7 +147,7 @@ const Accordianbar = ({ comics }: { comics: ComicsSelect }) => {
                           {item.genres.slice(0, 3).map((genre) => (
                             <Link
                               key={genre.id}
-                              href={`/series/page=1&genres=${genre.id}`}
+                              href={`/series/${genre.name}`}
                               className="text-white hover:text-themecolor cursor-pointer"
                             >
                               {genre.name},
@@ -161,7 +161,7 @@ const Accordianbar = ({ comics }: { comics: ComicsSelect }) => {
                           {item.genres.slice(0, 2).map((genre) => (
                             <Link
                               key={genre.id}
-                              href={`/series/page=1&genres=${genre.id}`}
+                              href={`/series/${genre.name}`}
                               className="text-white hover:text-themecolor cursor-pointer"
                             >
                               {genre.name},
@@ -251,7 +251,7 @@ const Accordianbar = ({ comics }: { comics: ComicsSelect }) => {
                     </div>
                     <div className="flex overflow-hidden mt-0.5 mb-2.5 ml-[37px] mr-2 float-left max-w-[55px] h-[72px] max-h-[80px] rounded-[3px]">
                       <Link
-                        href={`/series/${item.slug}`}
+                        href={`/comic/${item.slug}`}
                         className="text-[13px] font-[500] text-[#fff] decoration-none overflow-hidden"
                       >
                         {item.images[0].image ? (
@@ -296,7 +296,7 @@ const Accordianbar = ({ comics }: { comics: ComicsSelect }) => {
                     <div className="w-full p-0 overflow-hidden">
                       <span className="block">
                         <Link
-                          href={`/series/${item.slug}`}
+                          href={`/comic/${item.slug}`}
                           className="overflow-hidden block leading-[1.2] text-[13px] md:text-[12px] xl:text-[13px] font-[500] text-[#fff] cursor-pointer hover:text-themecolor"
                         >
                           {item.title}
@@ -308,7 +308,7 @@ const Accordianbar = ({ comics }: { comics: ComicsSelect }) => {
                           {item.genres.slice(0, 3).map((genre) => (
                             <Link
                               key={genre.id}
-                              href={`/series/page=1&genres=${genre.id}`}
+                              href={`/series/${genre.name}`}
                               className="text-white hover:text-themecolor cursor-pointer"
                             >
                               {genre.name},
@@ -322,7 +322,7 @@ const Accordianbar = ({ comics }: { comics: ComicsSelect }) => {
                           {item.genres.slice(0, 2).map((genre) => (
                             <Link
                               key={genre.id}
-                              href={`/series/page=1&genres=${genre.id}`}
+                              href={`/series/${genre.name}`}
                               className="text-white hover:text-themecolor cursor-pointer"
                             >
                               {genre.name},
@@ -412,7 +412,7 @@ const Accordianbar = ({ comics }: { comics: ComicsSelect }) => {
                     </div>
                     <div className="flex overflow-hidden mt-0.5 mb-2.5 ml-[37px] mr-2 float-left max-w-[55px] h-[72px] max-h-[80px] rounded-[3px]">
                       <Link
-                        href={`/series/${item.slug}`}
+                        href={`/comic/${item.slug}`}
                         className="text-[13px] font-[500] text-[#fff] decoration-none overflow-hidden"
                       >
                         {item.images[0].image ? (
@@ -457,7 +457,7 @@ const Accordianbar = ({ comics }: { comics: ComicsSelect }) => {
                     <div className="w-full p-0 overflow-hidden">
                       <span className="block">
                         <Link
-                          href={`/series/${item.slug}`}
+                          href={`/comic/${item.slug}`}
                           className="overflow-hidden block leading-[1.2] text-[13px] md:text-[12px] xl:text-[13px] font-[500] text-[#fff] cursor-pointer hover:text-themecolor"
                         >
                           {item.title}
@@ -469,7 +469,7 @@ const Accordianbar = ({ comics }: { comics: ComicsSelect }) => {
                           {item.genres.slice(0, 3).map((genre) => (
                             <Link
                               key={genre.id}
-                              href={`/series/page=1&genres=${genre.id}`}
+                              href={`/series/${genre.name}`}
                               className="text-white hover:text-themecolor cursor-pointer"
                             >
                               {genre.name},
@@ -483,7 +483,7 @@ const Accordianbar = ({ comics }: { comics: ComicsSelect }) => {
                           {item.genres.slice(0, 2).map((genre) => (
                             <Link
                               key={genre.id}
-                              href={`/series/page=1&genres=${genre.id}`}
+                              href={`/series/${genre.name}`}
                               className="text-white hover:text-themecolor cursor-pointer"
                             >
                               {genre.name},

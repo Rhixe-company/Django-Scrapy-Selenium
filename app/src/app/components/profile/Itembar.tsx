@@ -1,9 +1,9 @@
 import React from "react";
-
-export default function Itembar() {
+import type { User } from "@/models/users";
+export default function Itembar({ user }: { user: User }) {
   return (
     <div>
-      <h2>profile</h2>
+      <h2>profile {user.email}</h2>
     </div>
   );
 }

@@ -24,6 +24,7 @@ class CustomeBoundField(forms.BoundField):
 class UserAdminChangeForm(admin_forms.UserChangeForm):
     class Meta(admin_forms.UserChangeForm.Meta):  # type: ignore[name-defined]
         model = User
+        fields = ("email", "username", "first_name", "last_name", "image","full_name")
         field_classes = {"email": EmailField}
 
 
@@ -122,34 +123,34 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ("email", "username", "first_name", "last_name", "image")
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields["email"].widget.attrs.update(
-            {
-                "placeholder": _("Email"),
-                "class": "custom_text",
-            },
-        )
-        self.fields["username"].widget.attrs.update(
-            {
-                "placeholder": _("UserName"),
-                "class": "custom_text",
-            },
-        )
-        self.fields["first_name"].widget.attrs.update(
-            {
-                "placeholder": _("FirstName"),
-                "class": "custom_text",
-            },
-        )
-        self.fields["last_name"].widget.attrs.update(
-            {
-                "placeholder": _("LastName"),
-                "class": "custom_text",
-            },
-        )
-        self.fields["image"].widget.attrs.update(
-            {
-                "class": "custom_file",
-            },
-        )
+    # def __init__(self, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.fields["email"].widget.attrs.update(
+    #         {
+    #             "placeholder": _("Email"),
+    #             "class": "custom_text",
+    #         },
+    #     )
+    #     self.fields["username"].widget.attrs.update(
+    #         {
+    #             "placeholder": _("UserName"),
+    #             "class": "custom_text",
+    #         },
+    #     )
+    #     self.fields["first_name"].widget.attrs.update(
+    #         {
+    #             "placeholder": _("FirstName"),
+    #             "class": "custom_text",
+    #         },
+    #     )
+    #     self.fields["last_name"].widget.attrs.update(
+    #         {
+    #             "placeholder": _("LastName"),
+    #             "class": "custom_text",
+    #         },
+    #     )
+    #     self.fields["image"].widget.attrs.update(
+    #         {
+    #             "class": "custom_file",
+    #         },
+    #     )

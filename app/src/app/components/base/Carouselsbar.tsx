@@ -21,7 +21,7 @@ export default async function Carouselsbar() {
             key={item.slug}
             className="relative cursor-pointer h-[280px] ml-2.5"
           >
-            <Link href={`/series/${item.slug}`}>
+            <Link href={`/comic/${item.slug}`}>
               <Image
                 decoding="async"
                 loading="eager"

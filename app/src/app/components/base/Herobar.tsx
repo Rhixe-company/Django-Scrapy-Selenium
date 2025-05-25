@@ -25,7 +25,7 @@ export default async function Herobar() {
             key={item.slug}
             className="w-1/2 xs:w-1/2 sm:w-1/4 p-1.5 hover:cursor-pointer group hover:text-themecolor"
           >
-            <Link href={`/series/${item.slug}`}>
+            <Link href={`/comic/${item.slug}`}>
               <div>
                 <div className="flex h-[250px] md:h-[200px] overflow-hidden relative hover:opacity-60">
                   {item.images[0].image ? (
@@ -93,7 +93,7 @@ export default async function Herobar() {
             key={item.slug}
             className="w-1/2 xs:w-1/3 sm:w-1/5 p-1.5 hover:cursor-pointer group hover:text-themecolor"
           >
-            <Link href={`/series/${item.slug}`}>
+            <Link href={`/comic/${item.slug}`}>
               <div>
                 <div className="flex h-[250px] md:h-[200px] overflow-hidden relative hover:opacity-60">
                   {item.images[0].image ? (

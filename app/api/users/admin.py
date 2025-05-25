@@ -20,8 +20,8 @@ from unfold.forms import AdminPasswordChangeForm
 from api.users.admin_helpers import CustomDropdownFilter
 from api.users.admin_helpers import CustomTextFilter
 from api.users.admin_helpers import UnfoldPeriodicTaskForm
-from api.users.forms import UserAdminChangeForm
 from api.users.forms import UserAdminCreationForm
+from api.users.forms import UserForm
 from api.users.models import User
 
 admin.site.index_title = "Welcome to the Rhixescans admin area"
@@ -89,7 +89,7 @@ class UserAdminClass(ModelAdmin, ImportExportModelAdmin, auth_admin.UserAdmin):
     actions_detail = []  # Displayed at the top of for in object detail
     actions_submit_line = []  # Displayed near save in object detail
     actions = []
-    form = UserAdminChangeForm
+    form = UserForm
     add_form = UserAdminCreationForm
     change_password_form = AdminPasswordChangeForm
     import_form_class = ImportForm

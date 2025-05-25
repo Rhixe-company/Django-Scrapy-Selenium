@@ -1,8 +1,5 @@
 "use client";
-import Navbar from "@/app/components/base/Navbar";
-import Scrollbar from "@/app/components/base/Scrollbar";
-import Footerbar from "@/app/components/base/Footerbar";
-import { Fragment } from "react";
+
 import Formbar from "@/app/components/signup/Formbar";
 import Image from "next/image";
 import Link from "next/link";
@@ -32,8 +29,7 @@ export default function Register() {
     }
   };
   return (
-    <Fragment>
-      <Navbar />
+    <div className="lg:my-0 relative max-[786px]:p-0 max-[882px]:p-4 min[925px]:p-0">
       <div className="flex justify-center h-full sm:mt-6 xl:mt-[-15px]">
         <div className="bg-[#222222] p-8 rounded-lg shadow-md w-full md:w-[500px]">
           <div className="flex justify-center mb-1">
@@ -85,8 +81,6 @@ export default function Register() {
           </div>
         </div>
       </div>
-      <Scrollbar />
-      <Footerbar />
-    </Fragment>
+    </div>
   );
 }

@@ -1,18 +1,19 @@
 import os
-import warnings
 from contextlib import suppress
 from io import BytesIO
 
 from itemadapter import ItemAdapter
+from PIL import Image
 from scrapy.exceptions import DropItem
-from scrapy.exceptions import ScrapyDeprecationWarning
 from scrapy.http import Request
 from scrapy.http.request import NO_CALLBACK
+from scrapy.pipelines.files import _md5sum
 from scrapy.pipelines.images import ImagesPipeline
-from scrapy.utils.misc import md5sum
 
 
 class MyImagesPipeline(ImagesPipeline):
+
+
     def check_gif(self, image):
         if image.format == "GIF":
             return True
@@ -30,7 +31,7 @@ class MyImagesPipeline(ImagesPipeline):
         adapter = ItemAdapter(item)
         if adapter.get("image_urls"):
             if adapter.get("image_urls") and adapter.get("slug"):
-                checksum = None
+                checksum: str | None = None
                 for path, image, buf in self.get_images(
                     response,
                     request,
@@ -39,9 +40,9 @@ class MyImagesPipeline(ImagesPipeline):
                 ):
                     if checksum is None:
                         buf.seek(0)
-                        checksum = md5sum(buf)
+                        checksum = _md5sum(buf)
                     width, height = image.size
-                    newformat = image.format
+
                     if path.startswith(adapter.get("slug")) and self.check_gif(image):  # type: ignore  # noqa: PGH003
                         self.persist_gif(path, response.body, info)
                     else:
@@ -50,8 +51,9 @@ class MyImagesPipeline(ImagesPipeline):
                             buf,
                             info,
                             meta={"width": width, "height": height},
-                            headers={"Content-Type": f"image/{newformat}"},  # type: ignore  # noqa: PGH003
+                            headers={"Content-Type": "image/jpeg"},  # type: ignore  # noqa: PGH003
                         )
+                assert checksum is not None
                 return checksum
             if (
                 adapter.get("image_urls")
@@ -67,9 +69,9 @@ class MyImagesPipeline(ImagesPipeline):
                 ):
                     if checksum is None:
                         buf.seek(0)
-                        checksum = md5sum(buf)
+                        checksum = _md5sum(buf)
                     width, height = image.size
-                    newformat = image.format
+
                     if path.startswith(adapter.get("comicslug")) and self.check_gif(  # type: ignore  # noqa: PGH003
                         image,
                     ):
@@ -80,22 +82,21 @@ class MyImagesPipeline(ImagesPipeline):
                             buf,
                             info,
                             meta={"width": width, "height": height},
-                            headers={"Content-Type": f"image/{newformat}"},  # type: ignore  # noqa: PGH003
+                            headers={"Content-Type": "image/jpeg"},  # type: ignore  # noqa: PGH003
                         )
+                assert checksum is not None
                 return checksum
         msg = f"Missing field in MyImagesPipeline get_media_requests: {item!r}"
         raise DropItem(msg)
 
-    def convert_image(self, image, size=None, response_body=None):
-        if response_body is None:
-            warnings.warn(
-                f"{self.__class__.__name__}.convert_image() method called in a deprecated way, "  # noqa: E501
-                "method called without response_body argument.",
-                category=ScrapyDeprecationWarning,
-                stacklevel=2,
-            )
-        newformat = image.format
-        if newformat in ("PNG", "WEBP") and image.mode == "RGBA":
+    def convert_image(
+        self,
+        image: Image.Image,
+        size: tuple[int, int] | None = None,
+        *,
+        response_body: BytesIO,
+    ) -> tuple[Image.Image, BytesIO]:
+        if image.format in ("PNG", "WEBP") and image.mode == "RGBA":
             background = self._Image.new("RGBA", image.size, (255, 255, 255))
             background.paste(image, image)
             image = background.convert("RGB")
@@ -115,13 +116,13 @@ class MyImagesPipeline(ImagesPipeline):
                 # when updating the minimum requirements for Pillow.
                 resampling_filter = self._Image.Resampling.LANCZOS
             except AttributeError:
-                resampling_filter = self._Image.ANTIALIAS  # type: ignore  # noqa: PGH003
+                resampling_filter = self._Image.ANTIALIAS  # type: ignore[attr-defined]
             image.thumbnail(size, resampling_filter)
-        elif response_body is not None and newformat in ("PNG", "WEBP", "JPEG", "GIF"):
+        elif image.format == "JPEG":
             return image, response_body
 
         buf = BytesIO()
-        image.save(buf, f"{newformat}")
+        image.save(buf, "JPEG")
         return image, buf
 
     def get_media_requests(self, item, info):
@@ -134,7 +135,7 @@ class MyImagesPipeline(ImagesPipeline):
                         u,
                         callback=NO_CALLBACK,
                         meta={
-                            # "impersonate": "chrome124",
+
                             "comicslug": item.get("slug"),
                         },
                     )
@@ -150,7 +151,7 @@ class MyImagesPipeline(ImagesPipeline):
                         u,
                         callback=NO_CALLBACK,
                         meta={
-                            # "impersonate": "chrome124",
+
                             "comicslug": item.get("comicslug"),
                             "chapterslug": item.get("chapterslug"),
                         },
