@@ -1,3 +1,4 @@
+/* eslint-disable react/no-unescaped-entities */
 import { TutorialStep } from "./tutorial-step";
 
 export default function ConnectSupabaseSteps() {
