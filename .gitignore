@@ -1234,6 +1234,7 @@ FodyWeavers.xsd
 wheels/
 docker_data/
 public/
+public-bak/
 app/comicsdata.json
 app/comicsdata1.json
 app/chaptersdata.json
