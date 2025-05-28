@@ -67,17 +67,19 @@ twisted-iocpsupport
 wheel
 # django-dynamic-datatb
 # webdriver-manager
-# extruct
-# pydantic
+extruct
+pydantic
 typing
 # selenium-wire
 blinker==1.7.0
 # selenium-stealth
 # selenium-driverless
 # asynciolimiter
-# scrapy-playwright
+scrapy-playwright
 djangorestframework-simplejwt[crypto]
-# nodriver
+nodriver
 dj-rest-auth[with_social]
 # scrapy-nodriver
 supabase
+
+

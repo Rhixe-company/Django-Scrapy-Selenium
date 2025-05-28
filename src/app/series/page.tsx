@@ -1,5 +1,3 @@
-import type { ComicType } from "@/types/ComicType";
-import Link from "next/link";
 export const revalidate = 0;
 
 export default async function Page() {
@@ -7,6 +5,7 @@ export default async function Page() {
     cache: "no-cache",
   });
   const comics = await response.json();
+
   if (comics) {
     return (
       <>
@@ -17,32 +16,18 @@ export default async function Page() {
                 <h3 className="text-[15px] text-white font-semibold leading-5 m-0">
                   Comics list
                 </h3>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Title</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {comics.map((item: ComicType) => (
-                      <tr key={item.slug}>
-                        <td>{item.title}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
+              </div>
+              <div>
+                <pre>{JSON.stringify(comics, null, 2)}</pre>
               </div>
             </div>
           </div>
           <div className="w-[100%] min-[882px]:w-[30%] max-[600px]:w-[100%] float-right">
             <div className="lg:ml-[15px] min-[855px]:mr-3 lg:mr-0 bg-[#222] rounded-[3px] mb-[18px]">
               <div className="relative flex justify-between align-baseline font-500 bg-[#222222] border-b-[1px] border-[#312f40] px-[15px] py-[8px]">
-                <Link
-                  href="/comics/add"
-                  className="text-[15px] text-white font-semibold leading-5 m-0"
-                >
-                  Add New Comic
-                </Link>
+                <h3 className="text-[15px] text-white font-semibold leading-5 m-0">
+                  Comic Functions
+                </h3>
               </div>
             </div>
           </div>
