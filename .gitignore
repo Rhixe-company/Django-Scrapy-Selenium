@@ -69,7 +69,6 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
 lib64/
 parts/
 sdist/
@@ -747,7 +746,6 @@ pip-selfcheck.json
 *.vbw
 *.csi
 *.exp
-*.lib
 *.lvw
 *.dca
 *.scc
