@@ -1,5 +1,5 @@
 export interface ChapterType {
-  id: number;
+  id: string;
   name: string;
   title?: string;
   slug: string;
@@ -10,7 +10,7 @@ export interface ChapterType {
 }
 
 interface Comic {
-  id: number;
+  id: string;
   title: string;
   slug: string;
   description: string;
@@ -24,7 +24,7 @@ interface Comic {
 }
 
 export interface ChapterImageType {
-  id: number;
+  id: string;
   link: string;
   image?: string;
   status?: string;

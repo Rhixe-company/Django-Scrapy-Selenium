@@ -15,19 +15,17 @@ export default async function page({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const supabase = await createClient();
-
-  const { data: comic } = await supabase
-    .from("Comic")
-    .select()
-    .match({ slug })
-    .single();
-  if (!comic) {
+  const response = await fetch(`http://localhost:3000/api/comics/${slug}`, {
+    cache: "no-cache",
+  });
+  const item = await response.json();
+  if (!item) {
     notFound();
   }
+
   return (
     <>
-      <Header item={comic} />
+      <Header item={item} />
     </>
   );
 }

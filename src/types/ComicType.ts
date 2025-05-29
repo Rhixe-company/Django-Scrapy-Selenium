@@ -1,5 +1,5 @@
 export interface ComicType {
-  id: number;
+  id: string;
   title: string;
   slug: string;
   description: string;
@@ -22,11 +22,11 @@ interface Genres {
 
 interface Category {
   name: string;
-  id: number;
+  id: string;
 }
 
 export interface ComicImageType {
-  id: number;
+  id: string;
   link: string;
   image?: string;
   status?: string;

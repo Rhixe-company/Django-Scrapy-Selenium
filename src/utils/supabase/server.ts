@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import type { Database } from "@/utils/database.types";
 import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
-
 export const createClient = async () => {
   const cookieStore = await cookies();
 
-  return createServerClient(
+  return createServerClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
     {
@@ -25,6 +25,6 @@ export const createClient = async () => {
           }
         },
       },
-    },
+    }
   );
 };

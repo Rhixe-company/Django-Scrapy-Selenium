@@ -1,7 +1,9 @@
+import uuid
 from typing import ClassVar
 
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.db.models import UUIDField
 
 # from django.db.models import Q  # noqa: ERA001
 from django.urls import reverse
@@ -57,6 +59,7 @@ def comic_image_location(instance, filename):
 
 
 class Genre(models.Model):
+    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200, unique=True)
 
     class Meta:
@@ -71,6 +74,7 @@ class Genre(models.Model):
 
 
 class Author(models.Model):
+    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200, blank=True, null=True, unique=True)
 
     class Meta:
@@ -85,6 +89,7 @@ class Author(models.Model):
 
 
 class Artist(models.Model):
+    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200, blank=True, null=True, unique=True)
 
     class Meta:
@@ -99,6 +104,7 @@ class Artist(models.Model):
 
 
 class Category(models.Model):
+    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200, unique=True)
 
     class Meta:
@@ -113,6 +119,7 @@ class Category(models.Model):
 
 
 class Website(models.Model):
+    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=200)
 
     class Meta:
@@ -130,6 +137,7 @@ class Website(models.Model):
 
 
 class Comic(StandardMetadata):
+    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     title = models.CharField(_("Title"), max_length=5000, unique=True)
     slug = models.SlugField(_("Slug"), max_length=5000, blank=True, unique=True)
     description = CKEditor5Field("Description", config_name="extends")
@@ -238,6 +246,7 @@ class Comic(StandardMetadata):
 
 
 class Chapter(StandardMetadata):
+    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     website = models.ForeignKey(
         Website,
         on_delete=models.CASCADE,
@@ -299,6 +308,7 @@ class Chapter(StandardMetadata):
 
 
 class UserComic(models.Model):
+    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="usercomics")
     comic = models.ForeignKey(
         Comic,
@@ -315,6 +325,7 @@ class UserComic(models.Model):
 
 
 class ComicImage(StandardMetadata):
+    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     link = models.URLField(
         default="",
     )
@@ -358,6 +369,7 @@ class ComicImage(StandardMetadata):
 
 
 class ChapterImage(StandardMetadata):
+    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     link = models.URLField(
         default="",
     )
@@ -406,6 +418,7 @@ class ChapterImage(StandardMetadata):
 
 
 class Comment(StandardMetadata):
+    id = UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     text = CKEditor5Field("Text", config_name="extends")
     chapter = models.ForeignKey(
         Chapter,

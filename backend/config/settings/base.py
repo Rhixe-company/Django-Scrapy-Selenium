@@ -85,7 +85,7 @@ THIRD_PARTY_APPS = [
     "crispy_tailwind",
     "allauth",
     "allauth.account",
-    "allauth.mfa",
+    # "allauth.mfa",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
     "django_celery_beat",
@@ -383,9 +383,9 @@ SOCIALACCOUNT_ADAPTER = "api.users.adapters.SocialAccountAdapter"
 SOCIALACCOUNT_FORMS = {
     "signup": "api.users.forms.UserSocialSignupForm",
 }
-ACCOUNT_LOGIN_BY_CODE_ENABLED = True
-MFA_SUPPORTED_TYPES = ["totp", "webauthn", "recovery_codes"]
-MFA_PASSKEY_LOGIN_ENABLED = True
+# ACCOUNT_LOGIN_BY_CODE_ENABLED = True
+# MFA_SUPPORTED_TYPES = ["totp", "webauthn", "recovery_codes"]
+# MFA_PASSKEY_LOGIN_ENABLED = True
 SOCIALACCOUNT_PROVIDERS = {
     "google": {
         "APP": {

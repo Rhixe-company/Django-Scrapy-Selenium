@@ -12,22 +12,19 @@ export async function generateStaticParams() {
 export default async function page({
   params,
 }: {
-  params: Promise<{ chapterslug: string }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { chapterslug: slug } = await params;
-  const supabase = await createClient();
-
-  const { data: chapter } = await supabase
-    .from("Chapter")
-    .select()
-    .match({ slug })
-    .single();
-  if (!chapter) {
+  const { slug } = await params;
+  const response = await fetch(`http://localhost:3000/api/chapters/${slug}`, {
+    cache: "no-cache",
+  });
+  const item = await response.json();
+  if (!item) {
     notFound();
   }
   return (
     <>
-      <Header item={chapter} />
+      <Header item={item} />
     </>
   );
 }

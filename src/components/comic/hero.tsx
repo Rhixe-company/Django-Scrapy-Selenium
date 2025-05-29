@@ -1,31 +1,14 @@
-import { createClient } from "@/utils/supabase/client";
-export default async function Header({
-  item,
-}: {
-  item: {
-    id: number;
-    title: string;
-    slug: string;
-    description: string;
-    rating: number;
-    numchapters: number;
-    numimages: number;
-    updated_at: Date;
-    serialization: string;
-    status: string;
-    link: string;
-    category: number;
-    author: number;
-    artist: number;
-    genres: [string];
-  };
-}) {
-  const id = item.id;
-  const supabase = await createClient();
-  const { data: images } = await supabase
-    .from("ComicImage")
-    .select()
-    .eq("comic", id);
+import type { ComicType } from "@/types/ComicType";
+
+export default async function Header({ item }: { item: ComicType }) {
+  const comic = item.slug;
+  const response = await fetch(
+    `http://localhost:3000/api/comicimages/${comic}`,
+    {
+      cache: "no-cache",
+    }
+  );
+  const images = await response.json();
 
   return (
     <div className="lg:my-0 relative max-[786px]:p-0 max-[882px]:p-4 min[925px]:p-0 ">
