@@ -4,15 +4,15 @@ import { notFound } from "next/navigation";
 export default async function Page({
   params,
 }: {
-  params: Promise<{ id: number }>;
+  params: Promise<{ slug: string }>;
 }) {
-  const { id } = await params;
+  const { slug } = await params;
   const supabase = await createClient();
 
   const { data: chapter } = await supabase
     .from("Chapter")
     .select()
-    .match({ id })
+    .match({ slug })
     .single();
   if (!chapter) {
     notFound();

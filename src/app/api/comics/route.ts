@@ -10,12 +10,12 @@ export async function GET(request: Request) {
     .match({ status: "ongoing" });
   return NextResponse.json(comics);
 }
-export async function POST(request: Request) {
-  const { title } = await request.json();
-  const supabase = await createClient();
-  const { data: comic } = await supabase.from("Comic").insert({ title });
-  return NextResponse.json(comic);
-}
+// export async function POST(request: Request) {
+//   const { title } = await request.json();
+//   const supabase = await createClient();
+//   const { data: comic } = await supabase.from("Comic").insert({ title });
+//   return NextResponse.json(comic);
+// }
 export async function PUT(request: Request) {
   const { id } = await request.json();
   const { title } = await request.json();

@@ -7,9 +7,9 @@ export async function GET(request: Request) {
   const { data: chapters } = await supabase.from("Chapter").select();
   return NextResponse.json(chapters);
 }
-export async function POST(request: Request) {
-  const { name } = await request.json();
-  const supabase = await createClient();
-  const { data: chapter } = await supabase.from("Chapter").insert({ name });
-  return NextResponse.json(chapter);
-}
+// export async function POST(request: Request) {
+//   const { name } = await request.json();
+//   const supabase = await createClient();
+//   const { data: chapter } = await supabase.from("Chapter").insert({ name });
+//   return NextResponse.json(chapter);
+// }

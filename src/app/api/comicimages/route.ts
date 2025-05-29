@@ -7,9 +7,9 @@ export async function GET(request: Request) {
   const { data: images } = await supabase.from("ComicImage").select();
   return NextResponse.json(images);
 }
-export async function POST(request: Request) {
-  const { link } = await request.json();
-  const supabase = await createClient();
-  const { data: image } = await supabase.from("ComicImage").insert({ link });
-  return NextResponse.json(image);
-}
+// export async function POST(request: Request) {
+//   const { link } = await request.json();
+//   const supabase = await createClient();
+//   const { data: image } = await supabase.from("ComicImage").insert({ link });
+//   return NextResponse.json(image);
+// }

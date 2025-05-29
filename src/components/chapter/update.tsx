@@ -13,7 +13,7 @@ export default function UpdateChapter({ item }: { item: ChapterType }) {
 
     await fetch("http://localhost:3000/api/chapters", {
       method: "post",
-      body: JSON.stringify({ name: name, id: item.id }),
+      body: JSON.stringify({ name: name, slug: item.slug }),
     });
     router.refresh();
   };
