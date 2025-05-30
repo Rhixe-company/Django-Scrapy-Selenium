@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 class Command(BaseCommand):
     help = "Generates comics for apps"
 
-    def handle(self, *args, **options):  # noqa: C901, PLR0915
+    def handle(self, *args, **options):  # noqa: PLR0915
         def save_comics():  # noqa: PLR0915
             # save the data to a CSV file
             base = settings.BASE_DIR
@@ -43,48 +43,30 @@ class Command(BaseCommand):
             comicimages = ComicImage.objects.all()
 
             for comic in comics:
-                genres = comic.genres.all()
-                if genres:
-                    item = {
-                        "title": comic.title,
-                        "slug": comic.slug,
-                        "description": comic.description,
-                        "rating": comic.rating,
-                        "numchapters": comic.numchapters,
-                        "numimages": comic.numimages,
-                        "updated_at": comic.updated_at,
-                        "serialization": comic.serialization,
-                        "status": comic.status,
-                        "link": comic.link,
-                        "category": comic.category.name,
-                        "author": comic.author.name,
-                        "artist": comic.artist.name,
-                        "genres": [genre.name for genre in genres],
-                    }
-                else:
-                    item = {
-                        "title": comic.title,
-                        "slug": comic.slug,
-                        "description": comic.description,
-                        "rating": comic.rating,
-                        "numchapters": comic.numchapters,
-                        "numimages": comic.numimages,
-                        "updated_at": comic.updated_at,
-                        "serialization": comic.serialization,
-                        "status": comic.status,
-                        "link": comic.link,
-                        "category": comic.category.name,
-                        "author": comic.author.name,
-                        "artist": comic.artist.name,
-                        "genres": ["_"],
-                    }
+
+                item = {
+                    "title": comic.title,
+                    "slug": comic.slug,
+                    "description": comic.description,
+                    "rating": comic.rating,
+                    "numchapters": comic.numchapters,
+                    "numimages": comic.numimages,
+                    "updated_at": comic.updated_at,
+                    "serialization": comic.serialization,
+                    "status": comic.status,
+                    "link": comic.link,
+                    "category": comic.category.name,
+                    "author": comic.author.name,
+                    "artist": comic.artist.name,
+                    "genres": [genre.name for genre in comic.genres.all()],
+                }
 
                 mycomics_data.append(item)
 
             for comicimage in comicimages:
 
                 item = {
-                    "image": comicimage.image,
+                    "image": comicimage.image.url,
                     "checksum": comicimage.checksum,
                     "link": comicimage.link,
                     "comic": comicimage.comic.slug,
@@ -186,7 +168,7 @@ class Command(BaseCommand):
             for chapterimage in chapterimages:
 
                 item = {
-                    "image": chapterimage.image,
+                    "image": chapterimage.image.url,
                     "checksum": chapterimage.checksum,
                     "link": chapterimage.link,
                     "chapter": chapterimage.chapter.slug,

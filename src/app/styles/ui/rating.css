@@ -341,3 +341,9 @@
   --rr--fill-on-color: #ffc700;
   --rr--fill-off-color: #686868;
 }
+
+.myrr1 {
+  max-width: 103px;
+  --rr--fill-on-color: #ffc700;
+  --rr--fill-off-color: #686868;
+}

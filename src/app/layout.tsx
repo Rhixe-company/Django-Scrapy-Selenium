@@ -4,16 +4,6 @@ import { Fira_Sans } from "next/font/google";
 
 import "./styles/globals.css";
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
-
-export const metadata = {
-  metadataBase: new URL(defaultUrl),
-  title: "Rhixescans",
-  description: "The fastest way to build apps with Next.js and Supabase",
-};
-
 const fira_SansSans = Fira_Sans({
   display: "swap",
   subsets: ["latin"],

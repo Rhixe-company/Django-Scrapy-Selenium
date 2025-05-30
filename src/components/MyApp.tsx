@@ -1,13 +1,19 @@
 import Footerbar from "@/components/base/Footerbar";
 import Navbar from "@/components/base/Navbar";
 import Scrollbar from "@/components/base/Scrollbar";
+import { createClient } from "@/utils/supabase/server";
 import { ThemeProvider } from "next-themes";
 import React from "react";
-export default function MyApp({
+export default async function MyApp({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const supabase = await createClient();
+
+  const user = await supabase.auth.getUser();
+  const myuser: any = user.data.user;
+
   return (
     <ThemeProvider
       attribute="class"
@@ -15,7 +21,7 @@ export default function MyApp({
       enableSystem
       disableTransitionOnChange
     >
-      <Navbar />
+      <Navbar user={myuser} />
       <div className="max-w-[1220px] pt-2 overflow-hidden m-auto relative pb-[9rem]">
         <div className="w-[100%]">
           <div className="lg:my-0 relative max-[786px]:p-0 max-[882px]:p-4 min[925px]:p-0">

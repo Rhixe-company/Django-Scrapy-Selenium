@@ -5,17 +5,17 @@ import Image from "next/image";
 import Link from "next/link";
 export default async function Griditem({ item }: { item: ComicType }) {
   const response = await fetch(
-    `http://localhost:3000/api/comicimages/${item.slug}`,
-    {
-      cache: "no-cache",
-    }
+    `http://localhost:3000/api/comicimages/${item.slug}`
+    // {
+    //   cache: "no-cache",
+    // }
   );
   const images = await response.json();
   const response1 = await fetch(
-    `http://localhost:3000/api/chapter/${item.slug}`,
-    {
-      cache: "no-cache",
-    }
+    `http://localhost:3000/api/chapter/${item.slug}`
+    // {
+    //   cache: "no-cache",
+    // }
   );
   const chapters = await response1.json();
 

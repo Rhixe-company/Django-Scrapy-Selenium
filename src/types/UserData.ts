@@ -1,0 +1,42 @@
+export const User = {
+  id: "d67afd56-a5d1-4366-9fcc-efd38f0b3875",
+  aud: "authenticated",
+  role: "authenticated",
+  email: "",
+  email_confirmed_at: "2025-05-26T07:39:33.48454Z",
+  phone: "",
+  confirmation_sent_at: "2025-05-26T07:38:26.83334Z",
+  confirmed_at: "2025-05-26T07:39:33.48454Z",
+  last_sign_in_at: "2025-05-30T12:32:07.391519Z",
+  app_metadata: {
+    provider: "email",
+    providers: ["email"],
+  },
+  user_metadata: {
+    email: "alexanderrhixe30@gmail.com",
+    email_verified: true,
+    phone_verified: false,
+    sub: "d67afd56-a5d1-4366-9fcc-efd38f0b3875",
+  },
+  identities: [
+    {
+      identity_id: "056fface-3e8b-4044-9404-ee4fa2fe9936",
+      id: "d67afd56-a5d1-4366-9fcc-efd38f0b3875",
+      user_id: "d67afd56-a5d1-4366-9fcc-efd38f0b3875",
+      identity_data: {
+        email: "alexanderrhixe30@gmail.com",
+        email_verified: true,
+        phone_verified: false,
+        sub: "d67afd56-a5d1-4366-9fcc-efd38f0b3875",
+      },
+      provider: "email",
+      last_sign_in_at: "2025-05-26T07:38:26.830237Z",
+      created_at: "2025-05-26T07:38:26.830283Z",
+      updated_at: "2025-05-26T07:38:26.830283Z",
+      email: "alexanderrhixe30@gmail.com",
+    },
+  ],
+  created_at: "2025-05-26T07:38:26.827333Z",
+  updated_at: "2025-05-30T12:32:07.395189Z",
+  is_anonymous: false,
+};
