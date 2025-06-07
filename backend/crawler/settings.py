@@ -242,4 +242,5 @@ MEDIA_ALLOW_REDIRECTS = True
 # settings.py
 DOWNLOAD_HANDLERS = {
     "http": "crawler.handlers.play.handler.ScrapyPlaywrightDownloadHandler",
+    "https": "crawler.handlers.play.handler.ScrapyPlaywrightDownloadHandler",
 }

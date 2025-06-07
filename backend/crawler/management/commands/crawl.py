@@ -6,13 +6,13 @@ from scrapy.utils.log import configure_logging
 from scrapy.utils.project import get_project_settings
 from scrapy.utils.reactor import install_reactor
 
-from crawler.spiders.asuracomic1 import Asuracomic1Spider
+from crawler.spiders.asuracomic import AsuracomicSpider
 
 logger = logging.getLogger(__name__)
 
 
 class Command(BaseCommand):
-    help = "A  Custom command to  asuracomic1 Asuracomic1Spider"
+    help = "A  Custom command to  asuracomic AsuracomicSpider"
 
     def handle(self, *args, **options):
 
@@ -21,7 +21,7 @@ class Command(BaseCommand):
         configure_logging(crawlsettings)
         process = CrawlerProcess(settings=crawlsettings)
         logger.info("starting spider")
-        process.crawl(Asuracomic1Spider)
+        process.crawl(AsuracomicSpider)
         process.start()  # type: ignore  # noqa: PGH003
 
         logger.info("ending spider")

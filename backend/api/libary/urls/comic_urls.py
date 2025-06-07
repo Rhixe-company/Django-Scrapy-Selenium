@@ -1,33 +1,19 @@
 from django.urls import path
+from rest_framework.urlpatterns import format_suffix_patterns
 
 from api.libary.views import comic_views as views
 
 app_name = "comics"
 
 urlpatterns = [
-    path(
-        "",
-        view=views.comic_list,
-        name="list",
-    ),
-    path(
-        "top/",
-        view=views.topcomics,
-        name="top",
-    ),
-    path(
-        "featured/",
-        view=views.featuredcomics,
-        name="featured",
-    ),
-    path(
-        "selected/",
-        view=views.selectedcomics,
-        name="selected",
-    ),
-    path(
-        "<str:slug>/",
-        view=views.comic_detail,
-        name="detail",
-    ),
+    path("", views.getcomics, name="comics"),
+    path("create/", views.createcomic, name="comic-create"),
+    path("upload/", views.uploadimage, name="image-upload"),
+    path("top/", views.gettopcomics, name="top-comics"),
+    path("featured/", views.getfeaturedcomics, name="featured-comics"),
+    path("select/", views.getselectcomics, name="select-comics"),
+    path("<str:slug>/", views.getcomic, name="comic"),
+    path("update/<str:slug>/", views.updatecomic, name="comic-update"),
+    path("delete/<str:slug>/", views.deletecomic, name="comic-delete"),
 ]
+urlpatterns = format_suffix_patterns(urlpatterns)

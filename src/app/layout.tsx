@@ -1,30 +1,45 @@
-import MyApp from "@/components/MyApp";
+import "@/assets/styles/globals.css"
+import { Toaster } from "@/components/ui/toaster"
+import { APP_DESCRIPTION, APP_NAME, SERVER_URL } from "@/lib/constants"
+import type { Metadata } from "next"
+import { ThemeProvider } from "next-themes"
+// import { Fira_Sans } from "next/font/google"
 
-import { Fira_Sans } from "next/font/google";
+// const fira_Sans = Fira_Sans({
+//   // display: 'swap',
+//   subsets: ["latin"],
+//   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]
+// })
 
-import "./styles/globals.css";
-
-const fira_SansSans = Fira_Sans({
-  display: "swap",
-  subsets: ["latin"],
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-  preload: true,
-});
-
+export const metadata: Metadata = {
+  title: {
+    template: `%s | Prostore`,
+    default: APP_NAME
+  },
+  description: APP_DESCRIPTION,
+  metadataBase: new URL(SERVER_URL)
+}
 export default function RootLayout({
-  children,
+  children
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
-    <html
-      lang="en"
-      className={fira_SansSans.className}
-      suppressHydrationWarning
-    >
-      <body>
-        <MyApp>{children}</MyApp>
+    <html lang="en" suppressHydrationWarning>
+      {/* <html lang="en" className={`${fira_Sans.className}`}> */}
+      <body className="antialiased">
+        {/* <body className={` ${fira_Sans.className}`}> */}
+
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="dark"
+          enableSystem
+          disableTransitionOnChange
+        >
+          {children}
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }

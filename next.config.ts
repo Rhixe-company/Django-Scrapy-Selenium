@@ -1,4 +1,3 @@
-// /** @type {import('next').NextConfig} */
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
@@ -7,7 +6,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "http",
-        hostname: "127.0.0.1",
+        hostname: "localhost",
         port: "8000",
         pathname: "/media/**",
       },
@@ -19,36 +18,12 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-   eslint: {
-    ignoreDuringBuilds: true,
+  eslint: {
+    ignoreDuringBuilds: false,
   },
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
 };
 
 export default nextConfig;
-
-// const nextConfig = {
-//   experimental: {
-//     // appDir: true,
-//     serverActions: true,
-//   },
-//   images: {
-//     remotePatterns: [
-//       {
-//         protocol: "http",
-//         hostname: "127.0.0.1",
-//         port: "8000",
-//         pathname: "/media/**",
-//       },
-//       {
-//         protocol: "https",
-//         hostname: "gg.asuracomic.net",
-//         port: "",
-//         pathname: "/storage/media/**",
-//       },
-//     ],
-//   },
-// };
-// module.exports = nextConfig;

@@ -6,9 +6,6 @@ from django.db.models import Q
 from scrapy.http.request import Request
 from scrapy.loader import ItemLoader
 from scrapy.spiders import Spider
-from scrapy_headless import SeleniumRequest
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as ec
 
 from crawler.items import ChapterItem
 from crawler.items import ComicItem
@@ -30,9 +27,6 @@ class AsuracomicSpider(Spider):
             logger.info(msg)
             yield Request(
                 url=url,
-                meta={
-                    "impersonate": "chrome124",
-                },
                 callback=self.comicspage,
                 dont_filter=False,
             )
@@ -96,10 +90,10 @@ class AsuracomicSpider(Spider):
 
         chapters = response.xpath(
             '//div[contains(@class, "pl-4 py-2 border rounded-md group w-full hover:bg-[#343434] cursor-pointer border-[#A2A2A2]/20 relative")]/a/@href',  # noqa: E501
-        ).getall()[0:5]
+        ).getall()[0:1]
         chapters_time = response.xpath(
             '//div[contains(@class, "pl-4 py-2 border rounded-md group w-full hover:bg-[#343434] cursor-pointer border-[#A2A2A2]/20 relative")]/a/h3[contains(@class, "text-xs text-[#A2A2A2]")]/text()',  # noqa: E501
-        ).getall()[0:5]
+        ).getall()[0:1]
         comic_time = response.xpath(
             '//div[contains(@class, "pl-4 py-2 border rounded-md group w-full hover:bg-[#343434] cursor-pointer border-[#A2A2A2]/20 relative")]/a/h3[contains(@class, "text-xs text-[#A2A2A2]")]/text()',  # noqa: E501
         ).get()
@@ -153,15 +147,11 @@ class AsuracomicSpider(Spider):
                     msg = f"{chaps} already exists"
                     logger.error(msg)
                 else:
-                    yield SeleniumRequest(
+                    yield Request(
                         url=clink,
-                        wait_time=10,
-                        wait_until=ec.presence_of_element_located(
-                            (
-                                By.XPATH,
-                                "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501
-                            ),
-                        ),
+                        meta={
+                            "playwright": True,
+                        },
                         callback=self.parse,
                         cb_kwargs={"chaptertime": y},
                     )
@@ -212,18 +202,32 @@ class AsuracomicSpider(Spider):
             loader.add_value("chaptertitle", chaptertitle)
         loader.add_value("chaptername", chaptername)
         loader.add_value("chapterslug", chapterslug)
-        image_urls = response.request.meta["driver"].find_elements(
-            By.XPATH,
-            "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501
-        )
+        # image_urls = response.request.meta["driver"].find_elements(  # noqa: E501, ERA001, RUF100
+        #     By.XPATH,
+        #     "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501, ERA001
+        # )  # noqa: ERA001, RUF100
+        # if image_urls:
+        #     images = []  # noqa: ERA001
+
+        #     for img in image_urls:
+        #         images.append(img.get_attribute("src"))  # noqa: E501, ERA001, PERF401, RUF100
+
+        #     loader.add_value("image_urls", images)  # noqa: ERA001
+
+        #     msg = f"Total Images found: {len(images)}"  # noqa: ERA001
+        #     logger.info(msg)  # noqa: ERA001
+        # else:  # noqa: ERA001
+        #     msg = f"No Images found at: {response.url}"  # noqa: ERA001
+        #     logger.error(msg)  # noqa: ERA001
+        image_urls = response.xpath(
+            "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]/@src",  # noqa: E501
+        ).getall()
+
         if image_urls:
             images = []
-
-            for img in image_urls:
-                images.append(img.get_attribute("src"))  # noqa: PERF401
-
+            for img in image_urls[0:1]:
+                images.append(response.urljoin(img))  # noqa: ERA001, PERF401, RUF100
             loader.add_value("image_urls", images)
-
             msg = f"Total Images found: {len(images)}"
             logger.info(msg)
         else:

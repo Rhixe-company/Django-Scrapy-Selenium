@@ -22,10 +22,15 @@ class UserListAPIView(generics.ListCreateAPIView):
     ).all()
     serializer_class = UserSerializer
     filter_backends = [
-        DjangoFilterBackend,  # type: ignore  # noqa: PGH003
         filters.SearchFilter,
         filters.OrderingFilter,
     ]
+    search_fields = [
+        "email",
+        "username",
+    ]
+    ordering_fields = ["email", "username"]
+    ordering = ["-id"]
     pagination_class = StandardResultsSetPagination
 
     def get_queryset(self):

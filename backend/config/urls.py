@@ -33,6 +33,22 @@ urlpatterns += [
         "api/chapterimages/",
         include("libary.urls.chapter_image_urls", namespace="chapterimages"),
     ),
+    path(
+        "api/genres/",
+        include("libary.urls.genre_urls", namespace="genres"),
+    ),
+    path(
+        "api/categorys/",
+        include("libary.urls.category_urls", namespace="categorys"),
+    ),
+    path(
+        "api/artists/",
+        include("libary.urls.artist_urls", namespace="artists"),
+    ),
+    path(
+        "api/authors/",
+        include("libary.urls.author_urls", namespace="authors"),
+    ),
     # DRF auth token
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),

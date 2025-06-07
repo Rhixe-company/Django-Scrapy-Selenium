@@ -11,7 +11,7 @@ from api.libary.serializers import CategorySerializer
 
 class CategoryListAPIView(generics.ListCreateAPIView):
     queryset = Category.objects.prefetch_related(
-        "comiccategory",
+        "categorycomics",
     ).all()
     serializer_class = CategorySerializer
     filter_backends = [
@@ -36,7 +36,7 @@ category_list = CategoryListAPIView.as_view()
 
 class CategoryDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Category.objects.prefetch_related(
-        "comiccategory",
+        "categorycomics",
     ).all()
     serializer_class = CategorySerializer
     lookup_url_kwarg = "id"

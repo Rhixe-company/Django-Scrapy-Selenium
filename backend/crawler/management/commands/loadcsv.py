@@ -18,7 +18,7 @@ logger = logging.getLogger(__name__)
 class Command(BaseCommand):
     help = "Generates comics for apps"
 
-    def handle(self, *args, **options):  # noqa: PLR0915
+    def handle(self, *args, **options):  # noqa: C901, PLR0915
         def save_comics():  # noqa: PLR0915
             # save the data to a CSV file
             base = settings.BASE_DIR
@@ -43,23 +43,43 @@ class Command(BaseCommand):
             comicimages = ComicImage.objects.all()
 
             for comic in comics:
+                if comic.genres.all().count() == 0:
+                    item = {
+                        "user_id": "ce9d78e6-dcc1-4850-b6a9-5814f821482d",
+                        "title": comic.title,
+                        "slug": comic.slug,
+                        "description": comic.description,
+                        "rating": comic.rating,
+                        "numchapters": comic.numchapters,
+                        "numimages": comic.numimages,
+                        "updated_at": comic.updated_at,
+                        "serialization": comic.serialization,
+                        "status": comic.status,
+                        "link": comic.link,
+                        "category": comic.category.name,
+                        "author": comic.author.name,
+                        "artist": comic.artist.name,
+                        "genres": ["_"],
+                    }
+                else:
 
-                item = {
-                    "title": comic.title,
-                    "slug": comic.slug,
-                    "description": comic.description,
-                    "rating": comic.rating,
-                    "numchapters": comic.numchapters,
-                    "numimages": comic.numimages,
-                    "updated_at": comic.updated_at,
-                    "serialization": comic.serialization,
-                    "status": comic.status,
-                    "link": comic.link,
-                    "category": comic.category.name,
-                    "author": comic.author.name,
-                    "artist": comic.artist.name,
-                    "genres": [genre.name for genre in comic.genres.all()],
-                }
+                    item = {
+                        "user_id": "ce9d78e6-dcc1-4850-b6a9-5814f821482d",
+                        "title": comic.title,
+                        "slug": comic.slug,
+                        "description": comic.description,
+                        "rating": comic.rating,
+                        "numchapters": comic.numchapters,
+                        "numimages": comic.numimages,
+                        "updated_at": comic.updated_at,
+                        "serialization": comic.serialization,
+                        "status": comic.status,
+                        "link": comic.link,
+                        "category": comic.category.name,
+                        "author": comic.author.name,
+                        "artist": comic.artist.name,
+                        "genres": [genre.name for genre in comic.genres.all()],
+                    }
 
                 mycomics_data.append(item)
 
@@ -67,6 +87,7 @@ class Command(BaseCommand):
 
                 item = {
                     "image": comicimage.image.url,
+                    "status": comicimage.status,
                     "checksum": comicimage.checksum,
                     "link": comicimage.link,
                     "comic": comicimage.comic.slug,
@@ -166,14 +187,24 @@ class Command(BaseCommand):
             chapterkeys = mychapters_data[0].keys()
 
             for chapterimage in chapterimages:
-
-                item = {
-                    "image": chapterimage.image.url,
-                    "checksum": chapterimage.checksum,
-                    "link": chapterimage.link,
-                    "chapter": chapterimage.chapter.slug,
-                    "comic": chapterimage.comic.slug,
-                }
+                if chapterimage.image:
+                    item = {
+                        "image": chapterimage.image.url,
+                        "checksum": chapterimage.checksum,
+                        "status": chapterimage.status,
+                        "link": chapterimage.link,
+                        "chapter": chapterimage.chapter.slug,
+                        "comic": chapterimage.comic.slug,
+                    }
+                else:
+                    item = {
+                        "image": "",
+                        "checksum": "",
+                        "status": "",
+                        "link": chapterimage.link,
+                        "chapter": chapterimage.chapter.slug,
+                        "comic": chapterimage.comic.slug,
+                    }
 
                 mychapterimages_data.append(item)
             chapterimagekeys = mychapterimages_data[0].keys()

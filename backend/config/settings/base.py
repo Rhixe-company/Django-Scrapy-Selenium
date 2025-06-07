@@ -110,7 +110,6 @@ LOCAL_APPS = [
     "api.libary.apps.LibaryConfig",
     # Your stuff: custom apps go here
     "crawler",
-    "downloader",
 ]
 # https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
@@ -184,10 +183,10 @@ STATIC_URL = "/static/"
 # )  # <-- NEW App
 
 STATICFILES_DIRS = [
-    str(BASE_DIR / ".next"),
-    str(APPS_DIR / "static"),
-    str(APPS_DIR / "static/src"),
-    str(APPS_DIR / "static/images"),
+    # str(BASE_DIR / ".next"),
+    # str(APPS_DIR / "static"),
+    # str(APPS_DIR / "static/src"),
+    # str(APPS_DIR / "static/images"),
     # os.path.join(DYN_DB_PKG_ROOT, "templates/static"),  # noqa: PTH118, RUF100
 ]
 # https://docs.djangoproject.com/en/dev/ref/contrib/staticfiles/#staticfiles-finders

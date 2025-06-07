@@ -169,11 +169,15 @@ class Comic(StandardMetadata):
         Website,
         on_delete=models.CASCADE,
         related_name="websitecomics",
+        null=True,
+        blank=True,
     )
     category = models.ForeignKey(
         Category,
         on_delete=models.CASCADE,
         related_name="categorycomics",
+        null=True,
+        blank=True,
     )
     author = models.ForeignKey(
         Author,
@@ -193,6 +197,8 @@ class Comic(StandardMetadata):
         User,
         on_delete=models.CASCADE,
         related_name="usercomic",
+        null=True,
+        blank=True,
     )
     genres = models.ManyToManyField(
         Genre,
@@ -251,6 +257,8 @@ class Chapter(StandardMetadata):
         Website,
         on_delete=models.CASCADE,
         related_name="websitechapters",
+        null=True,
+        blank=True,
     )
     comic = models.ForeignKey(
         Comic,

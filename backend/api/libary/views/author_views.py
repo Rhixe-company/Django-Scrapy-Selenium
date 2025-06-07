@@ -11,7 +11,7 @@ from api.libary.serializers import AuthorSerializer
 
 class AuthorListAPIView(generics.ListCreateAPIView):
     queryset = Author.objects.prefetch_related(
-        "comicauthor",
+        "authorcomics",
     ).all()
     serializer_class = AuthorSerializer
     filter_backends = [
@@ -36,7 +36,7 @@ author_list = AuthorListAPIView.as_view()
 
 class AuthorDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Author.objects.prefetch_related(
-        "comicauthor",
+        "authorcomics",
     ).all()
     serializer_class = AuthorSerializer
     lookup_url_kwarg = "id"

@@ -10,12 +10,7 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
-  ...compat.extends("next/core-web-vitals", "next/typescript",'plugin:react/jsx-runtime', 'plugin:react-hooks/recommended'),
-   settings: {
-    react: {
-      version: 'detect',
-    },
-  },
+  ...compat.extends("next/core-web-vitals", "next/typescript"),
 ];
 
 export default eslintConfig;
