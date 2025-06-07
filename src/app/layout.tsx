@@ -3,13 +3,13 @@ import { Toaster } from "@/components/ui/toaster"
 import { APP_DESCRIPTION, APP_NAME, SERVER_URL } from "@/lib/constants"
 import type { Metadata } from "next"
 import { ThemeProvider } from "next-themes"
-// import { Fira_Sans } from "next/font/google"
+import { Fira_Sans } from "next/font/google"
 
-// const fira_Sans = Fira_Sans({
-//   // display: 'swap',
-//   subsets: ["latin"],
-//   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]
-// })
+const fira_Sans = Fira_Sans({
+  // display: 'swap',
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"]
+})
 
 export const metadata: Metadata = {
   title: {
@@ -25,11 +25,10 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      {/* <html lang="en" className={`${fira_Sans.className}`}> */}
-      <body className="antialiased">
-        {/* <body className={` ${fira_Sans.className}`}> */}
-
+    // <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={`${fira_Sans.className}`}>
+      {/* <body className="antialiased"> */}
+      <body className={` ${fira_Sans.className} antialiased`}>
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
