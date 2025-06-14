@@ -1,8 +1,0 @@
-.style_scrollToTop {
-  @apply fixed opacity-0 invisible rounded-[50%] border-2 border-[4px_5px] right-5 bottom-[125px];
-  transition: opacity .3s ease, visibility .3s ease
-}
-
-.style_scrollToTop.style_visible {
-  @apply opacity-100 visible cursor-pointer
-}

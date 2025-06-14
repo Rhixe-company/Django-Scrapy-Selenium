@@ -26,9 +26,7 @@
   },
   "tailwindCSS.emmetCompletions": true,
   // "terminal.integrated.shell.windows": "C:/'Program Files'/PowerShell/7-preview/pwsh.exe ",
-  "powershell.developer.featureFlags": [
-    "PSReadLine"
-  ],
+  // "powershell.developer.featureFlags": ["PSReadLine"],
   "python.analysis.autoImportCompletions": true,
   "python.analysis.typeCheckingMode": "basic",
   "python.defaultInterpreterPath": "../myvenv/Scripts/python.exe",
@@ -63,4 +61,11 @@
   "[dotenv]": {
     "editor.defaultFormatter": "foxundermoon.shell-format"
   },
+  // "[dotenv]": {
+  //   "editor.formatOnSave": false,
+  //   "editor.defaultFormatter": "foxundermoon.shell-format"
+  // }
+  // "[dotenv]": {
+  //   "editor.defaultFormatter": ""
+  // }
 }
