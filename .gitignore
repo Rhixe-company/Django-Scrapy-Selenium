@@ -1,3 +1,47 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+next-env.d.ts
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env
+.env.local
+/src-bak
+/src-bakk
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+
 ntemplates
 # File created using '.gitignore Generator' for Visual Studio Code: https://bit.ly/vscode-gig
 # Created by https://www.toptal.com/developers/gitignore/api/windows,visualstudiocode,appengine,cmake,database,direnv,django,nextjs,ninja,node,pydev,python,pythonvanilla,react,reactnative,redis,sass,ssh,typings,virtualenv,visualbasic,visualstudio,xcode,xcodeinjection

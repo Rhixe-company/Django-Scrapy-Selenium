@@ -58,6 +58,9 @@
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
   },
+  "[dotenv]": {
+    "editor.defaultFormatter": "foxundermoon.shell-format"
+  },
   // "[dotenv]": {
   //   "editor.formatOnSave": false,
   //   "editor.defaultFormatter": "foxundermoon.shell-format"
