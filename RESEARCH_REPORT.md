@@ -1,117 +1,128 @@
 # RESEARCH_REPORT — Django-Scrapy-Selenium
 
-> **Type:** Project research report | **Updated:** 2026-07-16
 
-**Type:** Django-based web scraping platform
-**Tech Stack:** Django 4.x, DRF, Scrapy, Selenium, BeautifulSoup4, Celery + Redis/RabbitMQ, PostgreSQL, Webpack 5, Tailwind CSS 3, Alpine.js, htmx
+**Stack:** Django 4.x, DRF, Scrapy, Selenium, Celery + Redis, PostgreSQL, Tailwind CSS 3, Node.js
 **Status:** Active (legacy — scraping consolidated to rhixecompany-comics)
 
 ---
 
-## Similar Projects
+## 1. Database: PostgreSQL Performance & Connection Pooling
 
-| Project | Relevance |
-|---------|-----------|
-| codingforentrepreneurs/Web-Scraping-with-Django-Celery | Django + Celery scraping scheduler |
-| scrapy-plugins/scrapy-playwright | Official Scrapy + Playwright integration |
-
----
-
-## Key Findings
-
-### Scrapy + Playwright (2026)
-- **Playwright is dominant** for JS-rendered content: auto-wait, native CDP, multi-browser
-- **Scrapy + HTTPX** remains strongest for high-volume static crawling (4× throughput vs requests)
-- **Scrapy 2.13+** introduces `async def start()` — first-class async support
-- **Hybrid approach recommended**: Scrapy for static pages, Playwright for JS interaction
-- **scrapy-playwright** integrates via `DOWNLOAD_HANDLERS` config, keeps Scrapy pipeline intact
-
-### Django + Celery Scraping Integration
-- Scrapy spiders best called from Celery tasks, not coupled to Django views
-- **Critical settings**: `task_acks_late=True`, `task_reject_on_worker_lost=True`, `worker_prefetch_multiplier=1`
-- **Queue separation**: dedicated queues for high-priority vs bulk scraping
-- **`django-celery-beat`** for DB-backed periodic tasks — enables Django Admin scheduling
-- **`celery-once` with Redis lock** prevents duplicate execution from retries
-
-### Selenium 4.x vs Modern Alternatives
-- Selenium 4 is W3C WebDriver compliant, mature Grid 4
-- **Selenium Manager (4.6+)** replaces `webdriver-manager` — built-in, zero-config
-- **Playwright is 2-3× faster and harder to detect** — recommended for new scrapers
-- Detection vectors: `navigator.webdriver`, UA inconsistencies — override via CDP
+- **Django 5.1 native pooling** via `psycopg[pool]` — 50-70ms latency reduction (requires `CONN_MAX_AGE=0`)
+- **Celery fix:** `connections.close_all()` in worker teardown
+- **N+1 fix:** 4,000ms → 330ms with `select_related`/`prefetch_related`
+- **Tuning:** `shared_buffers=25%RAM`, `work_mem=4-8MB`, `random_page_cost=1.1`
 
 ---
 
-## Cheatsheets & Quick Reference
+## 2. Django REST Framework — Optimization & Auth
 
-| Topic | Resource | Type |
-|-------|----------|------|
-| Scrapy + Playwright | <https://github.com/scrapy-plugins/scrapy-playwright> | Integration |
-| Django Celery Beat | <https://django-celery-beat.readthedocs.io> | Docs |
-| Selenium 4 Manager | <https://www.selenium.dev/documentation/webdriver/drivers/manager> | Guide |
-
----
-
-## Best Practices
-
-1. **Scrapy for static, Playwright for JS** — hybrid approach maximizes throughput
-2. **Celery task isolation** — one spider per task; never couple to views
-3. **Queue separation** — dedicated queues for high-priority vs bulk scraping
-4. **Idempotent webhook handling** — use Redis lock + idempotency keys
-5. **Django ORM in Scrapy pipelines** — call `django.setup()` in spider settings
+- **Cursor pagination:** O(1) vs O(n) `COUNT(*)` on large datasets
+- **Serializer:** avoid `SerializerMethodField`, never `fields='__all__'`
+- **Caching:** `@cache_page` + Redis → 95-99% response time reduction
+- **Auth:** SimpleJWT for APIs, SessionAuth for SPAs, Knox for per-device tokens
 
 ---
 
-## Common Pitfalls
+## 3. Scrapy + Selenium — Best Practices & Pitfalls
 
-| Pitfall | Impact | Avoidance |
-|---------|--------|-----------|
-| Blocking the web tier | Timeouts | Run scrapers in Celery, not views |
-| Duplicate task execution | Data duplication | `celery-once` + Redis lock |
-| Selenium detection | Blocks/bans | Use Playwright for new scrapers |
-| Missing Celery ack_late | Lost tasks on crash | `task_acks_late=True` in settings |
-
----
-
-## Performance
-
-1. **Scrapy + HTTPX hybrid** — static crawls at 4× requests throughput
-2. **Celery concurrency** — `--concurrency=CPU*2+1` for I/O-bound scraping workloads
-3. **Playwright for JS pages** — 2-3× faster than Selenium with better stealth
-4. **Visibility timeout** — `broker_transport_options = {'visibility_timeout': 3600}` for long tasks
-5. **Connection pooling** — `CONN_MAX_AGE` or pgbouncer for PostgreSQL
+- **Playwright dominant** (2-3× faster, better stealth) — `scrapy-playwright` v0.0.47 (Jun 2026) uses the asyncio reactor by default (Scrapy 2.7+) and requires Playwright>=1.40; Scrapy 2.13+ prefers async `start()`
+- **Scrapy + HTTPX** = 4× throughput vs `requests` for static content
+- **Selenium 4.6+** has Selenium Manager built-in; W3C compliant
+- **Key:** `CONCURRENT_REQUESTS=16`, `DOWNLOAD_DELAY=0.5`, `AUTOTHROTTLE_ENABLED`, `ROBOTSTXT_OBEY`
+- **Pitfalls:** run spiders in Celery (not views), rotate UAs, sanitize data before ORM
 
 ---
 
-## Security
+## 4. Docker Compose — Full Stack Orchestration
 
-1. **Scrapy download delays** — `DOWNLOAD_DELAY` + `RANDOMIZE_DOWNLOAD_DELAY` to avoid detection
-2. **Rotate user agents** — `Scrapy-Fake-Useragent` middleware
-3. **Proxy rotation** — for large-scale scraping to avoid IP bans
-4. **Never store credentials in spiders** — use Django settings modules
-5. **Rate limit webhook callbacks** — protect against replay attacks
+- **Multi-stage builds** → 50-80% smaller images; layer caching → 80-95% faster rebuilds
+- **Health checks** (`condition: service_healthy`) avoid startup races
+- **Named volumes** for PostgreSQL + Redis; separate `docker-compose.prod.yml`
+- **Celery concurrency:** max `CPU×2+1` for CPU-bound tasks
 
 ---
 
-## Related Projects (in workspace)
+## 5. Redis — Beyond the Celery Broker
 
-- **rhixecompany-comics** — consolidation target; shared Scrapy + Celery patterns
-- **selenium_webdriver** — shared browser automation; Node.js Selenium alternative
+- **Cache:** `django-redis` + `HiredisParser` + `BlockingConnectionPool` (max 50)
+- **Sessions:** `SESSION_ENGINE=cache` for stateless Redis-backed storage
+- **Rate limiting:** sliding window via sorted sets
+- **Task dedup:** `SETNX` lock prevents duplicate Celery executions
+- **Channels:** `channels-redis` for real-time scraping progress
+- **Tuning:** `allkeys-lru`, `save=""`, `tcp-keepalive=60`
+
+---
+
+## 6. Django Security Hardening
+
+- **Critical:** `DEBUG=False`, `SECRET_KEY` from env, `ALLOWED_HOSTS`, `SECURE_SSL_REDIRECT`, HSTS 1yr
+- **Cookies:** `SECURE=True`, `HTTPONLY=True`, `SAMESITE='Lax'`
+- **Argon2** hasher, `django-axes` (5/1h), `django-csp` (start `REPORT_ONLY`)
+- **Audit:** `manage.py check --deploy`, `pip-audit` in CI
+- **Scraping:** sanitize data before ORM; never store credentials in spiders
+
+---
+
+## 7. Tailwind CSS + Django — Production Builds
+
+- **Recommended:** `django-tailwind-cli` — `manage.py tailwind build`
+- **Current:** standalone Tailwind CLI via npm scripts
+- **Optimization:** `ManifestStaticFilesStorage` cache-busting; `--minify` + PurgeCSS → 3.5MB → ~10KB; avoid Play CDN
+
+---
+
+## 8. Node.js & TypeScript Scraping
+
+- **Libs:** Playwright (JS-heavy), Puppeteer (Chrome), Axios+Cheerio (static)
+- **Patterns:** `Promise.allSettled()` for batch isolation, `p-limit` for rate-limited concurrency
+- **Integration:** `src/scrape.js` scrapers coordinate via Celery or webhook
+
+---
+
+## 9. Performance Cheatsheet
+
+| Area | Technique | Gain |
+|------|-----------|------|
+| DB | N+1 fix | 10× query reduction |
+| DB | Django 5.1 native pooling | 50-70ms latency drop |
+| Cache | Redis backend | 95-99% speed |
+| Scraping | Scrapy + HTTPX | 4× throughput |
+| Scraping | Playwright vs Selenium | 2-3× faster |
+| Celery | `task_acks_late=True` | Zero data loss |
+| Docker | Multi-stage builds | 50-80% smaller |
+| Frontend | Tailwind `--minify` | 3.5MB → ~10KB |
+
+---
+
+## 10. Security Cheatsheet
+
+| Check | Severity |
+|-------|----------|
+| `DEBUG=False`, `SECRET_KEY` from env | Critical |
+| `SECURE_SSL_REDIRECT`, HSTS 1yr | High |
+| Secure cookies, Argon2, django-axes | High |
+| Sanitize scraped data before ORM | High |
+| `pip-audit` + `check --deploy` in CI | Medium |
+
+---
+
+## 11. Related Projects (workspace)
+
+- **rhixecompany-comics** — consolidation target
+- **selenium_webdriver** — shared browser automation
 - **ecom** — shared Django + DRF patterns
-- **cookiecutter-django-tailwind** — shared Django architecture conventions
-- **Python-projects** — shared Python scripting patterns
+- **cookiecutter-django-tailwind** — shared Django conventions
 
 ---
 
-## Resources
+## 12. Key Resources
 
-| Resource | URL |
-|----------|-----|
-| Scrapy + Playwright | <https://github.com/scrapy-plugins/scrapy-playwright> |
-| Celery Django | <https://docs.celeryq.dev/en/stable/django> |
-| Selenium 4 | <https://www.selenium.dev/documentation> |
+- [Scrapy + Playwright](https://github.com/scrapy-plugins/scrapy-playwright)
+- [Selenium 4 Docs](https://www.selenium.dev/documentation)
+- [Django 5.1 Pooling](https://docs.djangoproject.com/en/5.1/releases/5.1/)
+- [Celery + Django](https://docs.celeryq.dev/en/stable/django)
+- [Security Checklist](https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/)
 
-### Research Methodology
-- **Web search:** web_search (2026 scraping patterns)
-- **Documentation:** web_extract (Scrapy, Playwright, Selenium docs)
-- **Tool comparison:** Selenium vs Playwright vs Puppeteer benchmarks
-- **Last verified:** 2026-07-16
+**Methodology:** Web search + docs extraction. Last verified: 2026-07-16.
+## Related Projects
