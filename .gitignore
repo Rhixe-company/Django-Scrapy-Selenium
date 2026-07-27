@@ -288,3 +288,5 @@ geckodriver.exe
 # Large generated data files
 chapters.json
 comics.json
+
+.next/
