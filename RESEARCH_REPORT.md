@@ -10,16 +10,17 @@
 
 ## Similar Projects
 
-| Project | Relevance |
-|---------|-----------|
-| codingforentrepreneurs/Web-Scraping-with-Django-Celery | Django + Celery scraping scheduler |
-| scrapy-plugins/scrapy-playwright | Official Scrapy + Playwright integration |
+| Project                                                | Relevance                                |
+| ------------------------------------------------------ | ---------------------------------------- |
+| codingforentrepreneurs/Web-Scraping-with-Django-Celery | Django + Celery scraping scheduler       |
+| scrapy-plugins/scrapy-playwright                       | Official Scrapy + Playwright integration |
 
 ---
 
 ## Key Findings
 
 ### Scrapy + Playwright (2026)
+
 - **Playwright is dominant** for JS-rendered content: auto-wait, native CDP, multi-browser
 - **Scrapy + HTTPX** remains strongest for high-volume static crawling (4× throughput vs requests)
 - **Scrapy 2.13+** introduces `async def start()` — first-class async support
@@ -27,6 +28,7 @@
 - Selenium Manager (4.6+) built-in replaces `webdriver-manager`; Playwright 2-3× faster for dynamic content
 
 ### Django + Celery Integration
+
 - Scrapy spiders best called from Celery tasks, not coupled to Django views
 - **Critical**: `task_acks_late=True`, `task_reject_on_worker_lost=True`, `worker_prefetch_multiplier=1`
 - **Queue separation**: dedicated queues for high-priority vs bulk scraping
@@ -36,11 +38,11 @@
 
 ## Cheatsheets & Quick Reference
 
-| Topic | Resource | Type |
-|-------|----------|------|
-| Scrapy + Playwright | <https://github.com/scrapy-plugins/scrapy-playwright> | Integration |
-| Django Celery Beat | <https://django-celery-beat.readthedocs.io> | Docs |
-| Selenium 4 Manager | <https://www.selenium.dev/documentation/webdriver/drivers/manager> | Guide |
+| Topic               | Resource                                                           | Type        |
+| ------------------- | ------------------------------------------------------------------ | ----------- |
+| Scrapy + Playwright | <https://github.com/scrapy-plugins/scrapy-playwright>              | Integration |
+| Django Celery Beat  | <https://django-celery-beat.readthedocs.io>                        | Docs        |
+| Selenium 4 Manager  | <https://www.selenium.dev/documentation/webdriver/drivers/manager> | Guide       |
 
 ---
 
@@ -56,12 +58,12 @@
 
 ## Common Pitfalls
 
-| Pitfall | Impact | Avoidance |
-|---------|--------|-----------|
-| Blocking web tier | Timeouts | Run scrapers in Celery, not views |
-| Duplicate task execution | Data duplication | `celery-once` + Redis lock |
-| Selenium detection | Blocks/bans | Use Playwright for new scrapers |
-| Missing Celery ack_late | Lost tasks on crash | `task_acks_late=True` |
+| Pitfall                  | Impact              | Avoidance                         |
+| ------------------------ | ------------------- | --------------------------------- |
+| Blocking web tier        | Timeouts            | Run scrapers in Celery, not views |
+| Duplicate task execution | Data duplication    | `celery-once` + Redis lock        |
+| Selenium detection       | Blocks/bans         | Use Playwright for new scrapers   |
+| Missing Celery ack_late  | Lost tasks on crash | `task_acks_late=True`             |
 
 ---
 
@@ -106,13 +108,14 @@
 
 ## Resources
 
-| Resource | URL |
-|----------|-----|
+| Resource            | URL                                                   |
+| ------------------- | ----------------------------------------------------- |
 | Scrapy + Playwright | <https://github.com/scrapy-plugins/scrapy-playwright> |
-| Celery Django | <https://docs.celeryq.dev/en/stable/django> |
-| Selenium 4 | <https://www.selenium.dev/documentation> |
+| Celery Django       | <https://docs.celeryq.dev/en/stable/django>           |
+| Selenium 4          | <https://www.selenium.dev/documentation>              |
 
 ### Research Methodology
+
 - **Web search:** web_search (2026 scraping patterns, Playwright vs Selenium)
 - **Documentation:** web_extract (Scrapy, Playwright, Selenium docs)
 - **Tool comparison:** Selenium vs Playwright vs Puppeteer benchmarks

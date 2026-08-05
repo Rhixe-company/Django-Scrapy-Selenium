@@ -58,7 +58,7 @@
   bottom: 50%;
 }
 
-[dir='rtl'] .rr--reset {
+[dir="rtl"] .rr--reset {
   left: 0;
   right: auto;
 }
@@ -258,11 +258,11 @@
 }
 
 .rr--svg-stop-2,
-[dir='rtl'] .rr--svg-stop-1 {
+[dir="rtl"] .rr--svg-stop-1 {
   stop-color: var(--rr--fill-off-color, transparent);
 }
 
-[dir='rtl'] .rr--svg-stop-2 {
+[dir="rtl"] .rr--svg-stop-2 {
   stop-color: var(--rr--fill-on-color, transparent);
 }
 
@@ -296,21 +296,15 @@
 }
 
 .rr--dir-x .rr--hf-box-int .rr--svg {
-  background: linear-gradient(to right,
-      var(--rr--box-on-color, none) 50%,
-      var(--rr--box-off-color, none) 50%);
+  background: linear-gradient(to right, var(--rr--box-on-color, none) 50%, var(--rr--box-off-color, none) 50%);
 }
 
-[dir='rtl'] .rr--dir-x .rr--hf-box-int .rr--svg {
-  background: linear-gradient(to left,
-      var(--rr--box-on-color, none) 50%,
-      var(--rr--box-off-color, none) 50%);
+[dir="rtl"] .rr--dir-x .rr--hf-box-int .rr--svg {
+  background: linear-gradient(to left, var(--rr--box-on-color, none) 50%, var(--rr--box-off-color, none) 50%);
 }
 
 .rr--dir-y .rr--hf-box-int .rr--svg {
-  background: linear-gradient(to bottom,
-      var(--rr--box-on-color, none) 50%,
-      var(--rr--box-off-color, none) 50%);
+  background: linear-gradient(to bottom, var(--rr--box-on-color, none) 50%, var(--rr--box-off-color, none) 50%);
 }
 
 .rr--hf-box-on .rr--svg {

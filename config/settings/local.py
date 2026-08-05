@@ -1,10 +1,5 @@
-# ruff: noqa: E501
-from config.settings.base import *  # noqa: F403
-from config.settings.base import BASE_DIR
-from config.settings.base import INSTALLED_APPS
-from config.settings.base import MIDDLEWARE
-from config.settings.base import WEBPACK_LOADER
-from config.settings.base import env
+from config.settings.base import *
+from config.settings.base import BASE_DIR, INSTALLED_APPS, MIDDLEWARE, WEBPACK_LOADER, env
 
 # GENERAL
 # ------------------------------------------------------------------------------
@@ -13,10 +8,10 @@ DEBUG = True
 # https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
 SECRET_KEY = env(
     "DJANGO_SECRET_KEY",
-    default="Qg206ZCIgUuVxpVrpPKXMfDTlr9FDnTGsLvGYsGB1WCwc9rdVoPyY5kzhv8dLoVz",  # type: ignore  # noqa: PGH003
+    default="Qg206ZCIgUuVxpVrpPKXMfDTlr9FDnTGsLvGYsGB1WCwc9rdVoPyY5kzhv8dLoVz",  # type: ignore
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]  # noqa: S104
+ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1"]
 
 # CACHES
 # ------------------------------------------------------------------------------
@@ -33,7 +28,7 @@ CACHES = {
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-backend
 EMAIL_BACKEND = env(
     "DJANGO_EMAIL_BACKEND",
-    default="django.core.mail.backends.console.EmailBackend",  # type: ignore  # noqa: PGH003
+    default="django.core.mail.backends.console.EmailBackend",  # type: ignore
 )
 
 # WhiteNoise
@@ -60,11 +55,11 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 # https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
 INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
-if env("USE_DOCKER", default="no") == "yes":  # type: ignore  # noqa: PGH003
+if env("USE_DOCKER", default="no") == "yes":  # type: ignore
     import socket
 
     hostname, _, ips = socket.gethostbyname_ex(socket.gethostname())
-    INTERNAL_IPS += [".".join(ip.split(".")[:-1] + ["1"]) for ip in ips]
+    INTERNAL_IPS += [".".join([*ip.split(".")[:-1], "1"]) for ip in ips]
     try:
         _, _, ips = socket.gethostbyname_ex("node")
         INTERNAL_IPS.extend(ips)
@@ -90,7 +85,7 @@ WEBPACK_LOADER["DEFAULT"]["CACHE"] = not DEBUG
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
 if (
-    env("POSTGRES_ENGINE", default="django.db.backends.sqlite3")  # type: ignore  # noqa: PGH003
+    env("POSTGRES_ENGINE", default="django.db.backends.sqlite3")  # type: ignore
     == "django.db.backends.postgresql"
 ):
     DATABASES = {

@@ -10,11 +10,11 @@
 
 ## Architecture
 
-| Property | Value |
-|----------|-------|
-| **Type** | Django-based scraping platform |
-| **Pattern** | Django monolith with Scrapy spiders + Selenium automation + Celery async tasks |
-| **Reference** | [Workflow Analysis](../docs/Project_Architecture/Workflow_Analysis.md) |
+| Property      | Value                                                                          |
+| ------------- | ------------------------------------------------------------------------------ |
+| **Type**      | Django-based scraping platform                                                 |
+| **Pattern**   | Django monolith with Scrapy spiders + Selenium automation + Celery async tasks |
+| **Reference** | [Workflow Analysis](../docs/Project_Architecture/Workflow_Analysis.md)         |
 
 Combines multiple scraping approaches: Scrapy spiders, Selenium browser automation, Node.js scripts — orchestrated via Celery.
 
@@ -22,14 +22,14 @@ Combines multiple scraping approaches: Scrapy spiders, Selenium browser automati
 
 ## Technology Stack
 
-| Layer | Technology |
-|-------|------------|
-| **Backend** | Python 3.10+, Django 4.x, Django REST Framework |
-| **Scraping** | Scrapy, Selenium, BeautifulSoup4 |
-| **Async** | Celery + Redis/RabbitMQ |
-| **Database** | PostgreSQL (prod), SQLite (dev) |
-| **Frontend** | Node.js (Selenium scripts in `src/`) |
-| **Infra** | Docker Compose, Gunicorn |
+| Layer        | Technology                                      |
+| ------------ | ----------------------------------------------- |
+| **Backend**  | Python 3.10+, Django 4.x, Django REST Framework |
+| **Scraping** | Scrapy, Selenium, BeautifulSoup4                |
+| **Async**    | Celery + Redis/RabbitMQ                         |
+| **Database** | PostgreSQL (prod), SQLite (dev)                 |
+| **Frontend** | Node.js (Selenium scripts in `src/`)            |
+| **Infra**    | Docker Compose, Gunicorn                        |
 
 ---
 
@@ -91,12 +91,12 @@ npm run build
 
 **P1 Target:** Merge into `rhixecompany-comics/backend/apps/scrapers/`
 
-| Component | Destination |
-|-----------|-------------|
-| Scrapy spiders | `backend/apps/scrapers/spiders/` |
-| Selenium utils | `backend/apps/scrapers/selenium_utils.py` |
-| Celery tasks | `backend/apps/scrapers/tasks.py` |
-| Node.js scraper | Rewrite in Python (delete Node dep) |
+| Component       | Destination                               |
+| --------------- | ----------------------------------------- |
+| Scrapy spiders  | `backend/apps/scrapers/spiders/`          |
+| Selenium utils  | `backend/apps/scrapers/selenium_utils.py` |
+| Celery tasks    | `backend/apps/scrapers/tasks.py`          |
+| Node.js scraper | Rewrite in Python (delete Node dep)       |
 
 ---
 

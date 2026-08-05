@@ -8,15 +8,15 @@
 - Django REST Framework for API endpoints (optional)
 - django-allauth for authentication
 - Scrapy integration with custom spiders
-  - Comic spider for scraping comic listings
-  - Chapter spider for scraping chapter content
-  - Update spider for checking new content
+    - Comic spider for scraping comic listings
+    - Chapter spider for scraping chapter content
+    - Update spider for checking new content
 - Scrapy pipelines for database persistence
 - Scrapy middlewares for proxy rotation and user-agent rotation
 - Selenium WebDriver integration for JavaScript-rendered pages
-  - Headless Chrome support
-  - Custom wait conditions
-  - Screenshot capability
+    - Headless Chrome support
+    - Custom wait conditions
+    - Screenshot capability
 - Webpack 5 build system with Babel + TypeScript
 - Alpine.js 3.14 for reactive frontend components
 - htmx 1.9 for server-driven dynamic updates

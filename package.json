@@ -22,6 +22,7 @@
   "devDependencies": {
     "@babel/core": "^7.16.5",
     "@babel/preset-env": "^7.16.5",
+    "@eslint/js": "^10.0.1",
     "@fortawesome/fontawesome-free": "^6.5.2",
     "@popperjs/core": "^2.11.8",
     "@types/alpinejs": "^3.13.10",
@@ -48,6 +49,7 @@
     "file-loader": "^6.2.0",
     "flowbite": "^2.5.2",
     "flowbite-typography": "^1.0.3",
+    "globals": "^17.8.0",
     "mini-css-extract-plugin": "^2.4.5",
     "node-sass-tilde-importer": "^1.0.2",
     "pixrem": "^5.0.0",
@@ -70,6 +72,7 @@
     "ts-loader": "^9.5.1",
     "tsconfig-paths-webpack-plugin": "^4.2.0",
     "typescript": "^5.4.5",
+    "typescript-eslint": "^8.65.0",
     "url-loader": "^4.1.1",
     "webpack": "^5.82.0",
     "webpack-bundle-tracker": "^3.0.1",

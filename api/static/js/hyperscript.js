@@ -98,14 +98,10 @@
       "=": "EQUALS",
     };
     static isValidCSSClassChar(e) {
-      return (
-        n.isAlpha(e) || n.isNumeric(e) || e === "-" || e === "_" || e === ":"
-      );
+      return n.isAlpha(e) || n.isNumeric(e) || e === "-" || e === "_" || e === ":";
     }
     static isValidCSSIDChar(e) {
-      return (
-        n.isAlpha(e) || n.isNumeric(e) || e === "-" || e === "_" || e === ":"
-      );
+      return n.isAlpha(e) || n.isNumeric(e) || e === "-" || e === "_" || e === ":";
     }
     static isWhitespace(e) {
       return e === " " || e === "\t" || n.isNewline(e);
@@ -131,11 +127,7 @@
     static isValidSingleQuoteStringStart(e) {
       if (e.length > 0) {
         var t = e[e.length - 1];
-        if (
-          t.type === "IDENTIFIER" ||
-          t.type === "CLASS_REF" ||
-          t.type === "ID_REF"
-        ) {
+        if (t.type === "IDENTIFIER" || t.type === "CLASS_REF" || t.type === "ID_REF") {
           return false;
         }
         if (t.op && (t.value === ">" || t.value === ")")) {
@@ -157,28 +149,16 @@
       }
       while (o < a.length) {
         if (
-          (q() === "-" &&
-            I() === "-" &&
-            (n.isWhitespace(C(2)) || C(2) === "" || C(2) === "-")) ||
-          (q() === "/" &&
-            I() === "/" &&
-            (n.isWhitespace(C(2)) || C(2) === "" || C(2) === "/"))
+          (q() === "-" && I() === "-" && (n.isWhitespace(C(2)) || C(2) === "" || C(2) === "-")) ||
+          (q() === "/" && I() === "/" && (n.isWhitespace(C(2)) || C(2) === "" || C(2) === "/"))
         ) {
           h();
-        } else if (
-          q() === "/" &&
-          I() === "*" &&
-          (n.isWhitespace(C(2)) || C(2) === "" || C(2) === "*")
-        ) {
+        } else if (q() === "/" && I() === "*" && (n.isWhitespace(C(2)) || C(2) === "" || C(2) === "*")) {
           v();
         } else {
           if (n.isWhitespace(q())) {
             r.push(L());
-          } else if (
-            !A() &&
-            q() === "." &&
-            (n.isAlpha(I()) || I() === "{" || I() === "-")
-          ) {
+          } else if (!A() && q() === "." && (n.isAlpha(I()) || I() === "{" || I() === "-")) {
             r.push(d());
           } else if (!A() && q() === "#" && (n.isAlpha(I()) || I() === "{")) {
             r.push(k());
@@ -295,11 +275,7 @@
           if (q() === '"' || q() === "'") {
             let e = S();
             t += e.value;
-          } else if (
-            n.isAlpha(q()) ||
-            n.isNumeric(q()) ||
-            n.isIdentifierChar(q())
-          ) {
+          } else if (n.isAlpha(q()) || n.isNumeric(q()) || n.isIdentifierChar(q())) {
             let e = g();
             t += e.value;
           }
@@ -450,9 +426,7 @@
             } else if (t === "x") {
               const t = N();
               if (Number.isNaN(t)) {
-                throw Error(
-                  "Invalid hexadecimal escape at " + n.positionString(e),
-                );
+                throw Error("Invalid hexadecimal escape at " + n.positionString(e));
               }
               r += String.fromCharCode(t);
             } else {
@@ -500,14 +474,7 @@
       }
       function A() {
         return (
-          n.isAlpha(l) ||
-          n.isNumeric(l) ||
-          l === ")" ||
-          l === '"' ||
-          l === "'" ||
-          l === "`" ||
-          l === "}" ||
-          l === "]"
+          n.isAlpha(l) || n.isNumeric(l) || l === ")" || l === '"' || l === "'" || l === "`" || l === "}" || l === "]"
         );
       }
       function L() {
@@ -553,10 +520,7 @@
       if (t) {
         return t;
       } else {
-        this.raiseError(
-          this,
-          "Expected '" + e + "' but found '" + this.currentToken().value + "'",
-        );
+        this.raiseError(this, "Expected '" + e + "' but found '" + this.currentToken().value + "'");
       }
     }
     matchAnyOpToken(e, t, r) {
@@ -578,11 +542,7 @@
       }
     }
     matchOpToken(e) {
-      if (
-        this.currentToken() &&
-        this.currentToken().op &&
-        this.currentToken().value === e
-      ) {
+      if (this.currentToken() && this.currentToken().op && this.currentToken().value === e) {
         return this.consumeToken();
       }
     }
@@ -595,11 +555,7 @@
       }
     }
     matchTokenType(e, t, r, n) {
-      if (
-        this.currentToken() &&
-        this.currentToken().type &&
-        [e, t, r, n].indexOf(this.currentToken().type) >= 0
-      ) {
+      if (this.currentToken() && this.currentToken().type && [e, t, r, n].indexOf(this.currentToken().type) >= 0) {
         return this.consumeToken();
       }
     }
@@ -608,20 +564,13 @@
       if (r) {
         return r;
       } else {
-        this.raiseError(
-          this,
-          "Expected '" + e + "' but found '" + this.currentToken().value + "'",
-        );
+        this.raiseError(this, "Expected '" + e + "' but found '" + this.currentToken().value + "'");
       }
     }
     peekToken(e, t, r) {
       t = t || 0;
       r = r || "IDENTIFIER";
-      if (
-        this.tokens[t] &&
-        this.tokens[t].value === e &&
-        this.tokens[t].type === r
-      ) {
+      if (this.tokens[t] && this.tokens[t].value === e && this.tokens[t].type === r) {
         return this.tokens[t];
       }
     }
@@ -630,11 +579,7 @@
         return;
       }
       t = t || "IDENTIFIER";
-      if (
-        this.currentToken() &&
-        this.currentToken().value === e &&
-        this.currentToken().type === t
-      ) {
+      if (this.currentToken() && this.currentToken().value === e && this.currentToken().type === t) {
         return this.consumeToken();
       }
     }
@@ -648,11 +593,7 @@
     consumeUntil(e, t) {
       var r = [];
       var n = this.token(0, true);
-      while (
-        (t == null || n.type !== t) &&
-        (e == null || n.value !== e) &&
-        n.type !== "EOF"
-      ) {
+      while ((t == null || n.type !== t) && (e == null || n.value !== e) && n.type !== "EOF") {
         var i = this.tokens.shift();
         this.consumed.push(i);
         r.push(n);
@@ -662,10 +603,7 @@
       return r;
     }
     lastWhitespace() {
-      if (
-        this.consumed[this.consumed.length - 1] &&
-        this.consumed[this.consumed.length - 1].type === "WHITESPACE"
-      ) {
+      if (this.consumed[this.consumed.length - 1] && this.consumed[this.consumed.length - 1].type === "WHITESPACE") {
         return this.consumed[this.consumed.length - 1].value;
       } else {
         return "";
@@ -703,10 +641,7 @@
       return this._lastConsumed;
     }
     static sourceFor = function () {
-      return this.programSource.substring(
-        this.startToken.start,
-        this.endToken.end,
-      );
+      return this.programSource.substring(this.startToken.start, this.endToken.end);
     };
     static lineFor = function () {
       return this.programSource.split("\n")[this.startToken.line - 1];
@@ -926,10 +861,7 @@
       return a + "\n" + " ".repeat(o) + "^^\n\n";
     }
     static raiseParseError(e, t) {
-      t =
-        (t || "Unexpected Token : " + e.currentToken().value) +
-        "\n\n" +
-        a.createParserContext(e);
+      t = (t || "Unexpected Token : " + e.currentToken().value) + "\n\n" + a.createParserContext(e);
       var r = new Error(t);
       r["tokens"] = e;
       throw r;
@@ -1054,17 +986,11 @@
       return (
         Array.isArray(e) ||
         (typeof NodeList !== "undefined" &&
-          (e instanceof NodeList ||
-            e instanceof HTMLCollection ||
-            e instanceof FileList))
+          (e instanceof NodeList || e instanceof HTMLCollection || e instanceof FileList))
       );
     }
     isIterable(e) {
-      return (
-        typeof e === "object" &&
-        Symbol.iterator in e &&
-        typeof e[Symbol.iterator] === "function"
-      );
+      return typeof e === "object" && Symbol.iterator in e && typeof e[Symbol.iterator] === "function";
     }
     shouldAutoIterate(e) {
       return (e != null && e[p]) || this.isArrayLike(e);
@@ -1142,11 +1068,7 @@
           }
         }
         if (r == null) {
-          console.error(
-            e,
-            " did not return a next element to execute! context: ",
-            t,
-          );
+          console.error(e, " did not return a next element to execute! context: ", t);
           return;
         } else if (r.then) {
           r.then((e) => {
@@ -1336,10 +1258,7 @@
     evaluateNoPromise(e, t) {
       let r = e.evaluate(t);
       if (r.next) {
-        throw new Error(
-          i.sourceFor.call(e) +
-            " returned a Promise in a context that they are not allowed.",
-        );
+        throw new Error(i.sourceFor.call(e) + " returned a Promise in a context that they are not allowed.");
       }
       return r;
     }
@@ -1382,17 +1301,9 @@
         this.initElement(e, document.body);
       }
       if (e.querySelectorAll) {
-        this.forEach(
-          e.querySelectorAll(t + ", [type='text/hyperscript']"),
-          (e) => {
-            this.initElement(
-              e,
-              e instanceof HTMLScriptElement && e.type === "text/hyperscript"
-                ? document.body
-                : e,
-            );
-          },
-        );
+        this.forEach(e.querySelectorAll(t + ", [type='text/hyperscript']"), (e) => {
+          this.initElement(e, e instanceof HTMLScriptElement && e.type === "text/hyperscript" ? document.body : e);
+        });
       }
     }
     initElement(e, t) {
@@ -1417,13 +1328,7 @@
             }, 1);
           } catch (t) {
             this.triggerEvent(e, "exception", { error: t });
-            console.error(
-              "hyperscript errors were found on the following element:",
-              e,
-              "\n\n",
-              t.message,
-              t.stack,
-            );
+            console.error("hyperscript errors were found on the following element:", e, "\n\n", t.message, t.stack);
           }
         }
       }
@@ -1458,17 +1363,7 @@
       }
     }
     isReservedWord(e) {
-      return [
-        "meta",
-        "it",
-        "result",
-        "locals",
-        "event",
-        "target",
-        "detail",
-        "sender",
-        "body",
-      ].includes(e);
+      return ["meta", "it", "result", "locals", "event", "target", "detail", "sender", "body"].includes(e);
     }
     isHyperscriptContext(e) {
       return e instanceof f;
@@ -1531,11 +1426,7 @@
       } else if (n === "local") {
         r.locals[t] = i;
       } else {
-        if (
-          this.isHyperscriptContext(r) &&
-          !this.isReservedWord(t) &&
-          typeof r.locals[t] !== "undefined"
-        ) {
+        if (this.isHyperscriptContext(r) && !this.isReservedWord(t) && typeof r.locals[t] !== "undefined") {
           r.locals[t] = i;
         } else {
           var a = this.getElementScope(r);
@@ -1589,9 +1480,7 @@
       return this.flatGet(e, t, (e, t) => e.style && e.style[t]);
     }
     resolveComputedStyle(e, t) {
-      return this.flatGet(e, t, (e, t) =>
-        getComputedStyle(e).getPropertyValue(t),
-      );
+      return this.flatGet(e, t, (e, t) => getComputedStyle(e).getPropertyValue(t));
     }
     assignToNamespace(t, r, n, i) {
       let a;
@@ -1644,12 +1533,7 @@
             }
             for (var n = 0; n < r.length; n++) {
               var i = r[n];
-              e(
-                "  ->",
-                i.meta.feature.displayName.padEnd(t + 2),
-                "-",
-                i.meta.owner,
-              );
+              e("  ->", i.meta.feature.displayName.padEnd(t + 2), "-", i.meta.owner);
             }
           },
         };
@@ -1729,18 +1613,13 @@
           a = Array.from(r);
         }
         console.log(
-          "///_ BEEP! The expression (" +
-            i.sourceFor.call(t).replace("beep! ", "") +
-            ") evaluates to:",
+          "///_ BEEP! The expression (" + i.sourceFor.call(t).replace("beep! ", "") + ") evaluates to:",
           a,
           "of type " + n,
         );
       }
     }
-    hyperscriptUrl =
-      "document" in e && document.currentScript
-        ? document.currentScript.src
-        : null;
+    hyperscriptUrl = "document" in e && document.currentScript ? document.currentScript.src : null;
   }
   function s() {
     let e = document.cookie.split("; ").map((e) => {
@@ -1828,7 +1707,7 @@
         ctx: this,
       };
       this.locals = { cookies: c };
-      (this.me = n), (this.you = undefined);
+      ((this.me = n), (this.you = undefined));
       this.result = undefined;
       this.event = i;
       this.target = i ? i.target : null;
@@ -1874,9 +1753,7 @@
       return e[Symbol.iterator]();
     }
     selectMatches() {
-      let e = o.prototype
-        .getRootNode(this.relativeToElement)
-        .querySelectorAll(this.css);
+      let e = o.prototype.getRootNode(this.relativeToElement).querySelectorAll(this.css);
       return e;
     }
   }
@@ -2424,16 +2301,8 @@
         a = o;
         o = o.root;
       }
-      if (
-        o.type !== "symbol" &&
-        o.type !== "attributeRef" &&
-        o.type !== "styleRef" &&
-        o.type !== "computedStyleRef"
-      ) {
-        e.raiseParseError(
-          r,
-          "Cannot take a property of a non-symbol: " + o.type,
-        );
+      if (o.type !== "symbol" && o.type !== "attributeRef" && o.type !== "styleRef" && o.type !== "computedStyleRef") {
+        e.raiseParseError(r, "Cannot take a property of a non-symbol: " + o.type);
       }
       var s = o.type === "attributeRef";
       var u = o.type === "styleRef" || o.type === "computedStyleRef";
@@ -2973,9 +2842,7 @@
         op: function (e, t, r, n, f) {
           var p = t.css;
           if (p == null) {
-            throw (
-              "Expected a CSS value to be returned by " + i.sourceFor.apply(o)
-            );
+            throw "Expected a CSS value to be returned by " + i.sourceFor.apply(o);
           }
           if (m) {
             if (n) {
@@ -3043,10 +2910,7 @@
         a = a || i;
         var o = i.value;
         if (a.value !== o) {
-          e.raiseParseError(
-            r,
-            "You must parenthesize math operations with different operators",
-          );
+          e.raiseParseError(r, "You must parenthesize math operations with different operators");
         }
         var s = e.parseElement("unaryExpression", r);
         n = {
@@ -3085,11 +2949,7 @@
       } else if (t["includes"]) {
         return t.includes(r);
       } else {
-        throw Error(
-          "The value of " +
-            e.sourceFor() +
-            " does not have a contains or includes method on it",
-        );
+        throw Error("The value of " + e.sourceFor() + " does not have a contains or includes method on it");
       }
     }
     function p(e, t, r) {
@@ -3098,11 +2958,7 @@
       } else if (t["matches"]) {
         return t.matches(r);
       } else {
-        throw Error(
-          "The value of " +
-            e.sourceFor() +
-            " does not have a match or matches method on it",
-        );
+        throw Error("The value of " + e.sourceFor() + " does not have a match or matches method on it");
       }
     }
     t.addGrammarElement("comparisonOperator", function (e, t, r) {
@@ -3299,10 +3155,7 @@
       while (i) {
         a = a || i;
         if (a.value !== i.value) {
-          e.raiseParseError(
-            r,
-            "You must parenthesize logical operations with different operators",
-          );
+          e.raiseParseError(r, "You must parenthesize logical operations with different operators");
         }
         var o = e.requireElement("comparisonExpression", r);
         const s = i.value;
@@ -3367,9 +3220,7 @@
       } else {
         e.raiseParseError(
           r,
-          "A target expression must be writable.  The expression type '" +
-            (n && n.type) +
-            "' is not.",
+          "A target expression must be writable.  The expression type '" + (n && n.type) + "' is not.",
         );
       }
       return n;
@@ -3377,10 +3228,7 @@
     t.addGrammarElement("hyperscript", function (e, t, r) {
       var n = [];
       if (r.hasMore()) {
-        while (
-          e.featureStart(r.currentToken()) ||
-          r.currentToken().value === "("
-        ) {
+        while (e.featureStart(r.currentToken()) || r.currentToken().value === "(") {
           var i = e.requireElement("feature", r);
           n.push(i);
           r.matchToken("end");
@@ -3400,9 +3248,7 @@
       var t = [];
       if (
         e.token(0).value === "(" &&
-        (e.token(1).value === ")" ||
-          e.token(2).value === "," ||
-          e.token(2).value === ")")
+        (e.token(1).value === ")" || e.token(2).value === "," || e.token(2).value === ")")
       ) {
         e.matchOpToken("(");
         do {
@@ -3461,10 +3307,7 @@
               } else if (r.matchToken("threshold")) {
                 d["threshold"] = e.requireElement("expression", r).evaluate();
               } else {
-                e.raiseParseError(
-                  r,
-                  "Unknown intersection config specification",
-                );
+                e.raiseParseError(r, "Unknown intersection config specification");
               }
             } while (r.matchToken("and"));
           }
@@ -3495,10 +3338,7 @@
                 if (T.value.indexOf("@") == 0) {
                   E["attributeFilter"].push(T.value.substring(1));
                 } else {
-                  e.raiseParseError(
-                    r,
-                    "Only shorthand attribute references are allowed here",
-                  );
+                  e.raiseParseError(r, "Only shorthand attribute references are allowed here");
                 }
               } else {
                 e.raiseParseError(r, "Unknown mutation config specification");
@@ -3523,10 +3363,7 @@
               r.popFollow();
             }
             if (!y) {
-              e.raiseParseError(
-                r,
-                'Expected either target value or "elsewhere".',
-              );
+              e.raiseParseError(r, 'Expected either target value or "elsewhere".');
             }
           }
         }
@@ -3646,11 +3483,7 @@
             t.implicitLoop(n, function (n) {
               var i = r.on;
               if (n == null) {
-                console.warn(
-                  "'%s' feature ignored because target does not exists:",
-                  a,
-                  e,
-                );
+                console.warn("'%s' feature ignored because target does not exists:", a, e);
                 return;
               }
               if (r.mutationSpec) {
@@ -3676,12 +3509,7 @@
               }
               var o = n.addEventListener || n.on;
               o.call(n, i, function a(o) {
-                if (
-                  typeof Node !== "undefined" &&
-                  e instanceof Node &&
-                  n !== e &&
-                  !e.isConnected
-                ) {
+                if (typeof Node !== "undefined" && e instanceof Node && n !== e && !e.isConnected) {
                   n.removeEventListener(i, a);
                   return;
                 }
@@ -3733,10 +3561,7 @@
                 r.execCount++;
                 if (r.startCount) {
                   if (r.endCount) {
-                    if (
-                      r.execCount < r.startCount ||
-                      r.execCount > r.endCount
-                    ) {
+                    if (r.execCount < r.startCount || r.execCount > r.endCount) {
                       return;
                     }
                   } else if (r.unbounded) {
@@ -3862,10 +3687,7 @@
       let n = e.parseElement("setCommand", r);
       if (n) {
         if (n.target.scope !== "element") {
-          e.raiseParseError(
-            r,
-            "variables declared at the feature level must be element scoped.",
-          );
+          e.raiseParseError(r, "variables declared at the feature level must be element scoped.");
         }
         let i = {
           start: n,
@@ -3929,19 +3751,14 @@
       }
       return {
         install: function (t, n) {
-          r.assignToNamespace(
-            e.document && e.document.body,
-            a,
-            o,
-            function (e, t, n) {
-              var a = r.getInternalData(e);
-              var o = h(a, i + "Scope");
-              for (var l = 0; l < s.length; l++) {
-                o[s[l]] = n[s[l]];
-              }
-              u.apply(e, t);
-            },
-          );
+          r.assignToNamespace(e.document && e.document.body, a, o, function (e, t, n) {
+            var a = r.getInternalData(e);
+            var o = h(a, i + "Scope");
+            for (var l = 0; l < s.length; l++) {
+              o[s[l]] = n[s[l]];
+            }
+            u.apply(e, t);
+          });
         },
       };
     });
@@ -3963,8 +3780,7 @@
                   if (typeof s !== "object" && typeof s !== "function")
                     throw new Error("No such behavior defined as " + i);
                 }
-                if (!(s instanceof Function))
-                  throw new Error(i + " is not a behavior");
+                if (!(s instanceof Function)) throw new Error(i + " is not a behavior");
                 s(t, n, o);
               },
             },
@@ -4142,9 +3958,7 @@
             i.push({ time: e.requireElement("expression", r).evaluate() });
           } else {
             i.push({
-              name: e
-                .requireElement("dotOrColonPath", r, "Expected event name")
-                .evaluate(),
+              name: e.requireElement("dotOrColonPath", r, "Expected event name").evaluate(),
               args: v(r),
             });
           }
@@ -4158,10 +3972,7 @@
           args: [o],
           op: function (e, r) {
             var n = r ? r : e.me;
-            if (!(n instanceof EventTarget))
-              throw new Error(
-                "Not a valid event target: " + this.on.sourceFor(),
-              );
+            if (!(n instanceof EventTarget)) throw new Error("Not a valid event target: " + this.on.sourceFor());
             return new Promise((r) => {
               var a = false;
               for (const s of i) {
@@ -4169,8 +3980,7 @@
                   e.result = n;
                   if (s.args) {
                     for (const t of s.args) {
-                      e.locals[t.value] =
-                        n[t.value] || (n.detail ? n.detail[t.value] : null);
+                      e.locals[t.value] = n[t.value] || (n.detail ? n.detail[t.value] : null);
                     }
                   }
                   if (!a) {
@@ -4247,10 +4057,7 @@
     function d(e, t, r, n) {
       var i = t.requireElement("eventName", n);
       var a = t.parseElement("namedArgumentList", n);
-      if (
-        (e === "send" && n.matchToken("to")) ||
-        (e === "trigger" && n.matchToken("on"))
-      ) {
+      if ((e === "send" && n.matchToken("to")) || (e === "trigger" && n.matchToken("on"))) {
         var o = t.requireElement("expression", n);
       } else {
         var o = t.requireElement("implicitMeTarget", n);
@@ -4563,10 +4370,7 @@
       var s = n.type === "styleRef";
       var u = n.type === "arrayIndex";
       if (!(o || s || a) && n.root == null) {
-        e.raiseParseError(
-          r,
-          "Can only put directly into symbols, not references",
-        );
+        e.raiseParseError(r, "Can only put directly into symbols, not references");
       }
       var l = null;
       var c = null;
@@ -4728,10 +4532,7 @@
           var u = e.requireElement("expression", t);
         }
       } else {
-        if (
-          !e.commandBoundary(t.currentToken()) &&
-          t.currentToken().value !== "forever"
-        ) {
+        if (!e.commandBoundary(t.currentToken()) && t.currentToken().value !== "forever") {
           var m = e.requireElement("expression", t);
           t.requireToken("times");
         } else {
@@ -4869,10 +4670,7 @@
         op: function (t) {
           for (var n = this.parent; true; n = n.parent) {
             if (n == undefined) {
-              e.raiseParseError(
-                r,
-                "Command `continue` cannot be used outside of a `repeat` loop.",
-              );
+              e.raiseParseError(r, "Command `continue` cannot be used outside of a `repeat` loop.");
             }
             if (n.loop != undefined) {
               return n.resolveNext(t);
@@ -4888,10 +4686,7 @@
         op: function (n) {
           for (var i = this.parent; true; i = i.parent) {
             if (i == undefined) {
-              e.raiseParseError(
-                r,
-                "Command `continue` cannot be used outside of a `repeat` loop.",
-              );
+              e.raiseParseError(r, "Command `continue` cannot be used outside of a `repeat` loop.");
             }
             if (i.loop != undefined) {
               return t.findNext(i.parent, n);
@@ -4989,12 +4784,7 @@
     t.addCommand("pick", (e, t, r) => {
       if (!r.matchToken("pick")) return;
       r.matchToken("the");
-      if (
-        r.matchToken("item") ||
-        r.matchToken("items") ||
-        r.matchToken("character") ||
-        r.matchToken("characters")
-      ) {
+      if (r.matchToken("item") || r.matchToken("items") || r.matchToken("character") || r.matchToken("characters")) {
         const n = g(e, t, r);
         r.requireToken("from");
         const i = e.requireElement("expression", r);
@@ -5253,10 +5043,7 @@
           if (i == null) {
             a = e.parseElement("styleLiteral", r);
             if (a == null) {
-              e.raiseParseError(
-                r,
-                "Expected either a class reference or attribute expression",
-              );
+              e.raiseParseError(r, "Expected either a class reference or attribute expression");
             }
           }
         } else {
@@ -5272,10 +5059,7 @@
         }
         if (r.matchToken("when")) {
           if (a) {
-            e.raiseParseError(
-              r,
-              "Only class and properties are supported with a when clause",
-            );
+            e.raiseParseError(r, "Only class and properties are supported with a when clause");
           }
           var u = e.requireElement("expression", r);
         }
@@ -5400,10 +5184,7 @@
           if (i == null) {
             a = e.parseElement("expression", r);
             if (a == null) {
-              e.raiseParseError(
-                r,
-                "Expected either a class reference, attribute expression or value expression",
-              );
+              e.raiseParseError(r, "Expected either a class reference, attribute expression or value expression");
             }
           }
         } else {
@@ -5489,10 +5270,7 @@
           if (l == null) {
             f = e.parseElement("attributeRef", r);
             if (f == null) {
-              e.raiseParseError(
-                r,
-                "Expected either a class reference or attribute expression",
-              );
+              e.raiseParseError(r, "Expected either a class reference or attribute expression");
             }
           } else {
             var m = [l];
@@ -5754,10 +5532,7 @@
         if (!c) {
           n = e.parseElement("attributeRef", r);
           if (n == null) {
-            e.raiseParseError(
-              r,
-              "Expected either a class reference or attribute expression",
-            );
+            e.raiseParseError(r, "Expected either a class reference or attribute expression");
           }
           if (r.matchToken("with")) {
             i = e.requireElement("expression", r);
@@ -5852,10 +5627,7 @@
           r.requireToken("of");
         }
         if (i == null) {
-          e.raiseParseError(
-            r,
-            "Expected one of 'into', 'before', 'at start of', 'at end of', 'after'",
-          );
+          e.raiseParseError(r, "Expected one of 'into', 'before', 'at start of', 'at end of', 'after'");
         }
         var o = e.requireElement("expression", r);
         var s = i.value;
@@ -5928,10 +5700,7 @@
                           ? Element.prototype.append
                           : Element.prototype.append;
                 t.implicitLoop(r, function (e) {
-                  o.call(
-                    e,
-                    i instanceof Node ? i : t.convertValue(i, "Fragment"),
-                  );
+                  o.call(e, i instanceof Node ? i : t.convertValue(i, "Fragment"));
                   if (e.parentElement) {
                     t.processNode(e.parentElement);
                   } else {
@@ -5965,10 +5734,7 @@
         if (r.matchOpToken("'")) {
           r.requireToken("s");
         }
-      } else if (
-        r.currentToken().type === "IDENTIFIER" &&
-        r.currentToken().value === "its"
-      ) {
+      } else if (r.currentToken().type === "IDENTIFIER" && r.currentToken().value === "its") {
         var i = r.matchToken("its");
         n = {
           type: "pseudopossessiveIts",
@@ -5991,11 +5757,7 @@
         var s = [];
         var u = [];
         var l = n.currentToken();
-        while (
-          !e.commandBoundary(l) &&
-          l.value !== "over" &&
-          l.value !== "using"
-        ) {
+        while (!e.commandBoundary(l) && l.value !== "over" && l.value !== "using") {
           if (n.currentToken().type === "STYLE_REF") {
             let e = n.consumeToken();
             let t = e.value.substr(1);
@@ -6458,9 +6220,7 @@
     return k.evaluate(e, t);
   }
   function w() {
-    var t = Array.from(
-      e.document.querySelectorAll("script[type='text/hyperscript'][src]"),
-    );
+    var t = Array.from(e.document.querySelectorAll("script[type='text/hyperscript'][src]"));
     Promise.all(
       t.map(function (e) {
         return fetch(e.src).then(function (e) {

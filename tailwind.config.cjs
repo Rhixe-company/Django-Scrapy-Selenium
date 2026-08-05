@@ -85,11 +85,7 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    require("tw-elements/plugin.cjs"),
-    require("flowbite/plugin"),
-    require("daisyui"),
-  ],
+  plugins: [require("tw-elements/plugin.cjs"), require("flowbite/plugin"), require("daisyui")],
   // daisyUI config (optional - here are the default values)
   daisyui: {
     themes: {

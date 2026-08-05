@@ -1,6 +1,6 @@
 # The Story of Django-Scrapy-Selenium
 
-*The platform that tried to do everything, and taught us to do one thing well*
+_The platform that tried to do everything, and taught us to do one thing well_
 
 ---
 
@@ -25,12 +25,13 @@ The commit message: `feat: initial scraping platform with all engines`
 ## Chapter 1: The Three Engines
 
 ### Engine 1: Scrapy (The Structured One)
+
 ```python
 # apps/scrapers/spiders/comic_spider.py
 class ComicSpider(scrapy.Spider):
     name = 'comic'
     start_urls = ['https://example.com/comics']
-    
+
     def parse(self, response):
         for comic in response.css('.comic-item'):
             yield {
@@ -38,9 +39,11 @@ class ComicSpider(scrapy.Spider):
                 'url': comic.css('a::attr(href)').get(),
             }
 ```
+
 Clean. Fast. Handles thousands of pages. **But** — no JavaScript.
 
 ### Engine 2: Selenium via Python (The Browser One)
+
 ```python
 # apps/scrapers/selenium_utils.py
 def scrape_with_selenium(url):
@@ -54,24 +57,27 @@ def scrape_with_selenium(url):
     finally:
         driver.quit()
 ```
+
 Renders JavaScript. Slow. Memory leaks. **But** — works on SPAs.
 
 ### Engine 3: Selenium via Node.js (The Other Browser One)
+
 ```javascript
 // src/scrape.js
-const {Builder, By, until} = require('selenium-webdriver');
+const { Builder, By, until } = require("selenium-webdriver");
 
 async function scrape(url) {
-  const driver = await new Builder().forBrowser('chrome').build();
+  const driver = await new Builder().forBrowser("chrome").build();
   try {
     await driver.get(url);
-    await driver.wait(until.elementLocated(By.css('.dynamic-content')), 10000);
+    await driver.wait(until.elementLocated(By.css(".dynamic-content")), 10000);
     return await driver.getPageSource();
   } finally {
     await driver.quit();
   }
 }
 ```
+
 **Why two Selenium implementations?** The Python one had memory leaks after 50 pages. The Node one "felt more stable." Now there were two to maintain.
 
 ---
@@ -97,6 +103,7 @@ def run_selenium_node(url):
 ```
 
 **The problems:**
+
 - Three different error handling patterns
 - Three different logging formats
 - Three different retry strategies
@@ -108,6 +115,7 @@ def run_selenium_node(url):
 ## Chapter 3: The Dashboard That Monitored Chaos
 
 Tailwind + Alpine.js dashboard showing:
+
 - Active Celery workers
 - Task queue depth per engine
 - Success/failure rates
@@ -121,21 +129,22 @@ It was beautiful. It showed exactly how broken everything was.
 ## Chapter 4: The Consolidation Decision
 
 July 2025. Three comic projects exist:
+
 - `comicwise` — Next.js + Prisma
-- `rhixe_scans` — Next.js + Prisma  
+- `rhixe_scans` — Next.js + Prisma
 - `rhixecompany-comics` — Django + Next.js (the survivor)
 
 `Django-Scrapy-Selenium` is the **scraping engine** for all of them. But it's a mess.
 
 **P1 Priority:** Merge into `rhixecompany-comics/backend/apps/scrapers/`
 
-| Component | Destination | Effort |
-|-----------|-------------|--------|
-| Scrapy spiders | `backend/apps/scrapers/spiders/` | Low |
-| Selenium utils (Python) | `backend/apps/scrapers/selenium_utils.py` | Low |
-| Node.js scraper | **DELETE** (rewrite in Python) | Medium |
-| Celery tasks | `backend/apps/scrapers/tasks.py` | Low |
-| Dashboard | `frontend/app/admin/scraping/` | Medium |
+| Component               | Destination                               | Effort |
+| ----------------------- | ----------------------------------------- | ------ |
+| Scrapy spiders          | `backend/apps/scrapers/spiders/`          | Low    |
+| Selenium utils (Python) | `backend/apps/scrapers/selenium_utils.py` | Low    |
+| Node.js scraper         | **DELETE** (rewrite in Python)            | Medium |
+| Celery tasks            | `backend/apps/scrapers/tasks.py`          | Low    |
+| Dashboard               | `frontend/app/admin/scraping/`            | Medium |
 
 **The Node.js Selenium code gets deleted.** One language, one Selenium implementation.
 
@@ -143,13 +152,13 @@ July 2025. Three comic projects exist:
 
 ## Chapter 5: What We Learned
 
-| Anti-Pattern | Lesson |
-|--------------|--------|
-| **Three scraping engines** | Pick one primary. Add second only when first provably fails. |
-| **Polyglot scraping** | One language per service. Python for scraping, not Python + Node. |
-| **Celery without observability** | Add structured logging, metrics, alerting *before* scaling tasks. |
-| **Duplicate infrastructure** | Redis + RabbitMQ = confusion. Pick one broker. |
-| **No integration tests** | Scrapers break when sites change. Test with recorded HTML fixtures. |
+| Anti-Pattern                     | Lesson                                                              |
+| -------------------------------- | ------------------------------------------------------------------- |
+| **Three scraping engines**       | Pick one primary. Add second only when first provably fails.        |
+| **Polyglot scraping**            | One language per service. Python for scraping, not Python + Node.   |
+| **Celery without observability** | Add structured logging, metrics, alerting _before_ scaling tasks.   |
+| **Duplicate infrastructure**     | Redis + RabbitMQ = confusion. Pick one broker.                      |
+| **No integration tests**         | Scrapers break when sites change. Test with recorded HTML fixtures. |
 
 ---
 
@@ -169,5 +178,5 @@ The dashboard? Rebuilt in the `rhixecompany-comics` admin panel.
 
 ---
 
-*Written by the workspace chronicler, July 25, 2025.  
-Filed at `projects/Django-Scrapy-Selenium/THE_STORY_OF_THIS_REPO.md`.*
+_Written by the workspace chronicler, July 25, 2025.  
+Filed at `projects/Django-Scrapy-Selenium/THE_STORY_OF_THIS_REPO.md`._

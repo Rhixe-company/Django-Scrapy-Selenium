@@ -1,19 +1,15 @@
-# from django.conf import settings  # noqa: ERA001
+# from django.conf import settings
 import logging
 
 from django.core.management.base import BaseCommand
 
-# from redis import from_url  # noqa: ERA001
+# from redis import from_url
 from scrapy.crawler import CrawlerRunner
 from scrapy.utils.log import configure_logging
 from scrapy.utils.project import get_project_settings
-from twisted.internet import defer
-from twisted.internet import reactor
+from twisted.internet import defer, reactor
 
-from api.apps.models import Chapter
-from api.apps.models import ChapterImage
-from api.apps.models import Comic
-from api.apps.models import ComicImage
+from api.apps.models import Chapter, ChapterImage, Comic, ComicImage
 from crawler.spiders.asuracomic import AsuracomicSpider
 
 logger = logging.getLogger(__name__)
@@ -23,10 +19,10 @@ class Command(BaseCommand):
     help = "A  Custom command to  run AsuracomicSpider"
 
     def handle(self, *args, **options):
-        # urls = ["https://asuracomic.net/series/regression-of-the-yong-clan-heir-9a3a35e8"]  # noqa: E501, ERA001
-        # redisclient = from_url(settings.CELERY_BROKER_URL)  # noqa: ERA001
+        # urls = ["https://asuracomic.net/series/regression-of-the-yong-clan-heir-9a3a35e8"]
+        # redisclient = from_url(settings.CELERY_BROKER_URL)
         # redisclient.rpush(
-        #     "asuracomic_queue:start_urls",  # noqa: ERA001
+        #     "asuracomic_queue:start_urls",
         #     urls,
         # )  # noqa: ERA001, RUF100
         crawlsettings = get_project_settings()
@@ -38,10 +34,10 @@ class Command(BaseCommand):
         def run():
             yield runner.crawl(AsuracomicSpider)
 
-            reactor.stop()  # type: ignore  # noqa: PGH003
+            reactor.stop()  # type: ignore
 
         run()
-        reactor.run()  # type: ignore  # noqa: PGH003
+        reactor.run()  # type: ignore
         comics = (
             Comic.objects.prefetch_related(
                 "comicitems",
@@ -54,11 +50,7 @@ class Command(BaseCommand):
         )
 
         comic_images = ComicImage.objects.select_related("comic").all()
-        chapters = (
-            Chapter.objects.prefetch_related("chapteritems")
-            .select_related("comic")
-            .all()
-        )
+        chapters = Chapter.objects.prefetch_related("chapteritems").select_related("comic").all()
 
         chapter_images = ChapterImage.objects.select_related("comic", "chapter").all()
         context = {

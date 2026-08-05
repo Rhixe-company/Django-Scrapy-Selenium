@@ -19,7 +19,7 @@ services:
       - ./.envs/.local/.django
       - ./.envs/.local/.postgres
     ports:
-      - '8000:8000'
+      - "8000:8000"
     command: /start
 
   postgres:
@@ -40,7 +40,6 @@ services:
 
     volumes:
       - api_local_redis_data:/data
-
 
   celeryworker:
     <<: *django
@@ -67,7 +66,7 @@ services:
     image: api_local_flower
     container_name: api_local_flower
     ports:
-      - '5555:5555'
+      - "5555:5555"
     command: /start-flower
 
   node:
@@ -84,4 +83,4 @@ services:
       - /app/node_modules
     command: npm run dev
     ports:
-      - '3000:3000'
+      - "3000:3000"

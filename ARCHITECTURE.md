@@ -69,33 +69,33 @@ A comprehensive web crawling and content management platform built with Django 5
 
 ## Component Relationships
 
-| Component | Responsibility | Dependencies |
-|-----------|---------------|--------------|
-| `config/` | Django settings, URLs, Celery config | django-environ, celery |
-| `api/` | Django applications (models, views, API) | Django, DRF, PostgreSQL |
-| `crawler/` | Scrapy spiders and crawling logic | Scrapy, Selenium |
-| `compose/` | Docker Compose configurations | Docker, Traefik |
-| `tests/` | Test suite | pytest, coverage |
-| `fixtures/` | Test data fixtures | Django fixtures |
-| `webpack/` | Frontend asset bundling | Webpack, Tailwind CSS |
-| `locale/` | Internationalization files | Django i18n |
+| Component   | Responsibility                           | Dependencies            |
+| ----------- | ---------------------------------------- | ----------------------- |
+| `config/`   | Django settings, URLs, Celery config     | django-environ, celery  |
+| `api/`      | Django applications (models, views, API) | Django, DRF, PostgreSQL |
+| `crawler/`  | Scrapy spiders and crawling logic        | Scrapy, Selenium        |
+| `compose/`  | Docker Compose configurations            | Docker, Traefik         |
+| `tests/`    | Test suite                               | pytest, coverage        |
+| `fixtures/` | Test data fixtures                       | Django fixtures         |
+| `webpack/`  | Frontend asset bundling                  | Webpack, Tailwind CSS   |
+| `locale/`   | Internationalization files               | Django i18n             |
 
 ## Dependencies
 
-| Package | Version | Purpose |
-|---------|---------|---------|
-| django | 5.0 | Web framework |
-| scrapy | Latest | Web crawling framework |
-| selenium | Latest | Browser automation |
-| celery | Latest | Async task queue |
-| psycopg2 | Latest | PostgreSQL adapter |
-| django-environ | Latest | Environment configuration |
-| django-allauth | Latest | Authentication |
-| djangorestframework | Latest | REST API |
-| ruff | Latest | Python linter |
-| tailwindcss | 5.1.3 | CSS framework |
-| gunicorn | Latest | Production WSGI server |
-| traefik | Latest | Reverse proxy (Docker) |
+| Package             | Version | Purpose                   |
+| ------------------- | ------- | ------------------------- |
+| django              | 5.0     | Web framework             |
+| scrapy              | Latest  | Web crawling framework    |
+| selenium            | Latest  | Browser automation        |
+| celery              | Latest  | Async task queue          |
+| psycopg2            | Latest  | PostgreSQL adapter        |
+| django-environ      | Latest  | Environment configuration |
+| django-allauth      | Latest  | Authentication            |
+| djangorestframework | Latest  | REST API                  |
+| ruff                | Latest  | Python linter             |
+| tailwindcss         | 5.1.3   | CSS framework             |
+| gunicorn            | Latest  | Production WSGI server    |
+| traefik             | Latest  | Reverse proxy (Docker)    |
 
 ## Data Flow
 

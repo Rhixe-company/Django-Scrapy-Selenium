@@ -14,9 +14,9 @@ in `docs/`.
 
 ## Issues Found & Fixed
 
-| # | Issue | Action | Commit |
-|---|-------|--------|--------|
-| 1 | Stale `bin/post_compile` Heroku build script deleted from disk but not staged | Staged removal, committed clean | `9e902e3` |
+| #   | Issue                                                                         | Action                          | Commit    |
+| --- | ----------------------------------------------------------------------------- | ------------------------------- | --------- |
+| 1   | Stale `bin/post_compile` Heroku build script deleted from disk but not staged | Staged removal, committed clean | `9e902e3` |
 
 ## Final State
 

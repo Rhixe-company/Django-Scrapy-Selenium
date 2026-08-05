@@ -5,13 +5,9 @@
 
 from dateparser import parse
 from django.utils.text import slugify
-from itemloaders.processors import MapCompose
-from itemloaders.processors import TakeFirst
-from scrapy.item import Field
-from scrapy.item import Item
-from w3lib.html import remove_comments
-from w3lib.html import remove_tags
-from w3lib.html import strip_html5_whitespace
+from itemloaders.processors import MapCompose, TakeFirst
+from scrapy.item import Field, Item
+from w3lib.html import remove_comments, remove_tags, strip_html5_whitespace
 
 
 def gen_slug(value):
@@ -44,7 +40,7 @@ def get_des(value):
 
 
 def get_date(value):
-    return parse(value, languages=["en"], date_formats=["%d/%m/%Y"]).date()  # type: ignore  # noqa: PGH003
+    return parse(value, languages=["en"], date_formats=["%d/%m/%Y"]).date()  # type: ignore
 
 
 def get_html(value):

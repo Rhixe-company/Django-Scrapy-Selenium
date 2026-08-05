@@ -84,12 +84,12 @@ Django-Scrapy-Selenium/
 
 ## Naming Conventions
 
-| Convention | Pattern | Examples |
-|---|---|---|
-| **Django apps** | lowercase | `apps/`, `home/`, `contrib/` |
+| Convention               | Pattern                  | Examples                                                    |
+| ------------------------ | ------------------------ | ----------------------------------------------------------- |
+| **Django apps**          | lowercase                | `apps/`, `home/`, `contrib/`                                |
 | **Docker compose files** | docker-compose.<env>.yml | `docker-compose.local.yml`, `docker-compose.production.yml` |
-| **Config files** | dotted-prefix | `.devcontainer/`, `.envs/` |
-| **Documentation** | UPPER_CASE.md | `README.md`, `CHANGELOG.md`, `CONTRIBUTORS.txt` |
+| **Config files**         | dotted-prefix            | `.devcontainer/`, `.envs/`                                  |
+| **Documentation**        | UPPER_CASE.md            | `README.md`, `CHANGELOG.md`, `CONTRIBUTORS.txt`             |
 
 ---
 
@@ -105,15 +105,15 @@ Django-Scrapy-Selenium/
 
 ## Project Type Indicators
 
-| Indicator | Value |
-|---|---|
-| Has `manage.py` | ✅ Django project |
-| Has `crawler/` | ✅ Scrapy crawler |
-| Has `api/` with Django apps | ✅ Django REST API |
+| Indicator                   | Value                       |
+| --------------------------- | --------------------------- |
+| Has `manage.py`             | ✅ Django project           |
+| Has `crawler/`              | ✅ Scrapy crawler           |
+| Has `api/` with Django apps | ✅ Django REST API          |
 | Has Docker Compose variants | ✅ Multi-environment Docker |
-| Has `Procfile` | ✅ Heroku deployment |
-| Has `Makefile` | ✅ Build automation |
-| Has `locale/` | ✅ i18n support |
+| Has `Procfile`              | ✅ Heroku deployment        |
+| Has `Makefile`              | ✅ Build automation         |
+| Has `locale/`               | ✅ i18n support             |
 
 ---
 

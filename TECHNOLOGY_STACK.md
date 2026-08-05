@@ -10,6 +10,7 @@
 
 **Pattern:** Full-stack dual-stack (Django backend + Node.js frontend/tooling)
 **Components:**
+
 - Django 4.x + DRF backend API
 - Scrapy spiders for structured scraping
 - Selenium WebDriver for JavaScript-heavy sites
@@ -21,46 +22,48 @@
 
 ## Backend Stack (Python/Django)
 
-| Category | Technology | Version | License |
-|----------|-----------|---------|---------|
-| **Framework** | Django | 4.x | BSD |
-| **API** | Django REST Framework | 3.15+ | MIT |
-| **Language** | Python | 3.12 | PSF |
-| **Scraping** | Scrapy | ^2.11 | BSD |
-| **Browser Automation** | Selenium WebDriver | ^4.20 | Apache 2.0 |
-| **HTML Parsing** | BeautifulSoup4 | Latest | MIT |
-| **Async Tasks** | Celery | ^5.3 | BSD |
-| **Message Broker** | Redis | ^5.0 | BSD |
-| **Database** | PostgreSQL (prod) / SQLite (dev) | Latest | PostgreSQL |
-| **WSGI** | Gunicorn | ^22.0 | MIT |
-| **Static Files** | WhiteNoise | ^6.6 | MIT |
-| **Env Config** | python-dotenv | ^1.0 | BSD |
+| Category               | Technology                       | Version | License    |
+| ---------------------- | -------------------------------- | ------- | ---------- |
+| **Framework**          | Django                           | 4.x     | BSD        |
+| **API**                | Django REST Framework            | 3.15+   | MIT        |
+| **Language**           | Python                           | 3.12    | PSF        |
+| **Scraping**           | Scrapy                           | ^2.11   | BSD        |
+| **Browser Automation** | Selenium WebDriver               | ^4.20   | Apache 2.0 |
+| **HTML Parsing**       | BeautifulSoup4                   | Latest  | MIT        |
+| **Async Tasks**        | Celery                           | ^5.3    | BSD        |
+| **Message Broker**     | Redis                            | ^5.0    | BSD        |
+| **Database**           | PostgreSQL (prod) / SQLite (dev) | Latest  | PostgreSQL |
+| **WSGI**               | Gunicorn                         | ^22.0   | MIT        |
+| **Static Files**       | WhiteNoise                       | ^6.6    | MIT        |
+| **Env Config**         | python-dotenv                    | ^1.0    | BSD        |
 
 ### Python Quality Tools (`pyproject.toml`)
-| Tool | Version | Config |
-|------|---------|--------|
-| **pytest** | Latest | Django test settings, coverage |
-| **mypy** | Latest | Django plugin, strict |
-| **djLint** | Latest | Django/Jinja templates |
-| **ruff** | Latest | Comprehensive lint (F,E,W,C90,I,N,UP,YTT,ASYNC,S,BLE,FBT,B,A,COM,C4,DTZ,T10,DJ,EM,EXE,FA,ISC,ICN,G,INP,PIE,T20,PYI,PT,Q,RSE,RET,SLF,SLOT,SIM,TID,TCH,INT,PTH,ERA,PD,PGH,PL,TRY,FLY,PERF,RUF) |
+
+| Tool       | Version | Config                                                                                                                                                                                       |
+| ---------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **pytest** | Latest  | Django test settings, coverage                                                                                                                                                               |
+| **mypy**   | Latest  | Django plugin, strict                                                                                                                                                                        |
+| **djLint** | Latest  | Django/Jinja templates                                                                                                                                                                       |
+| **ruff**   | Latest  | Comprehensive lint (F,E,W,C90,I,N,UP,YTT,ASYNC,S,BLE,FBT,B,A,COM,C4,DTZ,T10,DJ,EM,EXE,FA,ISC,ICN,G,INP,PIE,T20,PYI,PT,Q,RSE,RET,SLF,SLOT,SIM,TID,TCH,INT,PTH,ERA,PD,PGH,PL,TRY,FLY,PERF,RUF) |
 
 ---
 
 ## Frontend Stack (Node.js/TypeScript)
 
-| Category | Technology | Version | License |
-|----------|-----------|---------|---------|
-| **Runtime** | Node.js | ^22.13 | MIT |
-| **Language** | TypeScript | ^5.4.5 | Apache 2.0 |
-| **Framework** | Alpine.js | ^3.14 | MIT |
-| **UI Kit** | daisyUI | ^4.12 | MIT |
-| **CSS** | Tailwind CSS | ^3.4 | MIT |
-| **Bundler** | Webpack | ^5.82 | MIT |
-| **Transpiler** | Babel | ^7.16 | MIT |
-| **CSS Processing** | PostCSS + PostCSS Preset Env | ^8.5 / ^10.0 | MIT |
-| **Sass** | Dart Sass | ^1.77 | MIT |
+| Category           | Technology                   | Version      | License    |
+| ------------------ | ---------------------------- | ------------ | ---------- |
+| **Runtime**        | Node.js                      | ^22.13       | MIT        |
+| **Language**       | TypeScript                   | ^5.4.5       | Apache 2.0 |
+| **Framework**      | Alpine.js                    | ^3.14        | MIT        |
+| **UI Kit**         | daisyUI                      | ^4.12        | MIT        |
+| **CSS**            | Tailwind CSS                 | ^3.4         | MIT        |
+| **Bundler**        | Webpack                      | ^5.82        | MIT        |
+| **Transpiler**     | Babel                        | ^7.16        | MIT        |
+| **CSS Processing** | PostCSS + PostCSS Preset Env | ^8.5 / ^10.0 | MIT        |
+| **Sass**           | Dart Sass                    | ^1.77        | MIT        |
 
 ### Frontend Dependencies
+
 ```json
 {
   "dependencies": {
@@ -85,6 +88,7 @@
 ```
 
 ### Frontend Dev Dependencies
+
 ```json
 {
   "devDependencies": {
@@ -211,18 +215,19 @@ Django-Scrapy-Selenium/
 
 ### Scraping Strategies
 
-| Strategy | Tool | Use Case |
-|----------|------|----------|
-| **Static HTML** | Scrapy | Fast, structured sites |
-| **JavaScript-rendered** | Selenium WebDriver | SPAs, dynamic content |
-| **Hybrid** | Scrapy + Selenium middleware | Complex sites |
-| **API endpoints** | Direct HTTP (axios/requests) | When available |
+| Strategy                | Tool                         | Use Case               |
+| ----------------------- | ---------------------------- | ---------------------- |
+| **Static HTML**         | Scrapy                       | Fast, structured sites |
+| **JavaScript-rendered** | Selenium WebDriver           | SPAs, dynamic content  |
+| **Hybrid**              | Scrapy + Selenium middleware | Complex sites          |
+| **API endpoints**       | Direct HTTP (axios/requests) | When available         |
 
 ---
 
 ## Key Scripts
 
 ### Backend
+
 ```bash
 # Install deps
 pip install -r requirements/local.txt
@@ -246,6 +251,7 @@ djlint .
 ```
 
 ### Frontend
+
 ```bash
 cd frontend
 npm install
@@ -265,17 +271,17 @@ npm run format:check
 
 ## Configuration Files
 
-| File | Purpose |
-|------|---------|
-| `pyproject.toml` | pytest, mypy, djLint, ruff, coverage |
-| `requirements/base.txt` | Shared Python deps |
-| `requirements/local.txt` | Dev deps (includes base) |
-| `requirements/production.txt` | Prod deps (includes base) |
-| `frontend/package.json` | Node deps & scripts |
-| `frontend/tsconfig.json` | TypeScript config |
-| `frontend/webpack/*.config.js` | Webpack configs |
-| `config/settings/*.py` | Django settings per env |
-| `scrapy/settings.py` | Scrapy settings |
+| File                           | Purpose                              |
+| ------------------------------ | ------------------------------------ |
+| `pyproject.toml`               | pytest, mypy, djLint, ruff, coverage |
+| `requirements/base.txt`        | Shared Python deps                   |
+| `requirements/local.txt`       | Dev deps (includes base)             |
+| `requirements/production.txt`  | Prod deps (includes base)            |
+| `frontend/package.json`        | Node deps & scripts                  |
+| `frontend/tsconfig.json`       | TypeScript config                    |
+| `frontend/webpack/*.config.js` | Webpack configs                      |
+| `config/settings/*.py`         | Django settings per env              |
+| `scrapy/settings.py`           | Scrapy settings                      |
 
 ---
 
@@ -292,25 +298,26 @@ npm run format:check
 
 ## License Summary
 
-| Component | License |
-|-----------|---------|
-| Django/DRF | BSD / MIT |
-| Scrapy | BSD |
-| Selenium | Apache 2.0 |
-| Celery | BSD |
-| Alpine.js/daisyUI/Tailwind | MIT |
-| Webpack/Babel/PostCSS | MIT |
-| All Python tooling | MIT / BSD |
+| Component                  | License    |
+| -------------------------- | ---------- |
+| Django/DRF                 | BSD / MIT  |
+| Scrapy                     | BSD        |
+| Selenium                   | Apache 2.0 |
+| Celery                     | BSD        |
+| Alpine.js/daisyUI/Tailwind | MIT        |
+| Webpack/Babel/PostCSS      | MIT        |
+| All Python tooling         | MIT / BSD  |
 
 ---
 
 ## Consolidation Notes
 
 **Status:** This project is a consolidation target.
+
 - Scraping functionality moved to `rhixecompany-comics/backend/`
 - Django-Scrapy-Selenium serves as reference implementation
 - New scraping work should use rhixecompany-comics stack
 
 ---
 
-*Generated by Hermes Agent Technology Stack Blueprint Generator*
+_Generated by Hermes Agent Technology Stack Blueprint Generator_

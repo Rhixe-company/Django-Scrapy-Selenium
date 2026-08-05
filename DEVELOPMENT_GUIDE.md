@@ -121,10 +121,8 @@ def create_driver(headless=True):
 
 ```html
 <div x-data="{ open: false }">
-    <button @click="open = !open">Toggle</button>
-    <div x-show="open" x-transition>
-        Content
-    </div>
+  <button @click="open = !open">Toggle</button>
+  <div x-show="open" x-transition>Content</div>
 </div>
 ```
 
@@ -132,18 +130,10 @@ def create_driver(headless=True):
 
 ```html
 <!-- Trigger search on input -->
-<input type="search"
-       name="q"
-       hx-get="/search/"
-       hx-trigger="keyup changed delay:500ms"
-       hx-target="#results">
+<input type="search" name="q" hx-get="/search/" hx-trigger="keyup changed delay:500ms" hx-target="#results" />
 
 <!-- Infinite scroll pagination -->
-<div hx-get="/comics/page/2/"
-     hx-trigger="revealed"
-     hx-swap="afterend">
-    Load more...
-</div>
+<div hx-get="/comics/page/2/" hx-trigger="revealed" hx-swap="afterend">Load more...</div>
 ```
 
 ### Webpack Build
@@ -152,17 +142,17 @@ def create_driver(headless=True):
 // webpack/common.config.js
 module.exports = {
   entry: {
-    main: './static/js/main.js',
-    vendors: './static/js/vendors.js',
+    main: "./static/js/main.js",
+    vendors: "./static/js/vendors.js",
   },
   output: {
-    path: path.resolve(__dirname, '../dist'),
-    filename: '[name].[contenthash].js',
+    path: path.resolve(__dirname, "../dist"),
+    filename: "[name].[contenthash].js",
   },
   module: {
     rules: [
-      { test: /\.ts$/, use: 'ts-loader' },
-      { test: /\.scss$/, use: ['style-loader', 'css-loader', 'sass-loader'] },
+      { test: /\.ts$/, use: "ts-loader" },
+      { test: /\.scss$/, use: ["style-loader", "css-loader", "sass-loader"] },
     ],
   },
 };

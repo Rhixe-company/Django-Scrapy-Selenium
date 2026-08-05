@@ -4,23 +4,23 @@
 
 ### Web Interface (htmx/HTML)
 
-| URL Pattern | Method | Purpose | Template |
-|-------------|--------|---------|----------|
-| `/` | GET | Home page with recent comics | `pages/home.html` |
-| `/comics/` | GET | Browse comics with filters | `comics/list.html` |
-| `/comics/<id>/` | GET | Comic detail | `comics/detail.html` |
-| `/search/` | GET | Search comics | `search/results.html` |
-| `/admin/` | GET | Django admin interface | admin templates |
-| `/accounts/` | GET/POST | Auth (allauth) | allauth templates |
+| URL Pattern     | Method   | Purpose                      | Template              |
+| --------------- | -------- | ---------------------------- | --------------------- |
+| `/`             | GET      | Home page with recent comics | `pages/home.html`     |
+| `/comics/`      | GET      | Browse comics with filters   | `comics/list.html`    |
+| `/comics/<id>/` | GET      | Comic detail                 | `comics/detail.html`  |
+| `/search/`      | GET      | Search comics                | `search/results.html` |
+| `/admin/`       | GET      | Django admin interface       | admin templates       |
+| `/accounts/`    | GET/POST | Auth (allauth)               | allauth templates     |
 
 ### htmx Endpoints (Partial HTML)
 
-| URL Pattern | htmx Trigger | Purpose |
-|-------------|--------------|---------|
-| `GET /comics/filter/` | htmx:form | Filter comic list |
-| `GET /comics/page/<n>/` | htmx:click | Paginate results |
-| `POST /scrape/run/` | htmx:submit | Trigger scrap job |
-| `GET /scrape/status/<id>/` | htmx:load | Poll scrap status |
+| URL Pattern                | htmx Trigger | Purpose           |
+| -------------------------- | ------------ | ----------------- |
+| `GET /comics/filter/`      | htmx:form    | Filter comic list |
+| `GET /comics/page/<n>/`    | htmx:click   | Paginate results  |
+| `POST /scrape/run/`        | htmx:submit  | Trigger scrap job |
+| `GET /scrape/status/<id>/` | htmx:load    | Poll scrap status |
 
 ### Scraping Management
 
@@ -84,13 +84,13 @@ cleanup_old_data.delay()             # Retention cleanup
 
 ### Django Admin
 
-| URL | Description |
-|-----|-------------|
-| `/admin/` | Admin dashboard |
-| `/admin/scraping/comic/` | Manage scraped comics |
-| `/admin/scraping/chapter/` | Manage chapters |
+| URL                          | Description             |
+| ---------------------------- | ----------------------- |
+| `/admin/`                    | Admin dashboard         |
+| `/admin/scraping/comic/`     | Manage scraped comics   |
+| `/admin/scraping/chapter/`   | Manage chapters         |
 | `/admin/scraping/scrapejob/` | View scrape job history |
-| `/admin/users/user/` | User management |
+| `/admin/users/user/`         | User management         |
 
 ## Response Formats
 

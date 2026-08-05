@@ -11,33 +11,24 @@ import hashlib
 import warnings
 from contextlib import suppress
 from io import BytesIO
-from typing import TYPE_CHECKING
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 from itemadapter import ItemAdapter
-from scrapy.exceptions import NotConfigured
-from scrapy.exceptions import ScrapyDeprecationWarning
-from scrapy.http import Request
-from scrapy.http import Response
+from scrapy.exceptions import NotConfigured, ScrapyDeprecationWarning
+from scrapy.http import Request, Response
 from scrapy.http.request import NO_CALLBACK
-from scrapy.pipelines.files import FileException
-from scrapy.pipelines.files import FilesPipeline
-from scrapy.pipelines.files import _md5sum
+from scrapy.pipelines.files import FileException, FilesPipeline, _md5sum
 from scrapy.settings import Settings
-from scrapy.utils.python import get_func_args
-from scrapy.utils.python import global_object_name
-from scrapy.utils.python import to_bytes
+from scrapy.utils.python import get_func_args, global_object_name, to_bytes
 
 if TYPE_CHECKING:
-    from collections.abc import Callable
-    from collections.abc import Iterable
+    from collections.abc import Callable, Iterable
     from os import PathLike
 
     from PIL import Image
     from scrapy import Spider
     from scrapy.crawler import Crawler
-    from scrapy.pipelines.media import FileInfoOrError
-    from scrapy.pipelines.media import MediaPipeline
+    from scrapy.pipelines.media import FileInfoOrError, MediaPipeline
 
     # typing.Self requires Python 3.11
     from typing_extensions import Self  # noqa: UP035
@@ -89,9 +80,9 @@ class ImagesPipeline(FilesPipeline):
         if crawler is not None:
             if settings is not None:
                 warnings.warn(
-                    f"ImagesPipeline.__init__() was called with a crawler instance and a settings instance"  # noqa: E501
-                    f" when creating {global_object_name(self.__class__)}. The settings instance will be ignored"  # noqa: E501
-                    f" and crawler.settings will be used. The settings argument will be removed in a future Scrapy version.",  # noqa: E501
+                    f"ImagesPipeline.__init__() was called with a crawler instance and a settings instance"
+                    f" when creating {global_object_name(self.__class__)}. The settings instance will be ignored"
+                    f" and crawler.settings will be used. The settings argument will be removed in a future Scrapy version.",
                     category=ScrapyDeprecationWarning,
                     stacklevel=2,
                 )
@@ -141,10 +132,10 @@ class ImagesPipeline(FilesPipeline):
         else:
             o = cls(store_uri, settings=settings)
             if crawler:
-                o._finish_init(crawler)  # noqa: SLF001
+                o._finish_init(crawler)
             warnings.warn(  # noqa: B028
                 f"{global_object_name(cls)}.__init__() doesn't take a crawler argument."
-                " This is deprecated and the argument will be required in future Scrapy versions.",  # noqa: E501
+                " This is deprecated and the argument will be required in future Scrapy versions.",
                 category=ScrapyDeprecationWarning,
             )
         return o
@@ -196,11 +187,7 @@ class ImagesPipeline(FilesPipeline):
 
         width, height = orig_image.size
         if width < self.min_width or height < self.min_height:
-            msg = (
-                "Image too small "
-                f"({width}x{height} < "
-                f"{self.min_width}x{self.min_height})"
-            )
+            msg = f"Image too small ({width}x{height} < {self.min_width}x{self.min_height})"
             raise ImageException(
                 msg,
             )
@@ -284,7 +271,7 @@ class ImagesPipeline(FilesPipeline):
         *,
         item: Any = None,
     ) -> str:
-        image_guid = hashlib.sha1(to_bytes(request.url)).hexdigest()  # nosec  # noqa: S324
+        image_guid = hashlib.sha1(to_bytes(request.url)).hexdigest()  # nosec
         return f"full/{image_guid}.jpg"
 
     def thumb_path(
@@ -296,5 +283,5 @@ class ImagesPipeline(FilesPipeline):
         *,
         item: Any = None,
     ) -> str:
-        thumb_guid = hashlib.sha1(to_bytes(request.url)).hexdigest()  # nosec  # noqa: S324
+        thumb_guid = hashlib.sha1(to_bytes(request.url)).hexdigest()  # nosec
         return f"thumbs/{thumb_id}/{thumb_guid}.jpg"

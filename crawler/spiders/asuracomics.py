@@ -2,38 +2,34 @@ import logging
 
 from scrapy.linkextractors.lxmlhtml import LxmlLinkExtractor as LinkExtractor
 from scrapy.loader import ItemLoader
-from scrapy.spiders.crawl import CrawlSpider
-from scrapy.spiders.crawl import Rule
+from scrapy.spiders.crawl import CrawlSpider, Rule
 from scrapy_selenium import SeleniumRequest
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC  # noqa: N812
 
-from crawler.items import ChapterItem
-from crawler.items import ComicItem
+from crawler.items import ChapterItem, ComicItem
 
 logger = logging.getLogger(__name__)
 
 
 class AsuracomicsSpider(CrawlSpider):
     name = "asuracomics"
-    start_urls = [
-        f"https://asuracomic.net/series?page={i}&order=update" for i in range(1, 19)
-    ]
-    # redis_key = "asurachapter_queue:start_urls"  # noqa: ERA001
+    start_urls = [f"https://asuracomic.net/series?page={i}&order=update" for i in range(1, 19)]
+    # redis_key = "asurachapter_queue:start_urls"
 
-    # redis_batch_size = 1  # noqa: ERA001
+    # redis_batch_size = 1
 
-    # max_idle_time = 0  # noqa: ERA001
+    # max_idle_time = 0
 
     le_comic_details = LinkExtractor(
-        restrict_xpaths="//div[@class='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-3 p-4']/a",  # noqa: E501
+        restrict_xpaths="//div[@class='grid grid-cols-2 sm:grid-cols-2 md:grid-cols-5 gap-3 p-4']/a",
     )
 
     rule_comic_details = Rule(le_comic_details, callback="comicpage", follow=False)
 
     rules = (rule_comic_details,)
 
-    def comicpage(self, response):  # noqa: C901, PLR0912, PLR0915
+    def comicpage(self, response):
         loader = ItemLoader(item=ComicItem(), selector=response)
         loader.add_xpath(
             "title",
@@ -43,15 +39,15 @@ class AsuracomicsSpider(CrawlSpider):
 
         loader.add_xpath(
             "serialization",
-            "//div[@class='grid grid-cols-1 md:grid-cols-2 gap-5 mt-8']/div[1]/h3[2]/text()",  # noqa: E501
+            "//div[@class='grid grid-cols-1 md:grid-cols-2 gap-5 mt-8']/div[1]/h3[2]/text()",
         )
         loader.add_xpath(
             "author",
-            "//div[@class='grid grid-cols-1 md:grid-cols-2 gap-5 mt-8']/div[2]/h3[2]/text()",  # noqa: E501
+            "//div[@class='grid grid-cols-1 md:grid-cols-2 gap-5 mt-8']/div[2]/h3[2]/text()",
         )
         loader.add_xpath(
             "artist",
-            "//div[@class='grid grid-cols-1 md:grid-cols-2 gap-5 mt-8']/div[3]/h3[2]/text()",  # noqa: E501
+            "//div[@class='grid grid-cols-1 md:grid-cols-2 gap-5 mt-8']/div[3]/h3[2]/text()",
         )
         loader.add_xpath(
             "rating",
@@ -59,11 +55,11 @@ class AsuracomicsSpider(CrawlSpider):
         )
         loader.add_xpath(
             "status",
-            "//div[@class='bg-[#343434] px-2 py-2 flex items-center justify-between rounded-[3px] w-full']/h3[2]/text()",  # noqa: E501
+            "//div[@class='bg-[#343434] px-2 py-2 flex items-center justify-between rounded-[3px] w-full']/h3[2]/text()",
         )
         loader.add_xpath(
             "type",
-            "//div[@class='bg-[#343434] px-2 py-2 flex items-center justify-between rounded-[3px] w-full'][2]/h3[2]/text()",  # noqa: E501
+            "//div[@class='bg-[#343434] px-2 py-2 flex items-center justify-between rounded-[3px] w-full'][2]/h3[2]/text()",
         )
         image = response.xpath("//img[@class='rounded mx-auto md:mx-0 ']/@src").get()
         image2 = response.xpath(
@@ -71,13 +67,13 @@ class AsuracomicsSpider(CrawlSpider):
         ).get()
 
         chapters = response.xpath(
-            '//div[contains(@class, "pl-4 py-2 border rounded-md group w-full hover:bg-[#343434] cursor-pointer border-[#A2A2A2]/20 relative")]/a/@href',  # noqa: E501
+            '//div[contains(@class, "pl-4 py-2 border rounded-md group w-full hover:bg-[#343434] cursor-pointer border-[#A2A2A2]/20 relative")]/a/@href',
         ).getall()[0:1]
         chapters_time = response.xpath(
-            '//div[contains(@class, "pl-4 py-2 border rounded-md group w-full hover:bg-[#343434] cursor-pointer border-[#A2A2A2]/20 relative")]/a/h3[contains(@class, "text-xs text-[#A2A2A2]")]/text()',  # noqa: E501
+            '//div[contains(@class, "pl-4 py-2 border rounded-md group w-full hover:bg-[#343434] cursor-pointer border-[#A2A2A2]/20 relative")]/a/h3[contains(@class, "text-xs text-[#A2A2A2]")]/text()',
         ).getall()[0:1]
         comic_time = response.xpath(
-            '//div[contains(@class, "pl-4 py-2 border rounded-md group w-full hover:bg-[#343434] cursor-pointer border-[#A2A2A2]/20 relative")]/a/h3[contains(@class, "text-xs text-[#A2A2A2]")]/text()',  # noqa: E501
+            '//div[contains(@class, "pl-4 py-2 border rounded-md group w-full hover:bg-[#343434] cursor-pointer border-[#A2A2A2]/20 relative")]/a/h3[contains(@class, "text-xs text-[#A2A2A2]")]/text()',
         ).get()
         loader.add_value("updated_at", comic_time)
         loader.add_value("url", response.url)
@@ -104,28 +100,28 @@ class AsuracomicsSpider(CrawlSpider):
             '//div[contains(@class, "col-span-12 sm:col-span-9")]/span/p/text()',
         ).getall()
         desem = response.xpath(
-            '//div[contains(@class, "col-span-12 sm:col-span-9")]/span/p/strong/em/text()',  # noqa: E501
+            '//div[contains(@class, "col-span-12 sm:col-span-9")]/span/p/strong/em/text()',
         ).getall()
         newdes = response.xpath(
             '//div[contains(@class, "col-span-12 sm:col-span-9")]/span/text()',
         ).getall()
         newdesem = response.xpath(
-            '//div[contains(@class, "col-span-12 sm:col-span-9")]/span/strong/em/text()',  # noqa: E501
+            '//div[contains(@class, "col-span-12 sm:col-span-9")]/span/strong/em/text()',
         ).getall()
         newdesem1 = response.xpath(
-            '//div[contains(@class, "col-span-12 sm:col-span-9")]/span/p/strong[1]/text()',  # noqa: E501
+            '//div[contains(@class, "col-span-12 sm:col-span-9")]/span/p/strong[1]/text()',
         ).getall()
         olddes = response.xpath(
-            '//div[contains(@class, "col-span-12 sm:col-span-9")]/span/div/div/div[1]/text()',  # noqa: E501
+            '//div[contains(@class, "col-span-12 sm:col-span-9")]/span/div/div/div[1]/text()',
         ).getall()
         oldesem = response.xpath(
-            '//div[contains(@class, "col-span-12 sm:col-span-9")]/span/div/div/div[1]/strong/em/text()',  # noqa: E501
+            '//div[contains(@class, "col-span-12 sm:col-span-9")]/span/div/div/div[1]/strong/em/text()',
         ).getall()
         newdesem2 = response.xpath(
-            '//div[contains(@class, "col-span-12 sm:col-span-9")]/span/p/strong[2]/em/text()',  # noqa: E501
+            '//div[contains(@class, "col-span-12 sm:col-span-9")]/span/p/strong[2]/em/text()',
         ).getall()
         newdesem3 = response.xpath(
-            '//div[contains(@class, "col-span-12 sm:col-span-9")]/span/p/strong[2]/em/text()',  # noqa: E501
+            '//div[contains(@class, "col-span-12 sm:col-span-9")]/span/p/strong[2]/em/text()',
         ).getall()
         if des:
             mydes = f"{des}"
@@ -151,14 +147,7 @@ class AsuracomicsSpider(CrawlSpider):
         if newdesem2 and newdesem1 and newdesem and not des and not olddes:
             newdesemdiv2 = f"{newdesem}{newdesem1}{newdesem2}"
             loader.add_value("description", newdesemdiv2)
-        if (
-            newdesem3
-            and newdesem2
-            and newdesem1
-            and newdesem
-            and not des
-            and not olddes
-        ):
+        if newdesem3 and newdesem2 and newdesem1 and newdesem and not des and not olddes:
             newdesemdiv3 = f"{newdesem}{newdesem1}{newdesem2}{newdesem3}"
             loader.add_value("description", newdesemdiv3)
         item = loader.load_item()
@@ -173,7 +162,7 @@ class AsuracomicsSpider(CrawlSpider):
                     wait_until=EC.presence_of_element_located(
                         (
                             By.XPATH,
-                            "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501
+                            "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",
                         ),
                     ),
                     callback=self.parse,
@@ -187,7 +176,7 @@ class AsuracomicsSpider(CrawlSpider):
 
     def parse(self, response, chaptertime):
         comictitle = response.xpath(
-            "//div[@class='flex flex-col items-center space-y-2 pt-6 px-5 text-center']/p/a/span/text()",  # noqa: E501
+            "//div[@class='flex flex-col items-center space-y-2 pt-6 px-5 text-center']/p/a/span/text()",
         ).get()
 
         chaptertitle = (
@@ -206,14 +195,13 @@ class AsuracomicsSpider(CrawlSpider):
         )
         url = response.url
 
-        chapterslug = f"{comictitle} {response.xpath(
-                '//button[contains(@class, "px-3 py-2 dropdown-btn")]/h2/text()',
-            )
-            .get()
-            .split("-")[-0]}"
+        chapter_xpath = response.xpath(
+            '//button[contains(@class, "px-3 py-2 dropdown-btn")]/h2/text()',
+        )
+        chapterslug = f"{comictitle} {chapter_xpath.get().split('-')[-0]}"
 
         comicslug = response.xpath(
-            "//div[@class='flex flex-col items-center space-y-2 pt-6 px-5 text-center']/p/a/span/text()",  # noqa: E501
+            "//div[@class='flex flex-col items-center space-y-2 pt-6 px-5 text-center']/p/a/span/text()",
         ).get()
         loader = ItemLoader(item=ChapterItem(), selector=response)
         loader.add_value("url", url)
@@ -225,12 +213,12 @@ class AsuracomicsSpider(CrawlSpider):
         loader.add_value("chaptername", chaptername)
         loader.add_value("chapterslug", chapterslug)
         image_urls = response.xpath(
-            '//div[contains(@class, "w-full mx-auto center")]/img[contains(@class, "object-cover mx-auto")]/@src',  # noqa: E501
+            '//div[contains(@class, "w-full mx-auto center")]/img[contains(@class, "object-cover mx-auto")]/@src',
         ).getall()
         if image_urls:
             images = []
             for img in image_urls[0:1]:
-                images.append(response.urljoin(img))  # noqa: PERF401
+                images.append(response.urljoin(img))
             loader.add_value("image_urls", images)
             msg = f"Total Images found: {len(images)}"
             logger.info(msg)

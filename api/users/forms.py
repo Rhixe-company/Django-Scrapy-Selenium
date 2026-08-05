@@ -1,11 +1,13 @@
-from allauth.account.forms import AddEmailForm
-from allauth.account.forms import ChangePasswordForm
-from allauth.account.forms import LoginForm
-from allauth.account.forms import ResetPasswordForm
-from allauth.account.forms import ResetPasswordKeyForm
-from allauth.account.forms import SetPasswordForm
-from allauth.account.forms import SignupForm
-from allauth.account.forms import UserTokenForm
+from allauth.account.forms import (
+    AddEmailForm,
+    ChangePasswordForm,
+    LoginForm,
+    ResetPasswordForm,
+    ResetPasswordKeyForm,
+    SetPasswordForm,
+    SignupForm,
+    UserTokenForm,
+)
 from allauth.socialaccount.forms import DisconnectForm
 from allauth.socialaccount.forms import SignupForm as SocialSignupForm
 from django import forms
@@ -97,7 +99,7 @@ class UserCreationForm(admin_forms.UserCreationForm):
         for field in self.fields:
             f = str(field)
             new_data = {
-                "placeholder": _(f"Enter your {f}"),  # noqa: INT001
+                "placeholder": _(f"Enter your {f}"),
                 "class": "",
             }
             self.fields[str(field)].widget.attrs.update(new_data)

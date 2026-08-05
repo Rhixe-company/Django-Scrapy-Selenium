@@ -10,26 +10,26 @@ A comprehensive web scraping platform combining Django (admin/dashboard), Scrapy
 
 ### Backend
 
-| Category | Technology |
-|---|---|
-| **Web Framework** | Django 4.x |
-| **API Framework** | Django REST Framework (DRF) |
-| **Language** | Python 3.10+ / 3.12 |
-| **Scraping** | Scrapy, Selenium, BeautifulSoup4 |
-| **Async Tasks** | Celery + Redis/RabbitMQ |
-| **Database** | PostgreSQL (prod), SQLite (dev) |
-| **Serving** | Gunicorn |
+| Category          | Technology                       |
+| ----------------- | -------------------------------- |
+| **Web Framework** | Django 4.x                       |
+| **API Framework** | Django REST Framework (DRF)      |
+| **Language**      | Python 3.10+ / 3.12              |
+| **Scraping**      | Scrapy, Selenium, BeautifulSoup4 |
+| **Async Tasks**   | Celery + Redis/RabbitMQ          |
+| **Database**      | PostgreSQL (prod), SQLite (dev)  |
+| **Serving**       | Gunicorn                         |
 
 ### Frontend
 
-| Category | Technology |
-|---|---|
-| **Build Tool** | Webpack 5 (dev/prod config) |
-| **CSS Framework** | Tailwind CSS 3, daisyui, flowbite |
-| **JavaScript** | Alpine.js, htmx, hyperscript, jQuery |
+| Category          | Technology                            |
+| ----------------- | ------------------------------------- |
+| **Build Tool**    | Webpack 5 (dev/prod config)           |
+| **CSS Framework** | Tailwind CSS 3, daisyui, flowbite     |
+| **JavaScript**    | Alpine.js, htmx, hyperscript, jQuery  |
 | **UI Components** | SweetAlert2, SortableJS, highlight.js |
-| **Icons** | Font Awesome |
-| **Language** | TypeScript ^5.4.5 |
+| **Icons**         | Font Awesome                          |
+| **Language**      | TypeScript ^5.4.5                     |
 
 ## Architecture
 

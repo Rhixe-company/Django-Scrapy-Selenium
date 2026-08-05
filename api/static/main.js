@@ -5,9 +5,7 @@ jQuery(document).ready(function ($) {
     copyid++;
     $(this).attr("data-copyid", copyid).wrap('<div class="pre-wrapper"/>');
     $(this).parent().css("margin", $(this).css("margin"));
-    $(
-      '<button class="copy-snippet"><img class="img" src="/static/img/result.png" /></button>',
-    )
+    $('<button class="copy-snippet"><img class="img" src="/static/img/result.png" /></button>')
       .insertAfter($(this))
       .data("copytarget", copyid);
   });
@@ -17,9 +15,7 @@ jQuery(document).ready(function ($) {
 
     var $copyButton = $(this);
 
-    $pre = $(document).find(
-      "pre[data-copyid=" + $copyButton.data("copytarget") + "]",
-    );
+    $pre = $(document).find("pre[data-copyid=" + $copyButton.data("copytarget") + "]");
     if ($pre.length) {
       var textArea = document.createElement("textarea");
 
@@ -58,9 +54,7 @@ jQuery(document).ready(function ($) {
         $copyButton.text("FAILED: Could not copy").prop("disabled", true);
       }
       setTimeout(function () {
-        $copyButton
-          .html('<img class="img" src="/static/img/result.png" />')
-          .prop("disabled", false);
+        $copyButton.html('<img class="img" src="/static/img/result.png" />').prop("disabled", false);
       }, 3000);
     }
   });

@@ -6,20 +6,13 @@ from django.db.utils import IntegrityError
 from itemadapter.adapter import ItemAdapter
 from scrapy.exceptions import DropItem
 
-from api.apps.models import Artist
-from api.apps.models import Author
-from api.apps.models import Chapter
-from api.apps.models import ChapterImage
-from api.apps.models import Comic
-from api.apps.models import ComicImage
-from api.apps.models import Genre
-from api.apps.models import Type
+from api.apps.models import Artist, Author, Chapter, ChapterImage, Comic, ComicImage, Genre, Type
 
 logger = logging.getLogger(__name__)
 
 
 class CrawlerAppsDbPipeline:
-    def process_item(self, item, spider):  # noqa: C901, PLR0912, PLR0915
+    def process_item(self, item, spider):
         adapter = ItemAdapter(item)
         if adapter.get("images"):
             if adapter.get("images") and adapter.get("slug"):
@@ -41,14 +34,13 @@ class CrawlerAppsDbPipeline:
                 genres = item.get("genres", "")
                 usermodel = get_user_model()
                 user = usermodel.objects.filter(
-                    Q(email__icontains="admin@rhixe.company")
-                    | Q(username__icontains="adminbot"),
+                    Q(email__icontains="admin@rhixe.company") | Q(username__icontains="adminbot"),
                 ).first()
                 if not user:
                     user = usermodel.objects.create_superuser(
                         email="admin@rhixe.company",
                         username="adminbot",
-                        password="R4I7gcJHX",  # noqa: S106
+                        password="R4I7gcJHX",
                     )
                 if images:
                     ty = Type.objects.filter(Q(name__icontains=te)).update_or_create(
@@ -115,11 +107,7 @@ class CrawlerAppsDbPipeline:
                     msg = f"ComicItem has not images: {item!r}"
                     raise DropItem(msg)
                 return item
-            if (
-                adapter.get("images")
-                and adapter.get("comicslug")
-                and adapter.get("chapterslug")
-            ):
+            if adapter.get("images") and adapter.get("comicslug") and adapter.get("chapterslug"):
                 chapterimages = item.get("images")
                 comicslug = item["comicslug"]
                 comictitle = item["comictitle"]
@@ -174,16 +162,16 @@ class CrawlerAppsDbPipeline:
                                 panelquery = Q(url__icontains=cimg_url) | Q(
                                     image__icontains=cimg_file,
                                 )
-                                # img_file = comic.get_comic_images_children()[0]  # noqa: E501, ERA001
+                                # img_file = comic.get_comic_images_children()[0]
                                 # if ChapterImage.objects.filter(
-                                #     image=img_file,comic=comic,chapter=ch,  # noqa: E501, ERA001
+                                #     image=img_file,comic=comic,chapter=ch,
                                 # ).exists():
                                 #     oldimg = ChapterImage.objects.filter(  # noqa: E501, ERA001, RUF100
-                                #         image=img_file,  # noqa: ERA001
-                                #         comic=comic,  # noqa: ERA001
-                                #         chapter=ch,  # noqa: ERA001
+                                #         image=img_file,
+                                #         comic=comic,
+                                #         chapter=ch,
                                 #     )  # noqa: ERA001, RUF100
-                                #     oldimg.delete()  # noqa: ERA001
+                                #     oldimg.delete()
                                 ChapterImage.objects.filter(
                                     panelquery,
                                 ).update_or_create(
@@ -191,9 +179,7 @@ class CrawlerAppsDbPipeline:
                                     image=cimg_file,
                                     comic=comic,
                                     chapter=ch,
-                                )[
-                                    0
-                                ]
+                                )[0]
                         except IntegrityError:
                             msg = f"{slug}: Already Exists"
                             logger.info(

@@ -5,19 +5,15 @@ from contextlib import suppress
 from io import BytesIO
 
 from itemadapter import ItemAdapter
-from scrapy.exceptions import DropItem
-from scrapy.exceptions import NotConfigured
-from scrapy.exceptions import ScrapyDeprecationWarning
+from scrapy.exceptions import DropItem, NotConfigured, ScrapyDeprecationWarning
 from scrapy.http import Request
 from scrapy.http.request import NO_CALLBACK
-from scrapy.pipelines.files import FileException
-from scrapy.pipelines.files import FilesPipeline
+from scrapy.pipelines.files import FileException, FilesPipeline
 
 # TODO: from scrapy.pipelines.media import MediaPipeline
 from scrapy.settings import Settings
 from scrapy.utils.misc import md5sum
-from scrapy.utils.python import get_func_args
-from scrapy.utils.python import to_bytes
+from scrapy.utils.python import get_func_args, to_bytes
 
 
 class NoimagesDrop(DropItem):
@@ -141,11 +137,7 @@ class CustomImagesPipeline(FilesPipeline):
 
         width, height = orig_image.size
         if width < self.min_width or height < self.min_height:
-            msg = (
-                "Image too small "
-                f"({width}x{height} < "
-                f"{self.min_width}x{self.min_height})"
-            )
+            msg = f"Image too small ({width}x{height} < {self.min_width}x{self.min_height})"
             raise ImageException(
                 msg,
             )
@@ -156,8 +148,8 @@ class CustomImagesPipeline(FilesPipeline):
             )
             if self._deprecated_convert_image:
                 warnings.warn(  # noqa: B028
-                    f"{self.__class__.__name__}.convert_image() method overridden in a deprecated way, "  # noqa: E501
-                    "overridden method does not accept response_body argument.",  # type: ignore  # noqa: PGH003
+                    f"{self.__class__.__name__}.convert_image() method overridden in a deprecated way, "
+                    "overridden method does not accept response_body argument.",  # type: ignore
                     category=ScrapyDeprecationWarning,
                 )
 
@@ -187,8 +179,8 @@ class CustomImagesPipeline(FilesPipeline):
     def convert_image(self, image, size=None, response_body=None):
         if response_body is None:
             warnings.warn(
-                f"{self.__class__.__name__}.convert_image() method called in a deprecated way, "  # noqa: E501
-                "method called without response_body argument.",  # type: ignore  # noqa: PGH003
+                f"{self.__class__.__name__}.convert_image() method called in a deprecated way, "
+                "method called without response_body argument.",  # type: ignore
                 category=ScrapyDeprecationWarning,
                 stacklevel=2,
             )
@@ -232,9 +224,9 @@ class CustomImagesPipeline(FilesPipeline):
         return item
 
     def file_path(self, request, response=None, info=None, *, item=None):
-        image_guid = hashlib.sha1(to_bytes(request.url)).hexdigest()  # noqa: S324
+        image_guid = hashlib.sha1(to_bytes(request.url)).hexdigest()
         return f"full/{image_guid}.jpg"
 
     def thumb_path(self, request, thumb_id, response=None, info=None, *, item=None):
-        thumb_guid = hashlib.sha1(to_bytes(request.url)).hexdigest()  # noqa: S324
+        thumb_guid = hashlib.sha1(to_bytes(request.url)).hexdigest()
         return f"thumbs/{thumb_id}/{thumb_guid}.jpg"

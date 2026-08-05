@@ -11,7 +11,7 @@ class Bs4Spider(scrapy.Spider):
     def parse(self, response):
         soup = BeautifulSoup(response.text, "html.parser")
         # Extract data using BeautifulSoup
-        title = soup.find("title").text  # type: ignore  # noqa: PGH003
+        title = soup.find("title").text  # type: ignore
         links = [a["href"] for a in soup.find_all("a")]
         images = [img["src"] for img in soup.find_all("img")]
         # Yield items or requests as needed

@@ -106,10 +106,10 @@ npm run build
 
 ## Troubleshooting
 
-| Problem | Solution |
-|---------|----------|
-| `ModuleNotFoundError: psycopg2` | Install PostgreSQL dev libraries |
-| Selenium fails | Install ChromeDriver matching Chrome version |
-| Celery won't connect | Ensure Redis is running: `redis-server` |
-| Webpack build fails | `npm install` and check Node version ≥ 22 |
-| Database connection error | Verify PostgreSQL running and DATABASE_URL correct |
+| Problem                         | Solution                                           |
+| ------------------------------- | -------------------------------------------------- |
+| `ModuleNotFoundError: psycopg2` | Install PostgreSQL dev libraries                   |
+| Selenium fails                  | Install ChromeDriver matching Chrome version       |
+| Celery won't connect            | Ensure Redis is running: `redis-server`            |
+| Webpack build fails             | `npm install` and check Node version ≥ 22          |
+| Database connection error       | Verify PostgreSQL running and DATABASE_URL correct |

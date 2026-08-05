@@ -1,12 +1,8 @@
 // Get the Top button
-const myCustomTopButton = document.getElementById(
-  "btn-to-top",
-) as HTMLBodyElement;
+const myCustomTopButton = document.getElementById("btn-to-top") as HTMLBodyElement;
 
 // Get the Down button
-const myCustomDownButton = document.getElementById(
-  "btn-to-down",
-) as HTMLBodyElement;
+const myCustomDownButton = document.getElementById("btn-to-down") as HTMLBodyElement;
 
 // When the user scrolls down 20px from the top of the document, show the button
 const myScrollTopFunction = (): void => {
@@ -19,10 +15,7 @@ const myScrollTopFunction = (): void => {
 
 // When the user scrolls down 20px from the down of the document, show the button
 const myScrollDownFunction = (): void => {
-  if (
-    document.body.scrollTop > 100 ||
-    document.documentElement.scrollTop > 100
-  ) {
+  if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
     myCustomDownButton.classList.remove("style_visible");
   } else {
     myCustomDownButton.classList.add("style_visible");

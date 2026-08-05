@@ -21,46 +21,46 @@ A comprehensive web scraping platform combining Django (admin/dashboard), Scrapy
 
 ### Languages & Runtimes
 
-| Technology | Version | Usage |
-|---|---|---|
-| Python | ^3.10 / 3.12 | Primary backend language |
-| Django | ^4.x | Web framework & admin |
-| TypeScript | ^5.4.5 | Frontend scripting |
-| Node.js | 22.13 | JavaScript runtime |
-| HTML/CSS | — | Templates & styling |
+| Technology | Version      | Usage                    |
+| ---------- | ------------ | ------------------------ |
+| Python     | ^3.10 / 3.12 | Primary backend language |
+| Django     | ^4.x         | Web framework & admin    |
+| TypeScript | ^5.4.5       | Frontend scripting       |
+| Node.js    | 22.13        | JavaScript runtime       |
+| HTML/CSS   | —            | Templates & styling      |
 
 ### Backend Dependencies
 
-| Category | Technologies |
-|---|---|
-| **Web Framework** | Django 4.x |
-| **API Framework** | Django REST Framework |
-| **Scraping** | Scrapy, Selenium, BeautifulSoup4 |
-| **Async Tasks** | Celery + Redis/RabbitMQ |
-| **Database** | PostgreSQL (prod), SQLite (dev) |
-| **Serving** | Gunicorn |
-| **Testing** | pytest, django-coverage-plugin |
-| **Linting** | ruff, mypy (Python 3.12), djlint |
-| **Formatting** | Black (line-length 119), isort |
+| Category          | Technologies                     |
+| ----------------- | -------------------------------- |
+| **Web Framework** | Django 4.x                       |
+| **API Framework** | Django REST Framework            |
+| **Scraping**      | Scrapy, Selenium, BeautifulSoup4 |
+| **Async Tasks**   | Celery + Redis/RabbitMQ          |
+| **Database**      | PostgreSQL (prod), SQLite (dev)  |
+| **Serving**       | Gunicorn                         |
+| **Testing**       | pytest, django-coverage-plugin   |
+| **Linting**       | ruff, mypy (Python 3.12), djlint |
+| **Formatting**    | Black (line-length 119), isort   |
 
 ### Frontend Dependencies
 
-| Category | Technologies |
-|---|---|
-| **Build Tool** | Webpack 5 (dev/prod config) |
-| **CSS Framework** | Tailwind CSS 3, daisyui, flowbite |
-| **JavaScript** | Alpine.js, htmx, hyperscript, jQuery, Select2 |
-| **UI Components** | SweetAlert2, SortableJS, highlight.js |
-| **Icons** | Font Awesome |
-| **Preprocessors** | Sass, PostCSS (preset-env, nesting, imports) |
-| **Babel** | ES6+ transpilation |
+| Category          | Technologies                                  |
+| ----------------- | --------------------------------------------- |
+| **Build Tool**    | Webpack 5 (dev/prod config)                   |
+| **CSS Framework** | Tailwind CSS 3, daisyui, flowbite             |
+| **JavaScript**    | Alpine.js, htmx, hyperscript, jQuery, Select2 |
+| **UI Components** | SweetAlert2, SortableJS, highlight.js         |
+| **Icons**         | Font Awesome                                  |
+| **Preprocessors** | Sass, PostCSS (preset-env, nesting, imports)  |
+| **Babel**         | ES6+ transpilation                            |
 
 ---
 
 ## Licensing
 
-| Component | License |
-|---|---|
+| Component              | License         |
+| ---------------------- | --------------- |
 | Django-Scrapy-Selenium | (not specified) |
 
 ---
@@ -92,15 +92,15 @@ Django-Scrapy-Selenium/
 
 ## Key Scripts
 
-| Command | Description |
-|---|---|
-| `python manage.py runserver` | Django dev server |
-| `celery -A config worker -l info` | Celery worker |
-| `scrapy crawl spider_name` | Run a Scrapy spider |
-| `node src/scrape.js` | Run Selenium scraper |
-| `pytest` | Run Python tests |
-| `npm run build` | Webpack production build |
-| `npm run dev` | Webpack dev server |
+| Command                           | Description              |
+| --------------------------------- | ------------------------ |
+| `python manage.py runserver`      | Django dev server        |
+| `celery -A config worker -l info` | Celery worker            |
+| `scrapy crawl spider_name`        | Run a Scrapy spider      |
+| `node src/scrape.js`              | Run Selenium scraper     |
+| `pytest`                          | Run Python tests         |
+| `npm run build`                   | Webpack production build |
+| `npm run dev`                     | Webpack dev server       |
 
 ---
 

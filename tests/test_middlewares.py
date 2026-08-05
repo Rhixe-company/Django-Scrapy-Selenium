@@ -1,4 +1,4 @@
-"""This module contains the test cases for the middlewares of the ``scrapy_selenium`` package"""  # noqa: E501
+"""This module contains the test cases for the middlewares of the ``scrapy_selenium`` package"""
 
 from unittest.mock import patch
 
@@ -32,7 +32,7 @@ class SeleniumMiddlewareTestCase(BaseScrapySeleniumTestCase):
         cls.selenium_middleware.driver.quit()
 
     def test_from_crawler_method_should_initialize_the_driver(self):
-        """Test that the ``from_crawler`` method should initialize the selenium driver"""  # noqa: E501
+        """Test that the ``from_crawler`` method should initialize the selenium driver"""
 
         crawler = Crawler(spidercls=self.spider_klass, settings=self.settings)
 
@@ -60,7 +60,7 @@ class SeleniumMiddlewareTestCase(BaseScrapySeleniumTestCase):
         mocked_quit.assert_called_once()
 
     def test_process_request_should_return_none_if_not_selenium_request(self):
-        """Test that the ``process_request`` should return none if not selenium request"""  # noqa: E501
+        """Test that the ``process_request`` should return none if not selenium request"""
 
         scrapy_request = Request(url="http://not-an-url")
 
@@ -73,7 +73,7 @@ class SeleniumMiddlewareTestCase(BaseScrapySeleniumTestCase):
         )
 
     def test_process_request_should_return_a_response_if_selenium_request(self):
-        """Test that the ``process_request`` should return a response if selenium request"""  # noqa: E501
+        """Test that the ``process_request`` should return a response if selenium request"""
 
         selenium_request = SeleniumRequest(url="http://www.python.org")
 
@@ -83,16 +83,16 @@ class SeleniumMiddlewareTestCase(BaseScrapySeleniumTestCase):
         )
 
         # We have access to the driver on the response via the "meta"
-        assert html_response.meta["driver"] == self.selenium_middleware.driver  # type: ignore  # noqa: PGH003
+        assert html_response.meta["driver"] == self.selenium_middleware.driver  # type: ignore
 
         # We also have access to the "selector" attribute on the response
         assert (
-            html_response.selector.xpath("//title/text()").extract_first()  # type: ignore  # noqa: PGH003
+            html_response.selector.xpath("//title/text()").extract_first()  # type: ignore
             == "Welcome to Python.org"
         )
 
     def test_process_request_should_return_a_screenshot_if_screenshot_option(self):
-        """Test that the ``process_request`` should return a response with a screenshot"""  # noqa: E501
+        """Test that the ``process_request`` should return a response with a screenshot"""
 
         selenium_request = SeleniumRequest(url="http://www.python.org", screenshot=True)
 
@@ -101,10 +101,10 @@ class SeleniumMiddlewareTestCase(BaseScrapySeleniumTestCase):
             spider=None,
         )
 
-        assert html_response.meta["screenshot"] is not None  # type: ignore  # noqa: PGH003
+        assert html_response.meta["screenshot"] is not None  # type: ignore
 
     def test_process_request_should_execute_script_if_script_option(self):
-        """Test that the ``process_request`` should execute the script and return a response"""  # noqa: E501
+        """Test that the ``process_request`` should execute the script and return a response"""
 
         selenium_request = SeleniumRequest(
             url="http://www.python.org",
@@ -117,6 +117,6 @@ class SeleniumMiddlewareTestCase(BaseScrapySeleniumTestCase):
         )
 
         assert (
-            html_response.selector.xpath("//title/text()").extract_first()  # type: ignore  # noqa: PGH003
+            html_response.selector.xpath("//title/text()").extract_first()  # type: ignore
             == "scrapy_selenium"
         )

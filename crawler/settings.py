@@ -11,7 +11,7 @@ from django.conf import settings
 from scrapy.utils.reactor import install_reactor
 
 BASE_DIR = Path(__file__).resolve(strict=True).parent.parent
-sys.path.append(os.path.join(BASE_DIR, "config"))  # noqa: PTH118
+sys.path.append(os.path.join(BASE_DIR, "config"))
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "config.settings.local")
 os.environ.setdefault("DJANGO_ALLOW_ASYNC_UNSAFE", "true")
 django.setup()
@@ -23,16 +23,18 @@ NEWSPIDER_MODULE = "crawler.spiders"
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
-USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"  # noqa: E501
+USER_AGENT = (
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36"
+)
 
 USER_AGENT_LIST = [
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",  # noqa: E501
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",  # noqa: E501
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/118.0.0.0 Safari/537.36",
     "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/118.0",
-    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",  # noqa: E501
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",  # noqa: E501
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0",  # noqa: E501
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",  # noqa: E501
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/117.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36",
 ]
 
 # Obey robots.txt rules
@@ -101,10 +103,10 @@ AUTOTHROTTLE_DEBUG = True
 # Enable and configure HTTP caching (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/downloader-middleware.html#httpcache-middleware-settings
 HTTPCACHE_ENABLED = False
-# HTTPCACHE_EXPIRATION_SECS = 0  # noqa: ERA001
-# HTTPCACHE_DIR = "httpcache"  # noqa: ERA001
-# HTTPCACHE_IGNORE_HTTP_CODES = list(range(300, 501))  # noqa: ERA001
-# HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"  # noqa: E501, ERA001
+# HTTPCACHE_EXPIRATION_SECS = 0
+# HTTPCACHE_DIR = "httpcache"
+# HTTPCACHE_IGNORE_HTTP_CODES = list(range(300, 501))
+# HTTPCACHE_STORAGE = "scrapy.extensions.httpcache.FilesystemCacheStorage"
 # Set settings whose default value is deprecated to a future-proof value
 REQUEST_FINGERPRINTER_CLASS = "crawler.utils.RequestFingerprinter"
 REQUEST_FINGERPRINTER_IMPLEMENTATION = "2.7"
@@ -117,11 +119,11 @@ FEED_EXPORT_ENCODING = "utf-8"
 IMAGES_STORE = settings.MEDIA_ROOT
 
 # # Production store
-# AWS_ACCESS_KEY_ID = settings.AWS_ACCESS_KEY_ID  # noqa: ERA001
-# AWS_SECRET_ACCESS_KEY = settings.AWS_SECRET_ACCESS_KEY  # noqa: ERA001
-# AWS_STORAGE_BUCKET_NAME = settings.AWS_STORAGE_BUCKET_NAME  # noqa: ERA001
-# IMAGES_STORE = "s3://{}/media/".format(AWS_STORAGE_BUCKET_NAME)  # noqa: ERA001
-# AWS_REGION_NAME = settings.AWS_S3_REGION_NAME  # noqa: ERA001
+# AWS_ACCESS_KEY_ID = settings.AWS_ACCESS_KEY_ID
+# AWS_SECRET_ACCESS_KEY = settings.AWS_SECRET_ACCESS_KEY
+# AWS_STORAGE_BUCKET_NAME = settings.AWS_STORAGE_BUCKET_NAME
+# IMAGES_STORE = "s3://{}/media/".format(AWS_STORAGE_BUCKET_NAME)
+# AWS_REGION_NAME = settings.AWS_S3_REGION_NAME
 RETRY_TIMES = 2
 RETRY_ENABLED = True
 RETRY_HTTP_CODES = list(range(300, 501))
@@ -136,21 +138,21 @@ EXTENSIONS = {"crawler.extensions.SpiderOpenCloseLogging": 500}
 IMAGES_EXPIRES = 730
 
 
-# DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"  # noqa: ERA001
-# SCHEDULER = "scrapy_redis.scheduler.Scheduler"  # noqa: ERA001
-# SCHEDULER_PERSIST = False  # noqa: ERA001
-# SCHEDULER_QUEUE_CLASS = "scrapy_redis.queue.SpiderPriorityQueue"  # noqa: ERA001
-# SCHEDULER_QUEUE_CLASS = "scrapy_redis.queue.SpiderQueue"  # noqa: ERA001
-# SCHEDULER_QUEUE_CLASS = "scrapy_redis.queue.SpiderStack"  # noqa: ERA001
-# REDIS_URL = settings.CELERY_BROKER_URL  # noqa: ERA001
-# SCHEDULER_FLUSH_ON_START = True  # noqa: ERA001
+# DUPEFILTER_CLASS = "scrapy_redis.dupefilter.RFPDupeFilter"
+# SCHEDULER = "scrapy_redis.scheduler.Scheduler"
+# SCHEDULER_PERSIST = False
+# SCHEDULER_QUEUE_CLASS = "scrapy_redis.queue.SpiderPriorityQueue"
+# SCHEDULER_QUEUE_CLASS = "scrapy_redis.queue.SpiderQueue"
+# SCHEDULER_QUEUE_CLASS = "scrapy_redis.queue.SpiderStack"
+# REDIS_URL = settings.CELERY_BROKER_URL
+# SCHEDULER_FLUSH_ON_START = True
 
 SELENIUM_DRIVER_NAME = "firefox"
 SELENIUM_DRIVER_EXECUTABLE_PATH = which("geckodriver")
-# SELENIUM_BROWSER_EXECUTABLE_PATH = "C:/'Program Files'/'Mozilla Firefox'/firefox.exe"  # noqa: E501, ERA001
+# SELENIUM_BROWSER_EXECUTABLE_PATH = "C:/'Program Files'/'Mozilla Firefox'/firefox.exe"
 SELENIUM_BROWSER_EXECUTABLE_PATH = which("firefox")
-# SELENIUM_DRIVER_EXECUTABLE_PATH = "./geckodriver" # noqa: ERA001
-# SELENIUM_BROWSER_EXECUTABLE_PATH = "C:/'Program Files'/'Mozilla Firefox'/firefox.exe"  # noqa: E501, ERA001
+# SELENIUM_DRIVER_EXECUTABLE_PATH = "./geckodriver"
+# SELENIUM_BROWSER_EXECUTABLE_PATH = "C:/'Program Files'/'Mozilla Firefox'/firefox.exe"
 SELENIUM_DRIVER_ARGUMENTS = [
     "--headless",
     "--no-sandbox",

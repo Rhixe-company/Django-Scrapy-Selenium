@@ -42,9 +42,7 @@ module.exports = {
 
         use: [
           // fallback to style-loader in development
-          process.env.NODE_ENV !== "production"
-            ? "style-loader"
-            : MiniCssExtractPlugin.loader,
+          process.env.NODE_ENV !== "production" ? "style-loader" : MiniCssExtractPlugin.loader,
           // Translates CSS into CommonJS
           {
             loader: "css-loader",
@@ -105,9 +103,7 @@ module.exports = {
       chunkFilename: "css/[id].css",
     }),
     new BundleTracker({
-      path: path.resolve(
-        path.join(__dirname, "../", "dist", "webpack_bundles"),
-      ),
+      path: path.resolve(path.join(__dirname, "../", "dist", "webpack_bundles")),
       filename: "webpack-stats.json",
     }),
   ],

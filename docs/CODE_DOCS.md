@@ -59,22 +59,22 @@ class Comic(models.Model):
 
 Fields and relationships:
 
-| Model | Key Fields | Relationships |
-|-------|-----------|---------------|
-| **Comic** | name, slug, alt_name, link, description, image, cover, status (6 choices), views, rating | FK→Type, FK→Author, FK→Artist, M2M→Genre |
-| **Chapter** | name, slug, link, release_date, volume, chapter_number | FK→Comic (CASCADE), unique(comic, chapter_number) |
-| **ChapterImage** | image, page_number | FK→Chapter (CASCADE), unique(chapter, page_number) |
-| **ComicImage** | image, order | FK→Comic (CASCADE) |
-| **Genre** | name (unique), slug, description | M2M→Comic (through ComicGenre) |
-| **Author** | name (unique) | FK→Comic |
-| **Artist** | name (unique) | FK→Comic |
-| **Type** | name (unique), slug, description | FK→Comic (Manhwa, Manga, Manhua, Comic) |
-| **Bookmark** | status (choices: Reading/Completed/Plan to Read/Dropped/On-Hold), notes | FK→User + FK→Comic (composite) |
-| **Follow** | — | FK→User + FK→Comic (composite, unique together) |
-| **Comment** | content (text) | FK→User + FK→Chapter, with timestamp |
-| **Rating** | rating (1-5 IntegerField with validators) | FK→User + FK→Comic, unique(user, comic) |
-| **CrawlLog** | status, pages_crawled, errors, started_at, finished_at | Tracks individual crawl sessions |
-| **ScrapeJob** | source_url, status, frequency | FK→Comic, scheduled scraping |
+| Model            | Key Fields                                                                               | Relationships                                      |
+| ---------------- | ---------------------------------------------------------------------------------------- | -------------------------------------------------- |
+| **Comic**        | name, slug, alt_name, link, description, image, cover, status (6 choices), views, rating | FK→Type, FK→Author, FK→Artist, M2M→Genre           |
+| **Chapter**      | name, slug, link, release_date, volume, chapter_number                                   | FK→Comic (CASCADE), unique(comic, chapter_number)  |
+| **ChapterImage** | image, page_number                                                                       | FK→Chapter (CASCADE), unique(chapter, page_number) |
+| **ComicImage**   | image, order                                                                             | FK→Comic (CASCADE)                                 |
+| **Genre**        | name (unique), slug, description                                                         | M2M→Comic (through ComicGenre)                     |
+| **Author**       | name (unique)                                                                            | FK→Comic                                           |
+| **Artist**       | name (unique)                                                                            | FK→Comic                                           |
+| **Type**         | name (unique), slug, description                                                         | FK→Comic (Manhwa, Manga, Manhua, Comic)            |
+| **Bookmark**     | status (choices: Reading/Completed/Plan to Read/Dropped/On-Hold), notes                  | FK→User + FK→Comic (composite)                     |
+| **Follow**       | —                                                                                        | FK→User + FK→Comic (composite, unique together)    |
+| **Comment**      | content (text)                                                                           | FK→User + FK→Chapter, with timestamp               |
+| **Rating**       | rating (1-5 IntegerField with validators)                                                | FK→User + FK→Comic, unique(user, comic)            |
+| **CrawlLog**     | status, pages_crawled, errors, started_at, finished_at                                   | Tracks individual crawl sessions                   |
+| **ScrapeJob**    | source_url, status, frequency                                                            | FK→Comic, scheduled scraping                       |
 
 ### Database Indexes
 
@@ -218,19 +218,19 @@ Django REST Framework viewsets providing:
 
 ### Endpoints
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/comics/` | GET, POST | List/create comics with filtering |
-| `/api/comics/{id}/` | GET, PUT, DELETE | Comic CRUD |
-| `/api/chapters/` | GET, POST | List/create chapters |
-| `/api/chapters/{id}/` | GET, PUT, DELETE | Chapter CRUD |
-| `/api/genres/` | GET | List genres |
-| `/api/authors/` | GET | List authors |
-| `/api/bookmarks/` | GET, POST, DELETE | User bookmark management |
-| `/api/comments/` | GET, POST | Chapter comments |
-| `/api/ratings/` | GET, POST | Comic ratings |
-| `/api/users/` | GET, POST | User management |
-| `/api/auth/` | POST | Authentication (JWT-based) |
+| Endpoint              | Method            | Description                       |
+| --------------------- | ----------------- | --------------------------------- |
+| `/api/comics/`        | GET, POST         | List/create comics with filtering |
+| `/api/comics/{id}/`   | GET, PUT, DELETE  | Comic CRUD                        |
+| `/api/chapters/`      | GET, POST         | List/create chapters              |
+| `/api/chapters/{id}/` | GET, PUT, DELETE  | Chapter CRUD                      |
+| `/api/genres/`        | GET               | List genres                       |
+| `/api/authors/`       | GET               | List authors                      |
+| `/api/bookmarks/`     | GET, POST, DELETE | User bookmark management          |
+| `/api/comments/`      | GET, POST         | Chapter comments                  |
+| `/api/ratings/`       | GET, POST         | Comic ratings                     |
+| `/api/users/`         | GET, POST         | User management                   |
+| `/api/auth/`          | POST              | Authentication (JWT-based)        |
 
 ### Authentication
 

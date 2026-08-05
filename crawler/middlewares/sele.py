@@ -4,10 +4,9 @@ from importlib import import_module
 
 from scrapy import signals
 from scrapy.exceptions import NotConfigured
-from scrapy.http import HtmlResponse  # type: ignore  # noqa: PGH003
+from scrapy.http import HtmlResponse  # type: ignore
 from scrapy_selenium.http import SeleniumRequest
-from selenium.common import ElementNotInteractableException
-from selenium.common import NoSuchElementException
+from selenium.common import ElementNotInteractableException, NoSuchElementException
 from selenium.webdriver.support.wait import WebDriverWait
 
 
@@ -72,7 +71,7 @@ class NewSeleniumMiddleware:
             capabilities = driver_options.to_capabilities()
             self.driver = webdriver.Remote(
                 command_executor=command_executor,
-                desired_capabilities=capabilities,  # type: ignore  # noqa: PGH003
+                desired_capabilities=capabilities,  # type: ignore
             )
         # webdriver-manager
         else:
@@ -85,14 +84,14 @@ class NewSeleniumMiddleware:
             if driver_name and driver_name.lower() == "firefox":
                 options = FirefoxOptions()
                 firefox_profile = FirefoxProfile()
-                # firefox_profile.set_preference("javascript.enabled", True)  # noqa: E501, ERA001
+                # firefox_profile.set_preference("javascript.enabled", True)
                 options.profile = firefox_profile
 
                 options.add_argument(
                     "--headless",
                 )
                 options.add_argument(
-                    "--no-sandbox",  # type: ignore  # noqa: PGH003
+                    "--no-sandbox",  # type: ignore
                 )
                 options.add_argument(
                     "--disable-gpu",
@@ -118,14 +117,9 @@ class NewSeleniumMiddleware:
             msg = "SELENIUM_DRIVER_NAME must be set"
             raise NotConfigured(msg)
 
-        # let's use webdriver-manager when nothing specified instead | RN just for Firefox  # noqa: E501
-        if (driver_name.lower() != "firefox") and (
-            driver_executable_path is None and command_executor is None
-        ):
-            msg = (
-                "Either SELENIUM_DRIVER_EXECUTABLE_PATH "
-                "or SELENIUM_COMMAND_EXECUTOR must be set"
-            )
+        # let's use webdriver-manager when nothing specified instead | RN just for Firefox
+        if (driver_name.lower() != "firefox") and (driver_executable_path is None and command_executor is None):
+            msg = "Either SELENIUM_DRIVER_EXECUTABLE_PATH or SELENIUM_COMMAND_EXECUTOR must be set"
             raise NotConfigured(msg)
 
         middleware = cls(
@@ -148,15 +142,15 @@ class NewSeleniumMiddleware:
 
         self.driver.get(request.url)
 
-        for cookie_name, cookie_value in request.cookies.items():  # type: ignore  # noqa: PGH003
+        for cookie_name, cookie_value in request.cookies.items():  # type: ignore
             self.driver.add_cookie({"name": cookie_name, "value": cookie_value})
 
         if request.wait_until:
-            # WebDriverWait(self.driver, request.wait_time).until(request.wait_until)  # type: ignore  # noqa: E501, ERA001, PGH003
+            # WebDriverWait(self.driver, request.wait_time).until(request.wait_until)  # type: ignore
             errors = [NoSuchElementException, ElementNotInteractableException]
             wait = WebDriverWait(
                 self.driver,
-                timeout=request.wait_time,  # type: ignore  # noqa: PGH003
+                timeout=request.wait_time,  # type: ignore
                 poll_frequency=0.2,
                 ignored_exceptions=errors,
             )

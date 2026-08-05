@@ -14,11 +14,11 @@ class Command(BaseCommand):
         def read_json():
             base = settings.BASE_DIR
             comics_file = str(base / "comics.json")
-            with open(comics_file) as comic_file:  # noqa: PTH123
+            with open(comics_file) as comic_file:
                 comics_data = json.load(comic_file)
                 comics = []
                 for item in comics_data:
-                    comics.append(item)  # noqa: PERF402
+                    comics.append(item)
             context = {
                 "comics": comics[0:1],
                 "comicscount": len(comics),
@@ -27,11 +27,11 @@ class Command(BaseCommand):
                 context,
             )
             chapters_file = str(base / "chapters.json")
-            with open(chapters_file) as chapter_file:  # noqa: PTH123
+            with open(chapters_file) as chapter_file:
                 chapters_data = json.load(chapter_file)
                 chapters = []
                 for citem in chapters_data:
-                    chapters.append(citem)  # noqa: PERF402
+                    chapters.append(citem)
             context1 = {
                 "chapters": chapters[0:1],
                 "chapterscount": len(chapters),

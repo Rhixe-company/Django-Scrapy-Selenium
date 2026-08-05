@@ -11,12 +11,12 @@ logger = logging.getLogger(__name__)
 class HtmlSpider(Spider):
     name = "html"
     start_urls = [
-        # "https://asuracomic.net/",  # noqa: ERA001
-        # "https://asuracomic.net/series?page=2",  # noqa: ERA001
-        # "https://asuracomic.net/series/reaper-of-the-drifting-moon-0fc74b94",  # noqa: E501, ERA001
-        # "https://asuracomic.net/series/nano-machine-923317b4",  # noqa: ERA001
+        # "https://asuracomic.net/",
+        # "https://asuracomic.net/series?page=2",
+        # "https://asuracomic.net/series/reaper-of-the-drifting-moon-0fc74b94",
+        # "https://asuracomic.net/series/nano-machine-923317b4",
         "https://asuracomic.net/series/nano-machine-923317b4/chapter/239",
-        # "https://asuracomic.net/series/nano-machine-923317b4/chapter/1",  # noqa: E501, ERA001
+        # "https://asuracomic.net/series/nano-machine-923317b4/chapter/1",
     ]
 
     def start_requests(self):
@@ -28,19 +28,19 @@ class HtmlSpider(Spider):
                 wait_until=EC.presence_of_element_located(
                     (
                         By.XPATH,
-                        "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",  # noqa: E501
+                        "//div[contains(@class, 'w-full mx-auto center')]/img[contains(@class, 'object-cover mx-auto')]",
                     ),
                 ),
             )
 
     def parse(self, response):
         image_urls = response.xpath(
-            '//div[contains(@class, "w-full mx-auto center")]/img[contains(@class, "object-cover mx-auto")]/@src',  # noqa: E501
+            '//div[contains(@class, "w-full mx-auto center")]/img[contains(@class, "object-cover mx-auto")]/@src',
         ).getall()
         if image_urls:
             images = []
             for img in image_urls:
-                images.append(response.urljoin(img))  # noqa: PERF401
+                images.append(response.urljoin(img))
             yield {
                 "image_urls": images,
             }

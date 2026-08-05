@@ -8,14 +8,7 @@ from django.db.models import Q
 from django.db.utils import IntegrityError
 from django.utils.timezone import now
 
-from api.apps.models import Artist
-from api.apps.models import Author
-from api.apps.models import Chapter
-from api.apps.models import ChapterImage
-from api.apps.models import Comic
-from api.apps.models import ComicImage
-from api.apps.models import Genre
-from api.apps.models import Type
+from api.apps.models import Artist, Author, Chapter, ChapterImage, Comic, ComicImage, Genre, Type
 
 logger = logging.getLogger(__name__)
 
@@ -23,12 +16,12 @@ logger = logging.getLogger(__name__)
 class Command(BaseCommand):
     help = "Generates comics for apps"
 
-    def handle(self, *args, **options):  # noqa: C901, PLR0915
-        def save_data():  # noqa: C901, PLR0912, PLR0915
+    def handle(self, *args, **options):
+        def save_data():
             base = settings.BASE_DIR
             comics_file = str(base / "comics.json")
             chapters_file = str(base / "chapters.json")
-            with open(comics_file) as comic_file:  # noqa: PTH123
+            with open(comics_file) as comic_file:
                 comics_data = json.load(comic_file)
                 for item in comics_data:
                     images = item.get("images")
@@ -49,14 +42,13 @@ class Command(BaseCommand):
                     genres = item.get("genres", "")
                     usermodel = get_user_model()
                     user = usermodel.objects.filter(
-                        Q(email__icontains="admin@rhixe.company")
-                        | Q(username__icontains="adminbot"),
+                        Q(email__icontains="admin@rhixe.company") | Q(username__icontains="adminbot"),
                     ).first()
                     if not user:
                         user = usermodel.objects.create_superuser(
                             email="admin@rhixe.company",
                             username="adminbot",
-                            password="R4I7gcJHX",  # noqa: S106
+                            password="R4I7gcJHX",
                         )
                     if images:
                         ty = Type.objects.filter(
@@ -122,7 +114,7 @@ class Command(BaseCommand):
                             logger.info(
                                 msg,
                             )
-            with open(chapters_file) as chapter_file:  # noqa: PTH123
+            with open(chapters_file) as chapter_file:
                 chapters_data = json.load(chapter_file)
                 for citem in chapters_data:
                     chapterimages = citem.get("images")
@@ -179,18 +171,18 @@ class Command(BaseCommand):
                                     panelquery = Q(url__icontains=cimg_url) | Q(
                                         image__icontains=cimg_file,
                                     )
-                                    # img_file = comic.get_comic_images_children()[0]  # noqa: E501, ERA001
+                                    # img_file = comic.get_comic_images_children()[0]
                                     # if ChapterImage.objects.filter(
-                                    #     image=img_file,  # noqa: ERA001
-                                    #     comic=comic,  # noqa: ERA001
+                                    #     image=img_file,
+                                    #     comic=comic,
                                     #     chapter=ch,  # noqa: E501, ERA001, RUF100
                                     # ).exists():
                                     #     oldimg = ChapterImage.objects.filter(  # noqa: E501, ERA001, RUF100
-                                    #         image=img_file,  # noqa: ERA001
-                                    #         comic=comic,  # noqa: ERA001
-                                    #         chapter=ch,  # noqa: ERA001
+                                    #         image=img_file,
+                                    #         comic=comic,
+                                    #         chapter=ch,
                                     #     )  # noqa: ERA001, RUF100
-                                    #     oldimg.delete()  # noqa: ERA001
+                                    #     oldimg.delete()
                                     ChapterImage.objects.filter(
                                         panelquery,
                                     ).update_or_create(
