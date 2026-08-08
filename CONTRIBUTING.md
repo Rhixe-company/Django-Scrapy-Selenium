@@ -12,7 +12,7 @@ cd api
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements/local.txt
-npm install
+bun install
 python manage.py migrate
 python manage.py runserver
 ```
@@ -29,7 +29,7 @@ python manage.py runserver
    black --check .
    mypy api/
    pytest
-   npm run lint
+   bun run lint
    ```
 
 5. **Test your changes** — add tests for new spiders/scrapers
@@ -83,7 +83,7 @@ test: add pipeline processing tests
 pytest                          # All Python tests
 pytest scraping/tests/          # Scrapy-specific tests
 pytest selenium_scraper/tests/  # Selenium-specific tests
-npm test                        # Frontend tests (if any)
+bun run test                        # Frontend tests (if any)
 ```
 
 ## Questions?

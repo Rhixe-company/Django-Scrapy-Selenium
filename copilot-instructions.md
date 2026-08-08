@@ -16,4 +16,4 @@
 
 **Security**: No `.env` in VCS; sanitize all scraped output; rate limit all external requests; respect website terms of service; credentials via environment variables only.
 
-**Commands**: `pip install -r requirements.txt && npm install` (setup); `python manage.py migrate && python manage.py runserver` (dev); `celery -A config worker -l info` (worker); `scrapy crawl spider_name` (scrape); `node src/scrape.js` (Selenium); `pytest && npm test` (test); `python manage.py collectstatic && gunicorn config.wsgi:application --bind 0.0.0.0:8000` (production); `docker compose up -d` (deploy).
+**Commands**: `pip install -r requirements.txt && bun install` (setup); `python manage.py migrate && python manage.py runserver` (dev); `celery -A config worker -l info` (worker); `scrapy crawl spider_name` (scrape); `node src/scrape.js` (Selenium); `pytest && bun run test` (test); `python manage.py collectstatic && gunicorn config.wsgi:application --bind 0.0.0.0:8000` (production); `docker compose up -d` (deploy).

@@ -93,8 +93,8 @@ python manage.py migrate
 python manage.py runserver
 
 # Frontend setup
-npm install
-npm run dev            # Webpack dev server
+bun install
+bun run dev            # Webpack dev server
 
 # Start Celery worker
 celery -A config worker -l info
@@ -107,7 +107,7 @@ node src/scrape.js
 
 # Run tests
 pytest
-npm test
+bun run test
 ```
 
 ## Key Features
@@ -127,8 +127,8 @@ python manage.py runserver
 python manage.py test
 
 # Frontend
-npm run dev           # Development build with watcher
-npm run build         # Production build
+bun run dev           # Development build with watcher
+bun run build         # Production build
 
 # Scraping
 celery -A config worker -l info
@@ -164,7 +164,7 @@ gunicorn config.wsgi:application --bind 0.0.0.0:8000
 docker compose up -d
 
 # Build frontend
-npm run build
+bun run build
 ```
 
 ## Security

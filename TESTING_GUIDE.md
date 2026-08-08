@@ -115,5 +115,5 @@ def test_spider_parse():
 
 - name: Frontend Lint
   run: |
-    npm run lint
+    bun run lint
 ```

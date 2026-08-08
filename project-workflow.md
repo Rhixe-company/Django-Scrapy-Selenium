@@ -13,7 +13,7 @@ python manage.py createsuperuser
 # Start Services
 python manage.py runserver          # Django dev server
 celery -A config worker -l info     # Celery worker
-npm run dev                         # Frontend assets
+bun run dev                         # Frontend assets
 
 # Run Scrapers
 scrapy crawl spider_name            # Run a spider
@@ -22,7 +22,7 @@ node selenium_scripts/scrape.js     # Run Selenium script
 # Testing
 python manage.py test               # Django tests
 pytest                              # pytest tests
-npm test                            # Frontend tests
+bun run test                            # Frontend tests
 ```
 
 ## Deployment

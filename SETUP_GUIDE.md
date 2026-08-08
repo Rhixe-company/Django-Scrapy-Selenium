@@ -56,13 +56,13 @@ DJANGO_DEBUG=true
 
 ```bash
 # Install Node dependencies
-npm install
+bun install
 
 # Development build with watch
-npm run dev
+bun run dev
 
 # Production build
-npm run build
+bun run build
 ```
 
 ## 5. Start Services
@@ -75,7 +75,7 @@ python manage.py runserver
 celery -A config.celery_app worker -l info
 
 # Terminal 3: Frontend (if developing CSS/JS)
-npm run dev
+bun run dev
 ```
 
 ## 6. Test Scraping
@@ -101,7 +101,7 @@ python manage.py check
 pytest
 
 # Frontend build
-npm run build
+bun run build
 ```
 
 ## Troubleshooting
@@ -111,5 +111,5 @@ npm run build
 | `ModuleNotFoundError: psycopg2` | Install PostgreSQL dev libraries                   |
 | Selenium fails                  | Install ChromeDriver matching Chrome version       |
 | Celery won't connect            | Ensure Redis is running: `redis-server`            |
-| Webpack build fails             | `npm install` and check Node version ≥ 22          |
+| Webpack build fails             | `bun install` and check Node version ≥ 22          |
 | Database connection error       | Verify PostgreSQL running and DATABASE_URL correct |

@@ -21,10 +21,10 @@ scrapy crawl spider_name
 scrapy check spider_name
 celery -A config worker -l info
 node src/scrape.js
-npm install
-npm test
-npm run dev
-npm run build
+bun install
+bun run test
+bun run dev
+bun run build
 ```
 
 ## Architecture

@@ -6,7 +6,7 @@
 
 ```bash
 python manage.py runserver       # Django dev server
-npm run dev                      # Webpack dev server (frontend)
+bun run dev                      # Webpack dev server (frontend)
 celery -A config.celery_app worker -l info  # Celery worker
 ```
 
@@ -27,7 +27,7 @@ mypy api/
 pytest
 
 # Build frontend
-npm run build
+bun run build
 ```
 
 ## Scrapy Development
@@ -183,6 +183,6 @@ def scrape_comic_task(self, url):
 python manage.py run_scraper        # Run main scraper
 python manage.py cleanup_old_data   # Data retention cleanup
 python manage.py export_data        # Export all scraped data
-npm run clean                       # Clean frontend build
-npm run build:prod                  # Production frontend build
+bun run clean                       # Clean frontend build
+bun run build:prod                  # Production frontend build
 ```

@@ -57,12 +57,12 @@ Django-Scrapy-Selenium/
 ## Commands
 
 ```bash
-pip install -r requirements.txt && npm install
+pip install -r requirements.txt && bun install
 python manage.py migrate && python manage.py runserver
 celery -A config worker -l info
 scrapy crawl spider_name
 node src/scrape.js
-pytest && npm test
+pytest && bun run test
 ```
 
 ---
@@ -73,7 +73,7 @@ pytest && npm test
 python manage.py collectstatic
 gunicorn config.wsgi:application --bind 0.0.0.0:8000
 docker compose up -d
-npm run build
+bun run build
 ```
 
 ---

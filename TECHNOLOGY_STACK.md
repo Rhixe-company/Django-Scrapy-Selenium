@@ -254,17 +254,17 @@ djlint .
 
 ```bash
 cd frontend
-npm install
+bun install
 
 # Dev
-npm run dev          # webpack serve
+bun run dev          # webpack serve
 
 # Build
-npm run build        # production bundle
+bun run build        # production bundle
 
 # Format
-npm run format
-npm run format:check
+bun run format
+bun run format:check
 ```
 
 ---

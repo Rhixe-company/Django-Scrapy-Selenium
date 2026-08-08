@@ -99,8 +99,8 @@ Django-Scrapy-Selenium/
 | `scrapy crawl spider_name`        | Run a Scrapy spider      |
 | `node src/scrape.js`              | Run Selenium scraper     |
 | `pytest`                          | Run Python tests         |
-| `npm run build`                   | Webpack production build |
-| `npm run dev`                     | Webpack dev server       |
+| `bun run build`                   | Webpack production build |
+| `bun run dev`                     | Webpack dev server       |
 
 ---
 
