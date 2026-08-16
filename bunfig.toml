@@ -1,0 +1,13 @@
+# Django-Scrapy-Selenium — Bun configuration
+# Django scraping platform (Python primary; Bun for Node.js scraper)
+
+[build]
+loader = false
+
+[test]
+coverage = true
+
+[install]
+optional = true
+dev = true
+peer = true
